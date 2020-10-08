@@ -1,0 +1,20 @@
+{
+  "database": {
+    "host": "mysql77.hostland.ru",
+    "port": 3306,
+    "username": "host1819103_myaso",
+    "password": "rb80cuI7",
+    "database": "host1819103_myaso",
+    "synchronize": "true"
+  },
+  "settings": {
+    "csrf": false,
+    "debug": true,
+    "loggerFormat": "tiny",
+    "session": {
+      "cookie": {
+        "sameSite": "lax"
+      }
+    }
+  }
+}

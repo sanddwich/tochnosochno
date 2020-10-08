@@ -1,0 +1,138 @@
+.ProductSliderItem {
+  width: 100%;
+  min-height: 370px;
+  cursor: default;
+  border: none;
+  border-radius: 0;
+
+  -webkit-box-shadow: 0px 0px 10px 0px #e0e0e0;
+  -moz-box-shadow: 0px 0px 10px 0px #e0e0e0;
+  box-shadow: 0px 0px 10px 0px #e0e0e0;
+
+  .addinfo__price {
+    position: absolute;
+    width: 120px;
+    margin-left: 200px;
+    background-color: #5ead03;
+    color: #ffffff;
+    font-family: 'Bebas Neue';
+    font-size: 18px;
+    font-weight: 200;
+    display: flex;
+    padding: 15px;
+    justify-content: center;
+    margin-top: -30px;
+
+    border-radius: 0px 0px 0px 31px;
+  }
+
+  .addinfo__facets {
+    position: absolute;
+
+    .addinfo__facet {
+      position: absolute;
+      width: 130px;
+      margin-left: -10px;
+
+      .addinfo__facetimg {
+        display: inline-block;
+        img {
+          margin-top: -10px;
+          width: 35px;
+        }
+      }
+
+      .addinfo__facetdesc {
+        width: 70px;
+        display: inline-block;
+        font-family: 'Bebas Neue';
+        color: #ad0303;
+        line-height: 14px;
+        font-weight: 300;
+        font-size: 16px;
+      }
+    }
+  }
+
+  img {
+    width: 270px;
+  }
+
+  .title {
+    // text-transform: uppercase;
+    font-family: 'Bebas Neue';
+    color: #000000;
+    font-weight: 300;
+    font-size: 24px;
+  }
+
+  .menuEl__bottomLine {
+    // position: absolute;
+    width: 41px;
+    border-bottom: solid #ad0303 3px;
+    margin-top: 4px;
+  }
+
+  .weight {
+    font-size: 14px;
+    font-family: 'Roboto';
+    line-height: 32px;
+    font-weight: bold;
+    color: #b5b5b5;
+  }
+
+  .text {
+    font-size: 14px;
+    font-family: 'Roboto';
+    letter-spacing: 0px;
+    font-weight: 400;
+  }
+}
+
+.cardButton {
+  position: absolute;
+
+  .round-button {
+    width: 200px;
+    margin-top: -10px;
+    text-align: left;
+    padding-left: 30px;
+
+    &:active {
+      box-shadow: none;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      transform: none;
+    }
+
+    &:hover + .cardButton__image {
+      transform: rotate(15deg);
+      transition: all 0.4s ease-in-out;
+    }
+
+    &:active + .cardButton__image {
+      background-color: #62ac0e;
+      transition: all 0.1s ease-in-out;
+    }
+
+  }
+
+  .cardButton__image {
+    position: absolute;
+    margin-top: -60px;
+    margin-left: 155px;
+
+    width: 50px;
+    height: 50px;
+    background-color: #6eb51d;
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 20px;
+    }
+  }
+}

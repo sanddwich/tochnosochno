@@ -1,0 +1,78 @@
+.CookingTime {
+  overflow-y: scroll;
+  padding-bottom: 85px !important;
+
+  .addDeliveryAddressButton {
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.56px;
+    background-color: #4d4d4d;
+    cursor: pointer;
+
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 60px;
+    border-radius: 30px;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    .addDeliveryAddressButton__img {
+      position: absolute;
+      width:47px;
+      height:47px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #5F5F5F;
+      border-radius: 30px;
+      margin-top: -37px;
+      margin-left: 145px;
+    }
+  }
+
+  .listItemContainer {
+    height: 40%;
+    overflow-y: scroll;
+  }
+
+  .underButton {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin-top: 18%;
+    text-transform: uppercase;
+    background-color: #5ead03;
+    height: 80px;
+    width: 438px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  @media screen and (max-width: 520px) {
+    .underButton {
+      width: 100%;
+    }
+  }
+
+  @media screen and (min-height:760px) {
+    .listItemContainer {
+      height: 45%;
+    }
+  }
+
+  @media screen and (min-height:900px) {
+    .listItemContainer {
+      height: 55%;
+    }
+  }
+}

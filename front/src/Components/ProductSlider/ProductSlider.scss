@@ -1,0 +1,31 @@
+.ProductSlider {
+  .swiper-slide {
+    width: 322px !important;
+  }
+
+  .menuEl {
+    width: 100% !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 300;
+    color: #b5b5b5;
+  }
+
+  .sliderAngles {
+    display: flex;
+    padding: 5px;
+    background-color: #ffffff;
+    z-index: 100;
+    border-radius: 50%;
+    width: 28px;
+    cursor: pointer;
+
+    -webkit-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.75);
+  }
+}

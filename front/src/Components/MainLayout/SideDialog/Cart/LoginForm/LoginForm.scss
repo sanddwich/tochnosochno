@@ -1,0 +1,32 @@
+.login-form {
+  padding-top: 10px;
+  // height: 25vh;
+  background-color: #212121;
+  border-bottom: 1px solid #4a4a4a;
+  .login-form__phone {
+    font-size: 16px;
+    font-family: 'Roboto';
+    color: #ffffff;
+  }
+  .login-form__btn:hover {
+    cursor: pointer;
+    opacity: 0.5;
+  }
+  &__error {
+    height: 30px;
+    &__text {
+      color: #ad0303;
+    }
+  }
+}
+
+.login-form.loggedIn {
+  padding-top: 35px;
+  height: 100px;
+}
+
+@media (max-width: 400px) {
+  .login-form {
+    padding-top: 10px;
+  }
+}

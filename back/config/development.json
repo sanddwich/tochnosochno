@@ -1,0 +1,10 @@
+{
+  "settings": {
+    "debug": true,
+    "loggerFormat": "dev",
+  "session":{
+    "secret": "h37EfLDdtfOB4K3G5cYkQXW94uWOJNGn5oD0+Xmh+Ok="
+  }  
+  }
+  
+}

@@ -1,0 +1,19 @@
+.round-number-input {
+  position: relative;
+  display: flex;
+  &__number {
+    position: relative;
+    left: -40px;
+    height: 35px;
+    text-align: center;
+    color: white;
+    width: 100px;
+    border-radius: 25px;
+    background-color: #414141;
+    z-index: 1;
+  }
+  &__wrapper {
+    position: relative;
+    left: -75px;
+  }
+}

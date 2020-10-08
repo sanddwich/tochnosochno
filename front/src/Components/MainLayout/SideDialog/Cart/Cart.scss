@@ -1,0 +1,34 @@
+.cart {
+  height: 100%;
+  &__product-list {
+    height: 100%;
+    min-height: 44vh;
+    margin-top: 30px;
+    padding-bottom: 30px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  &__details {
+    height: 40%;
+  }
+  &__bottom {
+    z-index: 1000;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 438px;
+  }
+}
+@media (max-height: 680px) {
+  .cart__product-list {
+    min-height: 48vh;
+    margin-top: 5px;
+  }
+}
+@media (max-width: 520px) {
+  .cart {
+    &__bottom {
+      width: 100%;
+    }
+  }
+}

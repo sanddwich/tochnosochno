@@ -1,0 +1,28 @@
+.payment {
+  overflow-y: scroll;
+  height: 80%;
+  &__buttons {
+    display: flex;
+  }
+  &__online {
+    width: 50%;
+  }
+  &__cash {
+    width: 50%;
+  }
+  &__bottom {
+    z-index: 1000;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 438px;
+  }
+}
+
+@media (max-width: 520px) {
+  .payment {
+    &__bottom {
+      width: 100%;
+    }
+  }
+}

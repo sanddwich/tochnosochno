@@ -1,0 +1,36 @@
+.order-price {
+  // height: 75px;
+  font-family: 'Bebas Neue';
+  background-color: #414141;
+  margin: auto; //
+
+  &__title {
+    font-weight: 500;
+    // margin: auto;
+    color: #b5b5b5;
+    font-size: 24px;
+    text-transform: uppercase;
+  }
+
+  &__value {
+    font-size: 30px;
+    display: flex;
+    // margin: auto 0px auto auto;
+  }
+
+  &__bonus {
+    font-weight: 300;
+    margin-right: 10px;
+    color: #b5b5b5;
+    text-decoration: line-through;
+  }
+
+  &__currency {
+    margin-left: 5px;
+    font-weight: 600;
+    font-size: 30px;
+
+    text-transform: uppercase;
+    color: #5ead03;
+  }
+}

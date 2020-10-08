@@ -1,0 +1,40 @@
+{
+  "port": 3001,
+  "settings": {
+    "csrf": {
+      "cookie": {
+        "maxAge": 31536000
+      }
+    },
+    "debug": true,
+    "loggerFormat": "tiny",
+    "session": {
+      "cookie": {
+        "sameSite": "lax"
+      }
+    }
+  },
+  "database": {
+    "host": "mysql77.hostland.ru",
+    "port": 3306,
+    "username": "host1819103_myaso",
+    "password": "rb80cuI7",
+    "database": "host1819103_myaso",
+    "synchronize": "true"
+  },
+
+  "apiLimit": {
+    "max": 10,
+    "windowMs": 1
+  },
+
+  "loginLimit": {
+    "max": 3,
+    "windowMs": 1
+  },
+
+  "authLimit": {
+    "max": 3,
+    "windowMs": 1
+  }
+}

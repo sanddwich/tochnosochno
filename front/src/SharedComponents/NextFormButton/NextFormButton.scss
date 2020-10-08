@@ -1,0 +1,28 @@
+.next-form-button {
+  display: flex;
+  height: 80px;
+  letter-spacing: 0.72px;
+  font-size: 18px;
+  font-weight: 500;
+  text-transform: uppercase;
+  background-color: #5ead03;
+  color: white;
+  display: flex;
+  &:hover,
+  :focus {
+    cursor: pointer;
+    opacity: 90%;
+  }
+
+  &__text {
+    margin: auto auto;
+  }
+  &.disabled {
+    color: #bbbbbb;
+    background-color: #767676;
+  }
+  &.disabled:hover {
+    cursor: default;
+    opacity: 100%;
+  }
+}

@@ -1,0 +1,4 @@
+<svg id="logout" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <path id="Path_62" data-name="Path 62" d="M0,0H20V20H0Z" fill="none"/>
+  <path id="Path_63" data-name="Path 63" d="M3.5,15.333H5.167V17h10V3.667h-10V5.333H3.5v-2.5A.833.833,0,0,1,4.333,2H16a.833.833,0,0,1,.833.833v15a.833.833,0,0,1-.833.833H4.333a.833.833,0,0,1-.833-.833ZM5.167,9.5H11v1.667H5.167v2.5L1,10.333,5.167,7Z" transform="translate(-0.167 -0.333)" fill="#b5b5b5"/>
+</svg>

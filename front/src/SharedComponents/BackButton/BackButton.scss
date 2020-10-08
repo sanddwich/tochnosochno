@@ -1,0 +1,16 @@
+.back-button {
+  display: flex;
+  margin-top: 21px;
+  margin-left: 30px;
+
+  &__text {
+    font-weight: 500;
+    font-size: 16px;
+    margin-left: 12px;
+  }
+
+  &:hover {
+    cursor: pointer;
+    color: #cccccc;
+  }
+}

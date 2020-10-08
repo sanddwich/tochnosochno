@@ -1,0 +1,23 @@
+.size-combobox {
+  display: flex;
+  &__item {
+    font-weight: 300;
+    font-size: 20px;
+    padding-right: 10px;
+    padding-left: 10px;
+    overflow: hidden;
+    max-height: 30px;
+
+    &:hover,
+    :active,
+    :focus {
+      color: #5ead03;
+      cursor: pointer;
+    }
+
+    &.selected {
+      border-bottom: 2px solid #5ead03;
+      color: #5ead03;
+    }
+  }
+}

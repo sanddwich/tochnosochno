@@ -1,0 +1,13 @@
+.CircleSideButton {
+  font-family: 'Roboto';
+  font-size: 13px;
+  letter-spacing: 0.56px;
+  color: #ffffff;
+  text-transform: uppercase;
+  padding: 8px;
+  cursor: pointer;
+  
+  &:hover {
+    opacity: 0.9;
+  }
+}

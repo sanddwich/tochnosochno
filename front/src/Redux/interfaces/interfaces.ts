@@ -1,0 +1,45 @@
+import Category from '../../Interfaces/Category'
+import Customer from '../../Interfaces/Customer'
+import FormType from '../../Interfaces/FormType'
+import Order from '../../Interfaces/Order'
+import OrderItem from '../../Interfaces/OrderItem'
+import Product from '../../Interfaces/Product'
+
+export interface MenuState {
+  menu: Category[]
+  loading: boolean
+  error: string
+  date: Date
+}
+
+export interface OrderState {
+  order: Order
+  loading: false
+  error: string
+}
+
+export interface OrderItemState {
+  orderItem: OrderItem
+  product: Product
+}
+
+export interface AuthState {
+  customer?: Customer
+  token: string
+  isSms: boolean
+  isAuth: boolean
+  loading: boolean
+  error: string
+  smsCodeTime: Date
+  phone: string
+  code: string
+}
+
+export interface AppState {
+  loading: boolean
+  error: boolean
+  showSideDialog: boolean
+  formType: FormType
+  isChangePoduct: boolean
+  orderHistory?: Order
+}

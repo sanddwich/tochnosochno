@@ -1,0 +1,41 @@
+.round-button {
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 50px;
+  letter-spacing: 0.56px;
+  width: 360px;
+  height: 50px;
+  margin: 0 auto 10px auto;
+  border-radius: 25px;
+  background-color: #5ead03;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: 0;
+  &:disabled {
+    color: #bbbbbb;
+    background-color: #767676;
+    cursor: default;
+  }
+  &:disabled:hover {
+    opacity: 100%;
+    color: #bbbbbb;
+    background-color: #767676;
+    cursor: default;
+  }
+  &:hover,
+  :focus {
+    background-color: #2ead03;
+    cursor: pointer;
+    outline: 0;
+  }
+  &:active {
+    outline: 0;
+    box-shadow: 0 2px #666;
+    transform: translateY(2px);
+  }
+}

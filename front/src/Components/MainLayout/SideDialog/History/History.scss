@@ -1,0 +1,36 @@
+.order-row {
+  font-size: 16px;
+  border-top: 1px solid #4a4a4a;
+  .order-row__date {
+    color: #b5b5b5;
+  }
+  .order-row__value {
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .order-row__address {
+    font-size: 18px;
+  }
+}
+
+.history {
+  height: 100%;
+  &__details {
+    display: flex;
+    line-height: 20px;
+    &:hover {
+      cursor: pointer;
+      opacity: 0.8;
+    }
+  }
+  &__order {
+    &__title {
+      margin-left: 30px;
+    }
+  }
+  &__order-items {
+    height: 65%;
+    overflow-y: scroll;
+  }
+}

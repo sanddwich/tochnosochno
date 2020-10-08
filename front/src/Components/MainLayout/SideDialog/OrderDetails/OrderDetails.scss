@@ -1,0 +1,71 @@
+.order-details {
+  height: 80%;
+  overflow-y: scroll;
+
+  &__buttons {
+    height: 20%;
+  }
+  &__info {
+    // border-bottom: 1px solid #ffffff;
+  }
+
+  &__products {
+  }
+
+  &__product {
+    &__name {
+      position: relative;
+    }
+    &__amount {
+      font-size: 18px;
+      font-weight: bold;
+      color: #b5b5b5;
+    }
+    &__value {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    &__currency {
+      text-transform: uppercase;
+      color: #5ead03;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+
+  &__button {
+    text-align: center;
+    height: 80px;
+    width: 438px;
+    letter-spacing: 0.72px;
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: white;
+    padding: 25px 0;
+
+    position: fixed;
+    right: 0;
+
+    &.repeat-btn {
+      background-color: #5ead03;
+      bottom: 0;
+    }
+    &.support-btn {
+      background-color: #4d4d4d;
+      bottom: 80px;
+    }
+    &:hover {
+      cursor: pointer;
+      opacity: 0.9;
+    }
+  }
+
+  .product-name {
+    text-transform: uppercase;
+    font-family: 'Bebas Neue Thin';
+    color: #4d4d4d;
+    font-size: 24px;
+    font-weight: 700;
+  }
+}

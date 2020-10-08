@@ -1,0 +1,36 @@
+.contacts {
+  margin: 60px 0 20px 40px;
+  &__text {
+    margin: 60px 0 60px 80px;
+    font-size: 16px;
+  }
+  &__address {
+    margin-top: 22px;
+    img {
+      margin-right: 15px;
+    }
+  }
+  &__map {
+    width: 65vw;
+    height: 422px;
+    margin-bottom: 60px;
+  }
+  h3 {
+    margin-top: 40px;
+    position: relative;
+  }
+}
+
+@media (max-width: 768px) {
+  .contacts {
+    margin: 0;
+    &__text {
+      margin: 60px 0 60px 40px;
+    }
+  }
+  .contacts__map {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 0;
+  }
+}

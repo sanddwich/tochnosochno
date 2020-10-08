@@ -1,0 +1,50 @@
+.newOrder-details {
+  &__arrow {
+    width: 15px;
+    text-align: center;
+    margin: auto;
+    &.active-arrow {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__title {
+    border-bottom: 1px solid #4a4a4a;
+    color: #b5b5b5;
+    font-size: 16px;
+  }
+
+  &__collapse {
+    color: #ffffff;
+    font-size: 18px;
+    border-bottom: 1px solid #4a4a4a;
+    &.active-collapse {
+      border-bottom: 1px solid #5ead03;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .shipping__title,
+  .date__title {
+    color: #b5b5b5;
+    font-size: 14px;
+  }
+
+  .shipping__address,
+  .date__text {
+    color: #ffffff;
+    font-size: 14px;
+  }
+
+  .newOrder {
+    &__product {
+      text-transform: uppercase;
+      &__details {
+        font-size: 16px;
+        color: #b5b5b5;
+      }
+    }
+  }
+}

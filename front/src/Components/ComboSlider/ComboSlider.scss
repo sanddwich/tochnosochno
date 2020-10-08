@@ -1,0 +1,19 @@
+.ComboSlider {
+  .swiper-slide {
+    width: 514px !important;
+  }
+
+  .sliderAngles {
+    display: flex;
+    padding: 5px;
+    background-color: #ffffff;
+    z-index: 100;
+    border-radius: 50%;
+    width: 28px;
+    cursor: pointer;
+
+    -webkit-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.75);
+  }
+}
