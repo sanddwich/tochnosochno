@@ -30,17 +30,23 @@ class Cart extends Component<CartProps, CartState> {
       <section className="cart">
         <LoginForm />
         <BackButton text="Вернуться назад" onClick={this.props.hideSideDialog} />
-        <div className="cart__details">
-          <div className="cart__product-list">
-            <CartProduct />
+
+        {this.props.order.items?.length === 0 ? (
+          <div className="cart__empty">Корзина пуста</div>
+        ) : (
+          <div className="cart__details">
+            <div className="cart__product-list">
+              <CartProduct />
+            </div>
           </div>
-        </div>
+        )}
+
         <div className="cart__bottom">
           <OrderPrice isProduct={false} />
           <NextFormButton
             loading={this.props.loading}
             onClick={this.props.showCookingTimeDialog}
-            disabled={!this.props.isAuth || this.props.order.orderItems?.length === 0}
+            disabled={!this.props.isAuth || this.props.order.items?.length === 0}
             text="Перейти к деталям"
           />
         </div>

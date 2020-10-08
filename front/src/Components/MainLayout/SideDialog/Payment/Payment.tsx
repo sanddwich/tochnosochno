@@ -35,11 +35,11 @@ class Payment extends Component<PaymentProps, PaymentState> {
   constructor(props: PaymentProps) {
     super(props)
     this.state = {
-      form: 'cash',
+      form: 'online',
     }
   }
   shouldComponentUpdate(nextProps: PaymentProps) {
-    if (nextProps.order.orderItems?.length === 0) {
+    if (nextProps.order.items?.length === 0) {
       this.props.hideSideDialog()
     }
     return true

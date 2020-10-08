@@ -22,12 +22,12 @@ class History extends Component<HistoryProps, HistoryState> {
   }
   showAddress = (address: Address | undefined) => {
     if (address) {
-      let { apartment, house, comment, entrance, floor, street } = address
-      street = street ? ` ул. ${street}` : ''
+      let { flat, house, comment, entrance, floor, street } = address
+      const streetDisplay = street.name ? ` ул. ${street.name}` : ''
       house = house ? `, д. ${house}` : ''
-      apartment = apartment ? `, кв. ${apartment}` : ''
+      flat = flat ? `, кв. ${flat}` : ''
 
-      return `${street}   ${house}  ${apartment}`
+      return `${streetDisplay}   ${house}  ${flat}`
     }
     return ''
   }
@@ -35,7 +35,7 @@ class History extends Component<HistoryProps, HistoryState> {
   render() {
     let orderItems
 
-    if (this.props.customer) {
+    if (this.props.customer && this.props.customer.orders) {
       orderItems = this.props.customer.orders.map((order, index) => {
         return (
           <div key={index.toString()} className="order-row pt-3">
@@ -67,13 +67,28 @@ class History extends Component<HistoryProps, HistoryState> {
       <section className="history">
         <LoginForm />
         <BackButton text="Вернуться назад" onClick={this.props.hideSideDialog} />
-        {this.props.customer ? <Bonus showCheck={false} value={this.props.customer.bonus} /> : null}
-
-        <div className="history__order__title mb-4">
-          <h3>История заказов</h3>
+        {this.props.customer ? (
+          <div className="history__bonus">
+            <Bonus showCheck={false} value={this.props.customer.bonus} />
+          </div>
+        ) : null}
+        <div hidden={this.props.customer.orders.length === 0}>
+          <div className="history__order__title mb-4">
+            <h3>История заказов</h3>
+          </div>
+          <div className="container-fluid mt-4 history__order-items">
+            <div className="container">{orderItems}</div>
+          </div>
         </div>
-        <div className="container-fluid mt-4 history__order-items">
-          <div className="container">{orderItems}</div>
+
+        <div className="history__empty" hidden={!(this.props.customer.orders.length === 0)}>
+          Заказов нет
+        </div>
+        <div className="order-details__buttons">
+          {/* <div className="order-details__button support-btn"> Связаться с поддержкой</div> */}
+          <div onClick={this.props.hideSideDialog} className="order-details__button repeat-btn">
+            Закрыть
+          </div>
         </div>
       </section>
     )

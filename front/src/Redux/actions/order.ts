@@ -24,14 +24,17 @@ import {
   SET_ORDER_ERROR,
   SET_ORDER_LOADING,
   SET_ORDER_PAYMENT,
+  SET_ORDER_PHONE,
   SET_PREPARE_TIME,
 } from '../constants/ActionTypes'
+import { AuthState } from '../interfaces/interfaces'
 import { OrderActionType } from '../interfaces/order'
 
 import { showProductDialog, showCartDialog, showCreditCardForm } from './app'
 import { getCustomer } from './auth'
 
-const apiServer = 'http://localhost:3001'
+// const apiServer = 'http://localhost:3001'
+const apiServer = 'http://myaso.holod30.ru'
 
 export const applyBonusOrder = (isClear?: boolean) => {
   return (dispatch: any, getState: any) => {
@@ -64,9 +67,12 @@ export const processOrder = (): ThunkAction<void, RootState, null, any> => {
     try {
       const { order } = getState().order
       const { token } = getState().auth
+      const auth: AuthState = getState().auth
+      const phone = auth.customer?.phone
       const cookies = new Cookies()
       const csrfToken = cookies.get('csrfToken')
       dispatch(setLoading())
+      dispatch(setOrderPhone(phone || ''))
       const res = await fetch(`${apiServer}/api/order`, {
         method: 'POST',
         headers: {
@@ -91,6 +97,38 @@ export const processOrder = (): ThunkAction<void, RootState, null, any> => {
         dispatch(hideLoading())
       }
       const resData: [] = await res.json()
+    } catch (err) {
+      dispatch(setError(err.message))
+    }
+  }
+}
+
+export const getStreetVariants = (street: string): ThunkAction<void, RootState, null, any> => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth
+      const cookies = new Cookies()
+      const csrfToken = cookies.get('csrfToken')
+      dispatch(setLoading())
+      const res = await fetch(`${apiServer}/api/street`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          'CSRF-Token': csrfToken,
+        },
+        body: JSON.stringify({ street }),
+      })
+
+      if (!res.ok) {
+        const resData: ApiResponse = await res.json()
+        throw new Error(resData.message)
+      }
+      if (res.status === 200) {
+        dispatch(hideLoading())
+      }
+      const resData: [] = await res.json()
+      return resData
     } catch (err) {
       dispatch(setError(err.message))
     }
@@ -179,6 +217,13 @@ const setOrderBonus = (bonus: number): OrderActionType => {
   return {
     type: SET_ORDER_BONUS,
     bonus: bonus,
+  }
+}
+
+const setOrderPhone = (phone: string): OrderActionType => {
+  return {
+    type: SET_ORDER_PHONE,
+    phone: phone,
   }
 }
 

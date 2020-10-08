@@ -33,4 +33,21 @@
     height: 65%;
     overflow-y: scroll;
   }
+
+  &__bonus {
+    margin-left: 30px;
+    margin-bottom: 10px;
+  }
+
+  &__empty {
+    font-family: 'Bebas Neue';
+    font-weight: 500;
+    color: #b5b5b5;
+    font-size: 28px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60%;
+  }
 }

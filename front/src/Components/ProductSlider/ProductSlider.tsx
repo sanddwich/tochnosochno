@@ -21,7 +21,7 @@ SwiperCore.use([Navigation])
 
 interface ProductSliderProps {
   menu: Category[]
-  catId: number
+  catId: string
 }
 
 interface ProductSliderState {

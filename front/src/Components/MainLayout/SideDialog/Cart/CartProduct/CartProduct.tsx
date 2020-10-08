@@ -107,7 +107,7 @@ const mapDispatchToProps = {
 const mapStateToProps = (state: any) => {
   const { order } = state
   return {
-    orderItems: order.order.orderItems,
+    orderItems: order.order.items,
   }
 }
 

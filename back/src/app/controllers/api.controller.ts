@@ -12,26 +12,40 @@ import {
   Options,
   HttpResponseCreated,
   dependency,
-  HttpResponseSuccess,
+  ApiOperation,
+  ApiServer,
+  ApiRequestBody,
 } from '@foal/core'
-import { getRepository } from 'typeorm'
+import { FindManyOptions, getRepository, Like } from 'typeorm'
 
-import { Product, Group, Order, Customer, Address, OrderItem, OrderItemModifier } from '../entities'
+import { Product, Group, Order, Customer, Address, OrderItem, OrderItemModifier, Terminal, Street } from '../entities'
 import { fetchUser, TypeORMStore } from '@foal/typeorm'
 import * as _ from 'lodash'
-import { Aiiko, OrderService } from '../services'
+import { GeoCoder, Iiko, OrderService } from '../services'
 import { CsrfTokenRequired } from '@foal/csrf'
-
+import { ApiInfo } from '@foal/core'
+@ApiInfo({
+  title: 'Food Delivery Site API',
+  version: '1.0.0',
+  contact: {
+    name: 'Denis Mehtahudinov',
+    url: 'https://deedesign.ru',
+    email: 'denristun@gmail.com',
+  },
+})
 @Hook(() => (response) => {
   response.setHeader('Access-Control-Allow-Credentials', 'true')
   response.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
 })
 export class ApiController {
   @dependency
+  geoCoder: GeoCoder
+
+  @dependency
   orderService: OrderService
 
   @dependency
-  aiiko: Aiiko
+  iiko: Iiko
 
   @Options('*')
   options(ctx: Context) {
@@ -43,8 +57,109 @@ export class ApiController {
   }
 
   @Get('/menu')
+  @ApiServer({ url: '/api', description: 'Main API URL' })
+  @ApiOperation({
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: {
+              items: {
+                properties: {
+                  name: { type: 'string' },
+                  id: { type: 'string' },
+                  additionalInfo: { type: 'string' },
+                  description: { type: 'string' },
+                  isDeleted: { type: 'boolean' },
+                  seoDescription: { type: 'string' },
+                  seoKeywords: { type: 'string' },
+                  seoText: { type: 'string' },
+                  seoTitle: { type: 'string' },
+                  tags: { type: 'string' },
+                  images: { type: 'string' },
+                  isIcludedInMenu: { type: 'boolean' },
+                  order: { type: 'number' },
+                  parentGroup: { type: 'string' },
+                  products: {
+                    items: {
+                      properties: {
+                        id: { type: 'string' },
+                        name: { type: 'string' },
+                        code: { type: 'string' },
+                        seoDescription: { type: 'string' },
+                        seoKeywords: { type: 'string' },
+                        seoText: { type: 'string' },
+                        seoTitle: { type: 'string' },
+                        isDeleted: { type: 'boolean' },
+                        image: { type: 'string' },
+                        ingredients: { type: 'string' },
+                        weight: { type: 'string' },
+                        modifiers: {
+                          items: {
+                            properties: {
+                              id: { type: 'string' },
+                              maxAmount: { type: 'number' },
+                              minAmount: { type: 'number' },
+                              required: { type: 'boolean' },
+                              defaultAmount: { type: 'number' },
+                              modifier: {
+                                properties: {
+                                  id: { type: 'string' },
+                                  name: { type: 'string' },
+                                  price: { type: 'number' },
+                                  image: { type: 'string' },
+                                },
+                                type: 'object',
+                              },
+                            },
+                            type: 'object',
+                          },
+                          type: 'array',
+                        },
+                        variants: {
+                          items: {
+                            properties: {
+                              id: { type: 'string' },
+                              name: { type: 'string' },
+                              size: { type: 'string' },
+                              weight: { type: 'string' },
+                              price: { type: 'number' },
+                            },
+                            type: 'object',
+                          },
+                          type: 'array',
+                        },
+                        facets: {
+                          items: {
+                            properties: {
+                              id: { type: 'string' },
+                              name: { type: 'string' },
+                              iamge: { type: 'string' },
+                            },
+                            type: 'object',
+                          },
+                          type: 'array',
+                        },
+                      },
+                      type: 'object',
+                    },
+                    type: 'array',
+                  },
+                },
+                type: 'object',
+              },
+              type: 'array',
+            },
+          },
+        },
+        description: 'Возвращает действующее меню',
+      },
+    },
+    summary: 'Возвращает действующее меню',
+  })
   async getMenu() {
-    await this.aiiko.getMenu()
+    await this.iiko.init()
+    await this.iiko.getMenu()
     const products = await getRepository(Group).find({
       relations: [
         'products',
@@ -55,15 +170,61 @@ export class ApiController {
       ],
     })
 
-    return new HttpResponseOK(products)
+    const terminals = await getRepository(Terminal).find({ isAlive: true })
+
+    return new HttpResponseOK({ products, terminals })
   }
 
   @Post('/customer')
   @TokenRequired({
+    openapi: true,
     user: fetchUser(Customer),
     store: TypeORMStore,
   })
   @CsrfTokenRequired()
+  @ApiOperation({
+    servers: [{ url: '/api', description: 'Main API URL' }],
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: {
+              properties: {
+                id: { type: 'string' },
+                phone: { type: 'string' },
+                email: { type: 'string' },
+                bonus: { type: 'number' },
+                name: { type: 'string' },
+              },
+              type: 'object',
+            },
+          },
+        },
+        description: 'Возвращает данные по авторизованному клиенту',
+      },
+      400: {
+        content: {
+          'application/json': {
+            schema: {
+              properties: {
+                code: { type: 'string' },
+                description: { type: 'string' },
+              },
+              type: 'object',
+            },
+          },
+        },
+        description: 'Authorization header not found.',
+      },
+      403: {
+        content: {
+          'text/html': {},
+        },
+        description: 'Bad csrf token.',
+      },
+    },
+    summary: 'Возвращает данные по авторизованному клиенту',
+  })
   async getCustomer(ctx: Context<Customer, Session>) {
     const customer = await getRepository(Customer).findOne(
       { id: ctx.user.id },
@@ -71,13 +232,15 @@ export class ApiController {
         relations: [
           'orders',
           'addresses',
+          'addresses.street',
           'orders.address',
-          'orders.orderItems',
-          'orders.orderItems.productVariant.product',
-          'orders.orderItems.productVariant',
-          'orders.orderItems.orderItemModifiers',
-          'orders.orderItems.orderItemModifiers.productModifier',
-          'orders.orderItems.orderItemModifiers.productModifier.modifier',
+          'orders.address.street',
+          'orders.items',
+          'orders.items.productVariant.product',
+          'orders.items.productVariant',
+          'orders.items.orderItemModifiers',
+          'orders.items.orderItemModifiers.productModifier',
+          'orders.items.orderItemModifiers.productModifier.modifier',
         ],
       }
     )
@@ -90,6 +253,7 @@ export class ApiController {
 
   @Post('/order')
   @TokenRequired({
+    openapi: true,
     user: fetchUser(Customer),
     store: TypeORMStore,
   })
@@ -102,6 +266,27 @@ export class ApiController {
     type: 'object',
   })
   @CsrfTokenRequired()
+  @ApiServer({ url: '/api', description: 'Main API URL' })
+  @ApiRequestBody({
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          properties: {
+            order: { type: 'object' },
+          },
+        },
+      },
+    },
+  })
+  @ApiOperation({
+    responses: {
+      200: {
+        description: 'OK',
+      },
+    },
+    summary: 'Добавление нового заказа клиента',
+  })
   async addOrder(ctx: Context<Customer, Session>) {
     const order: Order = ctx.request.body.order
     const repositoryOrder = getRepository(Order)
@@ -122,14 +307,15 @@ export class ApiController {
           if (customer) {
             order.customer = customer
             const orderDb = await repositoryOrder.save(order)
-            await repositoryOrderItem.save(orderDb.orderItems)
-            order.orderItems.map(async (orderItem) => {
+            await repositoryOrderItem.save(orderDb.items)
+            order.items.map(async (orderItem) => {
               await repositoryOrderItemModifier.save(orderItem.orderItemModifiers)
             })
           } else {
             return new HttpResponseNotFound({ error: true, message: `Customer with id=${ctx.user.id} not found.` })
           }
         } catch (error) {
+          console.log(error)
           return new HttpResponseNotFound({ error: true, message: error.message })
         }
       }
@@ -140,6 +326,7 @@ export class ApiController {
 
   @Post('/address')
   @TokenRequired({
+    openapi: true,
     user: fetchUser(Customer),
     store: TypeORMStore,
   })
@@ -152,16 +339,49 @@ export class ApiController {
     type: 'object',
   })
   @CsrfTokenRequired()
+  @ApiServer({ url: '/api', description: 'Main API URL' })
   async addAddress(ctx: Context<Customer, Session>) {
     const addressData: Address = ctx.request.body.address
-    console.log(addressData)
+    const street = await getRepository(Street).findOne({ name: addressData.street.name })
     const repositoryAddress = getRepository(Address)
+
     const customer = await getRepository(Customer).findOne({ id: ctx.user.id })
     if (customer) {
       addressData.customer = customer
     }
 
+    if (street) {
+      const geoData = await this.geoCoder.getCoordinates(addressData)
+      addressData.street = street
+      if (geoData) {
+        addressData.longitude = geoData.longitude
+        addressData.latitude = geoData.latitude
+      }
+    }
+
     const address = await repositoryAddress.save(addressData)
     return new HttpResponseCreated(address)
+  }
+
+  @Post('/street')
+  @TokenRequired({
+    openapi: true,
+    user: fetchUser(Customer),
+    store: TypeORMStore,
+  })
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      street: { type: 'string' },
+    },
+    required: ['street'],
+    type: 'object',
+  })
+  @CsrfTokenRequired()
+  @ApiServer({ url: '/api', description: 'Main API URL' })
+  async getStreets(ctx: Context<Customer, Session>) {
+    const street: string = ctx.request.body.street
+    const streets = await getRepository(Street).find({ where: { name: Like(`%${street}%`) }, order: { name: 'ASC' } })
+    return new HttpResponseOK(streets)
   }
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './SideBar.scss'
 import SideDialog from '../SideDialog/SideDialog'
 
-import { showOrderDialog, showCartDialog, showCookingTimeDialog } from '../../../Redux/actions/app'
+import { showOrderDialog, showCartDialog, showCookingTimeDialog, showHistoryDialog } from '../../../Redux/actions/app'
 import { connect } from 'react-redux'
 
 interface SideBarState {}
@@ -11,6 +11,7 @@ interface SideBarProps {
   showOrderDialog: () => {}
   showCartDialog: () => {}
   showCookingTimeDialog: () => {}
+  showHistoryDialog: () => {}
 }
 
 class SideBar extends Component<SideBarProps, SideBarState> {
@@ -36,7 +37,7 @@ class SideBar extends Component<SideBarProps, SideBarState> {
           </div>
           <div
             onClick={() => {
-              this.props.showCookingTimeDialog()
+              this.props.showHistoryDialog()
             }}
             className="nav-item"
           >
@@ -70,6 +71,7 @@ const mapDispatchToProps = {
   showOrderDialog,
   showCookingTimeDialog,
   showCartDialog,
+  showHistoryDialog,
 }
 
 export default connect(null, mapDispatchToProps)(SideBar)

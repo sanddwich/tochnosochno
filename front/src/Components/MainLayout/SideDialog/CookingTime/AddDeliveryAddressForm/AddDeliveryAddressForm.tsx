@@ -4,12 +4,16 @@ import { connect } from 'react-redux'
 import Address from '../../../../../Interfaces/Address'
 import { DeliveryAddressValidation } from '../../../../../Interfaces/DeliveryAddressValidation'
 import './AddDeliveryAddressForm.scss'
+import { getStreetVariants } from '../../../../../Redux/actions/order'
+import Street from '../../../../../Interfaces/Street'
 
 interface AddDeliveryAddressFormProps {
   addDeliveryAddress: (deliveryAddress: Address) => void
   renderEntryPage: (entryPage: string) => void
+  getStreetVariants: any
   deliveryAddressesCount: number
   loading: boolean
+  loadingOrder: boolean
   error: string
 }
 
@@ -24,13 +28,13 @@ class AddDeliveryAddressForm extends React.Component<AddDeliveryAddressFormProps
     this.state = {
       deliveryAddress: {
         house: '',
-        street: '',
-        apartment: '',
+        street: { name: '' },
+        flat: '',
         comment: '',
         entrance: '',
         floor: '',
         name: '',
-        id: -1
+        id: '',
       },
       validationTextfields: [
         {
@@ -54,13 +58,13 @@ class AddDeliveryAddressForm extends React.Component<AddDeliveryAddressFormProps
   textFieldInputHandler = (value: string, textFieldName: string): void => {
     const state = this.state
 
-    textFieldName === 'apartment' && (state.deliveryAddress.apartment = value)
+    textFieldName === 'flat' && (state.deliveryAddress.flat = value)
     textFieldName === 'comment' && (state.deliveryAddress.comment = value)
     textFieldName === 'entrance' && (state.deliveryAddress.entrance = value)
     textFieldName === 'floor' && (state.deliveryAddress.floor = value)
     textFieldName === 'house' && (state.deliveryAddress.house = value)
     textFieldName === 'name' && (state.deliveryAddress.name = value)
-    textFieldName === 'street' && (state.deliveryAddress.street = value)
+    textFieldName === 'street' && (state.deliveryAddress.street.name = value)
 
     state.validationTextfields.map((textfield) => {
       if (textfield.name === textFieldName) {
@@ -83,16 +87,29 @@ class AddDeliveryAddressForm extends React.Component<AddDeliveryAddressFormProps
 
   addButtonHandler = (): void => {
     let formValid: boolean = true
+    let isCorrectStreet = false
+    const dataList = document.getElementById('list-street')
+    if (dataList) {
+      const options = Array.from(dataList.children)
+      options.map((option: any) => {
+        if (option.value === this.state.deliveryAddress.street.name) {
+          isCorrectStreet = true
+        }
+      })
+    }
 
     const validationTextfields = this.state.validationTextfields
     validationTextfields.map((textfield) => {
       let isValid: boolean = true
       let value = ''
-      textfield.name === 'street' && (value = this.state.deliveryAddress.street)
+      textfield.name === 'street' && (value = this.state.deliveryAddress.street.name)
       textfield.name === 'house' && (value = this.state.deliveryAddress.house)
 
       if (textfield.required) {
         isValid = isValid && value.trim() !== ''
+        if (textfield.name === 'street') {
+          isValid = isCorrectStreet ? true : false
+        }
       }
       if (textfield.minLength > 0) {
         isValid = isValid && value.trim().length > textfield.minLength
@@ -106,21 +123,35 @@ class AddDeliveryAddressForm extends React.Component<AddDeliveryAddressFormProps
 
     if (formValid) {
       const formData: Address = {
-        apartment: this.state.deliveryAddress.apartment,
+        flat: this.state.deliveryAddress.flat,
         comment: this.state.deliveryAddress.comment,
         entrance: this.state.deliveryAddress.entrance,
         floor: this.state.deliveryAddress.floor,
         house: this.state.deliveryAddress.house,
         name: this.state.deliveryAddress.name,
         street: this.state.deliveryAddress.street,
-        id: Date.now(),        
+        id: Date.now().toString(),
       }
 
       this.props.addDeliveryAddress(formData)
     } else {
       this.setState({ validationTextfields })
     }
+  }
 
+  getStreetsFromIiko = async (street: string) => {
+    if (street.length % 4 === 0 && street.length > 0) {
+      const streetVariants: Street[] = await this.props.getStreetVariants(street)
+      const streetInput = document.getElementById('street') as HTMLInputElement
+      const datalist = document.getElementById('list-street')
+      let options: String[] = []
+      if (datalist && streetInput) {
+        streetVariants.map((street) => {
+          options.push(`<option value="${street.name}" data-id=${street.id}>${street.name}</option>`)
+        })
+        datalist.innerHTML = options.join('')
+      }
+    }
   }
 
   render() {
@@ -153,17 +184,29 @@ class AddDeliveryAddressForm extends React.Component<AddDeliveryAddressFormProps
               <label htmlFor="street" className="formLabel">
                 Улица
               </label>
+              <div className="d-flex justify-content-center">
+                <div hidden={!this.props.loadingOrder} className="spinner-border" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              </div>
               <input
+                list="list-street"
                 autoComplete="off"
                 type="text"
                 className="form-control"
                 id="street"
                 placeholder="Савушкина"
-                onInput={(e: React.FormEvent<HTMLInputElement>) =>
+                onKeyPress={(e: React.FormEvent<HTMLInputElement>) => {
+                  this.getStreetsFromIiko(e.currentTarget.value)
+                }}
+                onInput={(e: React.FormEvent<HTMLInputElement>) => {
                   this.textFieldInputHandler(e.currentTarget.value, 'street')
-                }
-                defaultValue={this.state.deliveryAddress.street}
+                }}
+                defaultValue={this.state.deliveryAddress.street.name}
               />
+
+              <datalist id="list-street"></datalist>
+
               {this.state.validationTextfields[0].touched && !this.state.validationTextfields[0].isValid ? (
                 <span className="fieldError text-warning" id="street">
                   Заполните поле
@@ -204,18 +247,18 @@ class AddDeliveryAddressForm extends React.Component<AddDeliveryAddressFormProps
         <Row className="pl-4 pr-4">
           <Col xs={6} className="form-group p-0 m-0">
             <div className="AddDeliveryAddressForm__textField">
-              <label htmlFor="apartment" className="formLabel">
+              <label htmlFor="flat" className="formLabel">
                 Квартира
               </label>
               <input
                 autoComplete="off"
                 type="text"
                 className="form-control"
-                id="apartment"
+                id="flat"
                 placeholder="98"
-                defaultValue={this.state.deliveryAddress.apartment}
+                defaultValue={this.state.deliveryAddress.flat}
                 onInput={(e: React.FormEvent<HTMLInputElement>) =>
-                  this.textFieldInputHandler(e.currentTarget.value, 'apartment')
+                  this.textFieldInputHandler(e.currentTarget.value, 'flat')
                 }
               />
             </div>
@@ -310,13 +353,17 @@ class AddDeliveryAddressForm extends React.Component<AddDeliveryAddressFormProps
   }
 }
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  getStreetVariants,
+}
 
 const mapStateToProps = (state: any) => {
   const { loading, error } = state.auth
+  const { loading: loadingOrder, error: errorOrder } = state.order
   return {
     loading: loading,
     error: error,
+    loadingOrder: loadingOrder,
   }
 }
 

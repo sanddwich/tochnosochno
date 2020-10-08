@@ -23,7 +23,7 @@ interface CategoriesSliderState {
 
 interface CategoriesSliderProps {
   categories: Category[]
-  categoryClickHandler: (catId: number) => void
+  categoryClickHandler: (catId: string) => void
 }
 
 export default class CategoriesSlider extends React.Component<CategoriesSliderProps, CategoriesSliderState> {
@@ -52,7 +52,7 @@ export default class CategoriesSlider extends React.Component<CategoriesSliderPr
     return counter
   }
 
-  changeCategory = (catId: number): void => {
+  changeCategory = (catId: string): void => {
     const categories = this.state.categories.map((category) => {
       if (category.id === catId) {
         category.active = true

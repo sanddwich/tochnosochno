@@ -16,13 +16,14 @@ import {
   SET_ORDER_ERROR,
   SET_ORDER_LOADING,
   SET_ORDER_PAYMENT,
+  SET_ORDER_PHONE,
   SET_PREPARE_TIME,
 } from '../constants/ActionTypes'
 import { OrderState } from '../interfaces/interfaces'
 import { OrderActionType } from '../interfaces/order'
 const initialDate = new Date().toLocaleDateString('ru-RU') + ' ' + new Date().toLocaleTimeString('ru-RU')
 
-const initialOrder = new Order('Новый', navigator.appVersion, initialDate, [])
+const initialOrder = new Order(navigator.appVersion, initialDate, [])
 
 const initialState: OrderState = {
   order: initialOrder,
@@ -42,7 +43,7 @@ const order = (state = initialState, action: OrderActionType) => {
         ...state,
         loading: false,
         error: '',
-        order: new Order('Новый', navigator.appVersion, initialDate, []),
+        order: new Order(navigator.appVersion, initialDate, []),
       }
     case ADD_TO_ORDER:
       return {
@@ -51,7 +52,7 @@ const order = (state = initialState, action: OrderActionType) => {
           bonus: 0,
           ...state.order,
           amount: state.order.amount + action.orderItem.value * action.orderItem.amount,
-          orderItems: [...(state.order.orderItems || []), action.orderItem],
+          items: [...(state.order.items || []), action.orderItem],
           date: new Date().toLocaleDateString('ru-RU') + ' ' + new Date().toLocaleTimeString('ru-RU'),
         },
       }
@@ -62,7 +63,7 @@ const order = (state = initialState, action: OrderActionType) => {
           ...state.order,
 
           amount: state.order.amount + (state.order.bonus || 0) - action.orderItem.value * action.orderItem.amount,
-          orderItems: state.order.orderItems?.filter((orderItem) => {
+          items: state.order.items?.filter((orderItem) => {
             return orderItem !== action.orderItem
           }),
           bonus: 0,
@@ -75,14 +76,14 @@ const order = (state = initialState, action: OrderActionType) => {
         order: {
           ...state.order,
           bonus: 0,
-          orderItems: state.order.orderItems?.map((orderItem) => {
+          items: state.order.items?.map((orderItem) => {
             if (orderItem.id === action.orderItem.id) {
               orderItem.amount = action.amount
             }
             return orderItem
           }),
 
-          amount: state.order.orderItems?.reduce((acc, currentOrderItem) => {
+          amount: state.order.items?.reduce((acc, currentOrderItem) => {
             return acc + currentOrderItem.value * currentOrderItem.amount
           }, 0),
         },
@@ -105,7 +106,7 @@ const order = (state = initialState, action: OrderActionType) => {
         ...state,
         order: {
           ...state.order,
-          orderItems: state.order.orderItems?.map((orderItem) => {
+          items: state.order.items?.map((orderItem) => {
             if (orderItem.id === action.orderItem.id) {
               orderItem = action.orderItem
             }
@@ -119,7 +120,7 @@ const order = (state = initialState, action: OrderActionType) => {
         ...state,
         order: {
           ...state.order,
-          amount: state.order.orderItems?.reduce((acc, currentOrderItem) => {
+          amount: state.order.items?.reduce((acc, currentOrderItem) => {
             return acc + currentOrderItem.value * currentOrderItem.amount
           }, -(state.order.bonus || 0)),
         },
@@ -159,7 +160,9 @@ const order = (state = initialState, action: OrderActionType) => {
         order: {
           ...state.order,
           isDelivery: action.isDelivery,
+          orderServiceType: action.isDelivery ? 'DeliveryByCourier' : 'DeliveryByClient',
           address: action.address,
+          terminalId: action.isDelivery ? null : action.address.id,
         },
       }
 
@@ -168,7 +171,7 @@ const order = (state = initialState, action: OrderActionType) => {
         ...state,
         order: {
           ...state.order,
-          prepareDate: action.date,
+          completeBefore: action.date,
         },
       }
 
@@ -185,6 +188,15 @@ const order = (state = initialState, action: OrderActionType) => {
       return {
         ...state,
         loading: false,
+      }
+
+    case SET_ORDER_PHONE:
+      return {
+        ...state,
+        order: {
+          ...state.order,
+          phone: action.phone,
+        },
       }
 
     default:

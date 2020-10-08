@@ -15,7 +15,7 @@ import { getMenu } from '../../Redux/actions/menu'
 interface MainPageState {
   loading?: boolean
   categories: Category[]
-  catId: number
+  catId: string
 }
 interface MainPageProps {
   menu: Category[]
@@ -31,7 +31,7 @@ class MainPage extends Component<MainPageProps, MainPageState> {
     this.state = {
       categories: this.props.menu,
       loading: this.props.loading,
-      catId: -1,
+      catId: '1',
     }
   }
 
@@ -46,7 +46,7 @@ class MainPage extends Component<MainPageProps, MainPageState> {
     }
   }
 
-  categoryClickHandler = (catId: number): void => {
+  categoryClickHandler = (catId: string): void => {
     this.setState({ catId })
   }
 

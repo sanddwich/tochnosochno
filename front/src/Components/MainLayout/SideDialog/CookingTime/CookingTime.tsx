@@ -18,6 +18,7 @@ import DeliveryAddress from './DeliveryAddress/DeliveryAddress'
 import DeliveryAddressEl from './DeliveryAddressEl/DeliveryAddressEl'
 import AddDeliveryAddressForm from './AddDeliveryAddressForm/AddDeliveryAddressForm'
 import ByDateEntryPage from './ByDateEntryPage/ByDateEntryPage'
+import Terminal from '../../../../Interfaces/Terminal'
 
 type CookingTimeState = {
   addressCafeList: FullAddress[]
@@ -56,6 +57,7 @@ type CookingTimeProps = {
   showCartDialog: any
   hideSideDialog: () => {}
   customer: Customer
+  terminals: Terminal[]
 }
 
 class CookingTime extends Component<CookingTimeProps, CookingTimeState> {
@@ -66,9 +68,9 @@ class CookingTime extends Component<CookingTimeProps, CookingTimeState> {
       addressCafeList: [],
       addressСustomerList: [],
       resultAddress: {
-        id: -1,
+        id: '',
         house: '',
-        street: '',
+        street: { name: '' },
       },
       cookingTimeEntryPages: [
         {
@@ -162,42 +164,16 @@ class CookingTime extends Component<CookingTimeProps, CookingTimeState> {
   }
 
   getAddressListArrays = (): void => {
-    const addressCafeList: FullAddress[] = [
-      {
+    const addressCafeList: FullAddress[] = this.props.terminals.map((terminal: Terminal, index) => {
+      return {
         address: {
-          house: '6к2',
-          street: 'Савушкина',
-          id: 1111,
+          house: '',
+          street: { name: terminal.name },
+          id: terminal.id,
         },
         clicked: false,
-      },
-      {
-        address: {
-          house: '31',
-          street: 'Фиолетова',
-          id: 2222,
-        },
-        clicked: false,
-      },
-      {
-        address: {
-          house: '9',
-          street: 'Богдана Хмельницкого',
-          id: 3333,
-        },
-        clicked: false,
-      },
-    ]
-
-    // const addressСustomerList: FullAddress[] = []
-    // if (typeof this.props.customer !== 'undefined') {
-    //   const addressСustomerList: FullAddress[] = this.props.customer.addresses.map((address) => {
-    //     return {
-    //       address,
-    //       clicked: false,
-    //     }
-    //   })
-    // }
+      }
+    })
 
     const addressСustomerList: FullAddress[] = this.props.customer.addresses.map((address) => {
       return {
@@ -377,9 +353,9 @@ class CookingTime extends Component<CookingTimeProps, CookingTimeState> {
 
   getDeliveryAddressString = (address: Address): string => {
     let addressString = ''
-    addressString = address.street + ' ' + address.house
-    if (typeof address.apartment !== 'undefined' && address.apartment !== '') {
-      addressString = addressString + ', кв.' + address.apartment
+    addressString = address.street.name + ' ' + address.house
+    if (typeof address.flat !== 'undefined' && address.flat !== '') {
+      addressString = addressString + ', кв.' + address.flat
     }
     if (typeof address.name !== 'undefined' && address.name !== '') {
       addressString = address.name + ': ' + addressString
@@ -612,8 +588,10 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: any) => {
   const { customer } = state.auth
+  const { terminals } = state.menu
   return {
     customer: customer,
+    terminals: terminals,
   }
 }
 

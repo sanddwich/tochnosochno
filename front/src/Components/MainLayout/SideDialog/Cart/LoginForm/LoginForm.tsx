@@ -110,7 +110,12 @@ class LoginForm extends Component<LoginFormProps, LoginFormState> {
     {
       if (!this.props.isAuth && !this.props.isSms) {
         return (
-          <form className="login-form">
+          <form
+            className="login-form"
+            onSubmit={(event) => {
+              event.preventDefault()
+            }}
+          >
             <div className="login-form__error text-center">
               <small className="login-form__error__text" hidden={!this.props.error}>
                 {this.props.error}
@@ -140,7 +145,12 @@ class LoginForm extends Component<LoginFormProps, LoginFormState> {
         )
       } else if (!this.props.isAuth && this.props.isSms) {
         return (
-          <form className="login-form">
+          <form
+            className="login-form"
+            onSubmit={(event) => {
+              event.preventDefault()
+            }}
+          >
             <div className="login-form__error text-center">
               <small className="login-form__error__text" hidden={!this.props.error}>
                 {this.props.error}

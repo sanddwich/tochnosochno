@@ -4,9 +4,11 @@ import FormType from '../../Interfaces/FormType'
 import Order from '../../Interfaces/Order'
 import OrderItem from '../../Interfaces/OrderItem'
 import Product from '../../Interfaces/Product'
+import Terminal from '../../Interfaces/Terminal'
 
 export interface MenuState {
   menu: Category[]
+  terminals: Terminal[]
   loading: boolean
   error: string
   date: Date

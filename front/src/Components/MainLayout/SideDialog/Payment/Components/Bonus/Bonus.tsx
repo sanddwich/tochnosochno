@@ -37,14 +37,14 @@ class Bonus extends Component<BonusProps, BonusState> {
       <div className="bonus">
         Бонусов доступно:
         <span hidden={this.state.isChecked} className="bonus__value">
-          {this.props.customer.bonus}
+          {this.props.customer.bonus || 0}
         </span>
         <span hidden={!this.state.isChecked} className="bonus__value">
           {this.props.customer.bonus - (this.props.order.bonus || 0)}
         </span>
         <img src="images/gold.svg" alt="gold" />
         <div
-          hidden={!this.props.showCheck || this.props.customer.bonus === 0}
+          hidden={!this.props.showCheck || this.props.customer.bonus === 0 || !this.props.customer.bonus}
           className="bonus__checkbox"
           onClick={this.clickHandler}
         >

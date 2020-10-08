@@ -22,12 +22,12 @@
 
     .addDeliveryAddressButton__img {
       position: absolute;
-      width:47px;
-      height:47px;
+      width: 47px;
+      height: 47px;
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #5F5F5F;
+      background-color: #5f5f5f;
       border-radius: 30px;
       margin-top: -37px;
       margin-left: 145px;
@@ -64,13 +64,13 @@
     }
   }
 
-  @media screen and (min-height:760px) {
+  @media screen and (min-height: 760px) {
     .listItemContainer {
       height: 45%;
     }
   }
 
-  @media screen and (min-height:900px) {
+  @media screen and (min-height: 900px) {
     .listItemContainer {
       height: 55%;
     }

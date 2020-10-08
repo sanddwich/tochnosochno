@@ -3,7 +3,7 @@ import Product from './Product'
 export default interface Category {
   additionalInfo: string
   description: string
-  id: number
+  id: string
   images: string
   isDeleted: boolean
   isIcludedInMenu: boolean

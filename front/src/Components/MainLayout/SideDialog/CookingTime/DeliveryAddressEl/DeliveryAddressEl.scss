@@ -36,6 +36,7 @@
   }
 
   .fake__checkbox::before {
+    font-family: sans-serif;
     color: #2b2b2b !important;
     opacity: 0;
     content: '\2714';

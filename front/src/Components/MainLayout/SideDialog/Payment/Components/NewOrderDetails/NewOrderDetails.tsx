@@ -27,12 +27,12 @@ class NewOrderDetails extends Component<NewOrderDetailsProps, NewOrderDetailsSta
 
   showAddress = () => {
     if (this.props.order.address) {
-      let { apartment, house, comment, entrance, floor, street } = this.props.order.address
-      street = street ? ` ул. ${street}` : ''
+      let { flat, house, comment, entrance, floor, street } = this.props.order.address
+      const streetDisplay = street.name ? ` ул. ${street.name}` : ''
       house = house ? `, д. ${house}` : ''
-      apartment = apartment ? `, кв. ${apartment}` : ''
+      flat = flat ? `, кв. ${flat}` : ''
 
-      return `${street}   ${house}  ${apartment}`
+      return `${streetDisplay}   ${house}  ${flat}`
     }
     return ''
   }
@@ -56,7 +56,7 @@ class NewOrderDetails extends Component<NewOrderDetailsProps, NewOrderDetailsSta
           />
         </div>
         <div hidden={!this.state.isShowProducts} className="newOrder-details__products mt-3">
-          {this.props.order.orderItems?.map((orderItem, index) => {
+          {this.props.order.items?.map((orderItem, index) => {
             return (
               <div key={index} className="newOrder__product">
                 <div className="newOrder__product__name">{orderItem.product.name}</div>

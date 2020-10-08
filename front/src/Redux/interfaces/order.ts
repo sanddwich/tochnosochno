@@ -1,3 +1,4 @@
+import Address from '../../Interfaces/Address'
 import OrderItem from '../../Interfaces/OrderItem'
 import PaymentType from '../../Interfaces/PaymentType'
 import {
@@ -20,6 +21,7 @@ import {
   SET_ORDER_ERROR,
   SET_ORDER_LOADING,
   SET_ORDER_PAYMENT,
+  SET_ORDER_PHONE,
   SET_PREPARE_TIME,
 } from '../constants/ActionTypes'
 
@@ -91,7 +93,7 @@ interface ClearOrderError {
 
 interface SetDelivery {
   type: typeof SET_DELIVERY
-  address: string
+  address: Address
   isDelivery: boolean
 }
 
@@ -107,6 +109,15 @@ interface SetOrderBonus {
 
 interface HideLoading {
   type: typeof HIDE_ORDER_LOADING
+}
+
+interface HideLoading {
+  type: typeof HIDE_ORDER_LOADING
+}
+
+interface SetOrderPhone {
+  type: typeof SET_ORDER_PHONE
+  phone: string
 }
 
 export type OrderActionType =
@@ -129,3 +140,4 @@ export type OrderActionType =
   | SetPrepareTime
   | SetOrderBonus
   | HideLoading
+  | SetOrderPhone

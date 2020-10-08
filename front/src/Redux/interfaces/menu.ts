@@ -1,5 +1,6 @@
 import Category from '../../Interfaces/Category'
-import { GET_MENU, SET_ERROR, SET_LOADING } from '../constants/ActionTypes'
+import Terminal from '../../Interfaces/Terminal'
+import { GET_MENU, SET_ERROR, SET_LOADING, SET_TERMINALS } from '../constants/ActionTypes'
 
 interface GetMenuAction {
   type: typeof GET_MENU
@@ -15,4 +16,9 @@ interface SetErrorAction {
   error: string
 }
 
-export type MenuAction = GetMenuAction | SetLoadingAction | SetErrorAction
+interface SetTerminalsAction {
+  type: typeof SET_TERMINALS
+  terminals: Terminal[]
+}
+
+export type MenuAction = GetMenuAction | SetLoadingAction | SetErrorAction | SetTerminalsAction

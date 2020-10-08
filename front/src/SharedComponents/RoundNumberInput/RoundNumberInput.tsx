@@ -23,13 +23,11 @@ export class RoundNumberInput extends Component<RoundNumberInputProps, RoundNumb
     const value = this.props.value + 1
 
     this.props.changeOrderItemAmount(value)
- 
   }
   decrementValue = () => {
     const value = this.props.value - 1 || 1
 
     this.props.changeOrderItemAmount(value)
-   
   }
 
   componentWillUnmount() {}

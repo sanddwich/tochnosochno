@@ -11,7 +11,7 @@ export class Footer extends Component<{}, FooterState> {
   render() {
     return (
       <div className="footer">
-        <div className="container">
+        <div className="container text-center">
           <div className="d-lg-flex justify-content-between">
             <p className="footer__policy">Политика конфиденциальности</p>
             <div className="container w-50">

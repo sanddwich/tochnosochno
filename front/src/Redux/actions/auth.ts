@@ -16,9 +16,9 @@ import {
   SET_TOKEN,
 } from '../constants/ActionTypes'
 import { AuthActionType } from '../interfaces/auth'
-import { OrderState } from '../interfaces/interfaces'
 
-const apiServer = 'http://localhost:3001'
+// const apiServer = 'http://localhost:3001'
+const apiServer = 'http://myaso.holod30.ru'
 
 export const addCustomerAddress = (address: Address): ThunkAction<void, RootState, null, AuthActionType> => {
   return async (dispatch, getState) => {

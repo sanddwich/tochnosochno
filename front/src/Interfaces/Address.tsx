@@ -1,10 +1,17 @@
+import Street from './Street'
+
 export default interface Address {
-  id: number
+  id?: string
   name?: string
-  street: string
+  street: Street
   house: string
-  apartment?: string
+  flat?: string
   entrance?: string
   floor?: string
   comment?: string
+  index?: string
+  building?: string
+  doorphone?: string
+  latitude?: string
+  longitude?: string
 }

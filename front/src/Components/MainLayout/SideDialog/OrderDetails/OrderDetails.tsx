@@ -21,12 +21,12 @@ class OrderDetails extends Component<OrderDetailsProps, OrderDetailsState> {
 
   showAddress = (address: Address | undefined) => {
     if (address) {
-      let { apartment, house, comment, entrance, floor, street } = address
-      street = street ? ` ул. ${street}` : ''
+      let { flat, house, comment, entrance, floor, street } = address
+      const streetDisplay = street.name ? ` ул. ${street.name}` : ''
       house = house ? `, д. ${house}` : ''
-      apartment = apartment ? `, кв. ${apartment}` : ''
+      flat = flat ? `, кв. ${flat}` : ''
 
-      return `${street}   ${house}  ${apartment}`
+      return `${streetDisplay}   ${house}  ${flat}`
     }
     return ''
   }
@@ -50,7 +50,7 @@ class OrderDetails extends Component<OrderDetailsProps, OrderDetailsState> {
             </div>
 
             <div className="order-row pt-5 order-details__products ">
-              {this.props.orderHistory.orderItems?.map((orderItem, index) => {
+              {this.props.orderHistory.items?.map((orderItem, index) => {
                 const name = orderItem.productVariant.product.name
                 const orderItemValue =
                   orderItem.amount *
@@ -89,8 +89,10 @@ class OrderDetails extends Component<OrderDetailsProps, OrderDetailsState> {
           </div>
         </div>
         <div className="order-details__buttons">
-          <div className="order-details__button support-btn"> Связаться с поддержкой</div>
-          <div className="order-details__button repeat-btn"> Повторить</div>
+          {/* <div className="order-details__button support-btn"> Связаться с поддержкой</div> */}
+          <div onClick={this.props.showHistoryDialog} className="order-details__button repeat-btn">
+            Отмена
+          </div>
         </div>
       </section>
     )

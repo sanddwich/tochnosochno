@@ -12,14 +12,28 @@ import {
   Options,
   HttpResponseNoContent,
   setSessionCookie,
+  ApiInfo,
+  HttpResponseBadRequest,
+  Config,
 } from '@foal/core'
 import { CsrfTokenRequired, getCsrfToken, setCsrfCookie } from '@foal/csrf'
 import { TypeORMStore, fetchUser } from '@foal/typeorm'
 import { getRepository } from 'typeorm'
 
 import { Customer } from '../entities'
-import { SmsService } from '../services'
+import { WalletBalance } from '../entities/wallet-balance.entity'
+import { Iiko, CustomerService, SmsService } from '../services'
+import { v4 as uuidv4 } from 'uuid'
 
+@ApiInfo({
+  title: 'Food Delivery Site API',
+  version: '1.0.0',
+  contact: {
+    name: 'Denis Mehtahudinov',
+    url: 'https://deedesign.ru',
+    email: 'denristun@gmail.com',
+  },
+})
 @Hook(() => (response) => {
   response.setHeader('Access-Control-Allow-Credentials', 'true')
   response.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
@@ -29,7 +43,13 @@ export class AuthController {
   store: TypeORMStore
 
   @dependency
+  iiko: Iiko
+
+  @dependency
   sms: SmsService
+
+  @dependency
+  customerService: CustomerService
 
   @Options('*')
   options(ctx: Context) {
@@ -72,8 +92,12 @@ export class AuthController {
     type: 'object',
   })
   async auth(ctx: Context) {
-    const { code, phone } = ctx.request.body
-    const repository = getRepository(Customer)
+    await this.iiko.init()
+    let customer: Customer | undefined
+    let { code, phone } = ctx.request.body
+
+    const repositoryCustomer = getRepository(Customer)
+    const repositoryWalletBalance = getRepository(WalletBalance)
 
     const isCodeCorrect = await this.sms.verifyCode(phone, code)
 
@@ -82,41 +106,61 @@ export class AuthController {
       return new HttpResponseNotFound({ error: true, message: 'Введите коректный код' })
     }
 
-    let customer = await getRepository(Customer).findOne(
-      { phone },
-      {
-        relations: [
-          'orders',
-          'addresses',
-          'orders.orderItems',
-          'orders.orderItems.productVariant.product',
-          'orders.orderItems.productVariant',
-          'orders.orderItems.orderItemModifiers',
-          'orders.orderItems.orderItemModifiers.productModifier',
-          'orders.orderItems.orderItemModifiers.productModifier.modifier',
-        ],
-      }
-    )
+    phone = phone.replace(/^\8/, '+7')
 
-    //Если клиента нет создаём нового с номером телефона
+    let aiikoCustomer = await this.iiko.getCustomer(phone)
+
+    if (aiikoCustomer) aiikoCustomer = this.customerService.setBonuses(aiikoCustomer)
+
+    if (aiikoCustomer && aiikoCustomer.id) {
+    } else {
+      const customerDb = await repositoryCustomer.findOne({ phone: phone })
+      if (!customerDb) {
+        customer = new Customer()
+        customer.phone = phone
+        customer.id = uuidv4()
+        customer.addresses = []
+        customer.orders = []
+        customer = await repositoryCustomer.save(customer)
+      }
+    }
     if (!customer) {
-      customer = new Customer()
-      customer.phone = phone
-      await repository.save(customer)
+      customer = await repositoryCustomer.findOne(
+        { phone },
+        {
+          relations: [
+            'orders',
+            'addresses',
+            'addresses.street',
+            'orders.address',
+            'orders.address.street',
+            'orders.items',
+            'orders.items.productVariant.product',
+            'orders.items.productVariant',
+            'orders.items.orderItemModifiers',
+            'orders.items.orderItemModifiers.productModifier',
+            'orders.items.orderItemModifiers.productModifier.modifier',
+          ],
+        }
+      )
     }
 
     //Создаём сессию для пользователя и отправляем ему токен сессии
-    const session = await this.store.createAndSaveSessionFromUser(customer, { csrfToken: true })
-    const token = session.getToken()
-    const response = new HttpResponseOK({
-      error: false,
-      message: 'Успешная авторизация',
-      token: token,
-      customer: customer,
-    })
-    setSessionCookie(response, session.getToken())
-    setCsrfCookie(response, await getCsrfToken(session))
-    return response
+    if (customer) {
+      const session = await this.store.createAndSaveSessionFromUser(customer, { csrfToken: true })
+      const token = session.getToken()
+      const response = new HttpResponseOK({
+        error: false,
+        message: 'Успешная авторизация',
+        token: token,
+        customer: customer,
+      })
+      setSessionCookie(response, session.getToken())
+      setCsrfCookie(response, await getCsrfToken(session))
+      return response
+    } else {
+      return new HttpResponseBadRequest(customer)
+    }
   }
 
   @Post('/logout')

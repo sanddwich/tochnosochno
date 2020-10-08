@@ -1,10 +1,12 @@
 import { ThunkAction } from 'redux-thunk'
 import { RootState } from '..'
 import Category from '../../Interfaces/Category'
-import { GET_MENU, SET_ERROR, SET_LOADING } from '../constants/ActionTypes'
+import Terminal from '../../Interfaces/Terminal'
+import { GET_MENU, SET_ERROR, SET_LOADING, SET_TERMINALS } from '../constants/ActionTypes'
 import { MenuAction } from '../interfaces/menu'
 
-const apiServer = 'http://localhost:3001'
+// const apiServer = 'http://localhost:3001'
+const apiServer = 'http://myaso.holod30.ru'
 
 export const getMenu = (): ThunkAction<void, RootState, null, MenuAction> => {
   return async (dispatch) => {
@@ -16,9 +18,10 @@ export const getMenu = (): ThunkAction<void, RootState, null, MenuAction> => {
         throw new Error(resData.message)
       }
 
-      const resData: [] = await res.json()
+      const resData = await res.json()
 
-      dispatch(fetchMenu(resData))
+      dispatch(fetchMenu(resData.products))
+      dispatch(setTerminals(resData.terminals))
     } catch (err) {
       dispatch(setError(err))
     }
@@ -42,5 +45,12 @@ export const setError = (error: Error): MenuAction => {
   return {
     type: SET_ERROR,
     error: error.message,
+  }
+}
+
+const setTerminals = (terminals: Terminal[]): MenuAction => {
+  return {
+    type: SET_TERMINALS,
+    terminals: terminals,
   }
 }

@@ -1,11 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany, OneToOne, ManyToMany } from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany, OneToOne, ManyToMany, PrimaryColumn } from 'typeorm'
 import { ProductModifier } from './product-modifier.entity'
 
 @Entity()
 export class Modifier {
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryColumn('varchar', { length: 200 })
+  id: string
 
   @Column()
   name: string

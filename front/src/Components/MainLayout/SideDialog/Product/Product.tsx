@@ -139,26 +139,26 @@ class Product extends Component<ProductProps, ProductState> {
 
         <OrderPrice isProduct={true} value={this.props.orderItem.value * this.props.orderItem.amount} />
 
-        <div className="container h-100  p-0  m-0">
-          <div className="product-dialog__buttons ">
-            {this.props.isChangeProduct ? (
-              <div
-                onClick={() => {
-                  this.props.changeOrderItem(this.props.orderItem)
-                }}
-                className="product-dialog__buttons__add"
-              >
-                Изменить
-              </div>
-            ) : (
-              <div onClick={() => this.addToOrder()} className="product-dialog__buttons__add">
-                Добавить
-              </div>
-            )}
-            <div onClick={this.props.hideSideDialog} className="product-dialog__buttons__cancel">
-              Отменить
+        {/* <div className="container h-100  p-0  m-0"> */}
+        <div className="product-dialog__buttons ">
+          {this.props.isChangeProduct ? (
+            <div
+              onClick={() => {
+                this.props.changeOrderItem(this.props.orderItem)
+              }}
+              className="product-dialog__buttons__add"
+            >
+              Изменить
             </div>
+          ) : (
+            <div onClick={() => this.addToOrder()} className="product-dialog__buttons__add">
+              Добавить
+            </div>
+          )}
+          <div onClick={this.props.hideSideDialog} className="product-dialog__buttons__cancel">
+            Отменить
           </div>
+          {/* </div> */}
         </div>
       </div>
     )

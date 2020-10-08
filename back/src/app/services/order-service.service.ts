@@ -4,12 +4,12 @@ import { Customer, Modifier, Order, OrderItem, OrderItemModifier, ProductVariant
 export class OrderService {
   private error = ''
 
-  async checkOrder(order: Order, customerId: number) {
+  async checkOrder(order: Order, customerId: string) {
     const customerRepository = getRepository(Customer)
     const productVariantRepository = getRepository(ProductVariant)
     const modifierRepository = getRepository(Modifier)
 
-    let { orderItems, amount, bonus } = order
+    let { items, amount, bonus } = order
     bonus = bonus ? bonus : 0
 
     let productValue = 0
@@ -17,7 +17,7 @@ export class OrderService {
 
     const customer = await customerRepository.findOne({ id: customerId })
 
-    if (orderItems.length === 0) {
+    if (items.length === 0) {
       this.error = `Ошибка в заказе нет ни одной поизиции.`
       return { error: true, message: this.error }
     }
@@ -33,7 +33,7 @@ export class OrderService {
     }
 
     await Promise.all(
-      orderItems.map(async (orderItem: OrderItem) => {
+      items.map(async (orderItem: OrderItem) => {
         const productVariant = await productVariantRepository.findOne({ id: orderItem.productVariant.id })
 
         if (!productVariant) {

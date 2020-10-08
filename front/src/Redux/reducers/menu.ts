@@ -1,9 +1,10 @@
-import { GET_MENU, SET_ERROR, SET_LOADING } from '../constants/ActionTypes'
+import { GET_MENU, SET_ERROR, SET_LOADING, SET_TERMINALS } from '../constants/ActionTypes'
 import { MenuState } from '../interfaces/interfaces'
 import { MenuAction } from '../interfaces/menu'
 
 const initialState: MenuState = {
   menu: [],
+  terminals: [],
   loading: false,
   error: '',
   date: new Date(),
@@ -29,6 +30,13 @@ export default (state: MenuState = initialState, action: MenuAction): MenuState 
         ...state,
         loading: false,
         error: action.error,
+      }
+
+    case SET_TERMINALS:
+      return {
+        ...state,
+        loading: false,
+        terminals: action.terminals,
       }
     default:
       return state

@@ -25,6 +25,14 @@ const product: Product = {
   seoTitle: '',
   weight: 0,
   variants: [],
+  sizePrices: [],
+  imageLinks: [],
+  doNotPrintInCheque: false,
+  parentGroup: '',
+  order: 0,
+  additionalInfo: '',
+  tags: [],
+  fullNameEnglish: '',
 }
 
 const initialOrderItem: OrderItem = {

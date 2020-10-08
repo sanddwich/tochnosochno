@@ -1,12 +1,21 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm'
-import { Customer } from '.'
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryColumn,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm'
+import { Customer, Street } from '.'
 import { Order } from './order.entity'
 
 @Entity()
 export class Address {
-  @PrimaryColumn('varchar', { length: 200 })
-  id: number
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
   @Column()
   name: string
@@ -15,16 +24,13 @@ export class Address {
   city: string
 
   @Column()
-  street: string
-
-  @Column()
   house: string
 
   @Column()
   building: string
 
   @Column()
-  apartment: string
+  flat: string
 
   @Column()
   entrance: string
@@ -35,9 +41,18 @@ export class Address {
   @Column()
   comment: string
 
+  @Column()
+  latitude: string
+
+  @Column()
+  longitude: string
+
   @ManyToOne((type) => Customer, (customer) => customer.addresses)
   customer: Customer
 
   @OneToMany((type) => Order, (order) => order.address)
   orders: Order[]
+
+  @ManyToOne((type) => Street, (street) => street.addresses)
+  street: Street
 }

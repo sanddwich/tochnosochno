@@ -4,7 +4,7 @@ import { Product } from '.'
 
 @Entity()
 export class Group {
-  @PrimaryColumn()
+  @PrimaryColumn('varchar', { length: 200 })
   id: string
 
   @Column()
@@ -18,6 +18,8 @@ export class Group {
 
   @Column()
   isDeleted: boolean
+  @Column({ nullable: true })
+  code: string
 
   @Column({ nullable: true })
   seoDescription: string
@@ -39,6 +41,9 @@ export class Group {
 
   @Column({ nullable: true })
   isIcludedInMenu: boolean
+
+  @Column({ nullable: true })
+  isGroupModifier: boolean
 
   @Column({ nullable: true })
   order: number

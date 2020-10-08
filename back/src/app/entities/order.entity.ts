@@ -3,14 +3,22 @@ import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, OneToOne, OneToMany,
 import { Customer } from './customer.entity'
 import { Address } from './address.entity'
 import { OrderItem } from './order-item.entity'
+import { Payment } from './payment.entity'
+import { Terminal } from './terminal.entity'
 
 @Entity()
 export class Order {
-  @PrimaryColumn('varchar', { length: 200 })
-  id: number
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
   @Column()
   name: string
+
+  @Column()
+  completeBefore: string
+
+  @Column()
+  phone: string
 
   @Column()
   date: string
@@ -49,5 +57,11 @@ export class Order {
   address: Address
 
   @OneToMany((type) => OrderItem, (orderItem) => orderItem.order)
-  orderItems: OrderItem[]
+  items: OrderItem[]
+
+  @OneToMany((type) => Payment, (payment) => payment.order)
+  payments: Payment[]
+
+  @ManyToOne((type) => Terminal, (terminal) => terminal.orders)
+  terminal: Terminal
 }
