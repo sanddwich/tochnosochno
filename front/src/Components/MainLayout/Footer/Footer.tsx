@@ -26,11 +26,14 @@ export default class Footer extends React.Component<FooterProps, FooterState> {
                 </div>
                 <div className="footer__contacts">
                   <div className="row">
-                    <div className="col-6">
+                    <div className="col-6 m-0 p-0">
                       <div className="footer__contats__title">Телефон ресторана</div>
                       <div className="footer__contats__phone"> 46-46-07</div>
                     </div>
-                    <div className="col-6">Телефон доставки 46-46-02</div>
+                    <div className="col-6 m-0 p-0">
+                      <div className="footer__contats__title">Телефон доставки</div>
+                      <div className="footer__contats__phone"> 46-46-02</div>
+                    </div>
                   </div>
                 </div>
               </div>
