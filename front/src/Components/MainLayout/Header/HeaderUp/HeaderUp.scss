@@ -7,5 +7,28 @@
   color: #555555;
 
   .HeaderUp__menuItem {
+    .HeaderUp__menuLogo {
+      background-color: #000000;
+    }
+
+    .HeaderUp__container {
+      .HeaderUp__containerImg {
+      }
+      .HeaderUp__containerDescr {
+        .HeaderUp__containerDescrPhone {
+          text-align: right;
+        }
+        .HeaderUp__containerDescrTitle {
+          font-family: 'Montserrat';
+          font-style: normal;
+          font-weight: 500;
+          font-size: 10px;
+          line-height: 12px;
+          text-align: right;
+
+          color: #303030;
+        }
+      }
+    }
   }
 }
