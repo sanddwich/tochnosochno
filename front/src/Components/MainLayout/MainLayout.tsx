@@ -7,12 +7,20 @@ import PageContent from './PageContent/PageContent'
 import { Route, Switch, Redirect } from 'react-router-dom';
 import Menu from '../Pages/Menu/Menu'
 import Main from '../Pages/Main/Main'
-
-interface MainLayoutProps {}
+import { connect } from 'react-redux'
+import { getMenu } from '../../Redux/actions/menu'
+ 
+interface MainLayoutProps {
+  getMenu: any
+}
 
 interface MainLayoutState {}
 
-export default class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
+class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
+  componentDidMount() {
+    this.props.getMenu()
+  }
+
   render() {
     return (
       <Container fluid className="MainLayout p-0 m-0">
@@ -30,3 +38,10 @@ export default class MainLayout extends React.Component<MainLayoutProps, MainLay
     )
   }
 }
+
+
+const mapDispatchToProps = {
+  getMenu 
+}
+
+export default connect(null, mapDispatchToProps)(MainLayout)

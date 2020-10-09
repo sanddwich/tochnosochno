@@ -13,7 +13,7 @@ export default class Header extends React.Component<HeaderProps, HeaderState> {
     return (
       <Container fluid className="Header p-0 m-0">
         <HeaderUp></HeaderUp>
-        <HeaderDown></HeaderDown>
+        <HeaderDown/>
       </Container>
     )
   }

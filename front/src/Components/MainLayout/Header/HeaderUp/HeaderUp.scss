@@ -5,10 +5,22 @@
   font-size: 16px;
   line-height: 20px;
   color: #555555;
+  height: 100px;
 
   .HeaderUp__menuItem {
     .HeaderUp__menuLogo {
       background-color: #000000;
+      width: 141px;
+      height: 63px;
+      border-radius: 10px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        margin-left: -10px;
+      }
     }
 
     .HeaderUp__container {
