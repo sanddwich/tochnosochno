@@ -33,8 +33,8 @@ import { OrderActionType } from '../interfaces/order'
 import { showProductDialog, showCartDialog, showCreditCardForm } from './app'
 import { getCustomer } from './auth'
 
-// const apiServer = 'http://localhost:3001'
-const apiServer = 'http://myaso.holod30.ru'
+const apiServer = 'http://localhost:3001'
+// const apiServer = 'http://myaso.holod30.ru'
 
 export const applyBonusOrder = (isClear?: boolean) => {
   return (dispatch: any, getState: any) => {
