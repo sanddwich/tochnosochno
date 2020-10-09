@@ -118,7 +118,7 @@ export const getSmsCode = (phone: string): ThunkAction<void, RootState, null, Au
   return async (dispatch) => {
     try {
       dispatch(setLoading())
-      Cookies
+
       const res = await fetch(`${apiServer}/auth/login`, {
         credentials: 'include',
         method: 'POST',
