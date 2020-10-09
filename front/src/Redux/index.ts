@@ -16,7 +16,7 @@ const encryptor = createEncryptor({
 })
 
 const persistConfig: any = {
-  key: 'myaso',
+  key: 'tochnosochno',
   storage,
   transforms: [encryptor],
 }

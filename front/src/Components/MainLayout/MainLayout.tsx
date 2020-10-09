@@ -1,40 +1,32 @@
-import React, { Component } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-
-import { Header } from './Header/Header'
-import { Footer } from './Footer/Footer'
-import { MapPage } from '../MapPage/MapPage'
-import SideBar from './SideBar/SideBar'
-import SideDialog from './SideDialog/SideDialog'
-import MainPage from '../MainPage/MainPage'
-
+import React from 'react'
+import { Container } from 'react-bootstrap'
+import Footer from './Footer/Footer'
+import Header from './Header/Header'
 import './MainLayout.scss'
-import { Alert } from 'react-bootstrap'
+import PageContent from './PageContent/PageContent'
+import { Route, Switch, Redirect } from 'react-router-dom';
+import Menu from '../Pages/Menu/Menu'
+import Main from '../Pages/Main/Main'
 
-type MainLayoutState = {}
+interface MainLayoutProps {}
 
-export class MainLayout extends Component<{}, MainLayoutState> {
-  constructor(props: any) {
-    super(props)
-  }
+interface MainLayoutState {}
 
+export default class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
   render() {
     return (
-      <React.Fragment>
+      <Container fluid className="MainLayout p-0 m-0">
         <Header />
-
-        <Router>
-          <main>
-            <Route path="/" exact component={MainPage} />
-            <Route path="/contacts" component={MapPage} />
-          </main>
-        </Router>
-        <SideDialog />
-        <SideBar />
-        <footer>
-          <Footer />
-        </footer>
-      </React.Fragment>
+        
+        <PageContent>
+          <Switch>
+            <Route path='/menu' exact component={Menu} />
+            <Route path='/' exact component={Main} />
+          </Switch>
+        </PageContent>
+        
+        <Footer />
+      </Container>
     )
   }
 }

@@ -5,8 +5,8 @@ import Terminal from '../../Interfaces/Terminal'
 import { GET_MENU, SET_ERROR, SET_LOADING, SET_TERMINALS } from '../constants/ActionTypes'
 import { MenuAction } from '../interfaces/menu'
 
-// const apiServer = 'http://localhost:3001'
-const apiServer = 'http://myaso.holod30.ru'
+const apiServer = 'http://localhost:3001'
+// const apiServer = 'http://myaso.holod30.ru'
 
 export const getMenu = (): ThunkAction<void, RootState, null, MenuAction> => {
   return async (dispatch) => {

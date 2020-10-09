@@ -17,8 +17,8 @@ import {
 } from '../constants/ActionTypes'
 import { AuthActionType } from '../interfaces/auth'
 
-// const apiServer = 'http://localhost:3001'
-const apiServer = 'http://myaso.holod30.ru'
+const apiServer = 'http://localhost:3001'
+// const apiServer = 'http://myaso.holod30.ru'
 
 export const addCustomerAddress = (address: Address): ThunkAction<void, RootState, null, AuthActionType> => {
   return async (dispatch, getState) => {
@@ -118,7 +118,6 @@ export const getSmsCode = (phone: string): ThunkAction<void, RootState, null, Au
   return async (dispatch) => {
     try {
       dispatch(setLoading())
-
       const res = await fetch(`${apiServer}/auth/login`, {
         credentials: 'include',
         method: 'POST',

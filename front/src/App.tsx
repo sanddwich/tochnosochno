@@ -1,10 +1,11 @@
 import React from 'react'
 import './App.scss'
-import { MainLayout } from './Components/MainLayout/MainLayout'
+// import { MainLayout } from './Components/MainLayout/MainLayout'
 import { connect } from 'react-redux'
 import { getCustomer } from './Redux/actions/auth'
 import { clearOrderError } from './Redux/actions/order'
-import { Alert } from 'react-bootstrap'
+import MainLayout from './Components/MainLayout/MainLayout'
+// import { Alert } from 'react-bootstrap'
 
 interface AppState {
   showAlert: boolean
@@ -34,15 +35,6 @@ class App extends React.Component<AppProps, AppState> {
   render() {
     return (
       <div className="App">
-        <Alert
-          show={!!this.props.errorOrder}
-          style={{ position: 'fixed', top: '10%', right: '20%', zIndex: 100000, lineHeight: '20px' }}
-          variant="danger"
-          onClose={() => this.setShow()}
-          dismissible
-        >
-          {this.props.errorOrder}
-        </Alert>
         <MainLayout />
       </div>
     )
