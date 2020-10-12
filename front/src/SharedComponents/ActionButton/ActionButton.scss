@@ -8,8 +8,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top-left-radius: 25px;
-  border-bottom-right-radius: 25px;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
   position: relative;
   &__text {
     text-align: center !important;
@@ -24,7 +24,7 @@
     background-color: #ffd12d;
     width: 60px;
     height: 60px;
-    border-bottom-right-radius: 25px;
+    border-bottom-right-radius: 20px;
   }
 
   &:hover {
