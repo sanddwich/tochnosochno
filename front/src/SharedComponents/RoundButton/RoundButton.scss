@@ -8,9 +8,9 @@
   align-items: center;
   &:hover {
     cursor: pointer;
-    filter: brightness(0.8);
+    background-color: #f6c000 !important;
   }
   &:active {
-    filter: brightness(0.5);
+    filter: brightness(0.8);
   }
 }
