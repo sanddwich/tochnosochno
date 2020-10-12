@@ -1,4 +1,5 @@
 import React from 'react'
+import ActionButton from '../../../SharedComponents/ActionButton/ActionButton'
 import RoundButton from '../../../SharedComponents/RoundButton/RoundButton'
 import './Footer.scss'
 
@@ -82,6 +83,15 @@ export default class Footer extends React.Component<FooterProps, FooterState> {
               </div>
             </div>
           </div>
+        </div>
+        <div style={{ backgroundColor: 'white', width: '300px', height: '300px', padding: '20px' }}>
+          <ActionButton
+            width="180px"
+            backgroundColor="#303030"
+            text="В корзину"
+            icon="cart_dark.svg"
+            onClick={() => console.log(111)}
+          />
         </div>
       </footer>
     )
