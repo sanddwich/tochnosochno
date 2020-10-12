@@ -10,7 +10,7 @@ interface PageContentState {}
 export default class PageContent extends React.Component<PageContentProps, PageContentState> {
   render() {
     return (
-      <Container className="PageContent p-0 m-0">
+      <Container fluid className="PageContent p-0 m-0">
         {this.props.children}
       </Container>
     )

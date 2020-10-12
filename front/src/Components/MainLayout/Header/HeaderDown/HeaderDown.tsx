@@ -26,34 +26,57 @@ class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
     // console.log(this.props.menu)
   }
 
-  activateLink = (id: number):void => {
+  activateLink = (id: number): void => {
     this.setState({
-      activeMenu: id
+      activeMenu: id,
     })
   }
 
   render() {
     return (
-      <Container fluid className="HeaderDown p-0 m-0">
-        <Container className="p-0 h-100">
-          <Row className="p-0 m-0 h-100 d-flex justify-content-between">
-            {this.props.menu.map((menuItem, index) => {
-              return (
-                <div
-                  key={menuItem.id + index}
-                  className="HeaderDown__menuEl h-100 d-flex align-items-center"
-                  style={{borderBottom: parseInt(menuItem.id) === this.state.activeMenu ? '5px solid #FFCF25' : ''}}
-                  onClick={() => {
-                    this.activateLink(parseInt(menuItem.id))
-                  }}
-                >
-                  {menuItem.name}
-                </div>
-              )
-            })}
-          </Row>
+      <React.Fragment>
+        <Container fluid className="HeaderDown p-0 m-0 d-none d-lg-flex">
+          <Container className="p-0 h-100">
+            <Row className="p-0 m-0 h-100 d-flex justify-content-between">
+              {this.props.menu.map((menuItem, index) => {
+                return (
+                  <div
+                    key={menuItem.id + index}
+                    className="HeaderDown__menuEl h-100 d-flex align-items-center"
+                    style={{ borderBottom: parseInt(menuItem.id) === this.state.activeMenu ? '5px solid #FFCF25' : '' }}
+                    onClick={() => {
+                      this.activateLink(parseInt(menuItem.id))
+                    }}
+                  >
+                    {menuItem.name}
+                  </div>
+                )
+              })}
+            </Row>
+          </Container>
         </Container>
-      </Container>
+
+        <Container fluid className="HeaderDownMobile p-0 m-0 d-flex d-lg-none">
+          <Container className="p-0 h-100">
+            <Row className="p-0 m-0 h-100 d-flex justify-content-between">
+              {this.props.menu.map((menuItem, index) => {
+                return (
+                  <div
+                    key={menuItem.id + index}
+                    className="HeaderDown__menuEl h-100 d-flex align-items-center"
+                    style={{ borderBottom: parseInt(menuItem.id) === this.state.activeMenu ? '5px solid #FFCF25' : '' }}
+                    onClick={() => {
+                      this.activateLink(parseInt(menuItem.id))
+                    }}
+                  >
+                    {menuItem.name}
+                  </div>
+                )
+              })}
+            </Row>
+          </Container>
+        </Container>
+      </React.Fragment>
     )
   }
 }
