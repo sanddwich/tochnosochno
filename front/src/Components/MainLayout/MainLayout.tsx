@@ -28,8 +28,9 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
         
         <PageContent>
           <Switch>
-            <Route path='/menu' exact component={Menu} />
+            <Route path='/menu/:id' component={Menu} />
             <Route path='/' exact component={Main} />
+            <Redirect to='/' />
           </Switch>
         </PageContent>
         

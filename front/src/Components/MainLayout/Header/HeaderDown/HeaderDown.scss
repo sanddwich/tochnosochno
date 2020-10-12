@@ -3,7 +3,7 @@
   background: #303030;
   border-radius: 40px 0px;
 
-  font-family: Montserrat;
+  font-family: 'Montserrat';
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -11,4 +11,32 @@
 
   color: #ffffff;
   cursor: pointer;
+
+  .HeaderDown__menuEl {
+    color: #ffffff;
+  }
 }
+
+.HeaderDownMobile {
+  height: 54px;
+  background: #303030;
+
+  .HeaderDown__menuEl {
+    color: red;
+    width: 300px;
+  }
+  .swiper-wrapper {
+    // margin-top: 600px !important;
+  }
+
+  .swiper-slide {
+    // width: 300px !important;
+    // margin-top: 50px;
+    // z-index: 100000;
+    a {
+      color: red;
+    }
+  }
+}
+
+
