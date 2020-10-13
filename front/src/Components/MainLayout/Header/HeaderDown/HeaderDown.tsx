@@ -18,25 +18,10 @@ interface HeaderDownProps {
   menu: Category[]
 }
 
-interface HeaderDownState {
-  activeMenu: number
-}
+interface HeaderDownState {}
 
 class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
-  constructor(props: HeaderDownProps) {
-    super(props)
-    this.state = {
-      activeMenu: 0,
-    }
-  }
-
   componentDidMount() {}
-
-  activateLink = (id: number): void => {
-    this.setState({
-      activeMenu: id,
-    })
-  }
 
   render() {
     return (
@@ -49,9 +34,6 @@ class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
                   <NavLink key={menuItem.id + index} to={`/menu/${menuItem.id}`} activeClassName="activatedLink">
                     <div
                       className="HeaderDown__menuEl h-100 d-flex align-items-center"
-                      style={{
-                        borderBottom: parseInt(menuItem.id) === this.state.activeMenu ? '5px solid #FFCF25' : '',
-                      }}
                     >
                       {menuItem.name}
                     </div>
