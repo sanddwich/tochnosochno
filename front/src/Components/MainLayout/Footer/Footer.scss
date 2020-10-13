@@ -1,16 +1,60 @@
 .footer {
   color: white;
-
-  font-family: Montserrat;
+  padding: 40px 0;
+  font-family: 'Montserrat';
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
+  font-weight: 400;
   line-height: 22px;
   width: 100%;
-  height: 240px;
+
   background-color: #303030;
+
+  .bold {
+    font-weight: bold;
+  }
+
+  a {
+    color: white;
+  }
 
   &__social {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 40px;
+  }
+  &__contacts {
+    line-height: 30px;
+    &__phone {
+      font-weight: 700;
+    }
+  }
+
+  &__policy {
+    margin-top: 13px;
+    line-height: 30px;
+  }
+
+  &__copyright {
+    margin-top: 13px;
+    line-height: 30px;
+  }
+
+  &__worktime {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    line-height: 80px;
+  }
+}
+
+@media (max-width: 489px) {
+  .footer {
+    font-size: 16px;
+    &__worktime {
+      justify-content: left;
+    }
   }
 }

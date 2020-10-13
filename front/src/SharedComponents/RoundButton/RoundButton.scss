@@ -1,16 +1,16 @@
 .roundButton {
   text-align: center;
   width: 40px;
-  height: 40px;  
+  height: 40px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   &:hover {
     cursor: pointer;
-    filter: brightness(0.8);
+    background-color: #f6c000 !important;
   }
   &:active {
-    filter: brightness(0.5);
+    filter: brightness(0.8);
   }
 }
