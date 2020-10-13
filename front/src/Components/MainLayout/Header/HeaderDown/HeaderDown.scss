@@ -21,22 +21,27 @@
   height: 54px;
   background: #303030;
 
+
   .HeaderDown__menuEl {
-    color: red;
-    width: 300px;
-  }
-  .swiper-wrapper {
-    // margin-top: 600px !important;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    color: #ffffff;
   }
 
   .swiper-slide {
-    // width: 300px !important;
-    // margin-top: 50px;
-    // z-index: 100000;
+    width: 100px !important;
     a {
-      color: red;
+      color: #ffffff;
     }
   }
 }
 
-
+.activatedLink {
+  div {
+    border-bottom: 5px solid #FFD74B;
+  }
+}

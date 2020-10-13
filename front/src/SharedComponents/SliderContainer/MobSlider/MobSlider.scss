@@ -1,0 +1,27 @@
+.MobSlider {
+  .swiper-slide,
+  .swiper-slide-active {
+    display: flex !important;
+    justify-content: center;
+  }
+}
+
+.MobSlider__pagination {
+  position: absolute;
+  z-index: 100000 !important;
+  margin-top: -30px;
+
+  .swiper-pagination-bullet {
+    background-color: none !important;
+    border: 2px solid #ffd12d;
+    box-sizing: border-box;
+    margin-right: 8px;
+    width: 14px !important;
+    height: 14px;
+    opacity: 1;
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: #ffd12d;
+  }
+}

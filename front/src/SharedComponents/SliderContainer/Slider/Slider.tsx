@@ -69,8 +69,7 @@ export default class Slider extends React.Component<SliderProps, SliderState> {
             </div>
           </div>
 
-          <div id="pagination" className="Slider__pagination">
-          </div>
+          <div id="pagination" className="Slider__pagination"></div>
         </Row>
       </Container>
     )

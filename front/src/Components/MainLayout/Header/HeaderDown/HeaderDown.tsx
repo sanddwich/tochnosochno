@@ -8,10 +8,11 @@ import { RootState } from '../../../../Redux'
 import './HeaderDown.scss'
 
 // Import Swiper React components
-import SwiperCore, { Navigation } from 'swiper'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { Swiper, SwiperSlide } from 'swiper/react';
+
 // Import Swiper styles
-import 'swiper/swiper.scss'
+import 'swiper/swiper.scss';
+
 
 interface HeaderDownProps {
   menu: Category[]
@@ -51,9 +52,6 @@ class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
                       style={{
                         borderBottom: parseInt(menuItem.id) === this.state.activeMenu ? '5px solid #FFCF25' : '',
                       }}
-                      // onClick={() => {
-                      //   this.activateLink(parseInt(menuItem.id))
-                      // }}
                     >
                       {menuItem.name}
                     </div>
@@ -65,12 +63,12 @@ class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
         </Container>
 
         <Container fluid className="HeaderDownMobile p-0 m-0 d-flex d-lg-none">
-          <Swiper slidesPerView={'auto'} spaceBetween={20} loop={true}>
+          <Swiper slidesPerView={'auto'} spaceBetween={5} loop={true}>
             {this.props.menu.map((menuItem, index) => {
               return (
                 <SwiperSlide key={menuItem.id + index}>
                   <NavLink to={`/menu/${menuItem.id}`} activeClassName="activatedLink">
-                    <div className="HeaderDown__menuEl h-100 d-flex align-items-center">{menuItem.name}</div>
+                    <div className="HeaderDown__menuEl h-100 d-flex justify-content-center align-items-center">{menuItem.name}</div>
                   </NavLink>
                 </SwiperSlide>
               )
