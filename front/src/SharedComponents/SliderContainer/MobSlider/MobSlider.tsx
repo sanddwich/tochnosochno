@@ -22,7 +22,7 @@ export default class MobSlider extends React.Component<MobSliderProps, MobSlider
   render() {
     return (
       <React.Fragment>
-        <Container fluid className="MobSlider p-0 m-0">
+        <Container fluid className="MobSlider p-0 m-0 mb-2">
           <Swiper
             loop={true}
             spaceBetween={5}

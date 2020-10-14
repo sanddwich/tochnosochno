@@ -1,3 +1,30 @@
 .CategoriesContainer {
+  margin: auto !important;
+  max-width: 1140px;
+  margin-bottom: 20px !important;
+  
+  .CategoriesContainer__LongNavLinkItem {
+    cursor: pointer;
+
+    &:nth-child(2n+1) {
+      padding-right: 10px !important;
+    }
+
+    &:nth-child(2n) {
+      padding-left: 10px !important;
+    }
+  }
+
+  .CategoriesContainer__ShortNavLinkItem {
+    cursor: pointer;
+
+    &:nth-child(3n+2) {
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+    }
+  }
+}
+
+.CategoriesContainerMobile {
   
 }

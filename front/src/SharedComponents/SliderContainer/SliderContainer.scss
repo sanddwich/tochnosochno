@@ -6,6 +6,26 @@
   margin-bottom: 20px !important;
 
   .sliderBanner__img {
-    padding-left: 10px !important;
+    padding-left: 20px !important;
+
+    img {
+      height:388px;
+    }
+  }
+
+  @media screen and (max-width: 1200px) {
+    .sliderBanner__img {  
+      img {
+        height:325px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 992px) {
+    .sliderBanner__img {  
+      img {
+        height:245px;
+      }
+    }
   }
 }

@@ -1,0 +1,66 @@
+import React from 'react'
+import { Col, Container, Row } from 'react-bootstrap'
+import './CategorySlider.scss'
+
+// Import Swiper React components
+import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
+
+// Import Swiper styles
+import 'swiper/swiper.scss'
+import 'swiper/components/navigation/navigation.scss'
+import 'swiper/components/pagination/pagination.scss'
+import Category from '../../../../../Interfaces/Category'
+import LongMenuItemMob from './LongMenuItemMob/LongMenuItemMob'
+import _ from 'lodash'
+import ShortMenuItemMob from './ShortMenuItemMob/ShortMenuItemMob'
+
+// install Swiper components
+SwiperCore.use([Navigation, Pagination, Autoplay])
+
+interface CategorySliderProps {
+  longMenu: Category[]
+  shortMenu: Category[]
+}
+
+interface CategorySliderState {}
+
+const longBreakpoint: number = 2
+const shortBreakpoint: number = 3
+
+export default class CategorySlider extends React.Component<CategorySliderProps, CategorySliderState> {
+  componentDidMount() {}
+
+  slideGenerator = (categories: Category[], separator: number): any => {
+    const resultCategories = _.chunk(categories, separator)
+    // console.log(resultCategories)
+    return resultCategories.map((pool, index) => {
+      return (
+        <SwiperSlide key={index}>
+          <Container fluid className="m-0 p-0">
+            {pool.map((category, index) => {
+              if (separator === longBreakpoint) {
+                return <LongMenuItemMob key={category.id + index} category={category} />
+              }
+              if (separator === shortBreakpoint) {
+                return <ShortMenuItemMob key={category.id + index} category={category} />
+              }
+              return <div key={category.id + index}></div>
+            })}
+          </Container>
+        </SwiperSlide>
+      )
+    })
+  }
+
+  render() {
+    return (
+      <Container fluid className="CategorySlider m-0 p-0 mb-4">
+        <Swiper loop={true} spaceBetween={20}>
+          {this.slideGenerator(this.props.longMenu, longBreakpoint)}
+          {this.slideGenerator(this.props.shortMenu, shortBreakpoint)}
+        </Swiper>
+      </Container>
+    )
+  }
+}

@@ -32,7 +32,7 @@ export default class SliderContainer extends React.Component<SliderContainerProp
           </Row>
         </Container>
 
-        <Container fluid className="p-0 m-0 d-flex d-md-none justify-content-center">
+        <Container fluid className="p-0 m-0 mb-4 d-flex d-md-none justify-content-center">
           <img className="img-fluid" src="images/banners/banner_mob.jpg" alt="" />
         </Container>
       </React.Fragment>
