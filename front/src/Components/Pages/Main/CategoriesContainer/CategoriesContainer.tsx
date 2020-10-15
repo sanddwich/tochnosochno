@@ -8,8 +8,8 @@ import { RootState } from '../../../../Redux'
 
 import './CategoriesContainer.scss'
 import CategorySlider from './CategorySlider/CategorySlider'
-import LongMenuItem from './LongMenuItem/LongMenuItem'
-import ShortMenuItem from './ShortMenuItem/ShortMenuItem'
+import LongMenuItem from './CategorySlider/LongMenuItem/LongMenuItem'
+import ShortMenuItem from './CategorySlider/ShortMenuItem/ShortMenuItem'
 
 interface CategoriesContainerProps {
   menu: Category[]

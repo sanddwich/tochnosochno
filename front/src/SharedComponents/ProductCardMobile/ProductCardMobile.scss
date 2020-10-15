@@ -1,0 +1,125 @@
+.ProductCardMobile {
+  
+    .ProductCardMobile__container {
+      background: #ffffff;
+      box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.1);
+      border-radius: 15px;
+    }
+  
+    .ProductCardMobile__favoriteButton {
+      padding: 20px;
+    }
+  
+    .ProductCardMobile__stickerCont {
+      padding: 20px;
+    }
+  
+    .ProductCardMobile__firstLine {
+      position: relative;
+      z-index: 100;
+    }
+  
+    .ProductCardMobile__img {
+      margin-top: -80px;
+    }
+  
+    .ProductCardMobile__textContent {
+      margin-top: -25px;
+      height: 100px;
+      padding-left: 45px !important;
+      padding-right: 45px !important;
+  
+      .ProductCardMobile__title {
+        cursor: pointer;
+        h1 {
+          font-family: 'Montserrat';
+          font-style: normal;
+          font-weight: bold;
+          font-size: 24px;
+          line-height: 24px;
+  
+          color: #303030;
+  
+          height: 50px;
+          overflow: hidden;
+        }
+      }
+  
+      .ProductCardMobile__desc {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 16px;
+  
+        color: #8e8e8e;
+        height: 50px;
+        overflow: hidden;
+      }
+    }
+  
+    .ProductCardMobile__priceLine {
+      margin-top: 10px;
+      padding-left: 19px !important;
+      padding-right: 19px !important;
+  
+      .ProductCardMobile__prices {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-left: 15px;
+      }
+  
+      .ProductCardMobile__price {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 28px;
+  
+        color: #303030;
+  
+        span {
+          font-size: 16px;
+          margin-top: 6px;
+          margin-left: -6px;
+        }
+      }
+  
+      .ProductCardMobile__oldPrice {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        text-decoration-line: line-through;
+  
+        margin-top: 6px;
+        margin-left: 5px;
+  
+        color: #8e8e8e;
+      }
+    }
+  
+    @media screen and (max-width: 1200px) {
+      .ProductCardMobile__prices {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        width: 100%;
+        justify-content: start !important;
+      }
+  
+      .ProductCardMobile__button {
+        width: 100%;
+      }
+    }
+  
+    @media screen and (max-width: 992px) {
+      .ProductCardMobile__title {
+        h1 {
+          max-width: 180px;
+        }
+      }
+    }
+  }
+  

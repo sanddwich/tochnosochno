@@ -56,10 +56,13 @@ export default class CategorySlider extends React.Component<CategorySliderProps,
   render() {
     return (
       <Container fluid className="CategorySlider m-0 p-0 mb-4">
-        <Swiper loop={true} spaceBetween={20}>
+        <Swiper loop={true} spaceBetween={20} pagination={{ clickable: true, el: '#paginationCategories' }}>
           {this.slideGenerator(this.props.longMenu, longBreakpoint)}
           {this.slideGenerator(this.props.shortMenu, shortBreakpoint)}
         </Swiper>
+        <Row className="d-flex justify-content-center">
+          <div id="paginationCategories" className="Slider__pagination"></div>
+        </Row>
       </Container>
     )
   }

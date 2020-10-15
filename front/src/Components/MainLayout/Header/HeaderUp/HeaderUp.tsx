@@ -19,50 +19,47 @@ export default class HeaderUp extends React.Component<HeaderUpProps, HeaderUpSta
     }
   }
 
-  instaButtonClick = (): void => {
-    console.log('instaButtonClick')
-  }
+  noAction = (): void => {}
 
-  vkButtonClick = (): void => {
-    console.log('vkButtonClick')
-  }
-
-  cartButtonClick = (): void => {
-    console.log('cartButtonClick')
-  }
-
-  profileButtonClick = (): void => {
-    console.log('profileButtonClick')
-  }
-
-  noAction = (): void => {
-    console.log('noAction')
-  }
-
-  burgerButtonClick = (): void => {  
+  burgerButtonClick = (): void => {
     const toggleMenu = this.state.toggleMenu
-    const element = document.querySelector('.HeaderUp__toggleMenu') as HTMLElement
-    toggleMenu ? element.style.display = 'block' : element.style.display = 'none'
-    this.setState({toggleMenu: !this.state.toggleMenu})
+    const element = (document.querySelector('.HeaderUp__toggleMenu') as HTMLElement) as HTMLElement
+    toggleMenu ? (element.style.display = 'block') : (element.style.display = 'none')
+
+    this.setState({ toggleMenu: !this.state.toggleMenu })
   }
 
   render() {
     return (
       <React.Fragment>
         <Container className="HeaderUp p-0 d-none d-lg-flex justify-content-between align-items-center">
-          <div className="HeaderUp__menuItem">Акции</div>
+          <NavLink to="/actions">
+            <div className="HeaderUp__menuItem">Акции</div>
+          </NavLink>
           <div className="HeaderUp__menuItem">Соц.сети:</div>
           <div className="HeaderUp__menuItem">
             <Row className="m-0 p-0">
               <Col className="m-0 p-0">
-                <RoundButton backgroundColor="#303030" icon="insta_white.svg" onClick={() => this.instaButtonClick()} />
+                <RoundButton
+                  backgroundColor="#303030"
+                  icon="insta_white.svg"
+                  onClick={() => window.open('http://instagram.com')}
+                />
               </Col>
               <Col className="">
-                <RoundButton backgroundColor="#303030" icon="vk_white.svg" onClick={() => this.vkButtonClick()} />
+                <RoundButton
+                  backgroundColor="#303030"
+                  icon="vk_white.svg"
+                  onClick={() => window.open('http://vk.com')}
+                />
               </Col>
             </Row>
           </div>
-          <div className="HeaderUp__menuItem">Контакты</div>
+
+          <NavLink to="/contacts">
+            <div className="HeaderUp__menuItem">Контакты</div>
+          </NavLink>
+
           <div className="HeaderUp__menuItem">
             <NavLink to="/" exact>
               <div className="HeaderUp__menuLogo">
@@ -73,36 +70,44 @@ export default class HeaderUp extends React.Component<HeaderUpProps, HeaderUpSta
           <div className="HeaderUp__menuItem d-flex justify-content-between">
             <Row className="HeaderUp__container p-0 m-0 d-flex align-items-center">
               <div className="HeaderUp__containerImg">
-                <RoundButton backgroundColor="#303030" icon="nyamnyan_white.svg" onClick={() => this.noAction()} />
+                <a href="tel:88512464607">
+                  <RoundButton backgroundColor="#303030" icon="nyamnyan_white.svg" onClick={() => this.noAction()} />
+                </a>
               </div>
               <div className="HeaderUp__containerDescr pl-2">
-                <div className="HeaderUp__containerDescrPhone">46-46-07</div>
-                <div className="HeaderUp__containerDescrTitle">номер ресторана</div>
+                <a href="tel:88512464607">
+                  <div className="HeaderUp__containerDescrPhone">46-46-07</div>
+                  <div className="HeaderUp__containerDescrTitle">номер ресторана</div>
+                </a>
               </div>
             </Row>
           </div>
           <div className="HeaderUp__menuItem d-flex justify-content-between">
             <Row className="HeaderUp__container p-0 m-0 d-flex align-items-center">
-              <div className="HeaderUp__containerImg">
-                <RoundButton backgroundColor="#303030" icon="car_white.svg" onClick={() => this.noAction()} />
-              </div>
+              <a href="tel:88512464602">
+                <div className="HeaderUp__containerImg">
+                  <RoundButton backgroundColor="#303030" icon="car_white.svg" onClick={() => this.noAction()} />
+                </div>
+              </a>
               <div className="HeaderUp__containerDescr pl-2">
-                <div className="HeaderUp__containerDescrPhone">46-46-02</div>
-                <div className="HeaderUp__containerDescrTitle">служба доставки</div>
+                <a href="tel:88512464602">
+                  <div className="HeaderUp__containerDescrPhone">46-46-02</div>
+                  <div className="HeaderUp__containerDescrTitle">служба доставки</div>
+                </a>
               </div>
             </Row>
           </div>
           <div className="HeaderUp__menuItem">
             <Row className="m-0 p-0">
               <Col className="m-0 p-0">
-                <RoundButton backgroundColor="#303030" icon="cart_white.svg" onClick={() => this.cartButtonClick()} />
+                <NavLink to="/cart">
+                  <RoundButton backgroundColor="#303030" icon="cart_white.svg" onClick={() => this.noAction()} />
+                </NavLink>
               </Col>
               <Col className="">
-                <RoundButton
-                  backgroundColor="#303030"
-                  icon="user_white.svg"
-                  onClick={() => this.profileButtonClick()}
-                />
+                <NavLink to="/profile">
+                  <RoundButton backgroundColor="#303030" icon="user_white.svg" onClick={() => this.noAction()} />
+                </NavLink>
               </Col>
             </Row>
           </div>
@@ -110,42 +115,67 @@ export default class HeaderUp extends React.Component<HeaderUpProps, HeaderUpSta
 
         <Container fluid className="HeaderUp__mobile pl-4 pr-4 m-0 d-flex d-lg-none justify-content-between">
           <div className="menuItem h-100 d-flex align-items-center" onClick={() => this.burgerButtonClick()}>
-            <img src="images/burger.svg" />
+            <img id="burgerButton" src="images/burger.svg" />
           </div>
-          <div className="menuItem h-100 d-flex align-items-center">
-            <img src="images/logo_mob.svg" />
-          </div>
-          <div className="menuItem h-100 d-flex align-items-center">
-            <RoundButton backgroundColor="#303030" icon="cart_white.svg" onClick={() => this.cartButtonClick()} />
-          </div>
+
+          <NavLink to="/">
+            <div className="menuItem h-100 d-flex align-items-center">
+              <img src="images/logo_mob.svg" />
+            </div>
+          </NavLink>
+
+          <NavLink to="/cart">
+            <div className="menuItem h-100 d-flex align-items-center">
+              <RoundButton backgroundColor="#303030" icon="cart_white.svg" onClick={() => this.noAction()} />
+            </div>
+          </NavLink>
         </Container>
 
         <Container fluid className="HeaderUp__toggleMenu p-0 m-0">
           <Container fluid className="HeaderUp__mobile pl-4 pr-4 m-0 d-flex d-lg-none justify-content-between">
             <div className="menuItem h-100 d-flex align-items-center" onClick={() => this.burgerButtonClick()}>
-              <img src="images/burger.svg" />
+              <img id="burgerButton" src="images/burger_close.svg" />
+            </div>
+
+            <div className="menuItem h-100 d-flex align-items-center">
+              <NavLink
+                to="/"
+                onClick={() => {
+                  this.burgerButtonClick()
+                }}
+              >
+                <img src="images/logo_mob.svg" />
+              </NavLink>
             </div>
             <div className="menuItem h-100 d-flex align-items-center">
-              <img src="images/logo_mob.svg" />
-            </div>
-            <div className="menuItem h-100 d-flex align-items-center">
-              <RoundButton backgroundColor="#303030" icon="cart_white.svg" onClick={() => this.cartButtonClick()} />
+              <NavLink
+                to="/cart"
+                onClick={() => {
+                  this.burgerButtonClick()
+                }}
+              >
+                <RoundButton backgroundColor="#303030" icon="cart_white.svg" onClick={() => this.noAction()} />
+              </NavLink>
             </div>
           </Container>
 
           <Container fluid className="HeaderUp__toggleMenuCont">
-            <Row className="pl-3 pr-3 mt-3">
-              <Col xs={8} className="HeaderUp__toggleMenuItem p-0 m-0">
-                <h1>Акции</h1>
-              </Col>
-            </Row>
-            <Row className="pl-3 pr-3 mt-3">
-              <Col xs={8} className="HeaderUp__toggleMenuItem p-0 m-0">
-                <h1>Контакты</h1>
-              </Col>
-            </Row>
+            <NavLink to="/actions" onClick={() => this.burgerButtonClick()}>
+              <Row className="pl-3 pr-3 mt-3">
+                <Col xs={8} className="HeaderUp__toggleMenuItem p-0 m-0">
+                  <h1>Акции</h1>
+                </Col>
+              </Row>
+            </NavLink>
+            <NavLink to="/contacts" onClick={() => this.burgerButtonClick()}>
+              <Row className="pl-3 pr-3 mt-3">
+                <Col xs={8} className="HeaderUp__toggleMenuItem p-0 m-0">
+                  <h1>Контакты</h1>
+                </Col>
+              </Row>
+            </NavLink>
 
-            <a href="tel:88512464602">
+            <a href="tel:88512464602" onClick={() => this.burgerButtonClick()}>
               <Row className="pl-3 pr-3">
                 <Container fluid className="HeaderUp__toggleMenuItem2 p-0 m-0 mt-5 d-flex justify-content-between">
                   <div className="HeaderUp__toggleMenuItemTitle">Телефон доставки</div>
@@ -153,7 +183,7 @@ export default class HeaderUp extends React.Component<HeaderUpProps, HeaderUpSta
                 </Container>
               </Row>
             </a>
-            <a href="tel:88512464607">
+            <a href="tel:88512464607" onClick={() => this.burgerButtonClick()}>
               <Row className="pl-3 pr-3">
                 <Container fluid className="HeaderUp__toggleMenuItem2 p-0 m-0 mt-3 d-flex justify-content-between">
                   <div className="HeaderUp__toggleMenuItemTitle">Телефон ресторана</div>
@@ -169,18 +199,30 @@ export default class HeaderUp extends React.Component<HeaderUpProps, HeaderUpSta
                 <RoundButton
                   icon="instagram.svg"
                   backgroundColor="white"
-                  onClick={() => window.open('http://instagram.com')}
+                  onClick={() => {
+                    this.burgerButtonClick()
+                    window.open('http://instagram.com')
+                  }}
                 />
               </div>
               <div>
-                <RoundButton icon="vk.svg" backgroundColor="white" onClick={() => window.open('http://vk.com')} />
+                <RoundButton
+                  icon="vk.svg"
+                  backgroundColor="white"
+                  onClick={() => {
+                    this.burgerButtonClick()
+                    window.open('http://vk.com')
+                  }}
+                />
               </div>
             </Row>
 
             <Row className="pl-3 pr-3 d-flex justify-content-center">
               <div className="HeaderUp__toggleMenuButton d-flex">
                 <div className="HeaderUp__toggleMenuButtonText">Войти в личный кабинет</div>
-                <div className="HeaderUp__toggleMenuButtonIcon"><img src="images/icons/profile.svg" alt=""/></div>
+                <div className="HeaderUp__toggleMenuButtonIcon">
+                  <img src="images/icons/profile.svg" alt="" />
+                </div>
               </div>
             </Row>
           </Container>

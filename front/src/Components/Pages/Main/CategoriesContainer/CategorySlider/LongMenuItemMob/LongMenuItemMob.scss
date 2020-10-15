@@ -6,6 +6,7 @@
   text-shadow: 1px 1px 1px #000000;
   border-radius: 20px 0;
   margin-bottom: 20px !important;
+  cursor: pointer;
 
   &:hover {
     filter: brightness(0.8);
@@ -73,6 +74,7 @@
     width: 100%;
     color: #ffffff;
     padding-left: 40px;
+    cursor: pointer;
 
     text-shadow: 1px 1px 1px #000000;
 

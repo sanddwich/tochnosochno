@@ -6,6 +6,7 @@
   text-shadow: 1px 1px 1px #000000;
   border-radius: 20px 0;
   margin-bottom: 10px !important;
+  cursor: pointer;
 
   &:hover {
     filter: brightness(0.8);
@@ -66,10 +67,11 @@
   }
 }
 
-.showCat__mobile {
-  .showCat__cont {
+.showCatMob__mobile {
+  cursor: pointer;
+  .showCatMob__cont {
     position: absolute;
-    margin-top: -60px;
+    margin-top: -45px;
     width: 100%;
     color: #ffffff;
     padding-left: 40px;

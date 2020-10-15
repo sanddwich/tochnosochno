@@ -1,0 +1,19 @@
+.Sticker {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+  font-variant: small-caps;
+  text-transform: uppercase;
+
+  display:flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 70px;
+  height: 21px;
+  border-radius: 0px 10.5px;
+  margin-bottom: 5px !important;
+}

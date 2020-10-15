@@ -8,6 +8,7 @@ interface ActionButtonProps {
   text: string
   backgroundColor: string
   width: string
+  textColor: string
 }
 
 interface ActionButtonState {}
@@ -18,7 +19,7 @@ export default class ActionButton extends React.Component<ActionButtonProps, Act
       <div
         onClick={this.props.onClick}
         className="actionButton noselect"
-        style={{ backgroundColor: this.props.backgroundColor, width: this.props.width }}
+        style={{ backgroundColor: this.props.backgroundColor, width: this.props.width, color: this.props.textColor }}
       >
         <div className="actionButton__text">{this.props.text}</div>
         <div className="actionButton__icon">

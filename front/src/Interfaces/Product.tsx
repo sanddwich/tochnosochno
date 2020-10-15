@@ -16,7 +16,7 @@ export default interface Product {
   seoText: string
   seoTitle: string
   variants: Variant[]
-  weight?: number
+  weight: number
   price?: number
 
   fatAmount?: number

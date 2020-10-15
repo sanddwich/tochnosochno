@@ -9,6 +9,11 @@ import Menu from '../Pages/Menu/Menu'
 import Main from '../Pages/Main/Main'
 import { connect } from 'react-redux'
 import { getMenu } from '../../Redux/actions/menu'
+import Cart from '../Pages/Cart/Cart'
+import Actions from '../Pages/Actions/Actions'
+import Contacts from '../Pages/Contacts/Contacts'
+import Profile from '../Pages/Profile/Profile'
+import Product from '../Pages/Product/Product'
  
 interface MainLayoutProps {
   getMenu: any
@@ -29,6 +34,11 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
         <PageContent>
           <Switch>
             <Route path='/menu/:id' component={Menu} />
+            <Route path='/product/:id' component={Product} />
+            <Route path='/cart' component={Cart} />
+            <Route path="/actions" component={Actions} />
+            <Route path="/contacts" component={Contacts} />
+            <Route path="/profile" component={Profile} />
             <Route path='/' exact component={Main} />
             <Redirect to='/' />
           </Switch>

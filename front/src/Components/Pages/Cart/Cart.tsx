@@ -10,7 +10,7 @@ interface CartState {}
 export default class Cart extends React.Component<CartProps, CartState> {
   render() {
     return (
-      <Container className="Cart">
+      <Container className="Cart m-0 p-0 mt-4">
         <h1>Cart</h1>
       </Container>
     )

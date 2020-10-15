@@ -7,6 +7,7 @@
   color: #555555;
   height: 100px;
 
+
   .HeaderUp__menuItem {
     .HeaderUp__menuLogo {
       background-color: #000000;
@@ -27,6 +28,7 @@
       .HeaderUp__containerImg {
       }
       .HeaderUp__containerDescr {
+        cursor: pointer;
         .HeaderUp__containerDescrPhone {
           text-align: right;
         }
@@ -45,13 +47,21 @@
   }
 }
 
+a {
+  color: #555555;
+}
+
 .HeaderUp__mobile {
   height: 54px;
 }
 
+#burgerButton {
+  cursor: pointer;
+}
+
 .HeaderUp__toggleMenu {
   position: fixed;
-  background-color: #555555;
+  background-color: #262626;
   right: 0;
   top: 0;
   left: 0;
