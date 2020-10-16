@@ -30,7 +30,7 @@ export default class Slider extends React.Component<SliderProps, SliderState> {
           }}
           spaceBetween={20}
           autoplay={{ delay: 5000 }}
-          pagination={{ clickable: true, el: '#pagination' }}
+          pagination={{ clickable: true, el: '#sliderPagination' }}
         >
           <SwiperSlide>
             <div className="Slider__slide">
@@ -69,7 +69,7 @@ export default class Slider extends React.Component<SliderProps, SliderState> {
             </div>
           </div>
 
-          <div id="pagination" className="Slider__pagination"></div>
+          <div id="sliderPagination" className="Slider__pagination"></div>
         </Row>
       </Container>
     )

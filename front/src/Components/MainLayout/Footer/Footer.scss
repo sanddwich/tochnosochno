@@ -1,6 +1,5 @@
-.footer {
+.Footer {
   color: white;
-  padding: 40px 0;
   font-family: 'Montserrat';
   font-style: normal;
   font-weight: normal;
@@ -11,50 +10,24 @@
 
   background-color: #303030;
 
-  .bold {
-    font-weight: bold;
-  }
-
-  a {
-    color: white;
-  }
-
-  &__social {
+  .Footer__social {
     display: flex;
-    justify-content: center;
     align-items: center;
-    line-height: 40px;
+    justify-content: start;
   }
-  &__contacts {
-    line-height: 30px;
-    &__phone {
-      font-weight: 700;
+
+  .Footer__worktime {
+    display: flex;
+    align-items: center;
+    text-align: right;
+  }
+
+  .Footer__socialContImgs {
+    .Footer__socialContImg {
+      display: inline-block;
     }
-  }
-
-  &__policy {
-    margin-top: 13px;
-    line-height: 30px;
-  }
-
-  &__copyright {
-    margin-top: 13px;
-    line-height: 30px;
-  }
-
-  &__worktime {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    line-height: 80px;
   }
 }
 
 @media (max-width: 489px) {
-  .footer {
-    font-size: 16px;
-    &__worktime {
-      justify-content: left;
-    }
-  }
 }

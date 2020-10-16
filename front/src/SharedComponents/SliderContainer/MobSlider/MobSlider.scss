@@ -1,12 +1,12 @@
 .MobSlider {
-  .swiper-slide,
-  .swiper-slide-active {
-    display: flex !important;
-    justify-content: center;
-  }
+  // .swiper-slide,
+  // .swiper-slide-active {
+  //   display: flex !important;
+  //   justify-content: center;
+  // }
 }
 
-.MobSlider__pagination {
+#slidePaginationMob {
   position: absolute;
   z-index: 100 !important;
   margin-top: -30px;

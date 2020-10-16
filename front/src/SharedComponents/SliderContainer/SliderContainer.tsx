@@ -25,11 +25,7 @@ export default class SliderContainer extends React.Component<SliderContainerProp
         </Container>
 
         <Container fluid className="SliderContainer p-0 m-0 d-flex d-md-none">
-          <Row className="p-0 m-0">
-            <Col className="p-0 m-0">
-              <MobSlider />
-            </Col>
-          </Row>
+          <MobSlider />
         </Container>
 
         <Container fluid className="p-0 m-0 mb-4 d-flex d-md-none justify-content-center">

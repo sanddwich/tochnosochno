@@ -5,6 +5,9 @@ import CategoriesContainer from './CategoriesContainer/CategoriesContainer'
 import NewItems from './NewItems/NewItems'
 
 import './Main.scss'
+import Banners from './Banners/Banners'
+import PopularProducts from './PopularProducts/PopularProducts'
+import FullBanner from '../FullBanner/FullBanner'
 
 interface MainProps {}
 
@@ -17,6 +20,9 @@ export default class Main extends React.Component<MainProps, MainState> {
         <SliderContainer />
         <CategoriesContainer />
         <NewItems />
+        <Banners />
+        <PopularProducts />
+        <FullBanner />
       </Container>
     )
   }

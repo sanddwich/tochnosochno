@@ -25,27 +25,24 @@ export default class MobSlider extends React.Component<MobSliderProps, MobSlider
         <Container fluid className="MobSlider p-0 m-0 mb-2">
           <Swiper
             loop={true}
-            spaceBetween={5}
-            autoplay={{ delay: 5000 }}
-            pagination={{ clickable: true, el: '#paginationMob' }}
+            spaceBetween={10}
+            // autoplay={{ delay: 5000 }}
+            pagination={{ clickable: true, el: '#slidePaginationMob' }}
           >
-            <SwiperSlide>
-              <img src="images/slides/mob/slide1.jpg" className="img-fluid" alt="" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="images/slides/mob/slide1.jpg" className="img-fluid" alt="" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="images/slides/mob/slide1.jpg" className="img-fluid" alt="" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src="images/slides/mob/slide1.jpg" className="img-fluid" alt="" />
-            </SwiperSlide>
+            {[1, 2, 3, 4].map((slide, index) => {
+              return (
+                <SwiperSlide key={index}>
+                  <Container fluid className="m-0 p-0 d-flex justify-content-center">
+                    <img src="images/slides/mob/slide1.jpg" className="img-fluid" alt="" />
+                  </Container>
+                </SwiperSlide>
+              )
+            })}
           </Swiper>
+          <Row className="p-0 m-0 d-flex justify-content-center">
+            <div id="slidePaginationMob"></div>
+          </Row>
         </Container>
-        <div className="MobSlider__pagination" style={{paddingLeft:document.documentElement.clientWidth/2-45}}>
-          <div id="paginationMob"></div>
-        </div>
       </React.Fragment>
     )
   }
