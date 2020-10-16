@@ -10,9 +10,13 @@ interface ContactsState {}
 export default class Contacts extends React.Component<ContactsProps, ContactsState> {
   render() {
     return (
-      <Container className="Contacts p-0 m-0 mt-4">
+      <div className="contacts container mt-4">
         <h1>Contacts</h1>
-      </Container>
+        <div className="row">
+          <div className="col-4"></div>
+          <div className="col-8"></div>
+        </div>
+      </div>
     )
   }
 }
