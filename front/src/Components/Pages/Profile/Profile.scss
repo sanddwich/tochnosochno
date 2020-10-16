@@ -1,3 +1,52 @@
-.Profile {
-  
+.profile {
+  &__text {
+    font-weight: 700;
+    font-family: 'Roboto';
+    font-size: 18px;
+    color: #8e8e8e;
+  }
+
+  .favouriteProducts__arrows {
+    display: flex;
+    position: relative;
+    z-index: 1000;
+    margin-right: 10px;
+  }
+
+  .favouriterProducts__arrow {
+    background-color: #303030;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 30px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  .Slider__pagination {
+    position: relative;
+    z-index: 1000;
+    margin-right: 20px;
+  }
+
+  .swiper-pagination-bullet {
+    background-color: #ffffff !important;
+    border: 2px solid #ffd12d;
+    box-sizing: border-box;
+    margin-right: 4px;
+    width: 12px !important;
+    height: 12px;
+    opacity: 1;
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: #ffd12d !important;
+  }
 }

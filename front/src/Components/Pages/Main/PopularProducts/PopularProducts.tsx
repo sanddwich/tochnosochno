@@ -117,7 +117,6 @@ class PopularProducts extends React.Component<PopularProductsProps, PopularProdu
               <div id="paginationProductsFull"></div>
             </Row>
           </Container>
-          
         </Row>
 
         <Row className="PopularProducts__Slider p-0 m-0 d-block d-md-none">
