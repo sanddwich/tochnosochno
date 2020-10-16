@@ -13,8 +13,12 @@ export default class Contacts extends React.Component<ContactsProps, ContactsSta
       <div className="contacts container mt-4">
         <h1>Contacts</h1>
         <div className="row">
-          <div className="col-4"></div>
-          <div className="col-8"></div>
+          <div className="col-4">
+            <h1>Рестораны</h1>
+          </div>
+          <div className="col-8">
+            <h1>Доставка</h1>
+          </div>
         </div>
       </div>
     )
