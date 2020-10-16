@@ -122,3 +122,20 @@ main {
 .bold {
   font-weight: 700;
 }
+
+input[type='text'],
+input[type='date'] {
+  border: none; /* Get rid of the browser's styling */
+  border-bottom: 1px solid #c4c4c4; /* Add your own border */
+  color: #8e8e8e;
+  font-family: 'Roboto';
+  font-size: 18px;
+}
+
+input,
+label {
+  display: block;
+}
+label {
+  font-weight: 700;
+}

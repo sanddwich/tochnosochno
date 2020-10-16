@@ -11,6 +11,7 @@ import ProductCard from '../../../SharedComponents/ProductCard/ProductCard'
 import ProductCardMobile from '../../../SharedComponents/ProductCardMobile/ProductCardMobile'
 import _ from 'lodash'
 import './Profile.scss'
+import LineProductWithCart from '../../../SharedComponents/LineProductWithCart/LineProductWithCart'
 
 interface ProfileProps {
   menu: Category[]
@@ -60,8 +61,28 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
     return (
       <div className="profile container mt-5">
         <BlockName name="Личный кабинет" />
-        <div className="row m-0">Имя День рождения</div>
-
+        <div className="row m-0 mt-4">
+          <div style={{ float: 'left' }}>
+            <label htmlFor="profile-name">Имя</label>
+            <input
+              name="name"
+              id="profile-name"
+              style={{ width: '280px', marginRight: '20px' }}
+              type="text"
+              placeholder="Отредактируйте профиль"
+            />
+          </div>
+          <div style={{ float: 'left' }}>
+            <label htmlFor="profile-birthday">День рождения</label>
+            <input
+              name="birthday"
+              id="profile-birthday"
+              style={{ width: '150px' }}
+              type="date"
+              placeholder="мм.мм.гггг"
+            />
+          </div>
+        </div>
         <div className="row m-0 mt-5">
           <ActionButton
             onClick={() => console.log('edit profile')}
@@ -84,9 +105,35 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
         </div>
 
         <div className="row m-0 mt-5">
+          <ActionButton
+            onClick={() => console.log('save changes')}
+            textColor="white"
+            width="280px"
+            text="Сохранить изменения"
+            backgroundColor="#303030"
+            icon="check.svg"
+          />
+          <div className="ml-5">
+            <ActionButton
+              onClick={() => console.log('save changes')}
+              textColor="white"
+              width="280px"
+              text="Отменить редактирование"
+              backgroundColor="#303030"
+              icon="cancel.svg"
+            />
+          </div>
+        </div>
+
+        <div className="row m-0 mt-5">
           <BlockName name="Последние заказы" />
         </div>
         <div className="row m-0 mt-4 profile__text">Сейчас тут ничего нет :( И мы ждем вашего заказа :)</div>
+
+        <div>
+          <LineProductWithCart product={this.props.menu[0].products[0]} />
+        </div>
+
         <div className="row m-0 mt-5">
           <BlockName name="Избранное" />
         </div>
@@ -115,10 +162,8 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
           <Row className="favouriteProducts__Slider p-0 m-0 d-none d-md-block">
             <Swiper
-              // slidesPerView={'auto'}
               slidesPerView={3}
               loop={true}
-              // spaceBetween={10}
               navigation={{
                 nextEl: '#nextArrowFavouriteProducts',
                 prevEl: '#prewArrowFavouriteProducts',
