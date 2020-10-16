@@ -17,6 +17,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/swiper.scss'
 import 'swiper/components/navigation/navigation.scss'
 import 'swiper/components/pagination/pagination.scss'
+import BlockName from '../../../../SharedComponents/BlockName/BlockName'
 
 // install Swiper components
 SwiperCore.use([Navigation, Pagination, Autoplay])
@@ -69,14 +70,7 @@ class NewItems extends React.Component<NewItemsProps, NewItemsState> {
     return (
       <Container key={this.state.lastProducts.length} className="NewItems p-0">
         <Row className="p-0 m-0 d-flex justify-content-between">
-          <div>
-            <div className="NewItems__title">
-              <h1>Новинки</h1>
-            </div>
-            <div className="NewItems__underLineCont">
-              <div className="NewItems__underLine"></div>
-            </div>
-          </div>
+          <BlockName name="Новинки" />
 
           <div className="NewItems__arrows d-none d-md-flex justify-content-start">
             <div id="prewArrowNewItems" className="NewItems__arrow" style={{ paddingRight: 3 }}>

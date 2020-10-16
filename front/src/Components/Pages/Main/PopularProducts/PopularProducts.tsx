@@ -17,6 +17,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/swiper.scss'
 import 'swiper/components/navigation/navigation.scss'
 import 'swiper/components/pagination/pagination.scss'
+import BlockName from '../../../../SharedComponents/BlockName/BlockName'
 
 // install Swiper components
 SwiperCore.use([Navigation, Pagination, Autoplay])
@@ -69,14 +70,7 @@ class PopularProducts extends React.Component<PopularProductsProps, PopularProdu
     return (
       <Container key={this.state.lastProducts.length} className="PopularProducts p-0">
         <Row className="p-0 m-0 d-flex justify-content-between">
-          <div>
-            <div className="PopularProducts__title">
-              <h1>Популярные</h1>
-            </div>
-            <div className="PopularProducts__underLineCont">
-              <div className="PopularProducts__underLine"></div>
-            </div>
-          </div>
+          <BlockName name="Популярные" />
 
           <div className="PopularProducts__arrows d-none d-md-flex justify-content-start">
             <div id="prewArrowPopularProducts" className="PopularProducts__arrow" style={{ paddingRight: 3 }}>
