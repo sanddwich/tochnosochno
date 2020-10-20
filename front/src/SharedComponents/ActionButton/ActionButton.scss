@@ -39,6 +39,10 @@
   }
 }
 
+.actionButton.active {
+  opacity: 0.6;
+}
+
 @media (max-width: 620px) {
   .actionButton.mobile {
     width: 60px !important;

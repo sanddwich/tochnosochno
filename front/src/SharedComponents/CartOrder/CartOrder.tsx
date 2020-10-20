@@ -6,6 +6,7 @@ import { RootState } from '../../Redux'
 import BlockName from '../BlockName/BlockName'
 import LineProductWithNumberInput from '../LineProductWithNumberInput/LineProductWithNumberInput'
 import NumberInput from '../NumberInput/NumberInput'
+import OrderTotalPrice from '../OrderTotalPrice/OrderTotalPrice'
 
 import './CartOrder.scss'
 
@@ -28,13 +29,15 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
   componentDidMount() {
     let cartProducts: Product[] = []
     this.props.menu.map((category) => {
-      cartProducts.push(category.products[category.products.length - 1])
+      if (category.products[category.products.length - 1]) {
+        cartProducts.push(category.products[category.products.length - 1])
+      }
     })
     this.setState({ cartProducts })
-    // console.log(lastProducts)
   }
 
   render() {
+    console.log(this.state.cartProducts)
     return (
       <div className="CartOrder">
         <div className="CartOrder__banner-mob">
@@ -52,10 +55,7 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
             <NumberInput label="Количество персон" hideLabel={false} />
           </div>
 
-          <div className="CartOrder__total">
-            <div className="CartOrder__total__label">Общая сумма</div>
-            <div className="CartOrder__total__amount">2940 р</div>
-          </div>
+          <OrderTotalPrice />
         </div>
 
         <div className="CartOrder__banner">

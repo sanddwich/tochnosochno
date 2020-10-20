@@ -29,7 +29,9 @@ class RecomendedProducts extends React.Component<RecomendedProductsProps, Recome
   componentDidMount() {
     let cartProducts: Product[] = []
     this.props.menu.map((category) => {
-      cartProducts.push(category.products[category.products.length - 1])
+      if (category.products[category.products.length - 1]) {
+        cartProducts.push(category.products[category.products.length - 1])
+      }
     })
     this.setState({ cartProducts })
     // console.log(lastProducts)

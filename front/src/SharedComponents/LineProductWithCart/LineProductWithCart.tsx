@@ -12,13 +12,12 @@ interface LineProductWithCartState {}
 
 export default class LineProductWithCart extends React.Component<LineProductWithCartProps, LineProductWithCartState> {
   render() {
-    console.log(this.props.product)
     return (
       <div className="lineProductWithCart d-flex justify-content-between ">
         <div className="lineProductWithCart__product">
           <div className="d-flex justify-content-between ">
             <div className="lineProductWithCart__product__image  ">
-              <img src={`${this.props.product.image}`} alt="" />
+              <img src={`${this.props.product.imageLinks[0]}`} alt="" />
             </div>
 
             <div className="lineProductWithCart__product__name ">{this.props.product.name}</div>

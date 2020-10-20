@@ -1,0 +1,33 @@
+.DeliveryByCourier {
+  &__form {
+    display: flex;
+    flex-wrap: wrap;
+
+    &__group {
+      margin-top: 25px;
+      flex-grow: 5;
+    }
+
+    &__street {
+      width: 97%;
+    }
+
+    &__number {
+      max-width: 80px;
+    }
+
+    &__row {
+      flex-grow: 5;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    &__cooking-time-select {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+}

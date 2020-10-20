@@ -21,7 +21,7 @@ export default class LineProductWithNumberInput extends React.Component<
       <div className="LineProductWithNumberInput">
         <div className="LineProductWithNumberInput__product ">
           <div className="LineProductWithNumberInput__product__image  ">
-            <img src={`${this.props.product.image}`} alt="" />
+            <img src={`${this.props.product.imageLinks[0]}`} alt="" />
           </div>
 
           <div className="LineProductWithNumberInput__product__name ">{this.props.product.name}</div>
