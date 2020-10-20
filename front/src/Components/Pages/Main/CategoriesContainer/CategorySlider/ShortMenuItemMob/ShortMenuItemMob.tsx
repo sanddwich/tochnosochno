@@ -21,7 +21,7 @@ export default class ShortMenuItemMob extends React.Component<ShortMenuItemMobPr
           <Container
             className="ShortMenuItemMob p-0"
             style={{
-              background: "url('images/background/bg.png')",
+              background: "url('/images/background/bg.png')",
               backgroundRepeat: 'no-repeat',
               // backgroundAttachment: 'fixed',
               backgroundPosition: 'center',
@@ -54,7 +54,7 @@ export default class ShortMenuItemMob extends React.Component<ShortMenuItemMobPr
             <div className="showCatMob__cont">
               <div>Посмотреть категорию</div>
               <div>
-                <img src="images/other_icons/arrow_right.svg" alt="" />
+                <img src="/images/other_icons/arrow_right.svg" alt="" />
               </div>
             </div>
           </Container>

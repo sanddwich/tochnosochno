@@ -5,7 +5,9 @@ import Slider from './Slider/Slider'
 
 import './SliderContainer.scss'
 
-interface SliderContainerProps {}
+interface SliderContainerProps {
+  marginTop?: number
+}
 
 interface SliderContainerState {}
 
@@ -13,13 +15,13 @@ export default class SliderContainer extends React.Component<SliderContainerProp
   render() {
     return (
       <React.Fragment>
-        <Container className="SliderContainer p-0 d-none d-md-block">
+        <Container className="SliderContainer d-none d-md-block" style={{marginTop: (typeof this.props.marginTop !== 'undefined' ) ? this.props.marginTop : ''}}>
           <Row className="sliderBanner p-0 m-0">
             <Col md={8} className="p-0 m-0">
               <Slider />
             </Col>
             <Col md={4} className="p-0 m-0 sliderBanner__img">
-              <img className="img-fluid" src="images/banners/banner.jpg" />
+              <img className="img-fluid" src="/images/banners/banner.jpg" />
             </Col>
           </Row>
         </Container>
@@ -29,7 +31,7 @@ export default class SliderContainer extends React.Component<SliderContainerProp
         </Container>
 
         <Container fluid className="p-0 m-0 mb-4 d-flex d-md-none justify-content-center">
-          <img className="img-fluid" src="images/banners/banner_mob.jpg" alt="" />
+          <img className="img-fluid" src="/images/banners/banner_mob.jpg" alt="" />
         </Container>
       </React.Fragment>
     )

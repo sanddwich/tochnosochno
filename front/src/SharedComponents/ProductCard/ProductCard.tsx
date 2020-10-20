@@ -45,7 +45,7 @@ export default class ProductCard extends React.Component<ProductCardProps, Produ
               <Row className="ProductCard__img">
                 <img
                   className="img-fluid"
-                  src={this.props.product.image !== null ? this.props.product.image : 'images/products/no-photo.png'}
+                  src={this.props.product.image !== null ? this.props.product.image : '/images/products/no-photo.png'}
                   alt={this.props.product.name}
                 />
               </Row>

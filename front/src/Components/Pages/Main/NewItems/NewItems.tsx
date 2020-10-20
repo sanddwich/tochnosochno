@@ -74,19 +74,19 @@ class NewItems extends React.Component<NewItemsProps, NewItemsState> {
 
           <div className="NewItems__arrows d-none d-md-flex justify-content-start">
             <div id="prewArrowNewItems" className="NewItems__arrow" style={{ paddingRight: 3 }}>
-              <img src="images/icons/arrowLeftFor45.svg" alt="" />
+              <img src="/images/icons/arrowLeftFor45.svg" alt="" />
             </div>
             <div id="nextArrowNewItems" className="NewItems__arrow" style={{ paddingLeft: 3 }}>
-              <img src="images/icons/arrowRightFor45.svg" alt="" />
+              <img src="/images/icons/arrowRightFor45.svg" alt="" />
             </div>
           </div>
 
           <div className="NewItems__arrows d-flex d-md-none justify-content-start">
             <div id="prewArrowNewItems" className="NewItems__arrow" style={{ paddingRight: 3 }}>
-              <img src="images/icons/arrowLeftMobileFor35.svg" alt="" />
+              <img src="/images/icons/arrowLeftMobileFor35.svg" alt="" />
             </div>
             <div id="nextArrowNewItems" className="NewItems__arrow" style={{ paddingLeft: 3 }}>
-              <img src="images/icons/arrowRightMobileFor35.svg" alt="" />
+              <img src="/images/icons/arrowRightMobileFor35.svg" alt="" />
             </div>
           </div>
         </Row>

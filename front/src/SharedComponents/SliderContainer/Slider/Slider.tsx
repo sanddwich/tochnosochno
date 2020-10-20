@@ -34,27 +34,27 @@ export default class Slider extends React.Component<SliderProps, SliderState> {
         >
           <SwiperSlide>
             <div className="Slider__slide">
-              <img className="img-fluid" src="images/slides/slide1.jpg" alt="" />
+              <img className="img-fluid" src="/images/slides/slide1.jpg" alt="" />
             </div>
           </SwiperSlide>
           <SwiperSlide>
             <div className="Slider__slide">
-              <img className="img-fluid" src="images/slides/slide1.jpg" alt="" />
+              <img className="img-fluid" src="/images/slides/slide1.jpg" alt="" />
             </div>
           </SwiperSlide>
           <SwiperSlide>
             <div className="Slider__slide">
-              <img className="img-fluid" src="images/slides/slide1.jpg" alt="" />
+              <img className="img-fluid" src="/images/slides/slide1.jpg" alt="" />
             </div>
           </SwiperSlide>
           <SwiperSlide>
             <div className="Slider__slide">
-              <img className="img-fluid" src="images/slides/slide1.jpg" alt="" />
+              <img className="img-fluid" src="/images/slides/slide1.jpg" alt="" />
             </div>
           </SwiperSlide>
           <SwiperSlide>
             <div className="Slider__slide">
-              <img className="img-fluid" src="images/slides/slide1.jpg" alt="" />
+              <img className="img-fluid" src="/images/slides/slide1.jpg" alt="" />
             </div>
           </SwiperSlide>
         </Swiper>
@@ -62,10 +62,10 @@ export default class Slider extends React.Component<SliderProps, SliderState> {
         <Row className="Slider__actions m-0 p-0 d-flex justify-content-between">
           <div className="Slider__arrows">
             <div id="prewArrow" className="Slider__arrow" style={{ paddingRight: 3 }}>
-              <img src="images/icons/arrow_left.svg" alt="" />
+              <img src="/images/icons/arrow_left.svg" alt="" />
             </div>
             <div id="nextArrow" className="Slider__arrow" style={{ paddingLeft: 3 }}>
-              <img src="images/icons/arrow_right.svg" alt="" />
+              <img src="/images/icons/arrow_right.svg" alt="" />
             </div>
           </div>
 

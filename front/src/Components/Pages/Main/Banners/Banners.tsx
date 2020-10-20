@@ -26,10 +26,10 @@ export default class Banners extends React.Component<BannersProps, BannersState>
         <Container className="d-none d-sm-block">
           <Row className="m-0 p-0">
             <Col xs={6} className="Banners__img m-0 p-0">
-              <img src="images/banners/banner1.jpg" className="img-fluid" alt="" />
+              <img src="/images/banners/banner1.jpg" className="img-fluid" alt="" />
             </Col>
             <Col xs={6} className="Banners__img m-0 p-0">
-              <img src="images/banners/banner1.jpg" className="img-fluid" alt="" />
+              <img src="/images/banners/banner1.jpg" className="img-fluid" alt="" />
             </Col>
           </Row>
         </Container>
@@ -46,7 +46,7 @@ export default class Banners extends React.Component<BannersProps, BannersState>
               return (
                 <SwiperSlide key={index}>
                   <Container className="m-0 p-0 ">
-                    <img src="images/banners/banner1.jpg" className="img-fluid" alt="" />
+                    <img src="/images/banners/banner1.jpg" className="img-fluid" alt="" />
                   </Container>
                 </SwiperSlide>
               )

@@ -19,7 +19,7 @@ export default class ShortMenuItem extends React.Component<ShortMenuItemProps, S
         <Container
           className="ShortMenuItem m-0 p-0"
           style={{
-            background: "url('images/background/bg.png')",
+            background: "url('/images/background/bg.png')",
           }}
         >
           <Row className="m-0 p-0">
@@ -49,7 +49,7 @@ export default class ShortMenuItem extends React.Component<ShortMenuItemProps, S
           <div className="showCat__cont">
             <div>Посмотреть категорию</div>
             <div>
-              <img src="images/other_icons/arrow_right.svg" alt="" />
+              <img src="/images/other_icons/arrow_right.svg" alt="" />
             </div>
           </div>
         </Container>

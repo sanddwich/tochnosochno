@@ -48,7 +48,7 @@ export default class ProductCardMobile extends React.Component<ProductCardMobile
                     <img
                       className="img-fluid"
                       src={
-                        this.props.product.image !== null ? this.props.product.image : 'images/products/no-photo.png'
+                        this.props.product.image !== null ? this.props.product.image : '/images/products/no-photo.png'
                       }
                       alt={this.props.product.name}
                     />

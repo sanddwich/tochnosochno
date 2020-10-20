@@ -7,7 +7,7 @@ import NewItems from './NewItems/NewItems'
 import './Main.scss'
 import Banners from './Banners/Banners'
 import PopularProducts from './PopularProducts/PopularProducts'
-import FullBanner from '../FullBanner/FullBanner'
+import FullBanner from './FullBanner/FullBanner'
 
 interface MainProps {}
 

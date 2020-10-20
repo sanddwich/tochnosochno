@@ -63,7 +63,7 @@ export default class HeaderUp extends React.Component<HeaderUpProps, HeaderUpSta
           <div className="HeaderUp__menuItem">
             <NavLink to="/" exact>
               <div className="HeaderUp__menuLogo">
-                <img src="images/logo_white.svg" alt="" />
+                <img src="/images/logo_white.svg" alt="" />
               </div>
             </NavLink>
           </div>
@@ -115,12 +115,12 @@ export default class HeaderUp extends React.Component<HeaderUpProps, HeaderUpSta
 
         <Container fluid className="HeaderUp__mobile pl-4 pr-4 m-0 d-flex d-lg-none justify-content-between">
           <div className="menuItem h-100 d-flex align-items-center" onClick={() => this.burgerButtonClick()}>
-            <img id="burgerButton" src="images/burger.svg" />
+            <img id="burgerButton" src="/images/burger.svg" />
           </div>
 
           <NavLink to="/">
             <div className="menuItem h-100 d-flex align-items-center">
-              <img src="images/logo_mob.svg" />
+              <img src="/images/logo_mob.svg" />
             </div>
           </NavLink>
 
@@ -134,7 +134,7 @@ export default class HeaderUp extends React.Component<HeaderUpProps, HeaderUpSta
         <Container fluid className="HeaderUp__toggleMenu p-0 m-0">
           <Container fluid className="HeaderUp__mobile pl-4 pr-4 m-0 d-flex d-lg-none justify-content-between">
             <div className="menuItem h-100 d-flex align-items-center" onClick={() => this.burgerButtonClick()}>
-              <img id="burgerButton" src="images/burger_close.svg" />
+              <img id="burgerButton" src="/images/burger_close.svg" />
             </div>
 
             <div className="menuItem h-100 d-flex align-items-center">
@@ -144,7 +144,7 @@ export default class HeaderUp extends React.Component<HeaderUpProps, HeaderUpSta
                   this.burgerButtonClick()
                 }}
               >
-                <img src="images/logo_mob.svg" />
+                <img src="/images/logo_mob.svg" />
               </NavLink>
             </div>
             <div className="menuItem h-100 d-flex align-items-center">
@@ -221,7 +221,7 @@ export default class HeaderUp extends React.Component<HeaderUpProps, HeaderUpSta
               <div className="HeaderUp__toggleMenuButton d-flex">
                 <div className="HeaderUp__toggleMenuButtonText">Войти в личный кабинет</div>
                 <div className="HeaderUp__toggleMenuButtonIcon">
-                  <img src="images/icons/profile.svg" alt="" />
+                  <img src="/images/icons/profile.svg" alt="" />
                 </div>
               </div>
             </Row>

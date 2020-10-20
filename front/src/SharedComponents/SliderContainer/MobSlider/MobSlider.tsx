@@ -33,7 +33,7 @@ export default class MobSlider extends React.Component<MobSliderProps, MobSlider
               return (
                 <SwiperSlide key={index}>
                   <Container fluid className="m-0 p-0 d-flex justify-content-center">
-                    <img src="images/slides/mob/slide1.jpg" className="img-fluid" alt="" />
+                    <img src="/images/slides/mob/slide1.jpg" className="img-fluid" alt="" />
                   </Container>
                 </SwiperSlide>
               )

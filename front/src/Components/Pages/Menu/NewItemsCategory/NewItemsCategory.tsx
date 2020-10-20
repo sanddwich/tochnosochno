@@ -1,13 +1,11 @@
 import React from 'react'
 import { Container, Row } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import Category from '../../../../Interfaces/Category'
-import Product from '../../../../Interfaces/Product'
 import { RootState } from '../../../../Redux'
 import ProductCard from '../../../../SharedComponents/ProductCard/ProductCard'
 import ProductCardMobile from '../../../../SharedComponents/ProductCardMobile/ProductCardMobile'
 import _ from 'lodash'
-import './PopularProducts.scss'
+import './NewItemsCategory.scss'
 
 // Import Swiper React components
 import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper'
@@ -18,22 +16,27 @@ import 'swiper/swiper.scss'
 import 'swiper/components/navigation/navigation.scss'
 import 'swiper/components/pagination/pagination.scss'
 import BlockName from '../../../../SharedComponents/BlockName/BlockName'
+import Category from '../../../../Interfaces/Category'
+import Product from '../../../../Interfaces/Product'
 
 // install Swiper components
 SwiperCore.use([Navigation, Pagination, Autoplay])
 
-interface PopularProductsProps {
+interface NewItemsCategoryProps {
+  categoryId: string
   menu: Category[]
 }
 
-interface PopularProductsState {
+interface NewItemsCategoryState {
   lastProducts: Product[]
 }
 
 const mobileSlidesSeparator: number = 2
+const slidesNumber: number = 3
+const newItemNumber: number = 4
 
-class PopularProducts extends React.Component<PopularProductsProps, PopularProductsState> {
-  constructor(props: PopularProductsProps) {
+class NewItemsCategory extends React.Component<NewItemsCategoryProps, NewItemsCategoryState> {
+  constructor(props: NewItemsCategoryProps) {
     super(props)
     this.state = {
       lastProducts: [],
@@ -41,12 +44,12 @@ class PopularProducts extends React.Component<PopularProductsProps, PopularProdu
   }
 
   componentDidMount() {
+    const category = this.props.menu.find((cat) => cat.id === this.props.categoryId) as Category
     let lastProducts: Product[] = []
-    this.props.menu.map((category) => {
-      lastProducts.push(category.products[category.products.length - 1])
-    })
+    for(let i = 1; i <= newItemNumber; i++) {
+      lastProducts.push(category.products[category.products.length-i])
+    }
     this.setState({ lastProducts })
-    // console.log(lastProducts)
   }
 
   generateMobileSlides = (separator: number): any => {
@@ -68,38 +71,38 @@ class PopularProducts extends React.Component<PopularProductsProps, PopularProdu
 
   render() {
     return (
-      <Container key={this.state.lastProducts.length} className="PopularProducts p-0">
+      <Container key={this.state.lastProducts.length} className="NewItemsCategory p-0">
         <Row className="p-0 m-0 d-flex justify-content-between">
-          <BlockName name="Популярные" />
+          <BlockName name="Новинки" />
 
-          <div className="PopularProducts__arrows d-none d-md-flex justify-content-start">
-            <div id="prewArrowPopularProducts" className="PopularProducts__arrow" style={{ paddingRight: 3 }}>
+          <div className="NewItemsCategory__arrows d-none d-md-flex justify-content-start">
+            <div id="prewArrowNewItemsCategory" className="NewItemsCategory__arrow" style={{ paddingRight: 3 }}>
               <img src="/images/icons/arrowLeftFor45.svg" alt="" />
             </div>
-            <div id="nextArrowPopularProducts" className="PopularProducts__arrow" style={{ paddingLeft: 3 }}>
+            <div id="nextArrowNewItemsCategory" className="NewItemsCategory__arrow" style={{ paddingLeft: 3 }}>
               <img src="/images/icons/arrowRightFor45.svg" alt="" />
             </div>
           </div>
 
-          <div className="PopularProducts__arrows d-flex d-md-none justify-content-start">
-            <div id="prewArrowPopularProducts" className="PopularProducts__arrow" style={{ paddingRight: 3 }}>
+          <div className="NewItemsCategory__arrows d-flex d-md-none justify-content-start">
+            <div id="prewArrowNewItemsCategory" className="NewItemsCategory__arrow" style={{ paddingRight: 3 }}>
               <img src="/images/icons/arrowLeftMobileFor35.svg" alt="" />
             </div>
-            <div id="nextArrowPopularProducts" className="PopularProducts__arrow" style={{ paddingLeft: 3 }}>
+            <div id="nextArrowNewItemsCategory" className="NewItemsCategory__arrow" style={{ paddingLeft: 3 }}>
               <img src="/images/icons/arrowRightMobileFor35.svg" alt="" />
             </div>
           </div>
         </Row>
 
-        <Row className="PopularProducts__Slider p-0 m-0 d-none d-md-block">
+        <Row className="NewItemsCategory__Slider p-0 m-0 d-none d-md-block">
           <Swiper
             // slidesPerView={'auto'}
-            slidesPerView={3}
-            loop={true}
+            slidesPerView={slidesNumber}
+            loop={this.state.lastProducts.length < slidesNumber ? false : true}
             // spaceBetween={10}
             navigation={{
-              nextEl: '#nextArrowPopularProducts',
-              prevEl: '#prewArrowPopularProducts',
+              nextEl: '#nextArrowNewItemsCategory',
+              prevEl: '#prewArrowNewItemsCategory',
             }}
             pagination={{ clickable: true, el: '#paginationProductsFull' }}
           >
@@ -112,28 +115,32 @@ class PopularProducts extends React.Component<PopularProductsProps, PopularProdu
             })}
           </Swiper>
 
-          <Container fluid className="p-0 m-0 d-flex d-none">
-            <Row className="p-0 m-0 d-flex justify-content-center">
-              <div id="paginationProductsFull"></div>
-            </Row>
-          </Container>
+          {this.state.lastProducts.length > slidesNumber ? (
+            <Container fluid className="p-0 m-0 d-flex justify-content-center d-none">
+              <Row className="p-0 m-0 d-flex">
+                <div id="paginationProductsFull"></div>
+              </Row>
+            </Container>
+          ) : (
+            ''
+          )}
         </Row>
 
-        <Row className="PopularProducts__Slider p-0 m-0 d-block d-md-none">
+        <Row className="NewItemsCategory__Slider p-0 m-0 d-block d-md-none">
           <Swiper
             slidesPerView={1}
             loop={true}
             navigation={{
-              nextEl: '#nextArrowPopularProducts',
-              prevEl: '#prewArrowPopularProducts',
+              nextEl: '#nextArrowNewItemsCategory',
+              prevEl: '#prewArrowNewItemsCategory',
             }}
-            pagination={{ clickable: true, el: '#paginationPopularProducts' }}
+            pagination={{ clickable: true, el: '#paginationProducts' }}
           >
             {this.generateMobileSlides(mobileSlidesSeparator)}
           </Swiper>
         </Row>
         <Row className="p-0 m-0 d-flex justify-content-center d-block d-md-none">
-          <div id="paginationPopularProducts"></div>
+          <div id="paginationProducts"></div>
         </Row>
       </Container>
     )
@@ -149,4 +156,4 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PopularProducts)
+export default connect(mapStateToProps, mapDispatchToProps)(NewItemsCategory)

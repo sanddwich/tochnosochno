@@ -33,12 +33,12 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
         
         <PageContent>
           <Switch>
-            <Route path='/menu/:id' component={Menu} />
-            <Route path='/product/:id' component={Product} />
-            <Route path='/cart' component={Cart} />
-            <Route path="/actions" component={Actions} />
-            <Route path="/contacts" component={Contacts} />
-            <Route path="/profile" component={Profile} />
+            <Route path='/menu/:id' exact component={Menu} />
+            <Route path='/product/:id' exact component={Product} />
+            <Route path='/cart' exact component={Cart} />
+            <Route path="/actions" exact component={Actions} />
+            <Route path="/contacts" exact component={Contacts} />
+            <Route path="/profile" exact component={Profile} />
             <Route path='/' exact component={Main} />
             <Redirect to='/' />
           </Switch>
