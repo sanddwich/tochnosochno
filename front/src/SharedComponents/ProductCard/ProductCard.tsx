@@ -29,7 +29,7 @@ export default class ProductCard extends React.Component<ProductCardProps, Produ
   render() {
     return (
       <React.Fragment>
-        <Container className="ProductCard p-3 m-0 mt-4">
+        <Container className="ProductCard p-3 m-0">
           <Container className="ProductCard__container p-0 m-0">
             <Row className="ProductCard__firstLine p-0 m-0 d-flex justify-content-between">
               <div className="ProductCard__favoriteButton">
@@ -42,7 +42,7 @@ export default class ProductCard extends React.Component<ProductCardProps, Produ
             </Row>
 
             <NavLink to={`/product/${this.props.product.id}`}>
-              <Row className="ProductCard__img">
+              <Row className="ProductCard__img d-flex justify-content-center">
                 <img
                   className="img-fluid"
                   src={this.props.product.image !== null ? this.props.product.image : '/images/products/no-photo.png'}

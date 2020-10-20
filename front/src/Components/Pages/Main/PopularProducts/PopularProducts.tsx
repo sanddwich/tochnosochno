@@ -91,7 +91,7 @@ class PopularProducts extends React.Component<PopularProductsProps, PopularProdu
           </div>
         </Row>
 
-        <Row className="PopularProducts__Slider p-0 m-0 d-none d-md-block">
+        <Row className="PopularProducts__Slider p-0 m-0 mt-2 d-none d-md-block">
           <Swiper
             // slidesPerView={'auto'}
             slidesPerView={3}
