@@ -20,22 +20,20 @@ export default class LineProductWithNumberInput extends React.Component<
     return (
       <div className="LineProductWithNumberInput">
         <div className="LineProductWithNumberInput__product ">
-          <div className="d-flex justify-content-between ">
-            <div className="LineProductWithNumberInput__product__image  ">
-              <img src={`${this.props.product.image}`} alt="" />
-            </div>
+          <div className="LineProductWithNumberInput__product__image  ">
+            <img src={`${this.props.product.image}`} alt="" />
+          </div>
 
-            <div className="LineProductWithNumberInput__product__name ">{this.props.product.name}</div>
+          <div className="LineProductWithNumberInput__product__name ">{this.props.product.name}</div>
 
-            <div className="LineProductWithNumberInput__product__price">
-              <div className="LineProductWithNumberInput__product__newPrice col-sm-6 m-0 p-0">
-                <span className="bold">980</span>руб
-              </div>
-              <div className="LineProductWithNumberInput__product__oldPrice col-sm-6 m-0 p-0"> 1170р</div>
+          <div className="LineProductWithNumberInput__product__price">
+            <div className="LineProductWithNumberInput__product__newPrice ">
+              <span className="bold">980</span>руб
             </div>
+            <div className="LineProductWithNumberInput__product__oldPrice "> 1170р</div>
           </div>
         </div>
-        <NumberInput />
+        <NumberInput label="Количество" hideLabel={true} />
 
         <div className="LineProductWithNumberInput__delete">
           <RoundButton

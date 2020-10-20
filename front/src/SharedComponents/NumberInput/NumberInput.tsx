@@ -2,7 +2,10 @@ import React from 'react'
 
 import './NumberInput.scss'
 
-interface NumberInputProps {}
+interface NumberInputProps {
+  label: string
+  hideLabel: boolean
+}
 
 interface NumberInputState {
   value: number
@@ -30,8 +33,8 @@ export default class NumberInput extends React.Component<NumberInputProps, Numbe
 
   render() {
     return (
-      <div className="numberInput noselect">
-        <div className="numberInput__label">Количество</div>
+      <div className={`numberInput noselect ${this.props.hideLabel ? '' : 'fullWidth'}`}>
+        <div className={`numberInput__label ${this.props.hideLabel ? 'hidden' : ''}`}>{this.props.label}</div>
         <div className="numberInput__input">
           <div onClick={this.decrement} className="numberInput__dec">
             -

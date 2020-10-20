@@ -1,0 +1,46 @@
+.CartOrder {
+  //   max-width: 780px;
+  display: flex;
+  justify-content: space-between;
+  &__guests {
+    max-width: 690px;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__total {
+    border-top: 1px solid #e5e5e5;
+    flex-grow: 1;
+    display: flex;
+    font-family: 'Montserrat';
+    font-weight: 700;
+    font-size: 24px;
+    justify-content: space-between;
+    padding: 50px 0;
+  }
+
+  &__banner {
+    margin-left: 20px;
+  }
+  &__banner-mob {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+}
+
+@media (max-width: 991px) {
+  .CartOrder {
+    display: block;
+    &__banner-mob {
+      display: block;
+      text-align: center;
+    }
+    &__banner {
+      display: none;
+    }
+  }
+}

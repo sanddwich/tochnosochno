@@ -73,7 +73,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               placeholder="Отредактируйте профиль"
             />
           </div>
-          <div style={{ float: 'left' }}>
+          <div className="mt-4 mt-sm-0 mt-md-0" style={{ float: 'left' }}>
             <label htmlFor="profile-birthday">День рождения</label>
             <input
               name="birthday"
@@ -105,16 +105,18 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
           />
         </div>
 
-        <div className="row m-0 mt-5">
-          <ActionButton
-            onClick={() => console.log('save changes')}
-            textColor="white"
-            width="280px"
-            text="Сохранить изменения"
-            backgroundColor="#303030"
-            icon="check.svg"
-          />
-          <div className="ml-5">
+        <div className="row m-0 mt-5 col-8 p-0">
+          <div className="col-md-6 p-0">
+            <ActionButton
+              onClick={() => console.log('save changes')}
+              textColor="white"
+              width="280px"
+              text="Сохранить изменения"
+              backgroundColor="#303030"
+              icon="check.svg"
+            />
+          </div>
+          <div className="col-md-6 mt-5 mt-md-0 p-0">
             <ActionButton
               onClick={() => console.log('save changes')}
               textColor="white"

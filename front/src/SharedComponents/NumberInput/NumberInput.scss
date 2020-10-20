@@ -4,7 +4,6 @@
   font-weight: 500;
   line-height: 60px;
   text-align: center;
-
   justify-content: space-between;
   order: 1;
 
@@ -13,12 +12,17 @@
   }
 
   &__label {
-    display: none;
     font-family: 'Montserrat';
     font-weight: 700;
     font-size: 18px;
     margin-right: 20px;
+
+    text-align: left;
   }
+  &__label.hidden {
+    display: none;
+  }
+
   &__dec {
     background-color: #ffcf25;
     width: 60px;
@@ -45,11 +49,24 @@
   }
 }
 
+.numberInput.fullWidth {
+  flex-grow: 5;
+}
+
 @media (max-width: 767px) {
   .numberInput {
     flex-grow: 5;
-    &__label {
+    &__label.hidden {
       display: block;
+      line-height: 60px;
+    }
+  }
+}
+
+@media (max-width: 438px) {
+  .numberInput {
+    &__label {
+      line-height: 30px;
     }
   }
 }

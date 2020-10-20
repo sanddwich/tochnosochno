@@ -1,6 +1,6 @@
 .LineProductWithNumberInput {
   border-bottom: #e5e5e5 1px solid;
-  padding: 10px 0;
+  padding: 20px 0;
   max-width: 780px;
   display: flex;
   justify-content: space-between;
@@ -12,7 +12,8 @@
   }
 
   &__product {
-    // display: flex;
+    display: flex;
+    justify-content: space-between;
 
     // width: 400px;
     line-height: 60px;
@@ -20,6 +21,7 @@
     flex-grow: 1;
     margin-right: 30px;
     &__image {
+      flex-grow: 6;
       img {
         width: 60px;
       }
@@ -28,6 +30,8 @@
       font-family: 'Roboto';
       font-weight: 400;
       font-size: 14px;
+      flex-grow: 5;
+      text-align: center;
     }
     &__price {
       // display: flex;
