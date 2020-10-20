@@ -124,7 +124,8 @@ main {
 }
 
 input[type='text'],
-input[type='date'] {
+input[type='date'],
+textarea {
   border: none; /* Get rid of the browser's styling */
   border-bottom: 1px solid #c4c4c4; /* Add your own border */
   color: #8e8e8e;

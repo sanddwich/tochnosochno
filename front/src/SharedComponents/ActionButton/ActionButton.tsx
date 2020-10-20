@@ -10,6 +10,7 @@ interface ActionButtonProps {
   width: string
   textColor: string
   hideTextMobile?: boolean
+  active?: boolean
 }
 
 interface ActionButtonState {}
@@ -19,7 +20,9 @@ export default class ActionButton extends React.Component<ActionButtonProps, Act
     return (
       <div
         onClick={this.props.onClick}
-        className={`actionButton noselect ${this.props.hideTextMobile ? 'mobile' : ''}`}
+        className={`actionButton  noselect ${this.props.hideTextMobile ? 'mobile' : ''} ${
+          this.props.active ? 'active' : ''
+        }`}
         style={{ backgroundColor: this.props.backgroundColor, width: this.props.width, color: this.props.textColor }}
       >
         <div className={`actionButton__text`}>{this.props.text}</div>

@@ -1,2 +1,23 @@
 .Cart {
+  &__delivery {
+    max-width: 780px;
+    padding: 40px 0;
+    &__select {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      &__label {
+        font-family: 'Montserrat';
+        font-weight: 700;
+        font-size: 24px;
+        flex-grow: 1;
+      }
+      &__buttons {
+        display: flex;
+        justify-content: space-evenly;
+        flex-grow: 1;
+      }
+    }
+  }
 }
