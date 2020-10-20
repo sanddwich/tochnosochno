@@ -17,7 +17,7 @@ export default class Footer extends React.Component<FooterProps, FooterState> {
             <div className="col-md-7 d-flex">
               <div className="row ">
                 <div className="col-5">
-                  <img src="images/logo.svg" alt="Logo" />
+                  <img src="/images/logo.svg" alt="Logo" />
                 </div>
                 <div className="col-1"></div>
 

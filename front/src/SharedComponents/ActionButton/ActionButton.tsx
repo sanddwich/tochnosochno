@@ -24,7 +24,7 @@ export default class ActionButton extends React.Component<ActionButtonProps, Act
       >
         <div className={`actionButton__text`}>{this.props.text}</div>
         <div className="actionButton__icon">
-          <img src={`images/icons/${this.props.icon}`} alt="icon" />
+          <img src={`/images/icons/${this.props.icon}`} alt="icon" />
         </div>
       </div>
     )
