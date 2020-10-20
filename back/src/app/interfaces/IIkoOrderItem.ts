@@ -4,7 +4,7 @@ import IIkoOrderItemModifier from './IIkoOrderItemModifier'
 import IIkoOrderItemType from './IIkoOrderItemType'
 
 export default class IIkoOrderItem {
-  type: IIkoOrderItemType
+  type: string
   productId: string
   amount: number
   modifiers?: IIkoOrderItemModifier[]

@@ -53,6 +53,6 @@ export class Address {
   @OneToMany((type) => Order, (order) => order.address)
   orders: Order[]
 
-  @ManyToOne((type) => Street, (street) => street.addresses)
+  @ManyToOne((type) => Street, (street) => street.addresses, { cascade: true })
   street: Street
 }

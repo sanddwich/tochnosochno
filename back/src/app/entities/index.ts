@@ -18,9 +18,11 @@ export { Card } from './card.entity'
 export { Payment } from './payment.entity'
 export { Size } from './size.entity'
 export { SizePrice } from './size-price.entity'
-export { Terminal } from './terminal.entity';
-export { Organization } from './organization.entity';
-export { PaymentType } from './payment-type.entity';
-export { ProductCategory } from './product-category.entity';
-export { Street } from './street.entity';
-export { City } from './city.entity';
+export { Terminal } from './terminal.entity'
+export { Organization } from './organization.entity'
+export { PaymentType } from './payment-type.entity'
+export { ProductCategory } from './product-category.entity'
+export { Street } from './street.entity'
+export { City } from './city.entity'
+export { Price } from './price.entity'
+export { GroupModifier } from './group-modifier.entity'

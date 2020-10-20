@@ -11,12 +11,20 @@ import {
   Street,
   PaymentType,
   OrderItem,
+  Size,
+  ProductCategory,
+  SizePrice,
+  OrderItemModifier,
+  ProductModifier,
+  Terminal,
 } from '../entities'
 import { Organization } from '../entities/organization.entity'
 import DeliveryPoint from '../interfaces/DeliveryPoint'
 import IIkoOrder from '../interfaces/IIkoOrder'
 import IIkoOrderItem from '../interfaces/IIkoOrderItem'
+import IIkoOrderItemModifier from '../interfaces/IIkoOrderItemModifier'
 import IIkoOrderItemType from '../interfaces/IIkoOrderItemType'
+import OrderServiceType from '../interfaces/OrderServiceType'
 import { LoggerService } from './logger.service'
 
 const fetch = require('node-fetch')
@@ -25,6 +33,9 @@ interface Menu {
   groups: Group[]
   products: Product[]
   revision: number
+  correlationId: string
+  sizes: Size[]
+  productCategories: ProductCategory[]
 }
 
 export class Iiko {
@@ -47,6 +58,8 @@ export class Iiko {
   private createOrderUrl = `${this.apiServer}/deliveries/create`
   private customerUrl = `${this.apiServer}/loyalty/iiko/customers/get_customer`
   private menuUrl = `${this.apiServer}/nomenclature`
+  private checkOrderUrl = `${this.apiServer}/deliveries/check_create`
+  private orderStatusUrl = `${this.apiServer}/deliveries/by_id`
 
   public async init() {
     const tokenAge = (Date.now() - this.tokenTimeStamp) / 60000
@@ -56,25 +69,69 @@ export class Iiko {
     }
   }
 
-  async sendOrderToIiko(order: Order, terminalGroupId?: string | null) {
+  async checkOrderIiko(order: Order) {
     const organization = await getRepository(Organization).findOne()
+    const iikoOrder = this.formatOrderForIiko(order)
+    try {
+      if (organization) {
+        const res = await fetch(this.checkOrderUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.token}`,
+          },
+          body: JSON.stringify({ organizationId: organization.id, order: iikoOrder }),
+        })
+        if (!res.ok) {
+          const error = await res.json()
+          throw new Error(`${res.status} ${res.statusText}. ${error.errorDescription}. Ошибка на сервере IIKO.`)
+        }
+        const iOrder = await res.json()
+        return iOrder
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-    const iikoOrder: IIkoOrder = this.formatOrderForIiko(order)
-    return iikoOrder
+  async sendOrderToIiko(order: Order, terminalGroupId?: Terminal | null) {
+    const terminalId = terminalGroupId ? terminalGroupId.toString() : null
 
-    // const city = await getRepository(City).findOne({ name: 'Астрахань' })
-    // if (city && organization) {
-    //   const res = await fetch(this.createOrderUrl, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       Authorization: `Bearer ${this.token}`,
-    //     },
-    //     body: JSON.stringify({ organizationId: organization.id, terminalGroupId, order }),
-    //   })
+    const organization = await getRepository(Organization).findOne()
+    const iikoOrder = this.formatOrderForIiko(order)
 
-    //   const iikoOrder = await res.json()
-    // }
+    try {
+      if (organization) {
+        const res = await this.fetch_retry(
+          this.createOrderUrl,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${this.token}`,
+              Timeout: 30,
+            },
+            body: JSON.stringify({
+              organizationId: organization.id,
+              order: iikoOrder,
+              terminalGroupId: terminalId,
+              createOrderSettings: {
+                transportToFrontTimeout: 30,
+              },
+            }),
+          },
+          5
+        )
+        if (!res.ok) {
+          const error = await res.json()
+          throw new Error(`${res.status} ${res.statusText}. ${error.errorDescription}. Ошибка на сервере IIKO.`)
+        }
+        const iOrder = await res.json()
+        return iOrder
+      }
+    } catch (error) {
+      return { error: true, message: error }
+    }
   }
 
   async setStreets() {
@@ -119,6 +176,8 @@ export class Iiko {
         },
         body: JSON.stringify({ organizationIds: [this.organizations[0].id] }),
       })
+      const terminals = await res.json()
+      return terminals
     } catch (error) {
       this.logger.iiko('iiko.service.setTerminals()', error)
       this.logger.error(`iiko.service.setTerminals() ${error}`)
@@ -169,6 +228,30 @@ export class Iiko {
     }
   }
 
+  async getOrders(orderIds: string[]) {
+    this.logger.info(`iiko.service.getOrders()`)
+    try {
+      const res = await fetch(this.orderStatusUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.token}`,
+        },
+        body: JSON.stringify({ organizationId: this.organizations[0].id, orderIds }),
+      })
+
+      if (!res.ok) {
+        const error = await res.json()
+        throw new Error(`${res.status} ${res.statusText}. ${error.errorDescription}. Ошибка на сервере IIKO.`)
+      }
+      const orders = await res.json()
+      return orders
+    } catch (error) {
+      this.logger.iiko('iiko.service.getOrders()', error)
+      this.logger.error(`iiko.service.getOrders() ${error}`)
+    }
+  }
+
   async getMenu() {
     this.logger.info(`iiko.service.getMenu()`)
 
@@ -185,39 +268,13 @@ export class Iiko {
       if (!res.ok) {
         throw new Error(`${res.status} ошибка на сервере IIKO.`)
       }
-
+      const productRepository = getRepository(Product)
+      const sizePriceRepository = getRepository(SizePrice)
       const menu: Menu = await res.json()
-      return menu
-
-      // const formattedGroups = menu.groups.map((group: Group) => {
-      //   group.images = ''
-      //   if (group.additionalInfo) {
-      //     group.additionalInfo = group.additionalInfo.replace(/"([^"]+(?="))"/g, '$1')
-      //   }
-      //   group.isIcludedInMenu = true
-      //   group.name = group.name.replace(/"([^"]+(?="))"/g, '$1')
-      //   return group
-      // })
-
-      // const groups = await getRepository(Group).save(formattedGroups)
-
-      // menu.products.map(async (product: Product) => {
-      //   if (product.id === '8842b207-1546-483b-945a-5eed6279139d') {
-      //     product.id = '8842b207-1546-483b-945a-5eed6279139d' + Math.random().toString()
-      //   }
-      //   if (product.id === ' 961cbaf2-dee6-4905-a83e-77a0c4385687') {
-      //     product.id = ' 961cbaf2-dee6-4905-a83e-77a0c4385687' + Math.random().toString()
-      //   }
-      //   if (product) product.image = ''
-      //   product.name = product.name.replace(/"([^"]+(?="))"/g, '$1')
-      //   if (product.images) {
-      //     if (product.images.length > 0) {
-      //       product.image = product.images[0].imageUrl
-      //       await getRepository(Image).save(product.images)
-      //     }
-      //   }
-      //   await getRepository(Product).save(product)
-      // })
+      const groups = await getRepository(Group).save(menu.groups)
+      const productCategories = await getRepository(ProductCategory).save(menu.productCategories)
+      const products = await productRepository.save(menu.products)
+      return products
     } catch (error) {
       this.logger.iiko('iiko.service.getMenu()', error)
       this.logger.error(`iiko.service.getMenu() ${error}`)
@@ -278,39 +335,75 @@ export class Iiko {
   private formatOrderForIiko(order: Order): IIkoOrder {
     const iikoOrderItems: IIkoOrderItem[] = []
     let comment = ''
-    let deliveryPoint: DeliveryPoint = {}
+    let deliveryPoint: DeliveryPoint | undefined = undefined
+    let orderServiceType: OrderServiceType = 'DeliveryByClient'
 
     if (order.payment === 'cash') comment = 'Оплата наличными курьеру'
     if (order.payment === 'credit') comment = 'Оплата кредитной картой курьеру'
     if (order.payment === 'online') comment = 'Оплата онлайн'
 
     order.items.map((item: OrderItem) => {
+      const iikoOrderItemModifers: IIkoOrderItemModifier[] = [
+        //БЕЗ ДОПОЛНЕНИЙ ДОЛЖНО БЫТЬ
+        {
+          productId: '51c9c4b8-2235-480c-ada2-84fed3df300f',
+          productGroupId: 'a062ac01-a16e-4b11-9398-c873d2b80215',
+          amount: 1,
+        },
+      ]
+
+      item.orderItemModifiers.map((orderItemModifier: OrderItemModifier) => {
+        iikoOrderItemModifers.push({
+          productId: orderItemModifier.productModifier.id,
+          productGroupId: orderItemModifier.productModifier.product.groupId,
+          amount: orderItemModifier.amount,
+        })
+      })
+
       iikoOrderItems.push({
-        type: 'Product',
+        type: item.product.orderItemType,
         amount: item.amount,
-        productId: 'dsadsd',
+        productId: item.product.id,
+        modifiers: iikoOrderItemModifers,
       })
     })
 
     if (order.isDelivery) {
+      const street: Street = {
+        id: order.address.street.id,
+      }
+
+      order.address.street = street
+
       deliveryPoint = {
         address: order.address,
         coordinates: { latitude: order.address.latitude, longitude: order.address.longitude },
         comment: order.address.comment,
       }
+      orderServiceType = 'DeliveryByCourier'
     }
-
-    console.log(order)
 
     const iikoOrder: IIkoOrder = {
       phone: order.phone,
       completeBefore: order.completeBefore,
       customer: order.customer,
-      items: iikoOrderItems,
+
       comment: comment,
-      deliveryPoint: deliveryPoint,
+      deliveryPoint,
+      orderServiceType: orderServiceType,
+      sourceKey: 'myaso.cafe',
+      items: iikoOrderItems,
     }
 
     return iikoOrder
+  }
+
+  fetch_retry = async (url, options, n) => {
+    try {
+      return await fetch(url, options)
+    } catch (err) {
+      if (n === 1) throw new Error(err)
+      return await this.fetch_retry(url, options, n - 1)
+    }
   }
 }

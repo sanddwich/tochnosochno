@@ -7,10 +7,10 @@ import { WalletBalance } from './wallet-balance.entity'
 
 @Entity()
 export class Customer {
-  @PrimaryColumn('varchar', { length: 200 })
+  @Column()
   id: string
 
-  @Column({ unique: true })
+  @PrimaryColumn()
   phone: string
 
   @Column({ nullable: true })
@@ -55,9 +55,9 @@ export class Customer {
   @OneToMany((type) => Address, (address) => address.customer)
   addresses: Address[]
 
-  @OneToMany((type) => WalletBalance, (walletBalance) => walletBalance.customer, { cascade: true })
+  @OneToMany((type) => WalletBalance, (walletBalance) => walletBalance.customer)
   walletBalances: WalletBalance[]
 
-  @OneToMany((type) => Card, (card) => card.customer, { cascade: true })
+  @OneToMany((type) => Card, (card) => card.customer)
   cards: Card[]
 }

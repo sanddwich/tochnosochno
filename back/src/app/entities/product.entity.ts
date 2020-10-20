@@ -10,14 +10,17 @@ import {
   PrimaryColumn,
   JoinColumn,
   OneToOne,
+  Unique,
 } from 'typeorm'
 import { ProductModifier } from './product-modifier.entity'
-import { Modifier, Group, Image } from '.'
+import { Modifier, Group, Image, GroupModifier } from '.'
 import { ProductVariant } from './product-variant.entity'
 import { Facet } from './facet.entity'
 import { Size } from './size.entity'
 import { SizePrice } from './size-price.entity'
 import { ProductCategory } from './product-category.entity'
+import { OrderItem } from './order-item.entity'
+import { OrderItemModifier } from './order-item-modifier.entity'
 
 @Entity()
 export class Product {
@@ -60,7 +63,7 @@ export class Product {
   @Column({ nullable: true })
   ingredients: string
 
-  @Column({ nullable: true })
+  @Column({ type: 'float', nullable: true })
   weight: number
 
   @Column({ nullable: true })
@@ -117,14 +120,19 @@ export class Product {
   @Column({ nullable: true })
   canSetOpenPrice: boolean
 
-  @OneToMany((type) => SizePrice, (sizePrice) => sizePrice.product)
+  @OneToMany((type) => SizePrice, (sizePrice) => sizePrice.product, {
+    cascade: true,
+  })
   sizePrices: SizePrice[]
 
-  @OneToMany((type) => ProductModifier, (productModifier) => productModifier.product)
+  @OneToMany((type) => ProductModifier, (productModifier) => productModifier.product, { cascade: true })
   modifiers: ProductModifier[]
 
   @OneToMany((type) => ProductVariant, (productVariant) => productVariant.product)
   variants: ProductVariant[]
+
+  @OneToMany((type) => OrderItem, (orderItem) => orderItem.product)
+  orderItems: OrderItem[]
 
   @ManyToOne((type) => Group, (group) => group.products)
   parentGroup: Group
@@ -135,10 +143,16 @@ export class Product {
   @OneToMany((type) => Image, (image) => image.product)
   images: Image[]
 
-  @OneToOne((type) => ProductCategory)
-  @JoinColumn()
+  @OneToMany((type) => OrderItemModifier, (orderItemModifier) => orderItemModifier.product)
+  orderItemModifiers: OrderItemModifier[]
+
+  @Column('simple-array')
+  imageLinks: string[]
+
+  @ManyToOne((type) => ProductCategory, (productCategory) => productCategory.products)
   productCategory: ProductCategory
 
-  @JoinTable()
-  groupTable: Group
+  @ManyToMany((type) => GroupModifier, (groupModifier) => groupModifier.products, { cascade: true })
+  @JoinTable({ name: 'product_group_modifiers' })
+  groupModifiers: GroupModifier[]
 }

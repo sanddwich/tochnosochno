@@ -5,20 +5,20 @@ import { Address } from './address.entity'
 @Entity()
 export class Street {
   @PrimaryColumn('varchar', { length: 200 })
-  id: string
-
-  @Column()
-  name: string
-
-  @Column()
-  externalRevision: number
+  id?: string
 
   @Column({ nullable: true })
-  classifierId: string
+  name?: string
 
-  @Column()
-  isDeleted: boolean
+  @Column({ nullable: true })
+  externalRevision?: number
+
+  @Column({ nullable: true })
+  classifierId?: string
+
+  @Column({ nullable: true })
+  isDeleted?: boolean
 
   @OneToMany((type) => Address, (address) => address.street)
-  addresses: Address[]
+  addresses?: Address[]
 }

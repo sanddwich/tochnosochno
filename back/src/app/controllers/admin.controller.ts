@@ -10,11 +10,14 @@ import {
 } from '@foal/core'
 import { fetchUser, TypeORMStore } from '@foal/typeorm'
 import { User } from '../entities'
-import { Iiko } from '../services'
+import { Iiko, PaymentService } from '../services'
 
 export class AdminController {
   @dependency
   iiko: Iiko
+
+  @dependency
+  bank: PaymentService
 
   @Get('/signin')
   signin(ctx: Context) {
@@ -42,10 +45,27 @@ export class AdminController {
     }
   }
 
+  @Put('/terminals')
+  async setTerminals() {
+    await this.iiko.init()
+    const terminals = await this.iiko.setTerminals()
+    if (terminals) {
+      return new HttpResponseCreated(terminals)
+    } else {
+      return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления терминалов' })
+    }
+  }
+
   @Put('/menu')
   async setMenu() {
+    let menu
     await this.iiko.init()
-    const menu = await this.iiko.getMenu()
+    try {
+      menu = await this.iiko.getMenu()
+    } catch (error) {
+      console.log(error)
+    }
+
     if (menu) {
       return new HttpResponseCreated(menu)
     } else {
@@ -56,6 +76,17 @@ export class AdminController {
   async setPayment() {
     await this.iiko.init()
     const payment = await this.iiko.getPaymentTypes()
+    if (payment) {
+      return new HttpResponseCreated(payment)
+    } else {
+      return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления типов оплат' })
+    }
+  }
+
+  @Put('/bank')
+  async testBank() {
+    const payment = await this.bank.sendOrderToBank('+79608618274', 'fssdf23432dsfs', '20000')
+
     if (payment) {
       return new HttpResponseCreated(payment)
     } else {

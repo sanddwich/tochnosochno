@@ -1,4 +1,4 @@
-import { Customer, OrderItem } from '../entities'
+import { Customer, Modifier, OrderItem } from '../entities'
 import Combo from './Combo'
 import DeliveryPoint from './DeliveryPoint'
 import IIkoOrderItem from './IIkoOrderItem'

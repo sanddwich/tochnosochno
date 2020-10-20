@@ -9,9 +9,6 @@ export class Image {
   @Column({ nullable: true })
   imageUrl: string
 
-  @Column({ nullable: true })
-  uploadDate: string
-
   @ManyToOne((type) => Product, (product) => product.images)
   product: Product
 }

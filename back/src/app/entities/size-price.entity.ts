@@ -1,31 +1,23 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Price } from './price.entity'
 import { Product } from './product.entity'
 import { Size } from './size.entity'
 
 @Entity()
 export class SizePrice {
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
-  @Column()
-  currentPrice: number
-
-  @Column()
-  nextPrice: number
-
-  @Column()
-  isIncludedInMenu: boolean
-
-  @Column()
-  nextIncludedInMenu: boolean
-
-  @Column()
-  nextDatePrice: string
+  @Column({ nullable: true })
+  sizeId: string
 
   @ManyToOne((type) => Product, (product) => product.sizePrices)
   product: Product
 
-  @OneToOne((type) => Size)
-  @JoinColumn()
-  size: Size
+  @ManyToOne((type) => Price, (price) => price.sizePrices, { cascade: true })
+  price: Price
+
+  // @OneToOne((type) => Size, { nullable: true })
+  // @JoinColumn()
+  // size: Size
 }

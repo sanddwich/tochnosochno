@@ -10,7 +10,7 @@ import {
   OneToMany,
   PrimaryColumn,
 } from 'typeorm'
-import { Product, OrderItemModifier } from '.'
+import { Product, OrderItemModifier, GroupModifier } from '.'
 import { Modifier } from './modifier.entity'
 
 @Entity()
@@ -36,6 +36,9 @@ export class ProductModifier {
   @ManyToOne((type) => Modifier, (modifier) => modifier.productModifier)
   modifier: Modifier
 
-  @OneToMany((type) => OrderItemModifier, (orderItemModifier) => orderItemModifier.productModifier)
+  @OneToMany((type) => OrderItemModifier, (orderItemModifier) => orderItemModifier.product)
   orderItemModifiers: OrderItemModifier[]
+
+  @ManyToOne((type) => GroupModifier, (groupModifier) => groupModifier.childModifiers)
+  groupModifier: GroupModifier
 }

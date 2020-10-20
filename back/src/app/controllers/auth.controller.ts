@@ -24,6 +24,7 @@ import { Customer } from '../entities'
 import { WalletBalance } from '../entities/wallet-balance.entity'
 import { Iiko, CustomerService, SmsService } from '../services'
 import { v4 as uuidv4 } from 'uuid'
+import * as _ from 'lodash'
 
 @ApiInfo({
   title: 'Food Delivery Site API',
@@ -36,7 +37,7 @@ import { v4 as uuidv4 } from 'uuid'
 })
 @Hook(() => (response) => {
   response.setHeader('Access-Control-Allow-Credentials', 'true')
-  response.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
+  response.setHeader('Access-Control-Allow-Origin', Config.get('host'))
 })
 export class AuthController {
   @dependency
@@ -92,7 +93,6 @@ export class AuthController {
     type: 'object',
   })
   async auth(ctx: Context) {
-    await this.iiko.init()
     let customer: Customer | undefined
     let { code, phone } = ctx.request.body
 
@@ -107,12 +107,13 @@ export class AuthController {
     }
 
     phone = phone.replace(/^\8/, '+7')
-
+    await this.iiko.init()
     let aiikoCustomer = await this.iiko.getCustomer(phone)
 
     if (aiikoCustomer) aiikoCustomer = this.customerService.setBonuses(aiikoCustomer)
 
     if (aiikoCustomer && aiikoCustomer.id) {
+      await repositoryCustomer.save(aiikoCustomer)
     } else {
       const customerDb = await repositoryCustomer.findOne({ phone: phone })
       if (!customerDb) {
@@ -121,6 +122,7 @@ export class AuthController {
         customer.id = uuidv4()
         customer.addresses = []
         customer.orders = []
+        customer.name = 'Клиент с сайта myaso.cafe'
         customer = await repositoryCustomer.save(customer)
       }
     }
@@ -131,15 +133,21 @@ export class AuthController {
           relations: [
             'orders',
             'addresses',
+            'orders.terminalId',
             'addresses.street',
             'orders.address',
             'orders.address.street',
             'orders.items',
             'orders.items.productVariant.product',
             'orders.items.productVariant',
+            'orders.items.product',
+            'orders.items.product.sizePrices',
+            'orders.items.product.sizePrices.price',
             'orders.items.orderItemModifiers',
             'orders.items.orderItemModifiers.productModifier',
-            'orders.items.orderItemModifiers.productModifier.modifier',
+            'orders.items.orderItemModifiers.productModifier.product',
+            'orders.items.orderItemModifiers.productModifier.product.sizePrices',
+            'orders.items.orderItemModifiers.productModifier.product.sizePrices.price',
           ],
         }
       )
@@ -147,6 +155,9 @@ export class AuthController {
 
     //Создаём сессию для пользователя и отправляем ему токен сессии
     if (customer) {
+      customer.orders = _.orderBy(customer.orders, ['date'], ['desc'])
+      customer.addresses = _.orderBy(customer.addresses, ['id'], ['desc'])
+      customer.orders = _.filter(customer.orders, 'orderIikoId')
       const session = await this.store.createAndSaveSessionFromUser(customer, { csrfToken: true })
       const token = session.getToken()
       const response = new HttpResponseOK({
@@ -168,7 +179,7 @@ export class AuthController {
     user: fetchUser(Customer),
     store: TypeORMStore,
   })
-  @CsrfTokenRequired()
+  // @CsrfTokenRequired()
   async logout(ctx: Context<Customer, Session>) {
     //Удаление сессии
     await this.store.destroy(ctx.session.sessionID)

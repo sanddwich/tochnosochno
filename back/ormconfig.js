@@ -8,7 +8,7 @@ module.exports = {
   username: Config.get('database.username'),
   password: Config.get('database.password'),
   database: Config.get('database.database'),
-
+  logging: Config.get('database.logging'),
   dropSchema: Config.get('database.dropSchema', false),
   synchronize: Config.get('database.synchronize', false),
 

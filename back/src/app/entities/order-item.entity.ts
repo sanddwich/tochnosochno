@@ -7,7 +7,7 @@ import { Product } from './product.entity'
 
 @Entity()
 export class OrderItem {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('varchar', { length: 200 })
   id: string
 
   @Column()
@@ -28,6 +28,9 @@ export class OrderItem {
   @ManyToOne((type) => ProductVariant, (productVariant) => productVariant.orderItems)
   productVariant: ProductVariant
 
-  @OneToMany((type) => OrderItemModifier, (orderItemModifier) => orderItemModifier.orderItem)
+  @OneToMany((type) => OrderItemModifier, (orderItemModifier) => orderItemModifier.orderItem, { cascade: true })
   orderItemModifiers: OrderItemModifier[]
+
+  @ManyToOne((type) => Product, (product) => product.orderItems)
+  product: Product
 }

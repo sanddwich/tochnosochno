@@ -20,6 +20,6 @@ export class Terminal {
   @ManyToOne((type) => Organization, (organization) => organization.terminals)
   organization: Organization
 
-  @OneToMany((type) => Order, (order) => order.terminal)
+  @OneToMany((type) => Order, (order) => order.terminalId)
   orders: Order[]
 }

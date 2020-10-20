@@ -17,7 +17,7 @@ export class SmsService {
     if (!oldCode) {
       const code = Math.floor(100000 + Math.random() * 900000)
       const date = new Date()
-      date.setSeconds(date.getSeconds() + 60)
+      date.setSeconds(date.getSeconds() + 3660)
 
       pinCode.phone = phone
       pinCode.pinCode = code

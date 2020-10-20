@@ -8,7 +8,7 @@ import { Terminal } from './terminal.entity'
 
 @Entity()
 export class Order {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('varchar', { length: 200 })
   id: string
 
   @Column()
@@ -50,18 +50,24 @@ export class Order {
   @Column()
   comment: string
 
+  @Column()
+  bankOrderId: string
+
+  @Column()
+  orderIikoId: string
+
   @ManyToOne((type) => Customer, (customer) => customer.orders)
   customer: Customer
 
   @ManyToOne((type) => Address, (address) => address.orders)
   address: Address
 
-  @OneToMany((type) => OrderItem, (orderItem) => orderItem.order)
+  @OneToMany((type) => OrderItem, (orderItem) => orderItem.order, { cascade: true })
   items: OrderItem[]
 
   @OneToMany((type) => Payment, (payment) => payment.order)
   payments: Payment[]
 
   @ManyToOne((type) => Terminal, (terminal) => terminal.orders)
-  terminal: Terminal
+  terminalId: Terminal
 }

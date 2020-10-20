@@ -33,14 +33,14 @@ export class Group {
   @Column({ nullable: true })
   seoTitle: string
 
-  @Column({ nullable: true })
-  tags: string
+  // @Column({ nullable: true })
+  // tags: string
 
   @Column({ nullable: true })
   images: string
 
   @Column({ nullable: true })
-  isIcludedInMenu: boolean
+  isIncludedInMenu: boolean
 
   @Column({ nullable: true })
   isGroupModifier: boolean
