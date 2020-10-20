@@ -58,7 +58,9 @@ class PopularProducts extends React.Component<PopularProductsProps, PopularProdu
         <SwiperSlide key={index}>
           <Container fluid className="m-0 p-0">
             {pool.map((product, index) => {
-              return <ProductCardMobile key={product.id + index} product={product} />
+              if (typeof product !== 'undefined') {
+                return <ProductCardMobile key={product.id + index} product={product} />
+              }
             })}
           </Container>
         </SwiperSlide>
@@ -104,11 +106,13 @@ class PopularProducts extends React.Component<PopularProductsProps, PopularProdu
             pagination={{ clickable: true, el: '#paginationProductsFull' }}
           >
             {this.state.lastProducts.map((product, index) => {
-              return (
-                <SwiperSlide key={product.id + index}>
-                  <ProductCard product={product} />
-                </SwiperSlide>
-              )
+              if (typeof product !== 'undefined') {
+                return (
+                  <SwiperSlide key={product.id + index}>
+                    <ProductCard product={product} />
+                  </SwiperSlide>
+                )
+              }
             })}
           </Swiper>
 

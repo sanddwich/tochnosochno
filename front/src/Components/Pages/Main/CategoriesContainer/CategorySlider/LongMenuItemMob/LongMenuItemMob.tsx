@@ -31,7 +31,7 @@ export default class LongMenuItemMob extends React.Component<LongMenuItemMobProp
             <Container
               className="m-0 p-0"
               style={{
-                background: `url(${this.props.category.images})`,
+                background: (this.props.category.images !== null && this.props.category.images !== ''  ) ? `url(${this.props.category.images})` : `url(/images/categories/rolls.png)`,
                 backgroundRepeat: 'no-repeat',
                 // backgroundAttachment: 'fixed',
                 backgroundPosition: 'right',

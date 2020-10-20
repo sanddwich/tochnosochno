@@ -21,7 +21,9 @@ interface HeaderDownProps {
 interface HeaderDownState {}
 
 class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
-  componentDidMount() {}
+  componentDidMount() {
+    // console.log(this.props.menu)
+  }
 
   render() {
     return (
