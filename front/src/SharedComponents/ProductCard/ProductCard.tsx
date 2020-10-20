@@ -18,6 +18,10 @@ const newPrice: number = 200
 const oldPrice: number = 300
 
 export default class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
+  componentDidMount() {
+    // console.log(this.props.product)
+  }
+
   favoriteClick = (): void => {
     console.log('favoriteClick')
   }
@@ -45,7 +49,8 @@ export default class ProductCard extends React.Component<ProductCardProps, Produ
               <Row className="ProductCard__img d-flex justify-content-center">
                 <img
                   className="img-fluid"
-                  src={this.props.product.image !== null ? this.props.product.image : '/images/products/no-photo.png'}
+                  // src={this.props.product.imageLinks[0]}
+                  // src={this.props.product.image !== null ? this.props.product.image : '/images/products/no-photo.png'}
                   alt={this.props.product.name}
                 />
               </Row>
