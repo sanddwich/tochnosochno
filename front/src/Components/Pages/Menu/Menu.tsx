@@ -23,8 +23,8 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
         {/* <BreadCrumbs  /> */}
         {/* <SliderContainer marginTop={30} /> */}
         <SliderContainer />
-        <NewItemsCategory key={parseInt(this.props.match.params.id)} categoryId={this.props.match.params.id} />
-        <ProductList productsPerPage={6} categoryId={this.props.match.params.id} />
+        <NewItemsCategory key={this.props.match.params.id + Math.random().toString()} categoryId={this.props.match.params.id} />
+        <ProductList key={this.props.match.params.id + Math.random().toString()} productsPerPage={6} categoryId={this.props.match.params.id} />
       </Container>
     )
   }

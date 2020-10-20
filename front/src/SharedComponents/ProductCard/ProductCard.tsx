@@ -49,8 +49,11 @@ export default class ProductCard extends React.Component<ProductCardProps, Produ
               <Row className="ProductCard__img d-flex justify-content-center">
                 <img
                   className="img-fluid"
-                  // src={this.props.product.imageLinks[0]}
-                  // src={this.props.product.image !== null ? this.props.product.image : '/images/products/no-photo.png'}
+                  src={
+                    typeof this.props.product.imageLinks[0] !== 'undefined'
+                      ? `${this.props.product.imageLinks[0]}`
+                      : '/images/products/no-photo.png'
+                  }
                   alt={this.props.product.name}
                 />
               </Row>
@@ -69,7 +72,10 @@ export default class ProductCard extends React.Component<ProductCardProps, Produ
             <Row className="ProductCard__priceLine d-flex justify-content-between">
               <div className="ProductCard__prices">
                 <div className="ProductCard__price d-inline-block">
-                  {newPrice.toFixed(0).toString()} <span>руб</span>
+                  {this.props.product.sizePrices.length > 0
+                    ? this.props.product.sizePrices[0].price.currentPrice.toFixed(0).toString()
+                    : newPrice.toFixed(0).toString()}{' '}
+                  <span>руб</span>
                 </div>
                 <div className="ProductCard__oldPrice d-inline-block">{oldPrice.toFixed(0).toString()}р</div>
               </div>
