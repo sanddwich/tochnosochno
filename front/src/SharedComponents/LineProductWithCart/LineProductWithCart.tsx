@@ -12,14 +12,24 @@ interface LineProductWithCartState {}
 
 export default class LineProductWithCart extends React.Component<LineProductWithCartProps, LineProductWithCartState> {
   render() {
+    console.log(this.props.product)
     return (
-      <div className="lineProductWithCart">
+      <div className="lineProductWithCart d-flex justify-content-between ">
         <div className="lineProductWithCart__product">
-          <div className="lineProductWithCart__product__image">
-            <img src={`${this.props.product.image}`} alt="" />
-          </div>
+          <div className="d-flex justify-content-between ">
+            <div className="lineProductWithCart__product__image  ">
+              <img src={`${this.props.product.image}`} alt="" />
+            </div>
 
-          <div className="lineProductWithCart__product__image">{this.props.product.name}</div>
+            <div className="lineProductWithCart__product__name ">{this.props.product.name}</div>
+
+            <div className="lineProductWithCart__product__price">
+              <div className="lineProductWithCart__product__newPrice col-sm-6 m-0 p-0">
+                <span className="bold">980</span>руб
+              </div>
+              <div className="lineProductWithCart__product__oldPrice col-sm-6 m-0 p-0"> 1170р</div>
+            </div>
+          </div>
         </div>
 
         <ActionButton
@@ -29,6 +39,7 @@ export default class LineProductWithCart extends React.Component<LineProductWith
           text="В корзину"
           backgroundColor="#303030"
           icon="cart_dark.svg"
+          hideTextMobile={true}
         />
       </div>
     )

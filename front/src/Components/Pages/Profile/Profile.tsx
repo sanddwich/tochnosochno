@@ -12,6 +12,7 @@ import ProductCardMobile from '../../../SharedComponents/ProductCardMobile/Produ
 import _ from 'lodash'
 import './Profile.scss'
 import LineProductWithCart from '../../../SharedComponents/LineProductWithCart/LineProductWithCart'
+import LineProductWithNumberInput from '../../../SharedComponents/LineProductWithNumberInput/LineProductWithNumberInput'
 
 interface ProfileProps {
   menu: Category[]
@@ -132,6 +133,10 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
         <div>
           <LineProductWithCart product={this.props.menu[0].products[0]} />
+        </div>
+
+        <div>
+          <LineProductWithNumberInput product={this.props.menu[0].products[0]} />
         </div>
 
         <div className="row m-0 mt-5">

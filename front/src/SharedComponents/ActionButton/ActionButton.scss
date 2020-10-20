@@ -37,5 +37,17 @@
   &:active {
     background-color: #f6c000 !important;
   }
+}
 
+@media (max-width: 620px) {
+  .actionButton.mobile {
+    width: 60px !important;
+    background-color: white !important;
+    .actionButton__text {
+      display: none;
+    }
+    .actionButton__icon {
+      border-top-left-radius: 20px;
+    }
+  }
 }
