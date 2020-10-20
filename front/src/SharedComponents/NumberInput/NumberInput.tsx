@@ -32,12 +32,14 @@ export default class NumberInput extends React.Component<NumberInputProps, Numbe
     return (
       <div className="numberInput noselect">
         <div className="numberInput__label">Количество</div>
-        <div onClick={this.decrement} className="numberInput__dec">
-          -
-        </div>
-        <div className="numberInput__number">{this.state.value}</div>
-        <div onClick={this.increment} className="numberInput__inc">
-          +
+        <div className="numberInput__input">
+          <div onClick={this.decrement} className="numberInput__dec">
+            -
+          </div>
+          <div className="numberInput__number">{this.state.value}</div>
+          <div onClick={this.increment} className="numberInput__inc">
+            +
+          </div>
         </div>
       </div>
     )

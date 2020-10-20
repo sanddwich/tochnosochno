@@ -19,7 +19,7 @@ export default class LineProductWithNumberInput extends React.Component<
   render() {
     return (
       <div className="LineProductWithNumberInput">
-        <div className="LineProductWithNumberInput__product">
+        <div className="LineProductWithNumberInput__product ">
           <div className="d-flex justify-content-between ">
             <div className="LineProductWithNumberInput__product__image  ">
               <img src={`${this.props.product.image}`} alt="" />
@@ -36,13 +36,16 @@ export default class LineProductWithNumberInput extends React.Component<
           </div>
         </div>
         <NumberInput />
-        <RoundButton
-          width="60px"
-          height="60px"
-          backgroundColor="#F2F2F2"
-          icon="trash.svg"
-          onClick={() => console.log('delete from cart')}
-        />
+
+        <div className="LineProductWithNumberInput__delete">
+          <RoundButton
+            width="60px"
+            height="60px"
+            backgroundColor="#F2F2F2"
+            icon="trash.svg"
+            onClick={() => console.log('delete from cart')}
+          />
+        </div>
       </div>
     )
   }
