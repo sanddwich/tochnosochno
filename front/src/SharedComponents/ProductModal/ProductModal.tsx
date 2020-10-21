@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import Product from '../../Interfaces/Product'
 import { RootState } from '../../Redux'
 import BlockName from '../BlockName/BlockName'
+import LineProductWithSizeInput from '../LineProductWithSizeInput/LineProductWithSizeInput'
 import RecomendedProducts from '../RecomendedProducts/RecomendedProducts'
 import RoundButton from '../RoundButton/RoundButton'
 import Sticker from '../Sticker/Sticker'
@@ -82,7 +83,7 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
               </Row>
             </Col>
 
-            <Col className="p-0 m-0" xs={7}>
+            <Col className="ProductModal__info p-0 m-0 d-flex flex-column" xs={7}>
               <Row>
                 <Col className="ProductModal__title">
                   <BlockName name={this.state.product.name} />
@@ -94,9 +95,17 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
                 </Col>
               </Row>
 
-              <Row>
-                <Col className="ProductModal__recomend">
-                  <RecomendedProducts />
+              <Row className="h-100">
+                <Col className="ProductModal__Content d-flex align-items-center">
+                  <LineProductWithSizeInput product={this.state.product} />
+                </Col>
+              </Row>
+
+              <Row className="mt-auto mb-2">
+                <Col className="ProductModal__recomendCont m-0 p-0">
+                  <div className="ProductModal__recomend">
+                    <RecomendedProducts />
+                  </div>
                 </Col>
               </Row>
             </Col>
