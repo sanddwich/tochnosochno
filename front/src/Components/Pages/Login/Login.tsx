@@ -1,5 +1,7 @@
 import React from 'react'
 import { Modal } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import { RootState } from '../../../Redux'
 import ActionButton from '../../../SharedComponents/ActionButton/ActionButton'
 import BlockName from '../../../SharedComponents/BlockName/BlockName'
 import RoundButton from '../../../SharedComponents/RoundButton/RoundButton'
@@ -14,7 +16,7 @@ interface LoginState {
   show: boolean
 }
 
-export default class Login extends React.Component<LoginProps, LoginState> {
+class Login extends React.Component<LoginProps, LoginState> {
   constructor(props: LoginProps) {
     super(props)
     this.state = {
@@ -63,3 +65,14 @@ export default class Login extends React.Component<LoginProps, LoginState> {
     )
   }
 }
+
+const mapDispatchToProps = {}
+
+const mapStateToProps = (state: RootState) => {
+  const auth = state.auth
+  return {
+    auth,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
