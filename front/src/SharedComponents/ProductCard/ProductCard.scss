@@ -22,7 +22,7 @@
 
   .ProductCard__img {
     margin-top: -80px;
-    height: 300px;       // =========== Каринки
+    // height: 300px;       // =========== Каринки
   }
 
   .ProductCard__textContent {
@@ -33,6 +33,7 @@
 
     .ProductCard__title {
       cursor: pointer;
+      margin-top: 20px; //Отступ наименования продукта
       h1 {
         font-family: 'Montserrat';
         font-style: normal;

@@ -114,47 +114,58 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
     const activePage: number = 1
     let productsAtPage: Product[] = []
 
-    if (filterId === 0) {
-      this.getProducts()
-    }
-    if (filterId === 1) {
-      let sortPriceUp: Product[] = _.orderBy(this.state.sortProducts, (product) => {
-        return product.sizePrices[0].price.currentPrice
-      }, ["asc"])
-      productsAtPage = this.getPageProducts(sortPriceUp, activePage, this.props.productsPerPage)
-
-      this.setState({sortProducts: sortPriceUp, productsAtPage, activePage})
-      // console.log(sortPriceUp)
-    }
-    if (filterId === 2) {
-      let sortPriceDown: Product[] = _.orderBy(this.state.sortProducts, (product) => {
-        return product.sizePrices[0].price.currentPrice
-      }, ["desc"])
-      productsAtPage = this.getPageProducts(sortPriceDown, activePage, this.props.productsPerPage)
-
-      this.setState({sortProducts: sortPriceDown, productsAtPage, activePage})
-      // console.log(sortPriceDown)
-    }
-    if (filterId === 3) {
-      let sortPopular: Product[] = _.shuffle(this.state.sortProducts) // Перемешивание случайным образом
-      productsAtPage = this.getPageProducts(sortPopular, activePage, this.props.productsPerPage)
-
-      this.setState({sortProducts: sortPopular, productsAtPage, activePage})
-      // console.log(sortPPopular)
-    }
-
-    // Обновление акивного фильтра
-    let filters: Filter[] = this.state.filters.map(filter => {
-      if (filter.id === filterId) {
-        filter.active = true
-        return (filter) 
-      } else {
-        filter.active = false
-        return (filter) 
+    try {
+      if (filterId === 0) {
+        this.getProducts()
       }
-    })
-    this.setState({filters})
+      if (filterId === 1) {
+        let sortPriceUp: Product[] = _.orderBy(
+          this.state.sortProducts,
+          (product) => {
+            return product.sizePrices[0].price.currentPrice
+          },
+          ['asc']
+        )
+        productsAtPage = this.getPageProducts(sortPriceUp, activePage, this.props.productsPerPage)
 
+        this.setState({ sortProducts: sortPriceUp, productsAtPage, activePage })
+        // console.log(sortPriceUp)
+      }
+      if (filterId === 2) {
+        let sortPriceDown: Product[] = _.orderBy(
+          this.state.sortProducts,
+          (product) => {
+            return product.sizePrices[0].price.currentPrice
+          },
+          ['desc']
+        )
+        productsAtPage = this.getPageProducts(sortPriceDown, activePage, this.props.productsPerPage)
+
+        this.setState({ sortProducts: sortPriceDown, productsAtPage, activePage })
+        // console.log(sortPriceDown)
+      }
+      if (filterId === 3) {
+        let sortPopular: Product[] = _.shuffle(this.state.sortProducts) // Перемешивание случайным образом
+        productsAtPage = this.getPageProducts(sortPopular, activePage, this.props.productsPerPage)
+
+        this.setState({ sortProducts: sortPopular, productsAtPage, activePage })
+        // console.log(sortPPopular)
+      }
+
+      // Обновление акивного фильтра
+      let filters: Filter[] = this.state.filters.map((filter) => {
+        if (filter.id === filterId) {
+          filter.active = true
+          return filter
+        } else {
+          filter.active = false
+          return filter
+        }
+      })
+      this.setState({ filters })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   setPage = (activePage: number): void => {

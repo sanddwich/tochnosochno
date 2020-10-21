@@ -6,18 +6,28 @@ import Sticker from '../Sticker/Sticker'
 
 import './ProductCard.scss'
 import ActionButton from '../ActionButton/ActionButton'
-import { NavLink } from 'react-router-dom'
+import ProductModal from '../ProductModal/ProductModal'
+// import { NavLink } from 'react-router-dom'
 
 interface ProductCardProps {
   product: Product
 }
 
-interface ProductCardState {}
+interface ProductCardState {
+  showProductModal: boolean
+}
 
 const newPrice: number = 200
 const oldPrice: number = 300
 
 export default class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
+  constructor(props:ProductCardProps) {
+    super(props)
+    this.state = {
+      showProductModal: false
+    }
+  }
+
   componentDidMount() {
     // console.log(this.props.product)
   }
@@ -30,9 +40,18 @@ export default class ProductCard extends React.Component<ProductCardProps, Produ
     console.log('addToCartButton ' + id.toString())
   }
 
+  toggleModal = (): void => {
+    const showProductModal: boolean = !this.state.showProductModal
+    this.setState({showProductModal})
+  }
+
   render() {
     return (
       <React.Fragment>
+        {this.state.showProductModal ? (
+          <ProductModal product={this.props.product} toggleModal={this.toggleModal} />
+        ) : null}
+
         <Container className="ProductCard p-3 m-0">
           <Container className="ProductCard__container p-0 m-0">
             <Row className="ProductCard__firstLine p-0 m-0 d-flex justify-content-between">
@@ -45,26 +64,22 @@ export default class ProductCard extends React.Component<ProductCardProps, Produ
               </div>
             </Row>
 
-            <NavLink to={`/product/${this.props.product.id}`}>
-              <Row className="ProductCard__img d-flex justify-content-center">
-                <img
-                  className="img-fluid"
-                  src={
-                    typeof this.props.product.imageLinks[0] !== 'undefined'
-                      ? `${this.props.product.imageLinks[0]}`
-                      : '/images/products/no-photo.png'
-                  }
-                  alt={this.props.product.name}
-                />
-              </Row>
-            </NavLink>
+            <Row className="ProductCard__img d-flex justify-content-center" onClick={() => this.toggleModal()} >
+              <img
+                className="img-fluid"
+                src={
+                  typeof this.props.product.imageLinks[0] !== 'undefined'
+                    ? `${this.props.product.imageLinks[0]}`
+                    : '/images/products/no-photo.png'
+                }
+                alt={this.props.product.name}
+              />
+            </Row>
 
             <Row className="ProductCard__textContent">
-              <NavLink to={`/product/${this.props.product.id}`}>
                 <div className="ProductCard__title w-100">
                   <h1>{this.props.product.name}</h1>
                 </div>
-              </NavLink>
 
               <div className="ProductCard__desc w-100">{this.props.product.description}</div>
             </Row>
