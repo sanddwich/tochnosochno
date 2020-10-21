@@ -5,37 +5,30 @@ import { RootState } from '../../../Redux'
 import ActionButton from '../../../SharedComponents/ActionButton/ActionButton'
 import BlockName from '../../../SharedComponents/BlockName/BlockName'
 import RoundButton from '../../../SharedComponents/RoundButton/RoundButton'
+import { hideLoginModal } from '../../../Redux/actions/app'
 
 import './Login.scss'
 
 interface LoginProps {
-  show: boolean
+  showLogin: boolean
+  hideLoginModal: () => void
 }
 
-interface LoginState {
-  show: boolean
-}
+interface LoginState {}
 
 class Login extends React.Component<LoginProps, LoginState> {
   constructor(props: LoginProps) {
     super(props)
-    this.state = {
-      show: this.props.show,
-    }
-  }
-
-  toggleLogin = () => {
-    this.setState({ show: !this.state.show })
   }
 
   render() {
     return (
       <React.Fragment>
-        {this.state.show ? (
+        {this.props.showLogin ? (
           <div className="Login">
             <div className="Login__content">
               <div className="Login__content__close">
-                <RoundButton icon="icon_close.svg" backgroundColor="#F2F2F2" onClick={() => this.toggleLogin()} />
+                <RoundButton icon="icon_close.svg" backgroundColor="#F2F2F2" onClick={this.props.hideLoginModal} />
               </div>
               <div className="Login__content__body">
                 <div className="Login__content__body__form">
@@ -66,12 +59,14 @@ class Login extends React.Component<LoginProps, LoginState> {
   }
 }
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  hideLoginModal,
+}
 
 const mapStateToProps = (state: RootState) => {
-  const auth = state.auth
+  const { showLogin } = state.app
   return {
-    auth,
+    showLogin,
   }
 }
 

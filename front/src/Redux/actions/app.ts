@@ -1,12 +1,14 @@
 import Order from '../../Interfaces/Order'
 import Product from '../../Interfaces/Product'
 import {
+  HIDE_LOGIN,
   HIDE_PRODUCT_MODAL,
   HIDE_SIDE_DIALOG,
   SHOW_CART,
   SHOW_COOKING_TIME,
   SHOW_CREDIT_CARD_FORM,
   SHOW_HISTORY,
+  SHOW_LOGIN,
   SHOW_ORDER,
   SHOW_ORDER_DETAIL,
   SHOW_PAYMENT,
@@ -57,4 +59,12 @@ export const showProductModal = (product: Product) => ({
 
 export const hideProductModal = () => ({
   type: HIDE_PRODUCT_MODAL,
+})
+
+export const showLoginModal = () => ({
+  type: SHOW_LOGIN,
+})
+
+export const hideLoginModal = () => ({
+  type: HIDE_LOGIN,
 })

@@ -2,12 +2,14 @@ import Order from '../../Interfaces/Order'
 import Product from '../../Interfaces/Product'
 import {
   GET_APP,
+  HIDE_LOGIN,
   HIDE_PRODUCT_MODAL,
   HIDE_SIDE_DIALOG,
   SHOW_CART,
   SHOW_COOKING_TIME,
   SHOW_CREDIT_CARD_FORM,
   SHOW_HISTORY,
+  SHOW_LOGIN,
   SHOW_ORDER,
   SHOW_ORDER_DETAIL,
   SHOW_PAYMENT,
@@ -60,6 +62,14 @@ interface HideProductModal {
   type: typeof HIDE_PRODUCT_MODAL
 }
 
+interface ShowLoginModal {
+  type: typeof SHOW_LOGIN
+}
+
+interface HideLoginModal {
+  type: typeof HIDE_LOGIN
+}
+
 export type AppActionType =
   | GetAppAction
   | ShowProductDialogAction
@@ -73,3 +83,5 @@ export type AppActionType =
   | ShowCreditCardFormAction
   | ShowProductModal
   | HideProductModal
+  | ShowLoginModal
+  | HideLoginModal

@@ -1,11 +1,13 @@
 import {
   GET_APP,
+  HIDE_LOGIN,
   HIDE_PRODUCT_MODAL,
   HIDE_SIDE_DIALOG,
   SHOW_CART,
   SHOW_COOKING_TIME,
   SHOW_CREDIT_CARD_FORM,
   SHOW_HISTORY,
+  SHOW_LOGIN,
   SHOW_ORDER,
   SHOW_ORDER_DETAIL,
   SHOW_PAYMENT,
@@ -93,6 +95,17 @@ const app = (state: AppState = initialState, action: AppActionType) => {
         ...state,
         showProductModal: false,
         productModalProduct: undefined,
+      }
+
+    case SHOW_LOGIN:
+      return {
+        ...state,
+        showLogin: true,
+      }
+    case HIDE_LOGIN:
+      return {
+        ...state,
+        showLogin: false,
       }
     default:
       return state

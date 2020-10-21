@@ -15,7 +15,7 @@ export default class Header extends React.Component<HeaderProps, HeaderState> {
       <Container fluid className="Header p-0 m-0">
         <HeaderUp></HeaderUp>
         <HeaderDown />
-        <Login show={true} />
+        <Login />
       </Container>
     )
   }
