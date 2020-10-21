@@ -3,14 +3,16 @@ import { Col, Container, Row } from 'react-bootstrap'
 import Product from '../../Interfaces/Product'
 import RoundButton from '../RoundButton/RoundButton'
 import Sticker from '../Sticker/Sticker'
+import { showProductModal } from '../../Redux/actions/app'
 
 import './ProductCard.scss'
 import ActionButton from '../ActionButton/ActionButton'
-import ProductModal from '../ProductModal/ProductModal'
+import { connect } from 'react-redux'
 // import { NavLink } from 'react-router-dom'
 
 interface ProductCardProps {
   product: Product
+  showProductModal: (product: Product) => void
 }
 
 interface ProductCardState {
@@ -20,11 +22,11 @@ interface ProductCardState {
 const newPrice: number = 200
 const oldPrice: number = 300
 
-export default class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
-  constructor(props:ProductCardProps) {
+class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
+  constructor(props: ProductCardProps) {
     super(props)
     this.state = {
-      showProductModal: false
+      showProductModal: false,
     }
   }
 
@@ -42,15 +44,15 @@ export default class ProductCard extends React.Component<ProductCardProps, Produ
 
   toggleModal = (): void => {
     const showProductModal: boolean = !this.state.showProductModal
-    this.setState({showProductModal})
+    this.setState({ showProductModal })
   }
 
   render() {
     return (
       <React.Fragment>
-        {this.state.showProductModal ? (
+        {/* {this.state.showProductModal ? (
           <ProductModal product={this.props.product} toggleModal={this.toggleModal} />
-        ) : null}
+        ) : null} */}
 
         <Container className="ProductCard p-3 m-0">
           <Container className="ProductCard__container p-0 m-0">
@@ -64,7 +66,7 @@ export default class ProductCard extends React.Component<ProductCardProps, Produ
               </div>
             </Row>
 
-            <Row className="ProductCard__img d-flex justify-content-center" onClick={() => this.toggleModal()} >
+            <Row className="ProductCard__img d-flex justify-content-center" onClick={() => this.props.showProductModal(this.props.product)}>
               <img
                 className="img-fluid"
                 src={
@@ -77,9 +79,9 @@ export default class ProductCard extends React.Component<ProductCardProps, Produ
             </Row>
 
             <Row className="ProductCard__textContent">
-                <div className="ProductCard__title w-100">
-                  <h1>{this.props.product.name}</h1>
-                </div>
+              <div className="ProductCard__title w-100" onClick={() => this.props.showProductModal(this.props.product)}>
+                <h1>{this.props.product.name}</h1>
+              </div>
 
               <div className="ProductCard__desc w-100">{this.props.product.description}</div>
             </Row>
@@ -112,3 +114,10 @@ export default class ProductCard extends React.Component<ProductCardProps, Produ
     )
   }
 }
+
+const mapDispatchToProps = {
+  showProductModal,
+}
+
+
+export default connect(null, mapDispatchToProps)(ProductCard)

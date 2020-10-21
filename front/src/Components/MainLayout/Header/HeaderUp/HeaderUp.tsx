@@ -1,6 +1,8 @@
 import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
+import { RootState } from '../../../../Redux'
+import ProductModal from '../../../../SharedComponents/ProductModal/ProductModal'
 import RoundButton from '../../../../SharedComponents/RoundButton/RoundButton'
 
 import './HeaderUp.scss'
@@ -11,7 +13,7 @@ interface HeaderUpState {
   toggleMenu: boolean
 }
 
-export default class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
+class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
   constructor(props: HeaderUpProps) {
     super(props)
     this.state = {
@@ -32,6 +34,9 @@ export default class HeaderUp extends React.Component<HeaderUpProps, HeaderUpSta
   render() {
     return (
       <React.Fragment>
+
+        <ProductModal />
+
         <Container className="HeaderUp p-0 d-none d-lg-flex justify-content-between align-items-center">
           <NavLink to="/actions">
             <div className="HeaderUp__menuItem">Акции</div>
@@ -231,3 +236,6 @@ export default class HeaderUp extends React.Component<HeaderUpProps, HeaderUpSta
     )
   }
 }
+
+
+export default HeaderUp

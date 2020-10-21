@@ -1,6 +1,8 @@
 import Order from '../../Interfaces/Order'
+import Product from '../../Interfaces/Product'
 import {
   GET_APP,
+  HIDE_PRODUCT_MODAL,
   HIDE_SIDE_DIALOG,
   SHOW_CART,
   SHOW_COOKING_TIME,
@@ -10,6 +12,7 @@ import {
   SHOW_ORDER_DETAIL,
   SHOW_PAYMENT,
   SHOW_PRODUCT,
+  SHOW_PRODUCT_MODAL,
 } from '../constants/ActionTypes'
 
 interface GetAppAction {
@@ -49,6 +52,13 @@ interface ShowPaymentDialogAction {
 interface ShowCreditCardFormAction {
   type: typeof SHOW_CREDIT_CARD_FORM
 }
+interface ShowProductModal {
+  type: typeof SHOW_PRODUCT_MODAL
+  product: Product
+}
+interface HideProductModal {
+  type: typeof HIDE_PRODUCT_MODAL
+}
 
 export type AppActionType =
   | GetAppAction
@@ -61,3 +71,5 @@ export type AppActionType =
   | ShowOrderDetailDialogAction
   | ShowPaymentDialogAction
   | ShowCreditCardFormAction
+  | ShowProductModal
+  | HideProductModal

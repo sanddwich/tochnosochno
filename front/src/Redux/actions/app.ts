@@ -1,5 +1,7 @@
 import Order from '../../Interfaces/Order'
+import Product from '../../Interfaces/Product'
 import {
+  HIDE_PRODUCT_MODAL,
   HIDE_SIDE_DIALOG,
   SHOW_CART,
   SHOW_COOKING_TIME,
@@ -9,6 +11,7 @@ import {
   SHOW_ORDER_DETAIL,
   SHOW_PAYMENT,
   SHOW_PRODUCT,
+  SHOW_PRODUCT_MODAL,
 } from '../constants/ActionTypes'
 
 export const showProductDialog = (isChangeProduct: boolean) => ({
@@ -45,4 +48,13 @@ export const showCookingTimeDialog = () => ({
 
 export const showCreditCardForm = () => ({
   type: SHOW_CREDIT_CARD_FORM,
+})
+
+export const showProductModal = (product: Product) => ({
+  type: SHOW_PRODUCT_MODAL,
+  product: product,
+})
+
+export const hideProductModal = () => ({
+  type: HIDE_PRODUCT_MODAL,
 })

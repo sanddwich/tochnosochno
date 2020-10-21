@@ -44,4 +44,6 @@ export interface AppState {
   formType: FormType
   isChangePoduct: boolean
   orderHistory?: Order
+  showProductModal: boolean
+  productModalProduct?: Product
 }

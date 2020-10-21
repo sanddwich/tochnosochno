@@ -1,5 +1,6 @@
 import {
   GET_APP,
+  HIDE_PRODUCT_MODAL,
   HIDE_SIDE_DIALOG,
   SHOW_CART,
   SHOW_COOKING_TIME,
@@ -9,6 +10,7 @@ import {
   SHOW_ORDER_DETAIL,
   SHOW_PAYMENT,
   SHOW_PRODUCT,
+  SHOW_PRODUCT_MODAL,
 } from '../constants/ActionTypes'
 import { AppActionType } from '../interfaces/app'
 import { AppState } from '../interfaces/interfaces'
@@ -19,6 +21,7 @@ const initialState: AppState = {
   error: false,
   showSideDialog: false,
   formType: 'product',
+  showProductModal: false,
 }
 const app = (state: AppState = initialState, action: AppActionType) => {
   switch (action.type) {
@@ -78,6 +81,18 @@ const app = (state: AppState = initialState, action: AppActionType) => {
       return {
         ...state,
         showSideDialog: false,
+      }
+    case SHOW_PRODUCT_MODAL:
+      return {
+        ...state,
+        showProductModal: true,
+        productModalProduct: action.product,
+      }
+    case HIDE_PRODUCT_MODAL:
+      return {
+        ...state,
+        showProductModal: false,
+        productModalProduct: undefined,
       }
     default:
       return state
