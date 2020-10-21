@@ -111,6 +111,9 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
   }
 
   changeFilter = (filterId: number): void => {
+    const activePage: number = 1
+    let productsAtPage: Product[] = []
+
     if (filterId === 0) {
       this.getProducts()
     }
@@ -118,19 +121,25 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
       let sortPriceUp: Product[] = _.orderBy(this.state.sortProducts, (product) => {
         return product.sizePrices[0].price.currentPrice
       }, ["asc"])
-      this.setState({sortProducts: sortPriceUp})
+      productsAtPage = this.getPageProducts(sortPriceUp, activePage, this.props.productsPerPage)
+
+      this.setState({sortProducts: sortPriceUp, productsAtPage, activePage})
       // console.log(sortPriceUp)
     }
     if (filterId === 2) {
       let sortPriceDown: Product[] = _.orderBy(this.state.sortProducts, (product) => {
         return product.sizePrices[0].price.currentPrice
       }, ["desc"])
-      this.setState({sortProducts: sortPriceDown})
+      productsAtPage = this.getPageProducts(sortPriceDown, activePage, this.props.productsPerPage)
+
+      this.setState({sortProducts: sortPriceDown, productsAtPage, activePage})
       // console.log(sortPriceDown)
     }
     if (filterId === 3) {
-      let sortPPopular: Product[] = _.shuffle(this.state.sortProducts) // Перемешивание случайным образом
-      this.setState({sortProducts: sortPPopular})
+      let sortPopular: Product[] = _.shuffle(this.state.sortProducts) // Перемешивание случайным образом
+      productsAtPage = this.getPageProducts(sortPopular, activePage, this.props.productsPerPage)
+
+      this.setState({sortProducts: sortPopular, productsAtPage, activePage})
       // console.log(sortPPopular)
     }
 
@@ -163,7 +172,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
   }
 
   render() {
-    console.log(this.state.sortProducts)
+    // console.log(this.state.sortProducts)
     const activeFilter: number = this.getFilter()
     const pagesStringArray: number[] = this.getPagesStringArray(this.state.pages)
 
