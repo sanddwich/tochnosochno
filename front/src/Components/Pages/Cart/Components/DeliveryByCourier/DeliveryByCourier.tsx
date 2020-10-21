@@ -76,7 +76,7 @@ export default class DeliveryByCourier extends React.Component<DeliveryByCourier
             </div>
 
             <PoliticSection />
-            <PaymentSection />
+            <PaymentSection isDelivery={true} />
             <ActionButton
               onClick={() => console.log('process Order')}
               textColor="white"
@@ -84,7 +84,6 @@ export default class DeliveryByCourier extends React.Component<DeliveryByCourier
               text="Завершить заказ"
               backgroundColor="#303030"
               icon="cart_dark.svg"
-              hideTextMobile={true}
             />
           </div>
         </form>
