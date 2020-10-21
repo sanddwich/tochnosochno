@@ -1,0 +1,72 @@
+.LineProductWithSizeInput {
+
+  .LineProductWithSizeInput__price {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 28px;
+    padding: 5px;
+    padding-right: 15px;
+
+    color: #303030;
+
+    span {
+      font-size: 16px;
+    }
+  }
+
+  .LineProductWithSizeInput__priceOld {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    text-decoration-line: line-through;
+    padding: 5px;
+    padding-right: 15px;
+
+    color: #8e8e8e;
+  }
+
+  .LineProductWithSizeInput__size {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    color: #8e8e8e;
+    cursor: pointer;
+
+    padding: 13px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+
+    border: 1px solid #8e8e8e;
+    box-sizing: border-box;
+    border-radius: 14px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+
+    &:hover {
+      color: #000000;
+      border-color: #000000;
+    }
+  }
+
+  .LineProductWithSizeInput__action {
+    .actionButton {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  #active {
+    border: 2px solid #FFD74B;
+
+    &:hover {
+      color: #8e8e8e;
+    }
+  }
+}

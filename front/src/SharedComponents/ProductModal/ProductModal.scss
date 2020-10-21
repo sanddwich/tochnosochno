@@ -9,7 +9,7 @@
 
   .ProductModal__body {
     background-color: #ffffff;
-    height: 580px;
+    max-height: 580px;
     border-radius: 40px 0px;
     z-index: -5;
   }
@@ -74,10 +74,19 @@
     color: #8e8e8e;
   }
 
-  .ProductModal__recomend {
+  .ProductModal__recomendCont {
+    padding-left: 40px !important;
+    padding-right: 20px !important;
+    .ProductModal__recomend {
+      padding-right: 20px !important;
+      height: 300px;
+      overflow-y: scroll;
+    }
+  }
+
+  .ProductModal__Content {
     padding-left: 40px;
     padding-right: 40px;
-    height: 330px;
-    overflow-y: scroll;
+    min-height: 100px;
   }
 }
