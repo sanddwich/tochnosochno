@@ -1,7 +1,10 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
+import ActionButton from '../../../../../SharedComponents/ActionButton/ActionButton'
 import CookingTime from '../../../../../SharedComponents/CookingTime/CookingTime'
 import OrderTotalPrice from '../../../../../SharedComponents/OrderTotalPrice/OrderTotalPrice'
+import PaymentSection from '../../../../../SharedComponents/PaymentSection/PaymentSection'
+import PoliticSection from '../../../../../SharedComponents/PoliticSection/PoliticSection'
 import RadioButton from '../../../../../SharedComponents/RadioButton/RadioButton'
 
 import './DeliveryByCourier.scss'
@@ -58,6 +61,8 @@ export default class DeliveryByCourier extends React.Component<DeliveryByCourier
               <label htmlFor="email">E-mail</label>
               <input id="email" type="text" placeholder="tochno-sochno@mail.ru" />
             </div>
+            <CookingTime />
+
             <div className="DeliveryByCourier__form__group w-100">
               <label htmlFor="comment">Комментарий к заказу</label>
               <textarea
@@ -69,7 +74,18 @@ export default class DeliveryByCourier extends React.Component<DeliveryByCourier
             <div className="w-100">
               <OrderTotalPrice />
             </div>
-            <CookingTime />
+
+            <PoliticSection />
+            <PaymentSection />
+            <ActionButton
+              onClick={() => console.log('process Order')}
+              textColor="white"
+              width="280px"
+              text="Завершить заказ"
+              backgroundColor="#303030"
+              icon="cart_dark.svg"
+              hideTextMobile={true}
+            />
           </div>
         </form>
       </Container>

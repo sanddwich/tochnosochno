@@ -3,7 +3,38 @@
   &__select {
     display: flex;
     flex-wrap: wrap;
-    width: 100%;
+    max-width: 600px;
     justify-content: space-between;
+    margin-top: 40px;
+  }
+
+  &__dateTime {
+    max-width: 400px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    &__date {
+      width: 220px;
+      overflow: hidden;
+    }
+    &__time {
+      width: 80px;
+      overflow: hidden;
+    }
+  }
+}
+
+.react-datepicker__input-container {
+  &:after {
+    content: '';
+    position: absolute;
+    left: 90%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #303030;
+    clear: both;
   }
 }
