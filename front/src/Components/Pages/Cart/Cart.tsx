@@ -69,6 +69,14 @@ export default class Cart extends React.Component<CartProps, CartState> {
               />
             </div>
           </div>
+          {/* 
+          <div style={{ display: this.state.isDelivery ? 'block' : 'none' }}>
+            <DeliveryByCourier />
+          </div>
+
+          <div style={{ display: this.state.isDelivery ? 'none' : 'block' }}>
+            <DeliveryByClient />
+          </div> */}
 
           {this.state.isDelivery ? <DeliveryByCourier /> : <DeliveryByClient />}
         </div>

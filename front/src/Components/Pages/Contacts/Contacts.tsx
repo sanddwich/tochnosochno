@@ -17,11 +17,11 @@ export default class Contacts extends React.Component<ContactsProps, ContactsSta
           <div className="col-md-5">
             <BlockName name="Рестораны" />
             <div className="contacts__address">
-              <img src="images/icons/map-pin.svg" alt="" />
+              <img src="/images/icons/map-pin.svg" alt="" />
               <div className="contacts__address__text">Кирова 27</div>
             </div>
             <div className="contacts__address">
-              <img src="images/icons/map-pin.svg" alt="" />
+              <img src="/images/icons/map-pin.svg" alt="" />
               <div className="contacts__address__text">Жилая 12</div>
             </div>
           </div>
