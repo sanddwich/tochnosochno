@@ -34,7 +34,6 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
   render() {
     return (
       <React.Fragment>
-
         <ProductModal />
 
         <Container className="HeaderUp p-0 d-none d-lg-flex justify-content-between align-items-center">
@@ -236,6 +235,5 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
     )
   }
 }
-
 
 export default HeaderUp
