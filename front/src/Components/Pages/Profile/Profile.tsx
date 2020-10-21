@@ -35,7 +35,9 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   componentDidMount() {
     let favouriteProducts: Product[] = []
     this.props.menu.map((category) => {
-      favouriteProducts.push(category.products[category.products.length - 1])
+      if (category.products[category.products.length - 1]) {
+        favouriteProducts.push(category.products[category.products.length - 1])
+      }
     })
     this.setState({ favouriteProducts })
     // console.log(lastProducts)
@@ -133,13 +135,9 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
         </div>
         <div className="row m-0 mt-4 profile__text">Сейчас тут ничего нет :( И мы ждем вашего заказа :)</div>
 
-        <div>
-          <LineProductWithCart product={this.props.menu[0].products[0]} />
-        </div>
+        <div>{/* <LineProductWithCart product={this.props.menu[0].products[0]} /> */}</div>
 
-        <div>
-          <LineProductWithNumberInput product={this.props.menu[0].products[0]} />
-        </div>
+        <div>{/* <LineProductWithNumberInput product={this.props.menu[0].products[0]} /> */}</div>
 
         <div className="row m-0 mt-5">
           <BlockName name="Избранное" />

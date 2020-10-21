@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
+import CookingTime from '../../../../../SharedComponents/CookingTime/CookingTime'
 import OrderTotalPrice from '../../../../../SharedComponents/OrderTotalPrice/OrderTotalPrice'
 import RadioButton from '../../../../../SharedComponents/RadioButton/RadioButton'
 
@@ -68,10 +69,7 @@ export default class DeliveryByCourier extends React.Component<DeliveryByCourier
             <div className="w-100">
               <OrderTotalPrice />
             </div>
-            <div className="DeliveryByCourier__form__cooking-time-select">
-              <RadioButton label="Как можно скорее" />
-              <RadioButton label="К определенному времени" />
-            </div>
+            <CookingTime />
           </div>
         </form>
       </Container>

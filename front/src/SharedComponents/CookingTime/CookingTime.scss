@@ -1,0 +1,9 @@
+.CookingTime {
+  width: 100%;
+  &__select {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
