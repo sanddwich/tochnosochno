@@ -9,8 +9,9 @@ import ProductCard from '../../../../SharedComponents/ProductCard/ProductCard'
 import { scroller, Element } from 'react-scroll'
 
 import './ProductList.scss'
-import CategorySlider from '../../Main/CategoriesContainer/CategorySlider/CategorySlider'
 import NoRecords from '../../../../SharedComponents/NoRecords/NoRecords'
+import _ from 'lodash'
+import order from '../../../../Redux/reducers/order'
 
 interface Filter {
   id: number
@@ -66,6 +67,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
   }
 
   componentDidMount() {
+    // console.log(this.props)
     this.getProducts()
   }
 
@@ -101,14 +103,50 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 
   scrollTo = (name: string): void => {
     scroller.scrollTo(name, {
-      duration: 1000,
-      delay: 100,
+      duration: 500,
+      delay: 0,
       smooth: true,
       offset: -220, // Scrolls to element + 50 pixels down the page
     })
   }
 
-  changeFilter = (filterId: number): void => {}
+  changeFilter = (filterId: number): void => {
+    if (filterId === 0) {
+      this.getProducts()
+    }
+    if (filterId === 1) {
+      let sortPriceUp: Product[] = _.orderBy(this.state.sortProducts, (product) => {
+        return product.sizePrices[0].price.currentPrice
+      }, ["asc"])
+      this.setState({sortProducts: sortPriceUp})
+      // console.log(sortPriceUp)
+    }
+    if (filterId === 2) {
+      let sortPriceDown: Product[] = _.orderBy(this.state.sortProducts, (product) => {
+        return product.sizePrices[0].price.currentPrice
+      }, ["desc"])
+      this.setState({sortProducts: sortPriceDown})
+      // console.log(sortPriceDown)
+    }
+    if (filterId === 3) {
+      let sortPPopular: Product[] = _.shuffle(this.state.sortProducts) // Перемешивание случайным образом
+      this.setState({sortProducts: sortPPopular})
+      // console.log(sortPPopular)
+    }
+
+    // Обновление акивного фильтра
+    let filters: Filter[] = this.state.filters.map(filter => {
+      if (filter.id === filterId) {
+        filter.active = true
+        return (filter) 
+      } else {
+        filter.active = false
+        return (filter) 
+      }
+    })
+    this.setState({filters})
+
+  }
 
   setPage = (activePage: number): void => {
     const productsAtPage = this.getPageProducts(this.state.sortProducts, activePage, this.props.productsPerPage)
@@ -125,6 +163,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
   }
 
   render() {
+    console.log(this.state.sortProducts)
     const activeFilter: number = this.getFilter()
     const pagesStringArray: number[] = this.getPagesStringArray(this.state.pages)
 
@@ -154,7 +193,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
           </Col>
         </Row>
         {this.state.sortProducts.length > 0 ? (
-          <Row key={this.state.activePage} className="p-0 m-0">
+          <Row key={this.state.productsAtPage[0].id} className="p-0 m-0">
             {this.state.productsAtPage.map((product, index) => {
               if (typeof product !== 'undefined') {
                 return (

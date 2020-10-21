@@ -46,8 +46,8 @@ class NewItemsCategory extends React.Component<NewItemsCategoryProps, NewItemsCa
   componentDidMount() {
     const category = this.props.menu.find((cat) => cat.id === this.props.categoryId) as Category
     let lastProducts: Product[] = []
-    for(let i = 1; i <= newItemNumber; i++) {
-      lastProducts.push(category.products[category.products.length-i])
+    for (let i = 1; i <= newItemNumber; i++) {
+      lastProducts.push(category.products[category.products.length - i])
     }
     this.setState({ lastProducts })
   }
@@ -61,7 +61,9 @@ class NewItemsCategory extends React.Component<NewItemsCategoryProps, NewItemsCa
         <SwiperSlide key={index}>
           <Container fluid className="m-0 p-0">
             {pool.map((product, index) => {
-              return <ProductCardMobile key={product.id + index} product={product} />
+              if (typeof product !== 'undefined') {
+                return <ProductCardMobile key={product.id + index} product={product} />
+              }
             })}
           </Container>
         </SwiperSlide>
@@ -71,7 +73,7 @@ class NewItemsCategory extends React.Component<NewItemsCategoryProps, NewItemsCa
 
   render() {
     return (
-      <Container key={this.state.lastProducts.length} className="NewItemsCategory p-0">
+      <Container key={this.props.categoryId} className="NewItemsCategory p-0">
         <Row className="p-0 m-0 d-flex justify-content-between">
           <BlockName name="Новинки" />
 
@@ -107,11 +109,13 @@ class NewItemsCategory extends React.Component<NewItemsCategoryProps, NewItemsCa
             pagination={{ clickable: true, el: '#paginationProductsFull' }}
           >
             {this.state.lastProducts.map((product, index) => {
-              return (
-                <SwiperSlide key={product.id + index}>
-                  <ProductCard product={product} />
-                </SwiperSlide>
-              )
+              if (typeof product !== 'undefined') {
+                return (
+                  <SwiperSlide key={product.id + index}>
+                    <ProductCard product={product} />
+                  </SwiperSlide>
+                )
+              }
             })}
           </Swiper>
 

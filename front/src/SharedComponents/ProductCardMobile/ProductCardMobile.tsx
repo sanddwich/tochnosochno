@@ -48,7 +48,9 @@ export default class ProductCardMobile extends React.Component<ProductCardMobile
                     <img
                       className="img-fluid"
                       src={
-                        this.props.product.image !== null ? this.props.product.image : '/images/products/no-photo.png'
+                        typeof this.props.product.imageLinks[0] !== 'undefined'
+                          ? `${this.props.product.imageLinks[0]}`
+                          : '/images/products/no-photo.png'
                       }
                       alt={this.props.product.name}
                     />
@@ -64,13 +66,18 @@ export default class ProductCardMobile extends React.Component<ProductCardMobile
                     </div>
                   </NavLink>
 
-                  <div id="description" className="ProductCardMobile__desc w-100">{this.props.product.description}</div>
+                  <div id="description" className="ProductCardMobile__desc w-100">
+                    {this.props.product.description}
+                  </div>
                 </Row>
 
                 <Row className="ProductCardMobile__priceLine d-flex justify-content-between align-items-end">
                   <div className="ProductCardMobile__prices m-0">
                     <div className="ProductCardMobile__price d-inline-block">
-                      {newPrice.toFixed(0).toString()} <span>руб</span>
+                      {this.props.product.sizePrices.length > 0
+                        ? this.props.product.sizePrices[0].price.currentPrice.toFixed(0).toString()
+                        : newPrice.toFixed(0).toString()}{' '}
+                      <span>руб</span>
                     </div>
                     <div className="ProductCardMobile__oldPrice d-inline-block">{oldPrice.toFixed(0).toString()}р</div>
                   </div>
