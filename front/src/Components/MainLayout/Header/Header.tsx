@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
+import Login from '../../Pages/Login/Login'
 import './Header.scss'
 import HeaderDown from './HeaderDown/HeaderDown'
 import HeaderUp from './HeaderUp/HeaderUp'
@@ -13,7 +14,8 @@ export default class Header extends React.Component<HeaderProps, HeaderState> {
     return (
       <Container fluid className="Header p-0 m-0">
         <HeaderUp></HeaderUp>
-        <HeaderDown/>
+        <HeaderDown />
+        <Login show={true} />
       </Container>
     )
   }
