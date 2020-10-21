@@ -5,8 +5,6 @@ import Product from '../../Interfaces/Product'
 import { RootState } from '../../Redux'
 import BlockName from '../BlockName/BlockName'
 import LineProductWithCart from '../LineProductWithCart/LineProductWithCart'
-import LineProductWithNumberInput from '../LineProductWithNumberInput/LineProductWithNumberInput'
-import NumberInput from '../NumberInput/NumberInput'
 
 import './RecomendedProducts.scss'
 
