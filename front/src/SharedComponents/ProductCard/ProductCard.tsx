@@ -119,5 +119,4 @@ const mapDispatchToProps = {
   showProductModal,
 }
 
-
 export default connect(null, mapDispatchToProps)(ProductCard)
