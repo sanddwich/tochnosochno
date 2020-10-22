@@ -54,6 +54,7 @@ export class Iiko {
   private organizationUrl = `${this.apiServer}/organizations`
   private terminalsUrl = `${this.apiServer}/terminal_groups`
   private paymnetTypeUrl = `${this.apiServer}/payment_types`
+  private cityUrl = `${this.apiServer}/cities`
   private streetUrl = `${this.apiServer}/streets/by_city`
   private createOrderUrl = `${this.apiServer}/deliveries/create`
   private customerUrl = `${this.apiServer}/loyalty/iiko/customers/get_customer`
@@ -131,6 +132,37 @@ export class Iiko {
       }
     } catch (error) {
       return { error: true, message: error }
+    }
+  }
+
+  async setCities() {
+    this.logger.info(`iiko.service.setCities()`)
+    const organization = await getRepository(Organization).findOne()
+    // const city = await getRepository(City).findOne({ name: 'Астрахань' })
+
+    try {
+      if (organization) {
+        const res = await fetch(this.cityUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.token}`,
+          },
+          body: JSON.stringify({ organizationIds: [organization.id] }),
+        })
+
+        const { cities } = await res.json()
+        cities[0].items.map(async (city: City) => {
+          await getRepository(City).save(city)
+        })
+
+        return true
+      } else {
+        return new HttpResponseBadRequest({ error: true, message: 'Организация не найдена.' })
+      }
+    } catch (error) {
+      this.logger.iiko('iiko.service.setCities()', error)
+      this.logger.error(`iiko.service.setCities() ${error}`)
     }
   }
 

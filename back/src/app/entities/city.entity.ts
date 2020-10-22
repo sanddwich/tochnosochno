@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
+import { Street } from './street.entity'
 
 @Entity()
 export class City {
@@ -20,4 +21,7 @@ export class City {
 
   @Column()
   additionalInfo: string
+
+  @OneToMany((type) => Street, (street) => street.city)
+  streets: Street[]
 }

@@ -1,13 +1,20 @@
 import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
+import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { RootState } from '../../../../Redux'
 import ProductModal from '../../../../SharedComponents/ProductModal/ProductModal'
 import RoundButton from '../../../../SharedComponents/RoundButton/RoundButton'
 
+import { showLoginModal } from '../../../../Redux/actions/app'
+
 import './HeaderUp.scss'
 
-interface HeaderUpProps {}
+interface HeaderUpProps {
+  token: string
+  showLogin: boolean
+  showLoginModal: () => void
+}
 
 interface HeaderUpState {
   toggleMenu: boolean
@@ -109,9 +116,13 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
                 </NavLink>
               </Col>
               <Col className="">
-                <NavLink to="/profile">
-                  <RoundButton backgroundColor="#303030" icon="user_white.svg" onClick={() => this.noAction()} />
-                </NavLink>
+                {this.props.token ? (
+                  <NavLink to="/profile">
+                    <RoundButton backgroundColor="#303030" icon="user_white.svg" onClick={() => this.noAction()} />
+                  </NavLink>
+                ) : (
+                  <RoundButton backgroundColor="#303030" icon="user_white.svg" onClick={this.props.showLoginModal} />
+                )}
               </Col>
             </Row>
           </div>
@@ -236,4 +247,17 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
   }
 }
 
-export default HeaderUp
+const mapDispatchToProps = {
+  showLoginModal,
+}
+
+const mapStateToProps = (state: RootState) => {
+  const { showLogin } = state.app
+  const { token } = state.auth
+  return {
+    token,
+    showLogin,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderUp)

@@ -46,4 +46,5 @@ export interface AppState {
   orderHistory?: Order
   showProductModal: boolean
   productModalProduct?: Product
+  showLogin: boolean
 }

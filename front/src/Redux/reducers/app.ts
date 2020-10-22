@@ -24,6 +24,7 @@ const initialState: AppState = {
   showSideDialog: false,
   formType: 'product',
   showProductModal: false,
+  showLogin: false,
 }
 const app = (state: AppState = initialState, action: AppActionType) => {
   switch (action.type) {

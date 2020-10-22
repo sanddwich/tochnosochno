@@ -1,4 +1,5 @@
 import React from 'react'
+import Loader from '../Loader/Loader'
 
 import './ActionButton.scss'
 
@@ -11,6 +12,8 @@ interface ActionButtonProps {
   textColor: string
   hideTextMobile?: boolean
   active?: boolean
+  loading?: boolean
+  disabled?: boolean
 }
 
 interface ActionButtonState {}
@@ -19,7 +22,9 @@ export default class ActionButton extends React.Component<ActionButtonProps, Act
   render() {
     return (
       <div
-        onClick={this.props.onClick}
+        onClick={() => {
+          if (!this.props.disabled) this.props.onClick()
+        }}
         className={`actionButton  noselect ${this.props.hideTextMobile ? 'mobile' : ''} ${
           this.props.active ? 'active' : ''
         }`}
@@ -27,7 +32,7 @@ export default class ActionButton extends React.Component<ActionButtonProps, Act
       >
         <div className={`actionButton__text`}>{this.props.text}</div>
         <div className="actionButton__icon">
-          <img src={`/images/icons/${this.props.icon}`} alt="icon" />
+          {this.props.loading ? <Loader dark={true} /> : <img src={`/images/icons/${this.props.icon}`} alt="icon" />}
         </div>
       </div>
     )
