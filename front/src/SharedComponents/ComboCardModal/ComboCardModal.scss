@@ -7,9 +7,15 @@
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 20000;
 
-  .ComboCardModal__leftColumn {}
+  .ComboCardModal__leftColumn {
+    border-right: 1px solid #F2F2F2;
+    height: 100%;
+  }
 
   .ComboCardModal__title {
+    padding-left: 50px !important;
+    padding-right: 20px !important;
+    padding-top: 20px !important;
     h1 {
       font-family: 'Montserrat';
       font-style: normal;
@@ -21,6 +27,12 @@
   }
 
   .ComboCardModal__descr {
+    padding-left: 50px !important;
+    padding-right: 50px !important;
+    margin-bottom: 5px !important;
+    max-height: 48px;
+    overflow: hidden;
+
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 300;
@@ -57,18 +69,58 @@
   }
 
   .ComboCardModal__productsList {
-    padding-top: 5px !important;    
+    height: 100%;
+    margin-right: 5px;
+    padding-left: 45px !important;
+    padding-right: 20px !important;
+    padding-top: 5px !important;
+    padding-bottom: 10px !important;
     overflow-y: scroll;
   }
 
-  @media screen and (max-width: 992px){
-    .ComboCardModal__Cont {      
+  .ComboCardModal__result {
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+    width: 100%;
+    background-color: #f2f2f2;
+  }
+
+  .ComboCardModal__resultTitle {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 29px;
+    color: #303030;
+  }
+
+  .ComboCardModal__resultPrice {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+    color: #303030;
+
+    span {
+      font-size: 18px;
+      font-weight: 400;
+    }
+  }
+
+  @media screen and (max-width: 992px) {
+    .ComboCardModal__Cont {
       .ComboCardModal__img {
         img {
           height: 100%;
           width: auto;
         }
       }
+    }
+
+    .actionButton {
+      width: 150px !important;
+      font-weight: 300;
     }
   }
 }

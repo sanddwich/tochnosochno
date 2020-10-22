@@ -7,6 +7,7 @@ import './ComboCardModal.scss'
 import RoundButton from '../RoundButton/RoundButton'
 import BlockName from '../BlockName/BlockName'
 import ComboElement from './ComboElement/ComboElement'
+import ActionButton from '../ActionButton/ActionButton'
 
 interface ComboCardModalProps {
   hideComboModal: () => void
@@ -30,27 +31,49 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                 </div>
               </Row>
               <Row className="ComboCardModal__Cont p-0 m-0">
-                <Col md={6} className="ComboCardModal__leftColumn">
-
-                  <Row>
+                <Col md={6} className="ComboCardModal__leftColumn p-0 d-flex flex-column align-items-start">
+                  <Row className="w-100">
                     <Col className="ComboCardModal__title">
                       <BlockName name="Комбо - 3 пиццы 25см" />
                     </Col>
                   </Row>
                   <Row>
                     <Col className="ComboCardModal__descr">
+                      ролл Сочный краб, ролл Сочный лосось, ролл Медовый лосось 637 г ролл Сочный краб, ролл Сочный
+                      лосось, ролл Медовый лосось 637 г ролл Сочный краб, ролл Сочный лосось, ролл Медовый лосось 637 г
                       ролл Сочный краб, ролл Сочный лосось, ролл Медовый лосось 637 г
                     </Col>
                   </Row>
-                  <Row className="ComboCardModal__productsList d-flex flex-column p-3">
-                    <ComboElement />
-                    <ComboElement />
-                    <ComboElement />
+                  <Row className="ComboCardModal__productsList d-flex p-0">
+                    <Col className="p-0">
+                      <ComboElement />
+                      <ComboElement />
+                      <ComboElement />
+                      <ComboElement />
+                    </Col>
+                  </Row>
+
+                  <Row className="ComboCardModal__result p-0 m-0 mt-auto d-flex justify-content-around align-items-center">
+                    <div className="ComboCardModal__resultTitle">Итого:</div>
+                    <div className="ComboCardModal__resultPrice">
+                      980<span>руб</span>
+                    </div>
+                    <div className="ComboCardModal__resultActionButton">
+                      <ActionButton
+                        onClick={() => console.log('add to cart')}
+                        textColor="white"
+                        width="180px"
+                        text="В корзину"
+                        backgroundColor="#303030"
+                        icon="cart_dark.svg"
+                        hideTextMobile={true}
+                      />
+                    </div>
                   </Row>
                 </Col>
 
                 <Col md={6} className="ComboCardModal__img p-0">
-                  <img className="img-fluid" src="/images/combo1.jpg" alt=""/>
+                  <img className="img-fluid" src="/images/combo1.jpg" alt="" />
                 </Col>
               </Row>
             </Container>
