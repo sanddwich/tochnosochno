@@ -23,6 +23,7 @@ interface LoginProps {
   sendSmsCode: any
   phone: string
   error: string
+  isAuth: boolean
 }
 
 interface LoginState {
@@ -83,7 +84,7 @@ class Login extends React.Component<LoginProps, LoginState> {
   render() {
     return (
       <React.Fragment>
-        {this.props.showLogin ? (
+        {this.props.showLogin && !this.props.isAuth ? (
           <div className="Login">
             <div className="Login__content">
               <div className="Login__content__close">
@@ -193,13 +194,14 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: RootState) => {
   const { showLogin } = state.app
-  const { loading, isSms, phone, error } = state.auth
+  const { loading, isSms, phone, error, isAuth } = state.auth
   return {
     showLogin,
     loading,
     isSms,
     phone,
     error,
+    isAuth,
   }
 }
 

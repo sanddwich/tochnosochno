@@ -9,13 +9,14 @@ import ActionButton from '../../../SharedComponents/ActionButton/ActionButton'
 import BlockName from '../../../SharedComponents/BlockName/BlockName'
 import ProductCard from '../../../SharedComponents/ProductCard/ProductCard'
 import ProductCardMobile from '../../../SharedComponents/ProductCardMobile/ProductCardMobile'
+
+import { logout } from '../../../Redux/actions/auth'
 import _ from 'lodash'
 import './Profile.scss'
-import LineProductWithCart from '../../../SharedComponents/LineProductWithCart/LineProductWithCart'
-import LineProductWithNumberInput from '../../../SharedComponents/LineProductWithNumberInput/LineProductWithNumberInput'
 
 interface ProfileProps {
   menu: Category[]
+  logout: any
 }
 
 interface ProfileState {
@@ -98,7 +99,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
         </div>
         <div className="row m-0 mt-5">
           <ActionButton
-            onClick={() => console.log('exit profile')}
+            onClick={() => this.props.logout()}
             textColor="white"
             width="280px"
             text="Выйти из личного кабинета"
@@ -213,7 +214,9 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   }
 }
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  logout,
+}
 
 const mapStateToProps = (state: RootState) => {
   const { menu } = state.menu
