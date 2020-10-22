@@ -150,6 +150,12 @@ textarea.correct {
   border-bottom: 2px solid #48d968;
 }
 
+input[type='text']:disabled,
+input[type='date']:disabled,
+textarea:disabled {
+  color: #8e8e8e;
+}
+
 // input[type='text'].correct::after {
 //   display: inline-block;
 //   width: 3em;

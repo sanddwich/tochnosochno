@@ -12,7 +12,7 @@ import { showLoginModal, showComboModal } from '../../../../Redux/actions/app'
 import './HeaderUp.scss'
 
 interface HeaderUpProps {
-  token: string
+  isAuth: boolean
   showLogin: boolean
   showLoginModal: () => void
   showComboModal: () => void
@@ -120,7 +120,7 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
                 </NavLink>
               </Col>
               <Col className="">
-                {this.props.token ? (
+                {this.props.isAuth ? (
                   <NavLink to="/profile">
                     <RoundButton backgroundColor="#303030" icon="user_white.svg" onClick={() => this.noAction()} />
                   </NavLink>
@@ -258,9 +258,9 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: RootState) => {
   const { showLogin } = state.app
-  const { token } = state.auth
+  const { isAuth } = state.auth
   return {
-    token,
+    isAuth,
     showLogin,
   }
 }

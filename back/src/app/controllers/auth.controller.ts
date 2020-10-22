@@ -15,6 +15,7 @@ import {
   ApiInfo,
   HttpResponseBadRequest,
   Config,
+  Patch,
 } from '@foal/core'
 import { CsrfTokenRequired, getCsrfToken, setCsrfCookie } from '@foal/csrf'
 import { TypeORMStore, fetchUser } from '@foal/typeorm'
@@ -186,5 +187,39 @@ export class AuthController {
     const response = new HttpResponseOK()
     removeSessionCookie(response)
     return new HttpResponseOK({ error: false, message: 'Logged out...' })
+  }
+
+  @Patch('/customer')
+  @TokenRequired({
+    user: fetchUser(Customer),
+    store: TypeORMStore,
+  })
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      name: { type: 'string' },
+      birthday: { type: 'string' },
+    },
+    required: ['name', 'birthday'],
+    type: 'object',
+  })
+  // @CsrfTokenRequired()
+  async setCustomerInfo(ctx: Context<Customer, Session>) {
+    const name = ctx.request.body.name
+    const birthday = ctx.request.body.birthday
+
+    try {
+      const customer = await getRepository(Customer).findOne({ id: ctx.user.id })
+      if (customer) {
+        customer.name = name
+        customer.birthday = birthday
+        await getRepository(Customer).save(customer)
+        return new HttpResponseOK({ error: false, message: 'Данные обновлены...' })
+      } else {
+        return new HttpResponseBadRequest('Клиент не найден')
+      }
+    } catch (error) {
+      return new HttpResponseBadRequest(error)
+    }
   }
 }

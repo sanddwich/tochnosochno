@@ -9,17 +9,21 @@ import ActionButton from '../../../SharedComponents/ActionButton/ActionButton'
 import BlockName from '../../../SharedComponents/BlockName/BlockName'
 import ProductCard from '../../../SharedComponents/ProductCard/ProductCard'
 import ProductCardMobile from '../../../SharedComponents/ProductCardMobile/ProductCardMobile'
-import _ from 'lodash'
+
+import { logout } from '../../../Redux/actions/auth'
+import _, { String } from 'lodash'
 import './Profile.scss'
-import LineProductWithCart from '../../../SharedComponents/LineProductWithCart/LineProductWithCart'
-import LineProductWithNumberInput from '../../../SharedComponents/LineProductWithNumberInput/LineProductWithNumberInput'
+import Customer from '../../../Interfaces/Customer'
 
 interface ProfileProps {
   menu: Category[]
+  logout: any
+  customer: Customer
 }
 
 interface ProfileState {
   favouriteProducts: Product[]
+  isEditProfile: boolean
 }
 
 const mobileSlidesSeparator: number = 2
@@ -29,6 +33,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
     super(props)
     this.state = {
       favouriteProducts: [],
+      isEditProfile: false,
     }
   }
 
@@ -69,65 +74,78 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
             <label htmlFor="profile-name">Имя</label>
             <input
               name="name"
+              disabled={!this.state.isEditProfile}
               id="profile-name"
               style={{ width: '280px', marginRight: '20px' }}
               type="text"
+              defaultValue={this.props.customer.name}
               placeholder="Отредактируйте профиль"
             />
           </div>
           <div className="mt-4 mt-sm-0 mt-md-0" style={{ float: 'left' }}>
             <label htmlFor="profile-birthday">День рождения</label>
             <input
+              disabled={!this.state.isEditProfile}
               name="birthday"
               id="profile-birthday"
               style={{ width: '150px' }}
               type="date"
+              defaultValue={new Date(this.props.customer.birthday).toISOString().slice(0, 10)}
               placeholder="мм.мм.гггг"
             />
           </div>
         </div>
+
         <div className="row m-0 mt-5">
-          <ActionButton
-            onClick={() => console.log('edit profile')}
-            textColor="white"
-            width="280px"
-            text="Редактировать профиль"
-            backgroundColor="#303030"
-            icon="edit-icon.svg"
-          />
+          {!this.state.isEditProfile ? (
+            <ActionButton
+              onClick={() => {
+                this.setState({ isEditProfile: true })
+              }}
+              textColor="white"
+              width="280px"
+              text="Редактировать профиль"
+              backgroundColor="#303030"
+              icon="edit-icon.svg"
+            />
+          ) : (
+            <div className="row m-0 mt-5 col-8 p-0">
+              <div className="col-md-6 p-0">
+                <ActionButton
+                  onClick={() => {
+                    this.setState({ isEditProfile: false })
+                  }}
+                  textColor="white"
+                  width="280px"
+                  text="Сохранить изменения"
+                  backgroundColor="#303030"
+                  icon="check.svg"
+                />
+              </div>
+              <div className="col-md-6 mt-5 mt-md-0 p-0">
+                <ActionButton
+                  onClick={() => {
+                    this.setState({ isEditProfile: false })
+                  }}
+                  textColor="white"
+                  width="280px"
+                  text="Отменить редактирование"
+                  backgroundColor="#303030"
+                  icon="cancel.svg"
+                />
+              </div>
+            </div>
+          )}
         </div>
         <div className="row m-0 mt-5">
           <ActionButton
-            onClick={() => console.log('exit profile')}
+            onClick={() => this.props.logout()}
             textColor="white"
             width="280px"
             text="Выйти из личного кабинета"
             backgroundColor="#303030"
             icon="exit-icon.svg"
           />
-        </div>
-
-        <div className="row m-0 mt-5 col-8 p-0">
-          <div className="col-md-6 p-0">
-            <ActionButton
-              onClick={() => console.log('save changes')}
-              textColor="white"
-              width="280px"
-              text="Сохранить изменения"
-              backgroundColor="#303030"
-              icon="check.svg"
-            />
-          </div>
-          <div className="col-md-6 mt-5 mt-md-0 p-0">
-            <ActionButton
-              onClick={() => console.log('save changes')}
-              textColor="white"
-              width="280px"
-              text="Отменить редактирование"
-              backgroundColor="#303030"
-              icon="cancel.svg"
-            />
-          </div>
         </div>
 
         <div className="row m-0 mt-5">
@@ -213,12 +231,16 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   }
 }
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  logout,
+}
 
 const mapStateToProps = (state: RootState) => {
   const { menu } = state.menu
+  const { customer, smsCodeTime } = state.auth
   return {
-    menu: menu,
+    menu,
+    customer,
   }
 }
 
