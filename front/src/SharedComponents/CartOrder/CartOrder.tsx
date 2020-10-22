@@ -40,11 +40,15 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
               <React.Fragment>
                 <div className="CartOrder__products">
                   {this.props.order.items.map((orderItem: OrderItem) => {
-                    return <LineProductWithNumberInput key={orderItem.id} product={orderItem.product} />
+                    return <LineProductWithNumberInput key={orderItem.id} orderItem={orderItem} />
                   })}
                 </div>
                 <div className="CartOrder__guests">
-                  <NumberInput label="Количество персон" hideLabel={false} />
+                  <NumberInput
+                    onChange={(count: number) => console.log(count)}
+                    label="Количество персон"
+                    hideLabel={false}
+                  />
                 </div>
 
                 <OrderTotalPrice />

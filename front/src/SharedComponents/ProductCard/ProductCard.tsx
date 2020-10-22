@@ -4,15 +4,18 @@ import Product from '../../Interfaces/Product'
 import RoundButton from '../RoundButton/RoundButton'
 import Sticker from '../Sticker/Sticker'
 import { showProductModal } from '../../Redux/actions/app'
+import { addOrderItemToOrder } from '../../Redux/actions/order'
 
 import './ProductCard.scss'
 import ActionButton from '../ActionButton/ActionButton'
 import { connect } from 'react-redux'
+import OrderItem from '../../Interfaces/OrderItem'
 // import { NavLink } from 'react-router-dom'
 
 interface ProductCardProps {
   product: Product
   showProductModal: (product: Product) => void
+  addOrderItemToOrder: (orderItem: OrderItem) => void
 }
 
 interface ProductCardState {
@@ -38,8 +41,13 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
     console.log('favoriteClick')
   }
 
-  addToCartButton = (id: number): void => {
-    console.log('addToCartButton ' + id.toString())
+  addToCartButton = (product: Product): void => {
+    this.props.addOrderItemToOrder({
+      product: product,
+      amount: 1,
+      orderItemModifiers: [],
+      value: product.sizePrices[0].price.currentPrice,
+    })
   }
 
   toggleModal = (): void => {
@@ -66,7 +74,10 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
               </div>
             </Row>
 
-            <Row className="ProductCard__img d-flex justify-content-center" onClick={() => this.props.showProductModal(this.props.product)}>
+            <Row
+              className="ProductCard__img d-flex justify-content-center"
+              onClick={() => this.props.showProductModal(this.props.product)}
+            >
               <img
                 className="img-fluid"
                 src={
@@ -104,7 +115,7 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
                   text="В корзину"
                   width="180px"
                   textColor="#ffffff"
-                  onClick={() => this.addToCartButton(this.props.product.id)}
+                  onClick={() => this.addToCartButton(this.props.product)}
                 />
               </div>
             </Row>
@@ -117,6 +128,7 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
 
 const mapDispatchToProps = {
   showProductModal,
+  addOrderItemToOrder,
 }
 
 export default connect(null, mapDispatchToProps)(ProductCard)

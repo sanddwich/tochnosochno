@@ -2,18 +2,30 @@ import React from 'react'
 import Product from '../../Interfaces/Product'
 import ActionButton from '../ActionButton/ActionButton'
 import { showProductModal } from '../../Redux/actions/app'
+import { addOrderItemToOrder } from '../../Redux/actions/order'
 
 import './LineProductWithCart.scss'
 import { connect } from 'react-redux'
+import OrderItem from '../../Interfaces/OrderItem'
 
 interface LineProductWithCartProps {
   product: Product
   showProductModal: (product: Product) => void
+  addOrderItemToOrder: (orderItem: OrderItem) => void
 }
 
 interface LineProductWithCartState {}
 
 class LineProductWithCart extends React.Component<LineProductWithCartProps, LineProductWithCartState> {
+  addToCartButton = (product: Product): void => {
+    this.props.addOrderItemToOrder({
+      product: product,
+      amount: 1,
+      orderItemModifiers: [],
+      value: product.sizePrices[0].price.currentPrice,
+    })
+  }
+
   render() {
     return (
       <div className="lineProductWithCart d-flex justify-content-between ">
@@ -43,16 +55,16 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
 
             <div className="lineProductWithCart__product__price d-flex flex-column justify-content-center align-items-center">
               <div className="lineProductWithCart__product__newPrice col-sm-6 m-0 p-0">
-                <span className="bold">980</span>руб
+                <span className="bold">{this.props.product.sizePrices[0].price.currentPrice}</span>руб
               </div>
-              <div className="lineProductWithCart__product__oldPrice col-sm-6 m-0 p-0"> 1170р</div>
+              <div className="lineProductWithCart__product__oldPrice col-sm-6 m-0 p-0"> 300р</div>
             </div>
           </div>
         </div>
 
         <div className="lineProductWithCart__product__cartIcon d-flex justify-content-center align-items-center">
           <ActionButton
-            onClick={() => console.log('add to cart')}
+            onClick={() => this.addToCartButton(this.props.product)}
             textColor="white"
             width="180px"
             text="В корзину"
@@ -68,6 +80,7 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
 
 const mapDispatchToProps = {
   showProductModal,
+  addOrderItemToOrder,
 }
 
 export default connect(null, mapDispatchToProps)(LineProductWithCart)

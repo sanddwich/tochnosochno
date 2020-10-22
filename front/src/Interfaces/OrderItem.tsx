@@ -5,7 +5,7 @@ import Product from './Product'
 export default interface OrderItem {
   id?: number
   amount: number
-  productVariant: Variant
+  productVariant?: Variant
   product: Product
   orderItemModifiers: OrderItemModifier[]
   value: number

@@ -5,6 +5,7 @@ import './NumberInput.scss'
 interface NumberInputProps {
   label: string
   hideLabel: boolean
+  onChange: any
 }
 
 interface NumberInputState {
@@ -20,15 +21,27 @@ export default class NumberInput extends React.Component<NumberInputProps, Numbe
   }
 
   increment = () => {
-    this.setState({
-      value: this.state.value + 1,
-    })
+    this.setState(
+      {
+        value: this.state.value + 1,
+      },
+      () => {
+        this.props.onChange(this.state.value)
+      }
+    )
   }
 
   decrement = () => {
-    this.setState({
-      value: this.state.value - 1,
-    })
+    let value = this.state.value - 1
+    if (value < 1) value = 1
+    this.setState(
+      {
+        value,
+      },
+      () => {
+        this.props.onChange(value)
+      }
+    )
   }
 
   render() {
