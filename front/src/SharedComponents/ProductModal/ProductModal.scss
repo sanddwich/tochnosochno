@@ -42,7 +42,7 @@
     position: absolute;
     margin-left: -60px;
     margin-top: 10px;
-    z-index: 100;
+    z-index: 110;
   }
 
   .BlockName__title {
@@ -88,5 +88,60 @@
     padding-left: 40px;
     padding-right: 40px;
     min-height: 100px;
+  }
+
+  .ProductModal__bodyCont {
+    min-height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .actionButton {
+    // padding-left: 10px;
+    // width: 140px !important;
+  }
+
+  @media screen and (max-width: 992px) {
+    .actionButton {
+      width: 140px !important;
+      width: auto !important;
+      background-color: #ffffff !important;
+    }
+
+    .actionButton__text {
+      font-size: 12px;
+      font-weight: 300;
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .ProductModal__body {
+      max-height: none;
+      height: 93%;
+      margin-top: 44px;
+      width: 96%;
+    }
+
+    .ProductModal__closeButton {
+      margin-top: -52px;
+      margin-left: -40px;
+    }
+
+    .BlockName__title {
+      h1 {
+        font-size: 24px;
+        line-height: 29px;
+      }
+    }
+    
+    .ProductModal__recomendCont {
+      height: 200px;
+    }
+
+    .ProductModal__title, .ProductModal__descr, .ProductModal__Content, .ProductModal__recomendCont {
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+    }
   }
 }

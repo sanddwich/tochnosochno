@@ -20,7 +20,7 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
         <div className="lineProductWithCart__product">
           <div className="d-flex justify-content-between ">
             <div
-              className="lineProductWithCart__product__image"
+              className="lineProductWithCart__product__image d-flex justify-content-center align-items-center"
               onClick={() => this.props.showProductModal(this.props.product)}
               style={{ cursor: 'pointer' }}
             >
@@ -34,14 +34,14 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
             </div>
 
             <div
-              className="lineProductWithCart__product__name"
+              className="lineProductWithCart__product__name  d-flex justify-content-center align-items-center"
               onClick={() => this.props.showProductModal(this.props.product)}
               style={{ cursor: 'pointer' }}
             >
               {this.props.product.name}
             </div>
 
-            <div className="lineProductWithCart__product__price">
+            <div className="lineProductWithCart__product__price d-flex flex-column justify-content-center align-items-center">
               <div className="lineProductWithCart__product__newPrice col-sm-6 m-0 p-0">
                 <span className="bold">980</span>руб
               </div>
@@ -50,15 +50,17 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
           </div>
         </div>
 
-        <ActionButton
-          onClick={() => console.log('add to cart')}
-          textColor="white"
-          width="180px"
-          text="В корзину"
-          backgroundColor="#303030"
-          icon="cart_dark.svg"
-          hideTextMobile={true}
-        />
+        <div className="lineProductWithCart__product__cartIcon d-flex justify-content-center align-items-center">
+          <ActionButton
+            onClick={() => console.log('add to cart')}
+            textColor="white"
+            width="180px"
+            text="В корзину"
+            backgroundColor="#303030"
+            icon="cart_dark.svg"
+            hideTextMobile={true}
+          />
+        </div>
       </div>
     )
   }

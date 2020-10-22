@@ -6,8 +6,12 @@
   &__product {
     // display: flex;
 
+    &__cartIcon {
+      padding-left: 15px;
+    }
+
     width: 400px;
-    line-height: 60px;
+    // line-height: 60px;
     &__image {
       img {
         width: 60px;
@@ -17,6 +21,8 @@
       font-family: 'Roboto';
       font-weight: 400;
       font-size: 16px;
+      line-height: 16px;
+      // text-align: center;
     }
     &__price {
       // display: flex;
@@ -33,6 +39,23 @@
       line-height: 16px;
       color: #8e8e8e;
       text-decoration: line-through;
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    &__product {
+      &__newPrice {
+        font-size: 14px;
+      }
+      &__oldPrice {
+        font-size: 14px;
+      }
+      &__name {
+        font-size: 14px;
+      }
+      &__cartIcon {
+        padding-left: 0px;
+      }
     }
   }
 }
