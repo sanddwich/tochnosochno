@@ -1,9 +1,11 @@
 import {
   GET_APP,
+  HIDE_COMBO_MODAL,
   HIDE_LOGIN,
   HIDE_PRODUCT_MODAL,
   HIDE_SIDE_DIALOG,
   SHOW_CART,
+  SHOW_COMBO_MODAL,
   SHOW_COOKING_TIME,
   SHOW_CREDIT_CARD_FORM,
   SHOW_HISTORY,
@@ -25,6 +27,7 @@ const initialState: AppState = {
   formType: 'product',
   showProductModal: false,
   showLogin: false,
+  showComboModal: false,
 }
 const app = (state: AppState = initialState, action: AppActionType) => {
   switch (action.type) {
@@ -96,6 +99,16 @@ const app = (state: AppState = initialState, action: AppActionType) => {
         ...state,
         showProductModal: false,
         productModalProduct: undefined,
+      }
+    case SHOW_COMBO_MODAL:
+      return {
+        ...state,
+        showComboModal: true,
+      }
+    case HIDE_COMBO_MODAL:
+      return {
+        ...state,
+        showComboModal: false,
       }
 
     case SHOW_LOGIN:
