@@ -28,7 +28,7 @@ export default class ShortMenuItem extends React.Component<ShortMenuItemProps, S
                 <div className="LongMenuItem__title">
                   <h1>{this.props.category.name}</h1>
                 </div>
-                <div className="LongMenuItem__desc">{this.props.category.products.length} сочныйх позиций</div>
+                <div className="LongMenuItem__desc">{this.props.category.products.length} сочные(х) позиций</div>
               </div>
             </Col>
             <Col

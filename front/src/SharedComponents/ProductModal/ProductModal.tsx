@@ -45,8 +45,8 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
                 </div>
               </Row>
 
-              <Row className="p-0 m-0 h-100">
-                <Col className="p-0 m-0" xs={5}>
+              <Row className="ProductModal__bodyCont p-0 m-0 h-100">
+                <Col className="p-0 m-0" md={5}>
                   <Row className="ProductModal__firstLine p-0 m-0 d-flex justify-content-between">
                     <div className="ProductModal__favoriteButton">
                       <RoundButton
@@ -76,7 +76,7 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
                   </Row>
                 </Col>
 
-                <Col className="ProductModal__info p-0 m-0 d-flex flex-column" xs={7}>
+                <Col className="ProductModal__info p-0 m-0 d-flex flex-column" md={7}>
                   <Row>
                     <Col className="ProductModal__title">
                       <BlockName name={this.props.productModalProduct.name} />

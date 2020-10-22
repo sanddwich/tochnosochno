@@ -5,11 +5,13 @@ import RoundButton from '../RoundButton/RoundButton'
 
 import './ProductCardMobile.scss'
 import ActionButton from '../ActionButton/ActionButton'
-import { NavLink } from 'react-router-dom'
 import Sticker from '../Sticker/Sticker'
+import { connect } from 'react-redux'
+import { showProductModal } from '../../Redux/actions/app'
 
 interface ProductCardMobileProps {
   product: Product
+  showProductModal: (product: Product) => void
 }
 
 interface ProductCardMobileState {}
@@ -17,7 +19,7 @@ interface ProductCardMobileState {}
 const newPrice: number = 200
 const oldPrice: number = 300
 
-export default class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductCardMobileState> {
+class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductCardMobileState> {
   favoriteClick = (): void => {
     console.log('favoriteClick')
   }
@@ -43,28 +45,27 @@ export default class ProductCardMobile extends React.Component<ProductCardMobile
                   </div>
                 </Row>
 
-                <NavLink to={`/product/${this.props.product.id}`}>
-                  <Row className="ProductCardMobile__img">
-                    <img
-                      className="img-fluid"
-                      src={
-                        typeof this.props.product.imageLinks[0] !== 'undefined'
-                          ? `${this.props.product.imageLinks[0]}`
-                          : '/images/products/no-photo.png'
-                      }
-                      alt={this.props.product.name}
-                    />
-                  </Row>
-                </NavLink>
+                <Row className="ProductCardMobile__img" onClick={() => this.props.showProductModal(this.props.product)}>
+                  <img
+                    className="img-fluid"
+                    src={
+                      typeof this.props.product.imageLinks[0] !== 'undefined'
+                        ? `${this.props.product.imageLinks[0]}`
+                        : '/images/products/no-photo.png'
+                    }
+                    alt={this.props.product.name}
+                  />
+                </Row>
               </Col>
 
               <Col className="ProductCardMobile__info p-0 m-0" xs={6}>
                 <Row className="ProductCardMobile__textContent">
-                  <NavLink to={`/product/${this.props.product.id}`}>
-                    <div className="ProductCardMobile__title w-100">
-                      <h1>{this.props.product.name}</h1>
-                    </div>
-                  </NavLink>
+                  <div
+                    className="ProductCardMobile__title w-100"
+                    onClick={() => this.props.showProductModal(this.props.product)}
+                  >
+                    <h1>{this.props.product.name}</h1>
+                  </div>
 
                   <div id="description" className="ProductCardMobile__desc w-100">
                     {this.props.product.description}
@@ -101,3 +102,9 @@ export default class ProductCardMobile extends React.Component<ProductCardMobile
     )
   }
 }
+
+const mapDispatchToProps = {
+  showProductModal,
+}
+
+export default connect(null, mapDispatchToProps)(ProductCardMobile)
