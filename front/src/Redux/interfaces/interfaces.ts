@@ -47,4 +47,5 @@ export interface AppState {
   showProductModal: boolean
   productModalProduct?: Product
   showLogin: boolean
+  showComboModal: boolean
 }

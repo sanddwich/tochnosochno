@@ -1,5 +1,4 @@
 .LineProductWithSizeInput {
-
   .LineProductWithSizeInput__price {
     font-family: 'Roboto';
     font-style: normal;
@@ -63,10 +62,41 @@
   }
 
   #active {
-    border: 2px solid #FFD74B;
+    border: 2px solid #ffd74b;
 
     &:hover {
       color: #8e8e8e;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .LineProductWithSizeInput__action {
+      .actionButton {
+        width: 160px !important;
+        background-color: #212529 !important;
+      }
+      .actionButton__text {
+        font-size: 14px;
+        display: block;
+        font-weight: 400;
+        color: #ffffff;
+      }
+      .actionButton__icon {
+        width: 61px;
+        height: 62px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 360px) {
+    .LineProductWithSizeInput__action {
+      .actionButton {
+        width: auto !important;
+        background-color: #ffffff !important;
+      }
+      .actionButton__text {
+        display: none !important;
+      }
     }
   }
 }

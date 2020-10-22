@@ -37,7 +37,7 @@ export default class LineProductWithSizeInput extends React.Component<
               <div className="LineProductWithSizeInput__priceOld">200р</div>
             </Row>
           </Col>
-          <Col className="p-1 d-none d-md-block" md={4}>
+          <Col className="p-1 d-none d-md-block pr-4" md={4}>
             {/* Размеры продукта на десктопных устройствах */}
             <Row className="d-flex justify-content-center">
               <div id="active" className="LineProductWithSizeInput__size">
