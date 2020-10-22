@@ -12,6 +12,7 @@ import {
   SET_AUTH_ERROR,
   SET_AUTH_LOADING,
   SET_AUTH_NOT_SMS,
+  SET_AUTH_PHONE,
   SET_CUSTOMER,
   SET_CUSTOMER_BONUS,
   SET_SMS,
@@ -90,6 +91,11 @@ interface SetCustomerBonusAction {
   bonus: number
 }
 
+interface SetPhoneAction {
+  type: typeof SET_AUTH_PHONE
+  phone: string
+}
+
 export type AuthActionType =
   | GetIsAuthAction
   | GetSmsAction
@@ -108,3 +114,4 @@ export type AuthActionType =
   | SetNotSmsAction
   | AddCustomerAddress
   | SetCustomerBonusAction
+  | SetPhoneAction

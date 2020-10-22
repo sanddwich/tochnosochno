@@ -11,6 +11,7 @@ import {
   SET_AUTH_ERROR,
   SET_AUTH_LOADING,
   SET_AUTH_NOT_SMS,
+  SET_AUTH_PHONE,
   SET_CUSTOMER,
   SET_CUSTOMER_BONUS,
   SET_TOKEN,
@@ -191,6 +192,13 @@ export const setAuthError = (error: string): AuthActionType => {
 export const setNotSms = (): AuthActionType => {
   return {
     type: SET_AUTH_NOT_SMS,
+  }
+}
+
+export const setPhone = (phone: string): AuthActionType => {
+  return {
+    type: SET_AUTH_PHONE,
+    phone: phone,
   }
 }
 

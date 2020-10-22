@@ -8,6 +8,7 @@ import {
   SET_AUTH_ERROR,
   SET_AUTH_LOADING,
   SET_AUTH_NOT_SMS,
+  SET_AUTH_PHONE,
   SET_CUSTOMER,
   SET_CUSTOMER_BONUS,
   SET_TOKEN,
@@ -106,6 +107,12 @@ const auth = (state: AuthState = initialState, action: AuthActionType) => {
           ...state.customer,
           bonus: action.bonus,
         },
+      }
+
+    case SET_AUTH_PHONE:
+      return {
+        ...state,
+        phone: action.phone,
       }
 
     case ADD_CUSTOMER_ADDRESS:
