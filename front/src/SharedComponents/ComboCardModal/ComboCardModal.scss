@@ -1,3 +1,74 @@
 .ComboCardModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 20000;
 
+  .ComboCardModal__leftColumn {}
+
+  .ComboCardModal__title {
+    h1 {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: bold;
+      font-size: 28px;
+      line-height: 34px;
+      color: #303030;
+    }
+  }
+
+  .ComboCardModal__descr {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 16px;
+
+    color: #8e8e8e;
+  }
+
+  .ComboCardModal__body {
+    background-color: #ffffff;
+    max-height: 580px;
+    border-radius: 40px 0px;
+    overflow: hidden;
+    z-index: -5;
+  }
+
+  .ComboCardModal__closeButton {
+    position: absolute;
+    margin-left: -60px;
+    margin-top: 10px;
+    z-index: 110;
+  }
+
+  .ComboCardModal__Cont {
+    height: 480px;
+    overflow: hidden;
+    .ComboCardModal__img {
+      img {
+        width: 100%;
+        margin-top: -50px;
+      }
+    }
+  }
+
+  .ComboCardModal__productsList {
+    padding-top: 5px !important;    
+    overflow-y: scroll;
+  }
+
+  @media screen and (max-width: 992px){
+    .ComboCardModal__Cont {      
+      .ComboCardModal__img {
+        img {
+          height: 100%;
+          width: auto;
+        }
+      }
+    }
+  }
 }

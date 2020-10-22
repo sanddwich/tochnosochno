@@ -4,9 +4,10 @@ import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { RootState } from '../../../../Redux'
 import ProductModal from '../../../../SharedComponents/ProductModal/ProductModal'
+import ComboCardModal from '../../../../SharedComponents/ComboCardModal/ComboCardModal'
 import RoundButton from '../../../../SharedComponents/RoundButton/RoundButton'
 
-import { showLoginModal } from '../../../../Redux/actions/app'
+import { showLoginModal, showComboModal } from '../../../../Redux/actions/app'
 
 import './HeaderUp.scss'
 
@@ -14,6 +15,7 @@ interface HeaderUpProps {
   token: string
   showLogin: boolean
   showLoginModal: () => void
+  showComboModal: () => void
 }
 
 interface HeaderUpState {
@@ -41,6 +43,7 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
   render() {
     return (
       <React.Fragment>
+        <ComboCardModal />
         <ProductModal />
 
         <Container className="HeaderUp p-0 d-none d-lg-flex justify-content-between align-items-center">
@@ -61,7 +64,8 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
                 <RoundButton
                   backgroundColor="#303030"
                   icon="vk_white.svg"
-                  onClick={() => window.open('http://vk.com')}
+                  // onClick={() => window.open('http://vk.com')}
+                  onClick = {this.props.showComboModal}
                 />
               </Col>
             </Row>
@@ -249,6 +253,7 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
 
 const mapDispatchToProps = {
   showLoginModal,
+  showComboModal,
 }
 
 const mapStateToProps = (state: RootState) => {
