@@ -8,6 +8,7 @@ import RoundButton from '../../../SharedComponents/RoundButton/RoundButton'
 import { hideLoginModal } from '../../../Redux/actions/app'
 import { getSmsCode, sendSmsCode, setPhone, setNotSms } from '../../../Redux/actions/auth'
 import InputMask from 'react-input-mask'
+import Countdown from 'react-countdown'
 
 import './Login.scss'
 import CustomAlert from '../../../SharedComponents/CustomAlert/CustomAlert'
@@ -24,6 +25,7 @@ interface LoginProps {
   phone: string
   error: string
   isAuth: boolean
+  smsCodeTime: string
 }
 
 interface LoginState {
@@ -81,7 +83,29 @@ class Login extends React.Component<LoginProps, LoginState> {
     }
   }
 
+  repeatSmsTimer = () => {
+    const smsDate = new Date(this.props.smsCodeTime)
+    const now = new Date()
+    let diff = Math.floor((now.getTime() - smsDate.getTime()) / 1000)
+    return diff
+  }
+
+  timerRenderer = (props: any) => {
+    if (props.completed) {
+      // Render a completed state
+      return (
+        <div onClick={this.props.setNotSms} className="Login__repeatCode">
+          Отправить код повторно
+        </div>
+      )
+    } else {
+      // Render a countdown
+      return <span className="Login__timer">Отправить код повторно через {props.seconds} сек</span>
+    }
+  }
+
   render() {
+    console.log(this.repeatSmsTimer())
     return (
       <React.Fragment>
         {this.props.showLogin && !this.props.isAuth ? (
@@ -144,9 +168,12 @@ class Login extends React.Component<LoginProps, LoginState> {
 
                           {this.state.codeError ? <div className="inputError"> Введите корректный код</div> : null}
                         </div>
-                        <div onClick={this.props.setNotSms} className="Login__repeatCode">
-                          Отправить код повторно{' '}
-                        </div>
+
+                        <Countdown
+                          renderer={this.timerRenderer}
+                          zeroPadTime={2}
+                          date={new Date(this.props.smsCodeTime).getTime() + 59000}
+                        ></Countdown>
                       </div>
                     ) : null}
 
@@ -194,7 +221,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: RootState) => {
   const { showLogin } = state.app
-  const { loading, isSms, phone, error, isAuth } = state.auth
+  const { loading, isSms, phone, error, isAuth, smsCodeTime } = state.auth
   return {
     showLogin,
     loading,
@@ -202,6 +229,7 @@ const mapStateToProps = (state: RootState) => {
     phone,
     error,
     isAuth,
+    smsCodeTime,
   }
 }
 

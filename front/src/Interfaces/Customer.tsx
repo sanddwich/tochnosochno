@@ -9,4 +9,5 @@ export default interface Customer {
   orders: Order[]
   addresses: Address[]
   bonus: number
+  birthday: string
 }
