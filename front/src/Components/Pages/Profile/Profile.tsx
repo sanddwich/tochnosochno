@@ -10,7 +10,7 @@ import BlockName from '../../../SharedComponents/BlockName/BlockName'
 import ProductCard from '../../../SharedComponents/ProductCard/ProductCard'
 import ProductCardMobile from '../../../SharedComponents/ProductCardMobile/ProductCardMobile'
 
-import { logout } from '../../../Redux/actions/auth'
+import { logout, changeProfile, setCustomerName, setCustomerBirthday } from '../../../Redux/actions/auth'
 import _, { String } from 'lodash'
 import './Profile.scss'
 import Customer from '../../../Interfaces/Customer'
@@ -19,6 +19,10 @@ interface ProfileProps {
   menu: Category[]
   logout: any
   customer: Customer
+  setCustomerName: (name: string) => void
+  setCustomerBirthday: (birthday: string) => void
+  changeProfile: any
+  loading: boolean
 }
 
 interface ProfileState {
@@ -65,6 +69,14 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
     })
   }
 
+  nameChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.props.setCustomerName(event.target.value)
+  }
+
+  birthdayChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.props.setCustomerBirthday(event.target.value)
+  }
+
   render() {
     return (
       <div className="profile container mt-5">
@@ -78,7 +90,8 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               id="profile-name"
               style={{ width: '280px', marginRight: '20px' }}
               type="text"
-              defaultValue={this.props.customer.name}
+              value={this.props.customer.name}
+              onChange={(event) => this.nameChangeHandler(event)}
               placeholder="Отредактируйте профиль"
             />
           </div>
@@ -90,7 +103,8 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               id="profile-birthday"
               style={{ width: '150px' }}
               type="date"
-              defaultValue={new Date(this.props.customer.birthday).toISOString().slice(0, 10)}
+              onChange={(event) => this.birthdayChangeHandler(event)}
+              value={new Date(this.props.customer.birthday).toISOString().slice(0, 10)}
               placeholder="мм.мм.гггг"
             />
           </div>
@@ -112,7 +126,9 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
             <div className="row m-0 mt-5 col-8 p-0">
               <div className="col-md-6 p-0">
                 <ActionButton
-                  onClick={() => {
+                  loading={this.props.loading}
+                  onClick={async () => {
+                    await this.props.changeProfile(this.props.customer.name, this.props.customer.birthday)
                     this.setState({ isEditProfile: false })
                   }}
                   textColor="white"
@@ -139,6 +155,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
         </div>
         <div className="row m-0 mt-5">
           <ActionButton
+            loading={this.props.loading}
             onClick={() => this.props.logout()}
             textColor="white"
             width="280px"
@@ -233,14 +250,18 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
 const mapDispatchToProps = {
   logout,
+  changeProfile,
+  setCustomerName,
+  setCustomerBirthday,
 }
 
 const mapStateToProps = (state: RootState) => {
   const { menu } = state.menu
-  const { customer, smsCodeTime } = state.auth
+  const { customer, smsCodeTime, loading } = state.auth
   return {
     menu,
     customer,
+    loading,
   }
 }
 

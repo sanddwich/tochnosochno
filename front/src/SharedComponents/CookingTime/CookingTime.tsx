@@ -31,7 +31,6 @@ export default class CookingTime extends React.Component<CookingTimeProps, Cooki
       for (hour = currentHour + 1; hour >= startWorkHour; hour--) {
         for (minute = 0; minute <= 60; minute = minute + minutesRange) {
           excludeTimes.push(this.setTime(hour, minute))
-          console.log(minute)
         }
       }
     }

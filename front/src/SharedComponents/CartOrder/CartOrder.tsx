@@ -1,8 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Category from '../../Interfaces/Category'
+import Order from '../../Interfaces/Order'
+import OrderItem from '../../Interfaces/OrderItem'
 import Product from '../../Interfaces/Product'
 import { RootState } from '../../Redux'
+import order from '../../Redux/reducers/order'
 import BlockName from '../BlockName/BlockName'
 import LineProductWithNumberInput from '../LineProductWithNumberInput/LineProductWithNumberInput'
 import NumberInput from '../NumberInput/NumberInput'
@@ -11,12 +14,10 @@ import OrderTotalPrice from '../OrderTotalPrice/OrderTotalPrice'
 import './CartOrder.scss'
 
 interface CartOrderProps {
-  menu: Category[]
+  order: Order
 }
 
-interface CartOrderState {
-  cartProducts: Product[]
-}
+interface CartOrderState {}
 
 class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
   constructor(props: CartOrderProps) {
@@ -26,18 +27,7 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
     }
   }
 
-  componentDidMount() {
-    let cartProducts: Product[] = []
-    this.props.menu.map((category) => {
-      if (category.products[category.products.length - 1]) {
-        cartProducts.push(category.products[category.products.length - 1])
-      }
-    })
-    this.setState({ cartProducts })
-  }
-
   render() {
-    console.log(this.state.cartProducts)
     return (
       <div className="CartOrder">
         <div className="CartOrder__banner-mob">
@@ -45,17 +35,24 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
         </div>
         <div className="CartOrder__left">
           <BlockName name="Ваш заказ" />
-          <div className="CartOrder__products">
-            {this.state.cartProducts.map((cartProduct: Product) => {
-              return <LineProductWithNumberInput key={cartProduct.id} product={cartProduct} />
-            })}
-          </div>
+          <React.Fragment>
+            {this.props.order.items && this.props.order.items.length > 0 ? (
+              <React.Fragment>
+                <div className="CartOrder__products">
+                  {this.props.order.items.map((orderItem: OrderItem) => {
+                    return <LineProductWithNumberInput key={orderItem.id} product={orderItem.product} />
+                  })}
+                </div>
+                <div className="CartOrder__guests">
+                  <NumberInput label="Количество персон" hideLabel={false} />
+                </div>
 
-          <div className="CartOrder__guests">
-            <NumberInput label="Количество персон" hideLabel={false} />
-          </div>
-
-          <OrderTotalPrice />
+                <OrderTotalPrice />
+              </React.Fragment>
+            ) : (
+              <div>Корзина пуста</div>
+            )}
+          </React.Fragment>
         </div>
 
         <div className="CartOrder__banner">
@@ -69,9 +66,9 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
 const mapDispatchToProps = {}
 
 const mapStateToProps = (state: RootState) => {
-  const { menu } = state.menu
+  const { order } = state.order
   return {
-    menu: menu,
+    order,
   }
 }
 

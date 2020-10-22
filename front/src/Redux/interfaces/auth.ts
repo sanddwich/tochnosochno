@@ -14,7 +14,9 @@ import {
   SET_AUTH_NOT_SMS,
   SET_AUTH_PHONE,
   SET_CUSTOMER,
+  SET_CUSTOMER_BIRTHDAY,
   SET_CUSTOMER_BONUS,
+  SET_CUSTOMER_NAME,
   SET_SMS,
   SET_TOKEN,
   SIGN_IN,
@@ -96,6 +98,16 @@ interface SetPhoneAction {
   phone: string
 }
 
+interface SetCustomerName {
+  type: typeof SET_CUSTOMER_NAME
+  name: string
+}
+
+interface SetCustomerBithday {
+  type: typeof SET_CUSTOMER_BIRTHDAY
+  birthday: string
+}
+
 export type AuthActionType =
   | GetIsAuthAction
   | GetSmsAction
@@ -115,3 +127,5 @@ export type AuthActionType =
   | AddCustomerAddress
   | SetCustomerBonusAction
   | SetPhoneAction
+  | SetCustomerBithday
+  | SetCustomerName

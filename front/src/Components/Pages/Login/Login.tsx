@@ -105,7 +105,6 @@ class Login extends React.Component<LoginProps, LoginState> {
   }
 
   render() {
-    console.log(this.repeatSmsTimer())
     return (
       <React.Fragment>
         {this.props.showLogin && !this.props.isAuth ? (

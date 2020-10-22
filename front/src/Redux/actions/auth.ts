@@ -7,13 +7,16 @@ import { withCookies, Cookies } from 'react-cookie'
 import {
   ADD_CUSTOMER_ADDRESS,
   GET_SMS,
+  HIDE_AUTH_LOADING,
   LOGOUT,
   SET_AUTH_ERROR,
   SET_AUTH_LOADING,
   SET_AUTH_NOT_SMS,
   SET_AUTH_PHONE,
   SET_CUSTOMER,
+  SET_CUSTOMER_BIRTHDAY,
   SET_CUSTOMER_BONUS,
+  SET_CUSTOMER_NAME,
   SET_TOKEN,
 } from '../constants/ActionTypes'
 import { AuthActionType } from '../interfaces/auth'
@@ -182,6 +185,39 @@ export const sendSmsCode = (code: string): ThunkAction<void, RootState, null, Au
   }
 }
 
+export const changeProfile = (name: string, birthday: string): ThunkAction<void, RootState, null, AuthActionType> => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(setLoading())
+      const { token } = getState().auth
+      const cookies = new Cookies()
+      const csrfToken = cookies.get('csrfToken')
+      const res = await fetch(`${apiServer}/auth/customer`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          'CSRF-Token': csrfToken,
+        },
+        body: JSON.stringify({ name, birthday }),
+      })
+      if (res.status === 429) {
+        throw new Error('Слишком много запросов на сервер')
+      }
+      if (!res.ok) {
+        const resData: Error = await res.json()
+        throw new Error(resData.message)
+      }
+      dispatch(hideLoading())
+      const resData: ApiResponse = await res.json()
+    } catch (err) {
+      console.log({ err })
+      dispatch(setError(err))
+    }
+  }
+}
+
 export const setAuthError = (error: string): AuthActionType => {
   return {
     type: SET_AUTH_ERROR,
@@ -199,6 +235,20 @@ export const setPhone = (phone: string): AuthActionType => {
   return {
     type: SET_AUTH_PHONE,
     phone: phone,
+  }
+}
+
+export const setCustomerName = (name: string): AuthActionType => {
+  return {
+    type: SET_CUSTOMER_NAME,
+    name: name,
+  }
+}
+
+export const setCustomerBirthday = (birthday: string): AuthActionType => {
+  return {
+    type: SET_CUSTOMER_BIRTHDAY,
+    birthday: birthday,
   }
 }
 
@@ -233,6 +283,12 @@ const fetchSmsCode = (phone: string): AuthActionType => {
 const setLoading = (): AuthActionType => {
   return {
     type: SET_AUTH_LOADING,
+  }
+}
+
+const hideLoading = (): AuthActionType => {
+  return {
+    type: HIDE_AUTH_LOADING,
   }
 }
 
