@@ -11,6 +11,7 @@ import RoundButton from '../RoundButton/RoundButton'
 import Sticker from '../Sticker/Sticker'
 import { hideProductModal } from '../../Redux/actions/app'
 import './ProductModal.scss'
+import FavouriteRoundButton from '../FavouriteRoundButton/FavouriteRoundButton'
 
 interface ProductModalProps {
   productModalProduct: Product
@@ -49,11 +50,12 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
                 <Col className="p-0 m-0" md={5}>
                   <Row className="ProductModal__firstLine p-0 m-0 d-flex justify-content-between">
                     <div className="ProductModal__favoriteButton">
-                      <RoundButton
+                      <FavouriteRoundButton product={this.props.productModalProduct} />
+                      {/* <RoundButton
                         icon="favorite.svg"
                         backgroundColor="##F2F2F2"
                         onClick={() => this.favoriteClick()}
-                      />
+                      /> */}
                     </div>
                     <div className="ProductModal__stickerCont">
                       <Sticker title="Новинка" backgroundColor="#FFD74B" />

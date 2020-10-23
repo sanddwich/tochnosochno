@@ -251,6 +251,10 @@ export class ApiController {
         relations: [
           'orders',
           'addresses',
+          'favoriteProducts',
+          'favoriteProducts.product',
+          'favoriteProducts.product.sizePrices',
+          'favoriteProducts.product.sizePrices.price',
           'addresses.street',
           'orders.terminalId',
           'orders.address',

@@ -33,7 +33,8 @@ class CartRoundButton extends React.Component<CartRoundButtonProps, CartRoundBut
     return (
       <div
         onClick={this.props.onClick}
-        className="CartRoundButton noselect"
+        id="cartRoundButton"
+        className="CartRoundButton  noselect"
         style={{ backgroundColor: this.props.backgroundColor, width: this.props.width, height: this.props.height }}
       >
         <div hidden={!this.props.order.items} className="CartRoundButton__itemCount">

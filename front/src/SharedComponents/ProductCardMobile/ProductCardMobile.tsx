@@ -9,6 +9,7 @@ import Sticker from '../Sticker/Sticker'
 import { connect } from 'react-redux'
 import { showProductModal } from '../../Redux/actions/app'
 import AddProductButton from '../AddProductButton/AddProductButton'
+import FavouriteRoundButton from '../FavouriteRoundButton/FavouriteRoundButton'
 
 interface ProductCardMobileProps {
   product: Product
@@ -38,7 +39,8 @@ class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductC
               <Col className="p-0 m-0" xs={6}>
                 <Row className="ProductCardMobile__firstLine p-0 m-0 d-flex justify-content-between">
                   <div className="ProductCardMobile__favoriteButton">
-                    <RoundButton icon="favorite.svg" backgroundColor="##F2F2F2" onClick={() => this.favoriteClick()} />
+                    <FavouriteRoundButton product={this.props.product} />
+                    {/* <RoundButton icon="favorite.svg" backgroundColor="##F2F2F2" onClick={() => this.favoriteClick()} /> */}
                   </div>
                   <div className="ProductCardMobile__stickerCont">
                     <Sticker title="Новинка" backgroundColor="#FFD74B" />

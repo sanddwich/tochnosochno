@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany, PrimaryColumn } from 'typeorm'
-import { Order } from '.'
+import { FavoriteProduct, Order } from '.'
 import { Address } from './address.entity'
 import { Card } from './card.entity'
 import { WalletBalance } from './wallet-balance.entity'
@@ -60,4 +60,9 @@ export class Customer {
 
   @OneToMany((type) => Card, (card) => card.customer)
   cards: Card[]
+
+  @OneToMany((type) => FavoriteProduct, (favoriteProduct) => favoriteProduct.customer, {
+    cascade: ['insert', 'update'],
+  })
+  favoriteProducts: FavoriteProduct[]
 }

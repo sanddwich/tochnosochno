@@ -14,6 +14,7 @@ import { logout, changeProfile, setCustomerName, setCustomerBirthday } from '../
 import _, { String } from 'lodash'
 import './Profile.scss'
 import Customer from '../../../Interfaces/Customer'
+import FavoriteProduct from '../../../Interfaces/FavoriteProduct'
 
 interface ProfileProps {
   menu: Category[]
@@ -39,17 +40,6 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
       favouriteProducts: [],
       isEditProfile: false,
     }
-  }
-
-  componentDidMount() {
-    let favouriteProducts: Product[] = []
-    this.props.menu.map((category) => {
-      if (category.products[category.products.length - 1]) {
-        favouriteProducts.push(category.products[category.products.length - 1])
-      }
-    })
-    this.setState({ favouriteProducts })
-    // console.log(lastProducts)
   }
 
   generateMobileSlides = (separator: number): any => {
@@ -177,72 +167,76 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
         <div className="row m-0 mt-5">
           <BlockName name="Избранное" />
         </div>
-        <div className="row m-0 mt-4 mb-5 profile__text">
-          Сейчас тут ничего нет :( Нужно просто нажать на сердчеко на товаре
-        </div>
 
-        <div>
-          <div className="favouriteProducts__arrows d-none d-md-flex justify-content-start">
-            <div id="prewArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingRight: 3 }}>
-              <img src="images/icons/arrowLeftFor45.svg" alt="" />
-            </div>
-            <div id="nextArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingLeft: 3 }}>
-              <img src="images/icons/arrowRightFor45.svg" alt="" />
-            </div>
-          </div>
+        <React.Fragment>
+          {this.props.customer.favoriteProducts.length > 0 ? (
+            <div>
+              <div className="favouriteProducts__arrows d-none d-md-flex justify-content-start">
+                <div id="prewArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingRight: 3 }}>
+                  <img src="images/icons/arrowLeftFor45.svg" alt="" />
+                </div>
+                <div id="nextArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingLeft: 3 }}>
+                  <img src="images/icons/arrowRightFor45.svg" alt="" />
+                </div>
+              </div>
 
-          <div className="favouriteProducts__arrows d-flex d-md-none justify-content-start">
-            <div id="prewArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingRight: 3 }}>
-              <img src="images/icons/arrowLeftMobileFor35.svg" alt="" />
-            </div>
-            <div id="nextArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingLeft: 3 }}>
-              <img src="images/icons/arrowRightMobileFor35.svg" alt="" />
-            </div>
-          </div>
+              <div className="favouriteProducts__arrows d-flex d-md-none justify-content-start">
+                <div id="prewArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingRight: 3 }}>
+                  <img src="images/icons/arrowLeftMobileFor35.svg" alt="" />
+                </div>
+                <div id="nextArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingLeft: 3 }}>
+                  <img src="images/icons/arrowRightMobileFor35.svg" alt="" />
+                </div>
+              </div>
 
-          <Row className="favouriteProducts__Slider p-0 m-0 d-none d-md-block">
-            <Swiper
-              slidesPerView={3}
-              loop={true}
-              navigation={{
-                nextEl: '#nextArrowFavouriteProducts',
-                prevEl: '#prewArrowFavouriteProducts',
-              }}
-              pagination={{ clickable: true, el: '#paginationProductsFull' }}
-            >
-              {this.state.favouriteProducts.map((product, index) => {
-                return (
-                  <SwiperSlide key={product.id + index}>
-                    <ProductCard product={product} />
-                  </SwiperSlide>
-                )
-              })}
-            </Swiper>
+              <Row className="favouriteProducts__Slider p-0 m-0 d-none d-md-block">
+                <Swiper
+                  slidesPerView={3}
+                  navigation={{
+                    nextEl: '#nextArrowFavouriteProducts',
+                    prevEl: '#prewArrowFavouriteProducts',
+                  }}
+                  pagination={{ clickable: true, el: '#paginationProductsFull' }}
+                >
+                  {this.props.customer.favoriteProducts.map((favProduct: FavoriteProduct, index) => {
+                    return (
+                      <SwiperSlide key={favProduct.product.id + index}>
+                        <ProductCard product={favProduct.product} />
+                      </SwiperSlide>
+                    )
+                  })}
+                </Swiper>
 
-            {/* <Container fluid className="p-0 m-0 d-flex d-none">
+                {/* <Container fluid className="p-0 m-0 d-flex d-none">
               <Row className="p-0 m-0 d-flex justify-content-center">
                 <div id="paginationProductsFull"></div>
               </Row>
             </Container> */}
-          </Row>
+              </Row>
 
-          <Row className="favouriteProducts__Slider p-0 m-0 d-block d-md-none">
-            <Swiper
-              slidesPerView={1}
-              loop={true}
-              navigation={{
-                nextEl: '#nextArrowFavouriteProducts',
-                prevEl: '#prewArrowFavouriteProducts',
-              }}
-              pagination={{ clickable: true, el: '#paginationPopularProducts' }}
-            >
-              {this.generateMobileSlides(mobileSlidesSeparator)}
-            </Swiper>
-          </Row>
-          {/* <Row className="p-0 m-0 d-flex justify-content-center d-block d-md-none">
+              <Row className="favouriteProducts__Slider p-0 m-0 d-block d-md-none">
+                <Swiper
+                  slidesPerView={1}
+                  loop={true}
+                  navigation={{
+                    nextEl: '#nextArrowFavouriteProducts',
+                    prevEl: '#prewArrowFavouriteProducts',
+                  }}
+                  pagination={{ clickable: true, el: '#paginationPopularProducts' }}
+                >
+                  {this.generateMobileSlides(mobileSlidesSeparator)}
+                </Swiper>
+              </Row>
+              {/* <Row className="p-0 m-0 d-flex justify-content-center d-block d-md-none">
             <div id="paginationPopularProducts"></div>
           </Row> */}
-        </div>
+            </div>
+          ) : (
+            <div className="row m-0 mt-4 mb-5 profile__text">
+              Сейчас тут ничего нет :( Нужно просто нажать на сердчеко на товаре
+            </div>
+          )}
+        </React.Fragment>
       </div>
     )
   }
@@ -256,10 +250,8 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { menu } = state.menu
   const { customer, smsCodeTime, loading } = state.auth
   return {
-    menu,
     customer,
     loading,
   }

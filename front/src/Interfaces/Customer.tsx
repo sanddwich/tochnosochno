@@ -1,5 +1,6 @@
 import Order from './Order'
 import Address from './Address'
+import FavoriteProduct from './FavoriteProduct'
 
 export default interface Customer {
   id: number
@@ -10,4 +11,5 @@ export default interface Customer {
   addresses: Address[]
   bonus: number
   birthday: string
+  favoriteProducts: FavoriteProduct[]
 }

@@ -22,7 +22,28 @@
 
   .ProductCard__img {
     margin-top: -80px;
+
     // height: 300px;       // =========== Каринки
+  }
+
+  #productToCart {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      -webkit-transform: translate(0px) scale(1);
+      transform: translate(0px) scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: translate(10px, -500px) scale(0.1);
+      opacity: 0;
+    }
+    100% {
+      transform: translate(0) scale(1);
+      opacity: 1;
+    }
   }
 
   .ProductCard__textContent {

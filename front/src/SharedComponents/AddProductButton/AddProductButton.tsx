@@ -7,6 +7,7 @@ import { RootState } from '../../Redux'
 import { addOrderItemToOrder, setOrderItemAmount, deleteOrderItem } from '../../Redux/actions/order'
 import ActionButton from '../ActionButton/ActionButton'
 import NumberInput from '../NumberInput/NumberInput'
+import { cartAnimation } from '../../utils/animation'
 
 interface AddProductButtonProps {
   order: Order
@@ -40,6 +41,7 @@ class AddProductButton extends React.Component<AddProductButtonProps, AddProduct
         this.setState({ orderItem: null })
       }
     }
+    cartAnimation()
   }
 
   isProductInOrder = () => {
@@ -61,6 +63,7 @@ class AddProductButton extends React.Component<AddProductButtonProps, AddProduct
     }
     this.props.addOrderItemToOrder(orderItem)
     this.setState({ orderItem })
+    cartAnimation()
   }
 
   render() {

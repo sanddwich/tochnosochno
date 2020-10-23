@@ -26,3 +26,4 @@ export { Street } from './street.entity'
 export { City } from './city.entity'
 export { Price } from './price.entity'
 export { GroupModifier } from './group-modifier.entity'
+export { FavoriteProduct } from './favorite-product.entity';

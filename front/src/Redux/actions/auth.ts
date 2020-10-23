@@ -77,7 +77,7 @@ export const getCustomer = (): ThunkAction<void, RootState, null, AuthActionType
           const resData: Error = await res.json()
           throw new Error(resData.message)
         }
-
+        dispatch(hideLoading())
         const customer: Customer = await res.json()
         dispatch(setCustomer(customer))
       } catch (err) {
@@ -210,6 +210,45 @@ export const changeProfile = (name: string, birthday: string): ThunkAction<void,
         throw new Error(resData.message)
       }
       dispatch(hideLoading())
+      const resData: ApiResponse = await res.json()
+    } catch (err) {
+      console.log({ err })
+      dispatch(setError(err))
+    }
+  }
+}
+
+export const changeFavorite = (
+  productId: string,
+  isDelete: boolean
+): ThunkAction<void, RootState, null, AuthActionType> => {
+  return async (dispatch, getState) => {
+    try {
+      const method = isDelete ? 'DELETE' : 'POST'
+      dispatch(setLoading())
+      const { token } = getState().auth
+      const cookies = new Cookies()
+      const csrfToken = cookies.get('csrfToken')
+      const res = await fetch(`${apiServer}/auth/favorite`, {
+        method: method,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          'CSRF-Token': csrfToken,
+        },
+        body: JSON.stringify({ productId }),
+      })
+      if (res.status === 429) {
+        throw new Error('Слишком много запросов на сервер')
+      }
+      if (!res.ok) {
+        const resData: Error = await res.json()
+        throw new Error(resData.message)
+      }
+
+      await dispatch(getCustomer())
+
       const resData: ApiResponse = await res.json()
     } catch (err) {
       console.log({ err })

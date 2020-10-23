@@ -14,6 +14,7 @@ import { RootState } from '../../Redux'
 import Order from '../../Interfaces/Order'
 import NumberInput from '../NumberInput/NumberInput'
 import AddProductButton from '../AddProductButton/AddProductButton'
+import FavouriteRoundButton from '../FavouriteRoundButton/FavouriteRoundButton'
 // import { NavLink } from 'react-router-dom'
 
 interface ProductCardProps {
@@ -42,44 +43,7 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
     }
   }
 
-  componentDidMount() {
-    this.isProductInOrder()
-  }
-
-  setOrderItemAmount = (amount: number) => {
-    if (this.state.orderItem) {
-      this.props.setOrderItemAmount(this.state.orderItem, amount)
-      if (amount === 0) {
-        this.props.deleteOrderItem(this.state.orderItem)
-        this.setState({ orderItem: null })
-      }
-    }
-  }
-
-  isProductInOrder = () => {
-    if (this.props.order.items) {
-      this.props.order.items.map((orderItem: OrderItem) => {
-        if (orderItem.product.id === this.props.product.id) {
-          this.setState({ orderItem })
-        }
-      })
-    }
-  }
-
-  favoriteClick = (): void => {
-    console.log('favoriteClick')
-  }
-
-  addToCartButton = (product: Product): void => {
-    const orderItem = {
-      product: product,
-      amount: 1,
-      orderItemModifiers: [],
-      value: product.sizePrices[0].price.currentPrice,
-    }
-    this.props.addOrderItemToOrder(orderItem)
-    this.setState({ orderItem })
-  }
+  componentDidMount() {}
 
   toggleModal = (): void => {
     const showProductModal: boolean = !this.state.showProductModal
@@ -97,7 +61,8 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
           <Container className="ProductCard__container p-0 m-0">
             <Row className="ProductCard__firstLine p-0 m-0 d-flex justify-content-between">
               <div className="ProductCard__favoriteButton">
-                <RoundButton icon="favorite.svg" backgroundColor="##F2F2F2" onClick={() => this.favoriteClick()} />
+                <FavouriteRoundButton product={this.props.product} />
+                {/* <RoundButton icon="favorite.svg" backgroundColor="##F2F2F2" onClick={() => this.favoriteClick()} /> */}
               </div>
               <div className="ProductCard__stickerCont">
                 <Sticker title="Новинка" backgroundColor="#FFD74B" />

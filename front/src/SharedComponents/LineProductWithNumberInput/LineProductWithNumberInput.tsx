@@ -5,7 +5,7 @@ import ActionButton from '../ActionButton/ActionButton'
 import NumberInput from '../NumberInput/NumberInput'
 import RoundButton from '../RoundButton/RoundButton'
 import { deleteOrderItem, setOrderItemAmount } from '../../Redux/actions/order'
-
+import { cartAnimation } from '../../utils/animation'
 import './LineProductWithNumberInput.scss'
 import { connect } from 'react-redux'
 
@@ -26,6 +26,7 @@ class LineProductWithNumberInput extends React.Component<
     if (amount === 0) {
       this.props.deleteOrderItem(this.props.orderItem)
     }
+    cartAnimation()
   }
 
   render() {

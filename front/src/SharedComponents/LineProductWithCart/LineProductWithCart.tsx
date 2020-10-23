@@ -7,6 +7,7 @@ import { addOrderItemToOrder } from '../../Redux/actions/order'
 import './LineProductWithCart.scss'
 import { connect } from 'react-redux'
 import OrderItem from '../../Interfaces/OrderItem'
+import AddProductButton from '../AddProductButton/AddProductButton'
 
 interface LineProductWithCartProps {
   product: Product
@@ -63,7 +64,8 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
         </div>
 
         <div className="lineProductWithCart__product__cartIcon d-flex justify-content-center align-items-center">
-          <ActionButton
+          <AddProductButton product={this.props.product} />
+          {/* <ActionButton
             onClick={() => this.addToCartButton(this.props.product)}
             textColor="white"
             width="180px"
@@ -71,7 +73,7 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
             backgroundColor="#303030"
             icon="cart_dark.svg"
             hideTextMobile={true}
-          />
+          /> */}
         </div>
       </div>
     )

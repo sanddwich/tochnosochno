@@ -21,6 +21,7 @@ import { SizePrice } from './size-price.entity'
 import { ProductCategory } from './product-category.entity'
 import { OrderItem } from './order-item.entity'
 import { OrderItemModifier } from './order-item-modifier.entity'
+import { FavoriteProduct } from './favorite-product.entity'
 
 @Entity()
 export class Product {
@@ -155,4 +156,7 @@ export class Product {
   @ManyToMany((type) => GroupModifier, (groupModifier) => groupModifier.products, { cascade: true })
   @JoinTable({ name: 'product_group_modifiers' })
   groupModifiers: GroupModifier[]
+
+  @OneToMany((type) => FavoriteProduct, (favoriteProduct) => favoriteProduct.product)
+  favoriteProducts: FavoriteProduct[]
 }

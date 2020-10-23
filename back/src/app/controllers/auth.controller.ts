@@ -16,12 +16,13 @@ import {
   HttpResponseBadRequest,
   Config,
   Patch,
+  Delete,
 } from '@foal/core'
 import { CsrfTokenRequired, getCsrfToken, setCsrfCookie } from '@foal/csrf'
 import { TypeORMStore, fetchUser } from '@foal/typeorm'
 import { getRepository } from 'typeorm'
 
-import { Customer } from '../entities'
+import { Customer, FavoriteProduct, Product } from '../entities'
 import { WalletBalance } from '../entities/wallet-balance.entity'
 import { Iiko, CustomerService, SmsService } from '../services'
 import { v4 as uuidv4 } from 'uuid'
@@ -134,6 +135,10 @@ export class AuthController {
           relations: [
             'orders',
             'addresses',
+            'favoriteProducts',
+            'favoriteProducts.product',
+            'favoriteProducts.product.sizePrices',
+            'favoriteProducts.product.sizePrices.price',
             'orders.terminalId',
             'addresses.street',
             'orders.address',
@@ -207,16 +212,81 @@ export class AuthController {
   async setCustomerInfo(ctx: Context<Customer, Session>) {
     const name = ctx.request.body.name
     const birthday = ctx.request.body.birthday
+    console.log(111)
     try {
       const customer = await getRepository(Customer).findOne({ id: ctx.user.id })
       if (customer) {
         customer.name = name
         customer.birthday = birthday
         await getRepository(Customer).save(customer)
+        return new HttpResponseOK({ error: false, message: 'Данные обновлены...' })
       } else {
         return new HttpResponseBadRequest('Клиент не найден')
       }
     } catch (error) {
+      return new HttpResponseBadRequest(error)
+    }
+  }
+
+  @Post('/favorite')
+  @TokenRequired({
+    user: fetchUser(Customer),
+    store: TypeORMStore,
+  })
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      productId: { type: 'string' },
+    },
+    required: ['productId'],
+    type: 'object',
+  })
+  // @CsrfTokenRequired()
+  async setFavoriteProduct(ctx: Context<Customer, Session>) {
+    const productId = ctx.request.body.productId
+    try {
+      const product = await getRepository(Product).findOne({ id: productId })
+      const customer = await getRepository(Customer).findOne({ id: ctx.user.id })
+      if (customer && product) {
+        await getRepository(FavoriteProduct).save({ product, customer })
+        return new HttpResponseOK({ error: false, message: 'Данные обновлены...' })
+      } else {
+        return new HttpResponseBadRequest('Клиент не найден')
+      }
+    } catch (error) {
+      console.log(error)
+      return new HttpResponseBadRequest(error)
+    }
+  }
+
+  @Delete('/favorite')
+  @TokenRequired({
+    user: fetchUser(Customer),
+    store: TypeORMStore,
+  })
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      productId: { type: 'string' },
+    },
+    required: ['productId'],
+    type: 'object',
+  })
+  // @CsrfTokenRequired()
+  async deleteFavoriteProduct(ctx: Context<Customer, Session>) {
+    const productId = ctx.request.body.productId
+    try {
+      const product = await getRepository(Product).findOne({ id: productId })
+      const customer = await getRepository(Customer).findOne({ id: ctx.user.id })
+      const favoriteProduct = await getRepository(FavoriteProduct).findOne({ product, customer })
+      if (favoriteProduct) {
+        await getRepository(FavoriteProduct).delete(favoriteProduct)
+        return new HttpResponseOK({ error: false, message: 'Данные обновлены...' })
+      } else {
+        return new HttpResponseBadRequest('Избранный продукт не найден')
+      }
+    } catch (error) {
+      console.log(error)
       return new HttpResponseBadRequest(error)
     }
   }

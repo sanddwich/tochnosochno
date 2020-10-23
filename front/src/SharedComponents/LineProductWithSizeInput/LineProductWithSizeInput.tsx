@@ -2,6 +2,7 @@ import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import Product from '../../Interfaces/Product'
 import ActionButton from '../ActionButton/ActionButton'
+import AddProductButton from '../AddProductButton/AddProductButton'
 
 import './LineProductWithSizeInput.scss'
 
@@ -18,7 +19,6 @@ export default class LineProductWithSizeInput extends React.Component<
   render() {
     return (
       <Container fluid className="LineProductWithSizeInput m-0 p-0">
-        
         {/* Размеры продукта на мобильных устройствах */}
         <Row className="d-flex d-md-none justify-content-start pt-3 pl-3 pr-3">
           <div id="active" className="LineProductWithSizeInput__size">
@@ -48,7 +48,8 @@ export default class LineProductWithSizeInput extends React.Component<
           </Col>
           <Col className="p-1" xs={6} md={4}>
             <Row className="LineProductWithSizeInput__action d-flex justify-content-end">
-              <ActionButton
+              <AddProductButton product={this.props.product} />
+              {/* <ActionButton
                 onClick={() => console.log('add to cart')}
                 textColor="white"
                 width="180px"
@@ -56,7 +57,7 @@ export default class LineProductWithSizeInput extends React.Component<
                 backgroundColor="#303030"
                 icon="cart_dark.svg"
                 hideTextMobile={true}
-              />
+              /> */}
             </Row>
           </Col>
         </Row>
