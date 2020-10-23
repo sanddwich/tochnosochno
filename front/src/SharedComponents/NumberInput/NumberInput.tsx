@@ -6,6 +6,8 @@ interface NumberInputProps {
   label: string
   hideLabel: boolean
   onChange: any
+  value: number
+  minValue: number
 }
 
 interface NumberInputState {
@@ -16,7 +18,7 @@ export default class NumberInput extends React.Component<NumberInputProps, Numbe
   constructor(props: NumberInputProps) {
     super(props)
     this.state = {
-      value: 1,
+      value: this.props.value || 1,
     }
   }
 
@@ -33,10 +35,10 @@ export default class NumberInput extends React.Component<NumberInputProps, Numbe
 
   decrement = () => {
     let value = this.state.value - 1
-    if (value < 1) value = 1
+    if (value < this.props.minValue) value = this.props.minValue
     this.setState(
       {
-        value,
+        value: value,
       },
       () => {
         this.props.onChange(value)

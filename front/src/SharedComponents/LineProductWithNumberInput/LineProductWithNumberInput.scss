@@ -3,7 +3,7 @@
   padding: 20px 0;
   max-width: 780px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   flex-wrap: wrap;
 
   &__delete {
@@ -14,14 +14,14 @@
   &__product {
     display: flex;
     justify-content: space-between;
-
+    align-items: center;
     // width: 400px;
     line-height: 60px;
     order: -1;
     flex-grow: 1;
     margin-right: 30px;
     &__image {
-      flex-grow: 6;
+      display: flex;
       img {
         width: 60px;
       }
@@ -29,9 +29,10 @@
     &__name {
       font-family: 'Roboto';
       font-weight: 400;
-      font-size: 14px;
+      font-size: 16px;
       flex-grow: 5;
       text-align: center;
+      line-height: 16px;
     }
     &__price {
       // display: flex;

@@ -1,11 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { NavLink } from 'react-router-dom'
 import Category from '../../Interfaces/Category'
 import Order from '../../Interfaces/Order'
 import OrderItem from '../../Interfaces/OrderItem'
 import Product from '../../Interfaces/Product'
 import { RootState } from '../../Redux'
 import order from '../../Redux/reducers/order'
+import ActionButton from '../ActionButton/ActionButton'
 import BlockName from '../BlockName/BlockName'
 import LineProductWithNumberInput from '../LineProductWithNumberInput/LineProductWithNumberInput'
 import NumberInput from '../NumberInput/NumberInput'
@@ -45,6 +47,8 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
                 </div>
                 <div className="CartOrder__guests">
                   <NumberInput
+                    minValue={1}
+                    value={1}
                     onChange={(count: number) => console.log(count)}
                     label="Количество персон"
                     hideLabel={false}
@@ -54,7 +58,23 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
                 <OrderTotalPrice />
               </React.Fragment>
             ) : (
-              <div>Корзина пуста</div>
+              <div className="CartOrder__empty">
+                <div className="CartOrder__empty__text">
+                  Сейчас тут ничего нет :( И мы ждем вашего заказа :) Для этого перейдите в меню и добавьте сочную еду в
+                  корзину.
+                </div>
+                <NavLink to="/">
+                  <ActionButton
+                    onClick={() => null}
+                    textColor="white"
+                    width="260px"
+                    text="Перейти в меню"
+                    backgroundColor="#303030"
+                    icon="dish-dark.svg"
+                    hideTextMobile={false}
+                  />
+                </NavLink>
+              </div>
             )}
           </React.Fragment>
         </div>

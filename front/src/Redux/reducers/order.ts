@@ -21,6 +21,8 @@ import {
 } from '../constants/ActionTypes'
 import { OrderState } from '../interfaces/interfaces'
 import { OrderActionType } from '../interfaces/order'
+import { v4 as uuidv4 } from 'uuid'
+
 const initialDate = new Date().toLocaleDateString('ru-RU') + ' ' + new Date().toLocaleTimeString('ru-RU')
 
 const initialOrder = new Order(navigator.appVersion, initialDate, [])
@@ -46,11 +48,13 @@ const order = (state = initialState, action: OrderActionType) => {
         order: new Order(navigator.appVersion, initialDate, []),
       }
     case ADD_TO_ORDER:
+      if (!action.orderItem.id) action.orderItem.id = Date.now()
       return {
         ...state,
         order: {
           bonus: 0,
           ...state.order,
+
           amount: state.order.amount + action.orderItem.value * action.orderItem.amount,
           items: [...(state.order.items || []), action.orderItem],
           date: new Date().toLocaleDateString('ru-RU') + ' ' + new Date().toLocaleTimeString('ru-RU'),

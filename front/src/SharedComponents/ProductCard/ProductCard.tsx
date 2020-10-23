@@ -4,22 +4,30 @@ import Product from '../../Interfaces/Product'
 import RoundButton from '../RoundButton/RoundButton'
 import Sticker from '../Sticker/Sticker'
 import { showProductModal } from '../../Redux/actions/app'
-import { addOrderItemToOrder } from '../../Redux/actions/order'
+import { addOrderItemToOrder, setOrderItemAmount, deleteOrderItem } from '../../Redux/actions/order'
 
 import './ProductCard.scss'
 import ActionButton from '../ActionButton/ActionButton'
 import { connect } from 'react-redux'
 import OrderItem from '../../Interfaces/OrderItem'
+import { RootState } from '../../Redux'
+import Order from '../../Interfaces/Order'
+import NumberInput from '../NumberInput/NumberInput'
+import AddProductButton from '../AddProductButton/AddProductButton'
 // import { NavLink } from 'react-router-dom'
 
 interface ProductCardProps {
+  order: Order
   product: Product
   showProductModal: (product: Product) => void
   addOrderItemToOrder: (orderItem: OrderItem) => void
+  setOrderItemAmount: (orderItem: OrderItem, amount: number) => void
+  deleteOrderItem: (orderItem: OrderItem) => void
 }
 
 interface ProductCardState {
   showProductModal: boolean
+  orderItem: OrderItem | null
 }
 
 const newPrice: number = 200
@@ -30,11 +38,32 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
     super(props)
     this.state = {
       showProductModal: false,
+      orderItem: null,
     }
   }
 
   componentDidMount() {
-    // console.log(this.props.product)
+    this.isProductInOrder()
+  }
+
+  setOrderItemAmount = (amount: number) => {
+    if (this.state.orderItem) {
+      this.props.setOrderItemAmount(this.state.orderItem, amount)
+      if (amount === 0) {
+        this.props.deleteOrderItem(this.state.orderItem)
+        this.setState({ orderItem: null })
+      }
+    }
+  }
+
+  isProductInOrder = () => {
+    if (this.props.order.items) {
+      this.props.order.items.map((orderItem: OrderItem) => {
+        if (orderItem.product.id === this.props.product.id) {
+          this.setState({ orderItem })
+        }
+      })
+    }
   }
 
   favoriteClick = (): void => {
@@ -42,12 +71,14 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
   }
 
   addToCartButton = (product: Product): void => {
-    this.props.addOrderItemToOrder({
+    const orderItem = {
       product: product,
       amount: 1,
       orderItemModifiers: [],
       value: product.sizePrices[0].price.currentPrice,
-    })
+    }
+    this.props.addOrderItemToOrder(orderItem)
+    this.setState({ orderItem })
   }
 
   toggleModal = (): void => {
@@ -109,14 +140,25 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
               </div>
 
               <div className="ProductCard__button d-flex justify-content-end">
-                <ActionButton
-                  backgroundColor="#303030"
-                  icon="cart_dark.svg"
-                  text="В корзину"
-                  width="180px"
-                  textColor="#ffffff"
-                  onClick={() => this.addToCartButton(this.props.product)}
-                />
+                <AddProductButton product={this.props.product} />
+                {/* {this.state.orderItem ? (
+                  <NumberInput
+                    minValue={0}
+                    value={this.state.orderItem.amount}
+                    label=""
+                    hideLabel={true}
+                    onChange={(amount: number) => this.setOrderItemAmount(amount)}
+                  />
+                ) : (
+                  <ActionButton
+                    backgroundColor="#303030"
+                    icon="cart_dark.svg"
+                    text="В корзину"
+                    width="180px"
+                    textColor="#ffffff"
+                    onClick={() => this.addToCartButton(this.props.product)}
+                  />
+                )} */}
               </div>
             </Row>
           </Container>
@@ -129,6 +171,16 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
 const mapDispatchToProps = {
   showProductModal,
   addOrderItemToOrder,
+  setOrderItemAmount,
+  deleteOrderItem,
 }
 
-export default connect(null, mapDispatchToProps)(ProductCard)
+const mapStateToProps = (state: RootState) => {
+  const { order } = state.order
+
+  return {
+    order,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductCard)

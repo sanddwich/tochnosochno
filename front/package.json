@@ -80,6 +80,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/redux-logger": "^3.0.8",
     "@types/redux-persist-transform-encrypt": "^2.0.1",
+    "@types/uuid": "^8.3.0",
     "typescript": "^4.0.2"
   },
   "_moduleAliases": {

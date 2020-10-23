@@ -207,20 +207,16 @@ export class AuthController {
   async setCustomerInfo(ctx: Context<Customer, Session>) {
     const name = ctx.request.body.name
     const birthday = ctx.request.body.birthday
-    console.log(111)
     try {
       const customer = await getRepository(Customer).findOne({ id: ctx.user.id })
       if (customer) {
         customer.name = name
         customer.birthday = birthday
         await getRepository(Customer).save(customer)
-        return new HttpResponseOK({ error: false, message: 'Данные обновлены...' })
       } else {
-        return new HttpResponseOK({ error: false, message: 'Данные обновлены...' })
         return new HttpResponseBadRequest('Клиент не найден')
       }
     } catch (error) {
-      return new HttpResponseOK({ error: false, message: 'Данные обновлены...' })
       return new HttpResponseBadRequest(error)
     }
   }

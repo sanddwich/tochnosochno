@@ -10,11 +10,25 @@
     align-items: center;
   }
 
+  &__empty {
+    font-weight: 700;
+    font-family: 'Roboto';
+    font-size: 18px;
+    color: #8e8e8e;
+    &__text {
+      padding: 40px 0;
+    }
+  }
+
   &__banner {
     margin-left: 20px;
+    margin-bottom: 20px;
   }
   &__banner-mob {
     display: none;
+  }
+  &__left {
+    flex-grow: 1;
   }
 }
 

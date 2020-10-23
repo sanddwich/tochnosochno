@@ -8,6 +8,7 @@ import ActionButton from '../ActionButton/ActionButton'
 import Sticker from '../Sticker/Sticker'
 import { connect } from 'react-redux'
 import { showProductModal } from '../../Redux/actions/app'
+import AddProductButton from '../AddProductButton/AddProductButton'
 
 interface ProductCardMobileProps {
   product: Product
@@ -84,14 +85,15 @@ class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductC
                   </div>
 
                   <div className="ProductCardMobile__button d-flex justify-content-end">
-                    <ActionButton
+                    <AddProductButton product={this.props.product} />
+                    {/* <ActionButton
                       backgroundColor="#303030"
                       icon="cart_dark.svg"
                       text="В корзину"
                       width="180px"
                       textColor="#ffffff"
                       onClick={() => this.addToCartButton(this.props.product.id)}
-                    />
+                    /> */}
                   </div>
                 </Row>
               </Col>

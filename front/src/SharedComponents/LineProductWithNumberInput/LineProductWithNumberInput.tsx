@@ -23,6 +23,9 @@ class LineProductWithNumberInput extends React.Component<
 > {
   setOrderItemAmount = (amount: number) => {
     this.props.setOrderItemAmount(this.props.orderItem, amount)
+    if (amount === 0) {
+      this.props.deleteOrderItem(this.props.orderItem)
+    }
   }
 
   render() {
@@ -44,6 +47,8 @@ class LineProductWithNumberInput extends React.Component<
           </div>
         </div>
         <NumberInput
+          minValue={0}
+          value={this.props.orderItem.amount}
           onChange={(amount: number) => {
             this.setOrderItemAmount(amount)
           }}

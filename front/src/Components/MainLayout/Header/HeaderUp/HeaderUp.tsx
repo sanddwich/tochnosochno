@@ -6,10 +6,11 @@ import { RootState } from '../../../../Redux'
 import ProductModal from '../../../../SharedComponents/ProductModal/ProductModal'
 import ComboCardModal from '../../../../SharedComponents/ComboCardModal/ComboCardModal'
 import RoundButton from '../../../../SharedComponents/RoundButton/RoundButton'
-
+import * as Scroll from 'react-scroll'
 import { showLoginModal, showComboModal } from '../../../../Redux/actions/app'
 
 import './HeaderUp.scss'
+import CartRoundButton from '../../../../SharedComponents/CartRoundButton/CartRoundButton'
 
 interface HeaderUpProps {
   isAuth: boolean
@@ -65,7 +66,7 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
                   backgroundColor="#303030"
                   icon="vk_white.svg"
                   // onClick={() => window.open('http://vk.com')}
-                  onClick = {this.props.showComboModal}
+                  onClick={this.props.showComboModal}
                 />
               </Col>
             </Row>
@@ -116,7 +117,11 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
             <Row className="m-0 p-0">
               <Col className="m-0 p-0">
                 <NavLink to="/cart">
-                  <RoundButton backgroundColor="#303030" icon="cart_white.svg" onClick={() => this.noAction()} />
+                  <CartRoundButton
+                    backgroundColor="#303030"
+                    icon="cart_white.svg"
+                    onClick={() => Scroll.animateScroll.scrollToTop()}
+                  />
                 </NavLink>
               </Col>
               <Col className="">
