@@ -8,15 +8,61 @@ import RoundButton from '../RoundButton/RoundButton'
 import BlockName from '../BlockName/BlockName'
 import ComboElement from './ComboElement/ComboElement'
 import ActionButton from '../ActionButton/ActionButton'
+import Product from '../../Interfaces/Product'
+import Category from '../../Interfaces/Category'
+import ComboElementChangeList from './ComboElementChangeList/ComboElementChangeList'
 
 interface ComboCardModalProps {
   hideComboModal: () => void
   showComboModal: boolean
+  menu: Category[]
 }
 
-interface ComboCardModalState {}
+interface ComboCardModalState {
+  comboConsist: Product[]
+  comboProductVariants: Product[]
+  comboProductChangeId: number
+}
 
 class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModalState> {
+  constructor(props: ComboCardModalProps) {
+    super(props)
+    this.state = {
+      comboConsist: [],
+      comboProductVariants: [],
+      comboProductChangeId: 0,
+    }
+  }
+
+  componentDidMount() {
+    const comboConsist: Product[] = this.props.menu[0].products
+    let comboProductVariants: Product[] = []
+    this.props.menu.map((cat) => {
+      cat.products.map((product) => {
+        comboProductVariants.push(product)
+      })
+    })
+    this.setState({ comboConsist, comboProductVariants })
+  }
+
+  changeProductAtCombo = (productId: number) => {
+    const comboProductChangeId: number = productId
+    this.setState({ comboProductChangeId })
+  }
+
+  addNewProductAtCombo = (newProductId: number) => {
+    let comboProductChangeId = this.state.comboProductChangeId
+    const comboConsist = this.state.comboConsist.map((product) => {
+      if (product.id === comboProductChangeId) {
+        return this.state.comboProductVariants.find((product) => product.id === newProductId)
+      } else {
+        return product
+      }
+    }) as Product[]
+    comboProductChangeId = 0
+    this.setState({ comboProductChangeId, comboConsist })
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -46,10 +92,15 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                   </Row>
                   <Row className="ComboCardModal__productsList d-flex p-0">
                     <Col className="p-0">
-                      <ComboElement />
-                      <ComboElement />
-                      <ComboElement />
-                      <ComboElement />
+                      {this.state.comboConsist.map((product, index) => {
+                        return (
+                          <ComboElement
+                            key={product.id + index}
+                            product={product}
+                            changeProductAtCombo={this.changeProductAtCombo}
+                          />
+                        )
+                      })}
                     </Col>
                   </Row>
 
@@ -72,8 +123,16 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                   </Row>
                 </Col>
 
-                <Col md={6} className="ComboCardModal__img p-0">
-                  <img className="img-fluid" src="/images/combo1.jpg" alt="" />
+                <Col md={6} className="ComboCardModal__img p-0 h-100 d-flex align-items-start">
+                  {this.state.comboProductChangeId !== 0 ? (
+                    <ComboElementChangeList
+                      products={this.state.comboProductVariants}
+                      addNewProductAtCombo={this.addNewProductAtCombo}
+                      comboConsist={this.state.comboConsist}
+                    />
+                  ) : (
+                    <img className="img-fluid" src="/images/combo1.jpg" alt="" />
+                  )}
                 </Col>
               </Row>
             </Container>
@@ -90,8 +149,10 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: RootState) => {
   const { showComboModal } = state.app
+  const { menu } = state.menu
   return {
-    showComboModal: showComboModal,
+    showComboModal,
+    menu,
   }
 }
 
