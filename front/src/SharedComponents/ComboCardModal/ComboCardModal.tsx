@@ -131,7 +131,13 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                       comboConsist={this.state.comboConsist}
                     />
                   ) : (
-                    <img className="img-fluid" src="/images/combo1.jpg" alt="" />
+                    <div className="ComboCardModal__imgBack" style={{
+                      background: 'url(/images/combo1.jpg)',
+                      backgroundRepeat: 'no-repeat',
+                      // backgroundAttachment: 'fixed',
+                      backgroundPosition: 'center',
+                      backgroundSize: 'cover',
+                    }}></div>
                   )}
                 </Col>
               </Row>

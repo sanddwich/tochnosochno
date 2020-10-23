@@ -8,7 +8,7 @@
   z-index: 20000;
 
   .ComboCardModal__leftColumn {
-    border-right: 1px solid #F2F2F2;
+    border-right: 1px solid #f2f2f2;
     height: 100%;
   }
 
@@ -61,10 +61,9 @@
     height: 480px;
     overflow: hidden;
     .ComboCardModal__img {
-
-      img {
-        width: 100%;
-        margin-top: -50px;
+      .ComboCardModal__imgBack { 
+        width: 100% !important;
+        height: 100% !important;
       }
     }
   }
@@ -112,9 +111,8 @@
   @media screen and (max-width: 992px) {
     .ComboCardModal__Cont {
       .ComboCardModal__img {
-        img {
-          height: 100%;
-          width: auto;
+        .ComboCardModal__imgBack {
+          
         }
       }
     }
