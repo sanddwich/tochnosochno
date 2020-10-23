@@ -15,7 +15,8 @@ export default class ComboElement extends React.Component<ComboElementProps, Com
   render() {
     return (
       <Container
-        className="ComboElement p-0 m-0"
+        fluid
+        className="ComboElement w-100 p-0 m-0"
         onClick={() => this.props.changeProductAtCombo(this.props.product.id)}
       >
         <Row className="ComboElement__img p-0 m-0">

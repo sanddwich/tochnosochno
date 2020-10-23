@@ -3,7 +3,7 @@ import { Col, Container, Row } from 'react-bootstrap'
 import './CategorySlider.scss'
 
 // Import Swiper React components
-import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper'
+import SwiperCore, { Autoplay, Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 // Import Swiper styles
@@ -16,7 +16,7 @@ import _ from 'lodash'
 import ShortMenuItemMob from './ShortMenuItemMob/ShortMenuItemMob'
 
 // install Swiper components
-SwiperCore.use([Navigation, Pagination, Autoplay])
+SwiperCore.use([Pagination, Autoplay])
 
 interface CategorySliderProps {
   longMenu: Category[]

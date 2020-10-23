@@ -7,39 +7,31 @@
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 20000;
 
-  .ComboCardModal__leftColumn {
-    border-right: 1px solid #f2f2f2;
-    height: 100%;
+  #paginationComboProduct {
+    width: 80%;
+    display: flex;
+    justify-content: center;
   }
 
-  .ComboCardModal__title {
-    padding-left: 50px !important;
-    padding-right: 20px !important;
-    padding-top: 20px !important;
-    h1 {
-      font-family: 'Montserrat';
-      font-style: normal;
-      font-weight: bold;
-      font-size: 28px;
-      line-height: 34px;
-      color: #303030;
-    }
+  .Slider__pagination {
+    position: relative;
+    z-index: 1000;
+    margin-right: 20px;
   }
 
-  .ComboCardModal__descr {
-    padding-left: 50px !important;
-    padding-right: 50px !important;
-    margin-bottom: 5px !important;
-    max-height: 48px;
-    overflow: hidden;
+  .swiper-pagination-bullet {
+    background-color: #ffffff !important;
+    border: 2px solid #ffd12d;
+    box-sizing: border-box;
+    margin-right: 15px;
+    width: 14px !important;
+    height: 14px;
+    opacity: 1;
+  }
 
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 16px;
+  .swiper-pagination-bullet-active {
 
-    color: #8e8e8e;
+    background-color: #ffd12d !important;
   }
 
   .ComboCardModal__body {
@@ -48,78 +40,240 @@
     border-radius: 40px 0px;
     overflow: hidden;
     z-index: -5;
-  }
 
-  .ComboCardModal__closeButton {
-    position: absolute;
-    margin-left: -60px;
-    margin-top: 10px;
-    z-index: 110;
-  }
+    .ComboCardModal__leftColumn {
+      border-right: 1px solid #f2f2f2;
+      height: 100%;
+    }
 
-  .ComboCardModal__Cont {
-    height: 480px;
-    overflow: hidden;
-    .ComboCardModal__img {
-      .ComboCardModal__imgBack { 
-        width: 100% !important;
-        height: 100% !important;
+    .ComboCardModal__title {
+      padding-left: 50px !important;
+      padding-right: 20px !important;
+      padding-top: 20px !important;
+      h1 {
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: bold;
+        font-size: 28px;
+        line-height: 34px;
+        color: #303030;
       }
     }
-  }
 
-  .ComboCardModal__productsList {
-    height: 100%;
-    margin-right: 5px;
-    padding-left: 45px !important;
-    padding-right: 20px !important;
-    padding-top: 5px !important;
-    padding-bottom: 10px !important;
-    overflow-y: scroll;
-  }
+    .ComboCardModal__descr {
+      padding-left: 50px !important;
+      padding-right: 50px !important;
+      margin-bottom: 5px !important;
+      max-height: 48px;
+      overflow: hidden;
 
-  .ComboCardModal__result {
-    padding-top: 20px !important;
-    padding-bottom: 20px !important;
-    width: 100%;
-    background-color: #f2f2f2;
-  }
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 16px;
 
-  .ComboCardModal__resultTitle {
-    font-family: 'Montserrat';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 29px;
-    color: #303030;
-  }
-
-  .ComboCardModal__resultPrice {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 28px;
-    color: #303030;
-
-    span {
-      font-size: 18px;
-      font-weight: 400;
+      color: #8e8e8e;
     }
-  }
 
-  @media screen and (max-width: 992px) {
+    .ComboCardModal__closeButton {
+      position: absolute;
+      margin-left: -60px;
+      margin-top: 10px;
+      z-index: 110;
+    }
+
     .ComboCardModal__Cont {
+      height: 480px;
+      overflow: hidden;
       .ComboCardModal__img {
         .ComboCardModal__imgBack {
-          
+          width: 100% !important;
+          height: 100% !important;
         }
       }
     }
 
-    .actionButton {
-      width: 150px !important;
+    .ComboCardModal__productsList {
+      height: 100%;
+      margin-right: 5px;
+      padding-left: 45px !important;
+      padding-right: 20px !important;
+      padding-top: 5px !important;
+      padding-bottom: 10px !important;
+      overflow-y: scroll;
+    }
+
+    .ComboCardModal__result {
+      padding-top: 20px !important;
+      padding-bottom: 20px !important;
+      width: 100%;
+      background-color: #f2f2f2;
+    }
+
+    .ComboCardModal__resultTitle {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 29px;
+      color: #303030;
+    }
+
+    .ComboCardModal__resultPrice {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 28px;
+      color: #303030;
+
+      span {
+        font-size: 18px;
+        font-weight: 400;
+      }
+    }
+
+    @media screen and (max-width: 992px) {
+      .ComboCardModal__Cont {
+        .ComboCardModal__img {
+          .ComboCardModal__imgBack {
+          }
+        }
+      }
+
+      .actionButton {
+        width: 150px !important;
+        font-weight: 300;
+      }
+    }
+  }
+
+  .ComboCardModalMob__body {
+    background-color: #ffffff;
+    height: 95%;
+    overflow: hidden;
+    // margin-top: -20px;
+    z-index: -5;
+
+    .ComboCardModalMob__leftColumn {
+      border-right: 1px solid #f2f2f2;
+      height: 100%;
+    }
+
+    .ComboCardModalMob__title {
+      padding-left: 50px !important;
+      padding-right: 20px !important;
+      padding-top: 20px !important;
+      h1 {
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: bold;
+        font-size: 28px;
+        line-height: 34px;
+        color: #303030;
+      }
+    }
+
+    .ComboCardModalMob__descr {
+      padding-left: 50px !important;
+      padding-right: 50px !important;
+      margin-bottom: 5px !important;
+      max-height: 48px;
+      overflow: hidden;
+
+      font-family: 'Roboto';
+      font-style: normal;
       font-weight: 300;
+      font-size: 14px;
+      line-height: 16px;
+
+      color: #8e8e8e;
+    }
+
+    .ComboCardModalMob__closeButton {
+      position: absolute;
+      margin-left: -60px;
+      margin-top: 10px;
+      z-index: 110;
+    }
+
+    .BlockName__title {
+      margin-top: -15px;
+    }
+
+    .ComboCardModalMob__img {
+      height: 40%;
+      .ComboCardModalMob__imgBack {
+        width: 100% !important;
+        height: 100% !important;
+      }
+    }
+
+    .ComboCardModalMob__Cont {
+      height: 60%;
+    }
+
+    .ComboCardModalMob__productsList {
+      width: 100% !important;
+      margin-right: 0;
+      margin-left: 0;
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+      overflow-y: scroll;
+    }
+
+    .ComboCardModalMob__result {
+      padding-top: 10px !important;
+      padding-bottom: 10px !important;
+      width: 100%;
+      background-color: #f2f2f2;
+      // border-top: 1px solid #e2e2e2;
+    }
+
+    .ComboCardModalMob__resultTitle {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 29px;
+      color: #303030;
+    }
+
+    .ComboCardModalMob__resultPrice {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 28px;
+      color: #303030;
+
+      span {
+        font-size: 18px;
+        font-weight: 400;
+      }
+    }
+
+    @media screen and (max-width: 992px) {
+      .actionButton {
+        width: 150px !important;
+        display: flex !important;
+      }
+    }
+
+    @media screen and (max-width: 620px) {
+      .actionButton {
+        background-color: #f2f2f2 !important;
+        width: 60px !important;
+        .actionButton__text {
+          display: none;
+        }
+      }
+
+      .ComboCardModalMob__productsList {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+      }
     }
   }
 }
