@@ -1,0 +1,32 @@
+.ComboElementChangeList {
+  box-sizing: border-box;
+
+  .ComboElementChangeList__cont {
+    height:84%;
+    margin-top: 35px !important;
+    overflow-y: scroll;
+
+    .ComboElementChangeList_element {
+      margin-top: 50px !important;
+      cursor: pointer;
+
+      &:hover {
+        .ComboElementChangeList_elementTitle {
+          color: #ffc107;
+        }
+      }
+
+      .ComboElementChangeList_elementTitle {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+        color: #303030;
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+      }
+    }
+  }
+}
