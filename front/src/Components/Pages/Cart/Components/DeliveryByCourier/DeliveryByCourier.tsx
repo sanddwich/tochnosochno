@@ -26,6 +26,23 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     super(props)
   }
 
+  getCitiesFromIiko = async (street: string) => {
+    if (street.length % 4 === 0 && street.length > 0) {
+      const streetVariants: Street[] = await this.props.getStreetVariants(street)
+      const streetInput = document.getElementById('street') as HTMLInputElement
+      const datalist = document.getElementById('list-street')
+      let options: String[] = []
+      if (datalist && streetInput) {
+        streetVariants.map((street) => {
+          options.push(
+            `<option value="${street.city?.name}, ${street.name}" data-id=${street.id}>${street.city?.name}, ${street.name}</option>`
+          )
+        })
+        datalist.innerHTML = options.join('')
+      }
+    }
+  }
+
   getStreetsFromIiko = async (street: string) => {
     if (street.length % 4 === 0 && street.length > 0) {
       const streetVariants: Street[] = await this.props.getStreetVariants(street)
@@ -35,7 +52,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
       if (datalist && streetInput) {
         streetVariants.map((street) => {
           options.push(
-            `<option value="${street.name}" data-id=${street.id}>${street.city?.name} ${street.name}</option>`
+            `<option value="${street.city?.name}, ${street.name}" data-id=${street.id}>${street.city?.name}, ${street.name}</option>`
           )
         })
         datalist.innerHTML = options.join('')
@@ -62,6 +79,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
             <div className="DeliveryByCourier__form__group">
               <label htmlFor="street">Улица*</label>
               <input
+                list="list-street"
                 onKeyPress={(e: React.FormEvent<HTMLInputElement>) => {
                   this.getStreetsFromIiko(e.currentTarget.value)
                 }}
