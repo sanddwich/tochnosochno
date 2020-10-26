@@ -23,6 +23,7 @@ import {
   SET_ORDER_LOADING,
   SET_ORDER_PAYMENT,
   SET_ORDER_PHONE,
+  SET_ORDER_POLITIC,
   SET_PREPARE_TIME,
 } from '../constants/ActionTypes'
 
@@ -126,6 +127,13 @@ interface SetGuestCount {
   count: number
 }
 
+interface SetOrderPoilitic {
+  type: typeof SET_ORDER_POLITIC
+  ruleCheck: boolean
+  smsCheck: boolean
+  personCheck: boolean
+}
+
 export type OrderActionType =
   | AddToOrderAction
   | DeleteFromOrderAction
@@ -148,3 +156,4 @@ export type OrderActionType =
   | HideLoading
   | SetOrderPhone
   | SetGuestCount
+  | SetOrderPoilitic

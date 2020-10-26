@@ -18,11 +18,13 @@ import {
   SET_ORDER_LOADING,
   SET_ORDER_PAYMENT,
   SET_ORDER_PHONE,
+  SET_ORDER_POLITIC,
   SET_PREPARE_TIME,
 } from '../constants/ActionTypes'
 import { OrderState } from '../interfaces/interfaces'
 import { OrderActionType } from '../interfaces/order'
 import { v4 as uuidv4 } from 'uuid'
+import { act } from '@testing-library/react'
 
 const initialDate = new Date().toLocaleDateString('ru-RU') + ' ' + new Date().toLocaleTimeString('ru-RU')
 
@@ -32,6 +34,9 @@ const initialState: OrderState = {
   order: initialOrder,
   loading: false,
   error: '',
+  ruleCheck: false,
+  smsCheck: false,
+  personCheck: false,
 }
 
 const order = (state = initialState, action: OrderActionType) => {
@@ -193,6 +198,13 @@ const order = (state = initialState, action: OrderActionType) => {
       return {
         ...state,
         loading: false,
+      }
+    case SET_ORDER_POLITIC:
+      return {
+        ...state,
+        smsCheck: action.smsCheck,
+        personCheck: action.personCheck,
+        ruleCheck: action.ruleCheck,
       }
 
     case SET_ORDER_PHONE:

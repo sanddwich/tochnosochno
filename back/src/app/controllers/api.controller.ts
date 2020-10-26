@@ -517,11 +517,11 @@ export class ApiController {
   }
 
   @Post('/city')
-  @TokenRequired({
-    openapi: true,
-    user: fetchUser(Customer),
-    store: TypeORMStore,
-  })
+  // @TokenRequired({
+  //   openapi: true,
+  //   user: fetchUser(Customer),
+  //   store: TypeORMStore,
+  // })
   @ValidateBody({
     additionalProperties: false,
     properties: {
@@ -532,12 +532,44 @@ export class ApiController {
   })
   // @CsrfTokenRequired()
   @ApiServer({ url: '/api', description: 'Main API URL' })
-  async getSities(ctx: Context<Customer, Session>) {
+  async getCities(ctx: Context<Customer, Session>) {
     const city: string = ctx.request.body.city
     const cities = await getRepository(City).find({
       where: { name: Like(`%${city}%`), isDeleted: false },
       order: { name: 'ASC' },
     })
     return new HttpResponseOK(cities)
+  }
+
+  @Post('/cities')
+  @ApiServer({ url: '/api', description: 'Main API URL' })
+  async getAllCities(ctx: Context<Customer, Session>) {
+    const city: string = ctx.request.body.city
+    const cities = await getRepository(City).find({ where: { isDeleted: false }, order: { classifierId: 'ASC' } })
+    return new HttpResponseOK(cities)
+  }
+
+  @Post('/streetsbycity')
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      cityId: { type: 'string' },
+      street: { type: 'string' },
+    },
+    required: ['cityId', 'street'],
+    type: 'object',
+  })
+  @ApiServer({ url: '/api', description: 'Main API URL' })
+  async getStreetsByCity(ctx: Context<Customer, Session>) {
+    const cityId: string = ctx.request.body.cityId
+    const street: string = ctx.request.body.street
+
+    const city = await getRepository(City).findOne({ id: cityId })
+
+    const streets = await getRepository(Street).find({
+      where: { isDeleted: false, city, name: Like(`%${street}%`) },
+      order: { classifierId: 'ASC' },
+    })
+    return new HttpResponseOK(streets)
   }
 }
