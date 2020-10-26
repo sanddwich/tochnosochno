@@ -12,11 +12,13 @@ import BlockName from '../BlockName/BlockName'
 import LineProductWithNumberInput from '../LineProductWithNumberInput/LineProductWithNumberInput'
 import NumberInput from '../NumberInput/NumberInput'
 import OrderTotalPrice from '../OrderTotalPrice/OrderTotalPrice'
+import { setGuestCount } from '../../Redux/actions/order'
 
 import './CartOrder.scss'
 
 interface CartOrderProps {
   order: Order
+  setGuestCount: (count: number) => void
 }
 
 interface CartOrderState {}
@@ -48,8 +50,8 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
                 <div className="CartOrder__guests">
                   <NumberInput
                     minValue={1}
-                    value={1}
-                    onChange={(count: number) => console.log(count)}
+                    value={this.props.order.guests.count}
+                    onChange={(count: number) => this.props.setGuestCount(count)}
                     label="Количество персон"
                     hideLabel={false}
                   />
@@ -87,7 +89,9 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
   }
 }
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  setGuestCount,
+}
 
 const mapStateToProps = (state: RootState) => {
   const { order } = state.order

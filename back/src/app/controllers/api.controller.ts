@@ -22,7 +22,18 @@ import {
 } from '@foal/core'
 import { FindManyOptions, getRepository, Like } from 'typeorm'
 import { v4 as uuidv4 } from 'uuid'
-import { Product, Group, Order, Customer, Address, OrderItem, OrderItemModifier, Terminal, Street } from '../entities'
+import {
+  Product,
+  Group,
+  Order,
+  Customer,
+  Address,
+  OrderItem,
+  OrderItemModifier,
+  Terminal,
+  Street,
+  City,
+} from '../entities'
 import { fetchUser, TypeORMStore } from '@foal/typeorm'
 import * as _ from 'lodash'
 import { GeoCoder, Iiko, OrderService, PaymentService } from '../services'
@@ -171,7 +182,7 @@ export class ApiController {
     const products = await getRepository(Group).find({
       where: {
         isGroupModifier: false,
-        isSiteDisplay: true,
+        // isSiteDisplay: true,
       },
       relations: [
         'products',
@@ -480,11 +491,11 @@ export class ApiController {
   }
 
   @Post('/street')
-  @TokenRequired({
-    openapi: true,
-    user: fetchUser(Customer),
-    store: TypeORMStore,
-  })
+  // @TokenRequired({
+  //   openapi: true,
+  //   user: fetchUser(Customer),
+  //   store: TypeORMStore,
+  // })
   @ValidateBody({
     additionalProperties: false,
     properties: {
@@ -497,7 +508,36 @@ export class ApiController {
   @ApiServer({ url: '/api', description: 'Main API URL' })
   async getStreets(ctx: Context<Customer, Session>) {
     const street: string = ctx.request.body.street
-    const streets = await getRepository(Street).find({ where: { name: Like(`%${street}%`) }, order: { name: 'ASC' } })
+    const streets = await getRepository(Street).find({
+      where: { name: Like(`%${street}%`) },
+      order: { name: 'ASC' },
+      relations: ['city'],
+    })
     return new HttpResponseOK(streets)
+  }
+
+  @Post('/city')
+  @TokenRequired({
+    openapi: true,
+    user: fetchUser(Customer),
+    store: TypeORMStore,
+  })
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      city: { type: 'string' },
+    },
+    required: ['city'],
+    type: 'object',
+  })
+  // @CsrfTokenRequired()
+  @ApiServer({ url: '/api', description: 'Main API URL' })
+  async getSities(ctx: Context<Customer, Session>) {
+    const city: string = ctx.request.body.city
+    const cities = await getRepository(City).find({
+      where: { name: Like(`%${city}%`), isDeleted: false },
+      order: { name: 'ASC' },
+    })
+    return new HttpResponseOK(cities)
   }
 }

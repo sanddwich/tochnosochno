@@ -1,5 +1,6 @@
 import Address from './Address'
 import DeliveryPoint from './DeliveryPoint'
+import GuestDetails from './GuestDetails'
 import OrderItem from './OrderItem'
 import OrderItemModifier from './OrderItemModifier'
 import OrderServiceType from './OrderServiceType'
@@ -28,6 +29,7 @@ export default class Order {
   latitude?: string
   longitude?: string
   terminalId?: string
+  guests: GuestDetails
 
   constructor(device: string, date: string, orderItems?: OrderItem[]) {
     this.amount = 0
@@ -39,6 +41,10 @@ export default class Order {
     this.id = Date.now()
     this.payment = 'online'
     this.isPayment = false
+    this.guests = {
+      count: 1,
+      splitBetweenPersons: false,
+    }
   }
 
   // _calculateTotalPrice = () => {

@@ -93,4 +93,16 @@ export class AdminController {
       return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления типов оплат' })
     }
   }
+
+  @Put('/cities')
+  async setCities() {
+    await this.iiko.init()
+    const cities = await this.iiko.setCities()
+
+    if (cities) {
+      return new HttpResponseCreated(cities)
+    } else {
+      return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления городов' })
+    }
+  }
 }

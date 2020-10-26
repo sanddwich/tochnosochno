@@ -18,6 +18,7 @@ import {
   HIDE_ORDER_LOADING,
   INC_ORDER_ITEM_AMOUNT,
   SET_DELIVERY,
+  SET_GUEST_COUNT,
   SET_INIT_ORDER,
   SET_ORDER_AMOUNT,
   SET_ORDER_BONUS,
@@ -203,6 +204,13 @@ export const changeAddress = (address: string): OrderActionType => {
   return {
     type: CHANGE_ADDRESS,
     address: address,
+  }
+}
+
+export const setGuestCount = (count: number): OrderActionType => {
+  return {
+    type: SET_GUEST_COUNT,
+    count: count,
   }
 }
 

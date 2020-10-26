@@ -1,5 +1,7 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import Street from '../../../../../Interfaces/Street'
 import ActionButton from '../../../../../SharedComponents/ActionButton/ActionButton'
 import CookingTime from '../../../../../SharedComponents/CookingTime/CookingTime'
 import OrderTotalPrice from '../../../../../SharedComponents/OrderTotalPrice/OrderTotalPrice'
@@ -7,28 +9,69 @@ import PaymentSection from '../../../../../SharedComponents/PaymentSection/Payme
 import PoliticSection from '../../../../../SharedComponents/PoliticSection/PoliticSection'
 import RadioButton from '../../../../../SharedComponents/RadioButton/RadioButton'
 
+import { getStreetVariants } from '../../../../../Redux/actions/order'
+
 import './DeliveryByCourier.scss'
 
-interface DeliveryByCourierProps {}
+interface DeliveryByCourierProps {
+  getStreetVariants: any
+}
 
 interface DeliveryByCourierState {
   isDelivery: boolean
 }
 
-export default class DeliveryByCourier extends React.Component<DeliveryByCourierProps, DeliveryByCourierState> {
+class DeliveryByCourier extends React.Component<DeliveryByCourierProps, DeliveryByCourierState> {
   constructor(props: DeliveryByCourierProps) {
     super(props)
+  }
+
+  getStreetsFromIiko = async (street: string) => {
+    if (street.length % 4 === 0 && street.length > 0) {
+      const streetVariants: Street[] = await this.props.getStreetVariants(street)
+      const streetInput = document.getElementById('street') as HTMLInputElement
+      const datalist = document.getElementById('list-street')
+      let options: String[] = []
+      if (datalist && streetInput) {
+        streetVariants.map((street) => {
+          options.push(
+            `<option value="${street.name}" data-id=${street.id}>${street.city?.name} ${street.name}</option>`
+          )
+        })
+        datalist.innerHTML = options.join('')
+      }
+    }
   }
 
   render() {
     return (
       <Container className="DeliveryByCourier p-0  mt-5">
         <form className="DeliveryByCourier__form">
+          <div className="DeliveryByCourier__form__group">
+            <div className="DeliveryByCourier__form__row">
+              <label htmlFor="city">Населённый пункт*</label>
+              <input
+                className="DeliveryByCourier__form__street"
+                id="city"
+                type="text"
+                placeholder="Укажите населённый пункт"
+              />
+            </div>
+          </div>
           <div className="DeliveryByCourier__form__row">
             <div className="DeliveryByCourier__form__group">
               <label htmlFor="street">Улица*</label>
-              <input className="DeliveryByCourier__form__street" id="street" type="text" placeholder="Укажите улицу" />
+              <input
+                onKeyPress={(e: React.FormEvent<HTMLInputElement>) => {
+                  this.getStreetsFromIiko(e.currentTarget.value)
+                }}
+                className="DeliveryByCourier__form__street"
+                id="street"
+                type="text"
+                placeholder="Укажите улицу"
+              />
             </div>
+            <datalist id="list-street"></datalist>
             <div className="DeliveryByCourier__form__group">
               <label htmlFor="house">Дом*</label>
               <input id="house" type="text" placeholder="16/1" />
@@ -91,3 +134,19 @@ export default class DeliveryByCourier extends React.Component<DeliveryByCourier
     )
   }
 }
+
+const mapDispatchToProps = {
+  getStreetVariants,
+}
+
+const mapStateToProps = (state: any) => {
+  const { loading, error } = state.auth
+  const { loading: loadingOrder, error: errorOrder } = state.order
+  return {
+    loading: loading,
+    error: error,
+    loadingOrder: loadingOrder,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeliveryByCourier)

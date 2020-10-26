@@ -10,6 +10,7 @@ import {
   HIDE_ORDER_LOADING,
   PROCESS_ORDER,
   SET_DELIVERY,
+  SET_GUEST_COUNT,
   SET_INIT_ORDER,
   SET_ORDER_AMOUNT,
   SET_ORDER_BONUS,
@@ -200,6 +201,18 @@ const order = (state = initialState, action: OrderActionType) => {
         order: {
           ...state.order,
           phone: action.phone,
+        },
+      }
+
+    case SET_GUEST_COUNT:
+      return {
+        ...state,
+        order: {
+          ...state.order,
+          guests: {
+            ...state.order.guests,
+            count: action.count,
+          },
         },
       }
 

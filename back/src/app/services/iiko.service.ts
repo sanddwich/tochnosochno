@@ -169,22 +169,25 @@ export class Iiko {
   async setStreets() {
     this.logger.info(`iiko.service.setStreets()`)
     const organization = await getRepository(Organization).findOne()
-    const city = await getRepository(City).findOne({ name: 'Астрахань' })
+    const cities = await getRepository(City).find({ isDeleted: false })
 
     try {
-      if (city && organization) {
-        const res = await fetch(this.streetUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.token}`,
-          },
-          body: JSON.stringify({ organizationId: organization.id, cityId: city.id }),
-        })
+      if (cities && organization) {
+        cities.map(async (city) => {
+          const res = await fetch(this.streetUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${this.token}`,
+            },
+            body: JSON.stringify({ organizationId: organization.id, cityId: city.id }),
+          })
 
-        const { streets } = await res.json()
-        streets.map(async (street: Street) => {
-          await getRepository(Street).save(street)
+          const { streets } = await res.json()
+          streets.map(async (street: Street) => {
+            street.city = city
+            await getRepository(Street).save(street)
+          })
         })
 
         return true

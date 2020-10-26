@@ -16,10 +16,10 @@ export class City {
   @Column()
   isDeleted: boolean
 
-  @Column()
+  @Column({ nullable: true })
   classifierId: string
 
-  @Column()
+  @Column({ nullable: true })
   additionalInfo: string
 
   @OneToMany((type) => Street, (street) => street.city)

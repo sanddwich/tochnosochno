@@ -15,6 +15,7 @@ import {
   INC_ORDER_ITEM_AMOUNT,
   PROCESS_ORDER,
   SET_DELIVERY,
+  SET_GUEST_COUNT,
   SET_INIT_ORDER,
   SET_ORDER_AMOUNT,
   SET_ORDER_BONUS,
@@ -120,6 +121,11 @@ interface SetOrderPhone {
   phone: string
 }
 
+interface SetGuestCount {
+  type: typeof SET_GUEST_COUNT
+  count: number
+}
+
 export type OrderActionType =
   | AddToOrderAction
   | DeleteFromOrderAction
@@ -141,3 +147,4 @@ export type OrderActionType =
   | SetOrderBonus
   | HideLoading
   | SetOrderPhone
+  | SetGuestCount

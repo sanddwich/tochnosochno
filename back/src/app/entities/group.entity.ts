@@ -51,6 +51,9 @@ export class Group {
   @Column({ nullable: true, default: false })
   isSiteDisplay: boolean
 
+  @Column({ nullable: true, default: false })
+  isCombo: boolean
+
   // @ManyToOne((type) => Group, (group) => group.id)
   // parentGroup: Group
   @Column({ nullable: true })
