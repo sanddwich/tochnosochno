@@ -3,14 +3,33 @@ import React from 'react'
 import './PoliticSection.scss'
 import 'react-datepicker/dist/react-datepicker.css'
 import CheckBox from '../CheckBox/CheckBox'
+import { RootState } from '../../Redux'
+import { connect } from 'react-redux'
 
-interface PoliticSectionProps {}
+import { setOrderPolitic } from '../../Redux/actions/order'
+
+interface PoliticSectionProps {
+  setOrderPolitic: (smsCheck: boolean, ruleCheck: boolean, personCheck: boolean) => void
+  smsCheck: boolean
+  personCheck: boolean
+  ruleCheck: boolean
+}
 
 interface PoliticSectionState {}
 
-export default class PoliticSection extends React.Component<PoliticSectionProps, PoliticSectionState> {
+class PoliticSection extends React.Component<PoliticSectionProps, PoliticSectionState> {
   constructor(props: PoliticSectionProps) {
     super(props)
+  }
+
+  ruleCheckHandle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, selected: boolean) => {
+    const checkElement = event.target as HTMLElement
+    if (checkElement.id === 'ruleCheck')
+      this.props.setOrderPolitic(this.props.smsCheck, selected, this.props.personCheck)
+    if (checkElement.id === 'personCheck')
+      this.props.setOrderPolitic(this.props.smsCheck, this.props.ruleCheck, selected)
+    if (checkElement.id === 'smsCheck')
+      this.props.setOrderPolitic(selected, this.props.ruleCheck, this.props.personCheck)
   }
 
   render() {
@@ -20,7 +39,9 @@ export default class PoliticSection extends React.Component<PoliticSectionProps,
           id="ruleCheck"
           name="ruleCheck"
           selected={false}
-          onClick={() => console.log('ruleCheck')}
+          onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>, selected) =>
+            this.ruleCheckHandle(event, selected)
+          }
           label="Я подтверждаю, что ознакомился с правилами продажи 
         товаров, а также cо всеми документами, размещенными на сайте по адресу и 
         подтверждаю принятие правил продажи товаров на сайте в полном объеме без ограничений."
@@ -29,7 +50,9 @@ export default class PoliticSection extends React.Component<PoliticSectionProps,
           id="personCheck"
           name="personCheck"
           selected={false}
-          onClick={() => console.log('personCheck')}
+          onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>, selected) =>
+            this.ruleCheckHandle(event, selected)
+          }
           label="Я даю свое согласие на сбор и обработку моих 
          персональных данных в соответствии с политикой конфиденциальности."
         />
@@ -37,7 +60,9 @@ export default class PoliticSection extends React.Component<PoliticSectionProps,
           id="smsCheck"
           name="smsCheck"
           selected={false}
-          onClick={() => console.log('smsCheck')}
+          onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>, selected) =>
+            this.ruleCheckHandle(event, selected)
+          }
           label="Осуществляя заказ на сайте я даю свое согласие на 
                получение направляемых мне смс-сообщений и электронных писем 
                рекламного и информационного характера."
@@ -46,3 +71,18 @@ export default class PoliticSection extends React.Component<PoliticSectionProps,
     )
   }
 }
+
+const mapDispatchToProps = {
+  setOrderPolitic,
+}
+
+const mapStateToProps = (state: RootState) => {
+  const { smsCheck, ruleCheck, personCheck } = state.order
+  return {
+    smsCheck,
+    ruleCheck,
+    personCheck,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PoliticSection)

@@ -1,3 +1,4 @@
+import City from './City'
 import Street from './Street'
 
 export default interface Address {
@@ -14,4 +15,5 @@ export default interface Address {
   doorphone?: string
   latitude?: string
   longitude?: string
+  city?: City
 }

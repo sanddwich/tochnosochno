@@ -8,7 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 interface CheckBoxProps {
   label: string
   selected: boolean
-  onClick: () => void
+  onClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, selected: boolean) => void
   id: string
   name: string
 }
@@ -22,7 +22,12 @@ export default class CheckBox extends React.Component<CheckBoxProps, CheckBoxSta
 
   render() {
     return (
-      <div className="CheckBox">
+      <div
+        onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+          this.props.onClick(event, this.props.selected)
+        }
+        className="CheckBox"
+      >
         <input type="checkbox" className="CheckBox__input" id={this.props.id} name={this.props.name} value="checked" />
         <label className="CheckBox__label" htmlFor={this.props.id}>
           {this.props.label}

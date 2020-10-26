@@ -2,23 +2,32 @@ import React from 'react'
 import RadioButton from '../RadioButton/RadioButton'
 import DatePicker from 'react-datepicker'
 import ru from 'date-fns/locale/ru'
-
+import { setPrepareDate } from '../../Redux/actions/order'
 import './CookingTime.scss'
+import { connect } from 'react-redux'
 
-interface CookingTimeProps {}
+interface CookingTimeProps {
+  setPrepareDate: (prepareDate: string) => void
+}
 
 interface CookingTimeState {
   isSelectTime: boolean
+  cookingDate: any
   cookingTime: any
 }
 
-export default class CookingTime extends React.Component<CookingTimeProps, CookingTimeState> {
+class CookingTime extends React.Component<CookingTimeProps, CookingTimeState> {
   constructor(props: CookingTimeProps) {
     super(props)
     this.state = {
-      isSelectTime: true,
+      cookingDate: new Date(),
+      isSelectTime: false,
       cookingTime: this.addHour(1),
     }
+  }
+
+  componentDidMount() {
+    console.log(this.state.cookingTime)
   }
 
   excludeTimes = (startWorkHour: number, minutesRange: number) => {
@@ -68,16 +77,23 @@ export default class CookingTime extends React.Component<CookingTimeProps, Cooki
     this.setState({
       isSelectTime: true,
     })
+    if (this.state.cookingTime) {
+      this.props.setPrepareDate(this.state.cookingTime.toString())
+    }
   }
 
   selectSoon = () => {
     this.setState({
       isSelectTime: false,
     })
+    this.props.setPrepareDate(this.addHour(1).toString())
   }
 
   setCookingTime = (cookingTime: Date | [Date, Date] | null) => {
     this.setState({ cookingTime })
+    if (cookingTime) {
+      this.props.setPrepareDate(cookingTime.toString())
+    }
   }
 
   render() {
@@ -111,7 +127,6 @@ export default class CookingTime extends React.Component<CookingTimeProps, Cooki
                 maxDate={this.addDay(5)}
                 dateFormat="d MMMM"
                 placeholderText="Дата доставки"
-                //   withPortal
               />
             </div>
 
@@ -138,3 +153,22 @@ export default class CookingTime extends React.Component<CookingTimeProps, Cooki
     )
   }
 }
+
+const mapDispatchToProps = {
+  setPrepareDate,
+}
+
+// const mapStateToProps = (state: any) => {
+//   const { loading, error, phone, isAuth } = state.auth
+//   const { loading: loadingOrder, error: errorOrder, order } = state.order
+//   return {
+//     loading: loading,
+//     error: error,
+//     loadingOrder: loadingOrder,
+//     order,
+//     phone,
+//     isAuth,
+//   }
+// }
+
+export default connect(null, mapDispatchToProps)(CookingTime)

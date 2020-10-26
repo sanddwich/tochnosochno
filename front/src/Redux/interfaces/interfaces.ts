@@ -18,6 +18,9 @@ export interface OrderState {
   order: Order
   loading: false
   error: string
+  ruleCheck: boolean
+  personCheck: boolean
+  smsCheck: boolean
 }
 
 export interface OrderItemState {

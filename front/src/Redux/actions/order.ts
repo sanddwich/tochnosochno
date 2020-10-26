@@ -26,6 +26,7 @@ import {
   SET_ORDER_LOADING,
   SET_ORDER_PAYMENT,
   SET_ORDER_PHONE,
+  SET_ORDER_POLITIC,
   SET_PREPARE_TIME,
 } from '../constants/ActionTypes'
 import { AuthState } from '../interfaces/interfaces'
@@ -136,6 +137,101 @@ export const getStreetVariants = (street: string): ThunkAction<void, RootState, 
   }
 }
 
+export const getCityVariants = (city: string): ThunkAction<void, RootState, null, any> => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth
+      const cookies = new Cookies()
+      const csrfToken = cookies.get('csrfToken')
+      dispatch(setLoading())
+      const res = await fetch(`${apiServer}/api/city`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          'CSRF-Token': csrfToken,
+        },
+        body: JSON.stringify({ city }),
+      })
+
+      if (!res.ok) {
+        const resData: ApiResponse = await res.json()
+        throw new Error(resData.message)
+      }
+      if (res.status === 200) {
+        dispatch(hideLoading())
+      }
+      const resData: [] = await res.json()
+      return resData
+    } catch (err) {
+      dispatch(setError(err.message))
+    }
+  }
+}
+
+export const getAllCities = (): ThunkAction<void, RootState, null, any> => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth
+      const cookies = new Cookies()
+      const csrfToken = cookies.get('csrfToken')
+      dispatch(setLoading())
+      const res = await fetch(`${apiServer}/api/cities`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          'CSRF-Token': csrfToken,
+        },
+      })
+
+      if (!res.ok) {
+        const resData: ApiResponse = await res.json()
+        throw new Error(resData.message)
+      }
+      if (res.status === 200) {
+        dispatch(hideLoading())
+      }
+      const resData: [] = await res.json()
+      return resData
+    } catch (err) {
+      dispatch(setError(err.message))
+    }
+  }
+}
+
+export const getStreetsByCity = (street: string, cityId: string): ThunkAction<void, RootState, null, any> => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth
+      const cookies = new Cookies()
+      const csrfToken = cookies.get('csrfToken')
+      dispatch(setLoading())
+      const res = await fetch(`${apiServer}/api/streetsbycity`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          'CSRF-Token': csrfToken,
+        },
+        body: JSON.stringify({ cityId, street }),
+      })
+
+      if (!res.ok) {
+        const resData: ApiResponse = await res.json()
+        throw new Error(resData.message)
+      }
+      if (res.status === 200) {
+        dispatch(hideLoading())
+      }
+      const resData: [] = await res.json()
+      return resData
+    } catch (err) {
+      dispatch(setError(err.message))
+    }
+  }
+}
+
 const setNewOrder = (): OrderActionType => {
   return {
     type: SET_INIT_ORDER,
@@ -154,6 +250,15 @@ export const setPrepareDate = (prepareDate: string) => {
   return {
     type: SET_PREPARE_TIME,
     date: prepareDate,
+  }
+}
+
+export const setOrderPolitic = (smsCheck: boolean, ruleCheck: boolean, personCheck: boolean) => {
+  return {
+    type: SET_ORDER_POLITIC,
+    smsCheck,
+    ruleCheck,
+    personCheck,
   }
 }
 
