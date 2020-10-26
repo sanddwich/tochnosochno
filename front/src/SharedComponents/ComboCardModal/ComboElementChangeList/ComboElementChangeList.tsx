@@ -31,7 +31,7 @@ export default class ComboElementChangeList extends React.Component<
                     onClick={() => this.props.addNewProductAtCombo(product.id)}
                   >
                     <div className="ComboElementChangeList_elementImg p-0 m-0">
-                      <img src={`${product.imageLinks[0]}`} className="img-fluid" alt="" />
+                      <img src={product.imageLinks[0] ? `${product.imageLinks[0]}` : '/images/products/no-photo.png'} className="img-fluid" alt="" />
                     </div>
                     <div className="ComboElementChangeList_elementTitle p-0 m-0">{product.name}</div>
                   </Col>

@@ -6,6 +6,16 @@
   margin-top: 10px !important;
   cursor: pointer;
 
+  .ComboElement__underLine {
+    position: absolute;
+    width: 100%;
+
+    margin-top: -15px;
+    background-color: #ffd74b;
+    height: 15px;
+    border-radius: 15px 0px;
+  }
+
   &:hover {
     box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.3);
   }
