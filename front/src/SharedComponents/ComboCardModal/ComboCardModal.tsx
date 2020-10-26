@@ -47,7 +47,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
   }
 
   componentDidMount() {
-    const comboConsist: Product[] = this.props.menu[0].products
+    const comboConsist: Product[] = this.props.menu[0].products.slice(0, 3)
     let comboProductVariants: Product[] = []
     this.props.menu.map((cat) => {
       cat.products.map((product) => {
@@ -174,18 +174,28 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                   <React.Fragment>
                     <Swiper loop={true} pagination={{ clickable: true, el: '#paginationComboProduct' }}>
                       {this.state.comboProductVariants.map((product, index) => {
-                        return (
-                          <SwiperSlide key={index}>
-                            <Container fluid className="p-0 m-0">
-                              <Row className="p-0 m-0 d-flex flex-column align-items-center">
-                                <Col className="p-0 m-0 d-flex justify-content-center">
-                                  <img className="img-fluid" src={`${product.imageLinks[0]}`} alt="" />
-                                </Col>
-                                <Col className="p-0 m-0 d-flex justify-content-center">{product.name}</Col>
-                              </Row>
-                            </Container>
-                          </SwiperSlide>
-                        )
+                        if (!this.state.comboConsist.find((ccproduct) => product.id === ccproduct.id)) {
+                          return (
+                            <SwiperSlide key={index} onClick={() => this.addNewProductAtCombo(product.id)}>
+                              <Container fluid className="p-0 m-0">
+                                <Row className="p-0 m-0 d-flex flex-column align-items-center">
+                                  <Col className="p-0 m-0 d-flex justify-content-center">
+                                    <img
+                                      className="img-fluid"
+                                      src={
+                                        product.imageLinks[0]
+                                          ? `${product.imageLinks[0]}`
+                                          : '/images/products/no-photo.png'
+                                      }
+                                      alt=""
+                                    />
+                                  </Col>
+                                  <Col className="p-0 m-0 d-flex justify-content-center">{product.name}</Col>
+                                </Row>
+                              </Container>
+                            </SwiperSlide>
+                          )
+                        }
                       })}
                     </Swiper>
 

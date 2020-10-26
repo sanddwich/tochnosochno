@@ -19,9 +19,9 @@ export default class ComboElement extends React.Component<ComboElementProps, Com
         className="ComboElement w-100 p-0 m-0"
         onClick={() => this.props.changeProductAtCombo(this.props.product.id)}
       >
-        <Row className="ComboElement__img p-0 m-0">
+        <Row className="ComboElement__img p-0 m-0 pb-2">
           <Col className="p-0 m-0 d-flex align-items-center justify-content-center" xs={3}>
-            <img src={`${this.props.product.imageLinks[0]}`} className="img-fluid" alt="" />
+            <img src={this.props.product.imageLinks[0] ? `${this.props.product.imageLinks[0]}` : '/images/products/no-photo.png'} className="img-fluid" alt="" />
           </Col>
           <Col className="ComboElement__infoCont p-0 pt-2 m-0 d-flex align-items-center">
             <Row className="p-0 m-0 d-flex flex-column">
@@ -35,6 +35,9 @@ export default class ComboElement extends React.Component<ComboElementProps, Com
               </Col>
             </Row>
           </Col>
+        </Row>
+        <Row className="p-0 m-0 position-relative">
+          <div className="ComboElement__underLine"></div>
         </Row>
       </Container>
     )

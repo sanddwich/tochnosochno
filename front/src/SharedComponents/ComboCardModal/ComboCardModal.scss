@@ -7,31 +7,35 @@
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 20000;
 
-  #paginationComboProduct {
-    width: 80%;
-    display: flex;
-    justify-content: center;
+  .swiper-slide {
+    cursor: pointer;
+    img {
+      max-height: 200px;
+    }
   }
 
-  .Slider__pagination {
+  #paginationComboProduct {
+    text-align: center;
     position: relative;
     z-index: 1000;
-    margin-right: 20px;
-  }
+    line-height: 16px;
 
-  .swiper-pagination-bullet {
-    background-color: #ffffff !important;
-    border: 2px solid #ffd12d;
-    box-sizing: border-box;
-    margin-right: 15px;
-    width: 14px !important;
-    height: 14px;
-    opacity: 1;
-  }
+    .swiper-pagination-bullet {
+      background-color: #ffffff !important;
+      border: 2px solid #ffd12d;
+      box-sizing: border-box;
+      margin-right: 5px;
+      width: 12px !important;
+      height: 12px;
+      opacity: 1;
+    }
 
-  .swiper-pagination-bullet-active {
+    .swiper-pagination-bullet-active {
+      background-color: #ffd12d !important;
+    }
 
-    background-color: #ffd12d !important;
+    span {
+    }
   }
 
   .ComboCardModal__body {
@@ -204,6 +208,7 @@
 
     .ComboCardModalMob__img {
       height: 40%;
+      overflow-y: hidden;
       .ComboCardModalMob__imgBack {
         width: 100% !important;
         height: 100% !important;
