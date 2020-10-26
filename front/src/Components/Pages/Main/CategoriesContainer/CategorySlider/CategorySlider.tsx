@@ -23,12 +23,23 @@ interface CategorySliderProps {
   shortMenu: Category[]
 }
 
-interface CategorySliderState {}
+interface CategorySliderState {
+  longMenu: Category[]
+  shortMenu: Category[]
+}
 
 const longBreakpoint: number = 2
 const shortBreakpoint: number = 3
 
 export default class CategorySlider extends React.Component<CategorySliderProps, CategorySliderState> {
+  constructor(props: CategorySliderProps) {
+    super(props)
+    this.state = {
+      longMenu: this.props.longMenu.filter(cat => !cat.isCombo && cat.isSiteDisplay) || [],
+      shortMenu: this.props.shortMenu.filter(cat => !cat.isCombo && cat.isSiteDisplay) || [],
+    }
+  }
+
   componentDidMount() {}
 
   slideGenerator = (categories: Category[], separator: number): any => {
@@ -57,8 +68,8 @@ export default class CategorySlider extends React.Component<CategorySliderProps,
     return (
       <Container fluid className="CategorySlider m-0 p-0 mb-4">
         <Swiper loop={true} spaceBetween={20} pagination={{ clickable: true, el: '#paginationCategories' }}>
-          {this.slideGenerator(this.props.longMenu, longBreakpoint)}
-          {this.slideGenerator(this.props.shortMenu, shortBreakpoint)}
+          {this.slideGenerator(this.state.longMenu, longBreakpoint)}
+          {this.slideGenerator(this.state.shortMenu, shortBreakpoint)}
         </Swiper>
         <Row className="d-flex justify-content-center">
           <div id="paginationCategories" className="Slider__pagination"></div>

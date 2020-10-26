@@ -7,6 +7,8 @@ export default interface Category {
   images: string
   isDeleted: boolean
   isIcludedInMenu: boolean
+  isSiteDisplay: boolean
+  isCombo: boolean
   name: string
   order: number
   products: Product[]

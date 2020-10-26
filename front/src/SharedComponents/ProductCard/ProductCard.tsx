@@ -105,25 +105,7 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
               </div>
 
               <div className="ProductCard__button d-flex justify-content-end">
-                <AddProductButton product={this.props.product} />
-                {/* {this.state.orderItem ? (
-                  <NumberInput
-                    minValue={0}
-                    value={this.state.orderItem.amount}
-                    label=""
-                    hideLabel={true}
-                    onChange={(amount: number) => this.setOrderItemAmount(amount)}
-                  />
-                ) : (
-                  <ActionButton
-                    backgroundColor="#303030"
-                    icon="cart_dark.svg"
-                    text="В корзину"
-                    width="180px"
-                    textColor="#ffffff"
-                    onClick={() => this.addToCartButton(this.props.product)}
-                  />
-                )} */}
+                <AddProductButton product={this.props.product} />                
               </div>
             </Row>
           </Container>
