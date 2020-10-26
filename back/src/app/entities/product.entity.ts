@@ -141,7 +141,7 @@ export class Product {
   @OneToMany((type) => Facet, (facet) => facet.product)
   facets: Facet[]
 
-  @OneToMany((type) => Image, (image) => image.product)
+  @OneToMany((type) => Image, (image) => image.product, { cascade: true })
   images: Image[]
 
   @OneToMany((type) => OrderItemModifier, (orderItemModifier) => orderItemModifier.product)
@@ -150,7 +150,7 @@ export class Product {
   @Column('simple-array')
   imageLinks: string[]
 
-  @ManyToOne((type) => ProductCategory, (productCategory) => productCategory.products)
+  @ManyToOne((type) => ProductCategory, (productCategory) => productCategory.products, { cascade: true })
   productCategory: ProductCategory
 
   @ManyToMany((type) => GroupModifier, (groupModifier) => groupModifier.products, { cascade: true })

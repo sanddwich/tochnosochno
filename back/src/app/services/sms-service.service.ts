@@ -42,6 +42,8 @@ export class SmsService {
       .where('pincode.phone = :phone', { phone: phone })
       .andWhere('pincode.pinCode = :code', { code: code })
       .andWhere('TIMESTAMPDIFF(SECOND, pincode.expiresIn, CURRENT_TIMESTAMP + INTERVAL 1 HOUR) < 60')
+
+      // .andWhere('TIMESTAMPDIFF(SECOND, pincode.expiresIn, CURRENT_TIMESTAMP + INTERVAL 1 HOUR) < 60')
       .getOne()
 
     return pinCode

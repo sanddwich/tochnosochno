@@ -171,6 +171,7 @@ export class ApiController {
     const products = await getRepository(Group).find({
       where: {
         isGroupModifier: false,
+        isSiteDisplay: true,
       },
       relations: [
         'products',

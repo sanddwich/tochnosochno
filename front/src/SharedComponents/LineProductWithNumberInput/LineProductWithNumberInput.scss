@@ -33,6 +33,10 @@
       flex-grow: 5;
       text-align: center;
       line-height: 16px;
+      &:hover {
+        cursor: pointer;
+        color: #ffd12d;
+      }
     }
     &__price {
       // display: flex;

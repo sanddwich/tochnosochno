@@ -48,11 +48,14 @@ export class Group {
   @Column({ nullable: true })
   order: number
 
+  @Column({ nullable: true, default: false })
+  isSiteDisplay: boolean
+
   // @ManyToOne((type) => Group, (group) => group.id)
   // parentGroup: Group
   @Column({ nullable: true })
   parentGroup: string
 
-  @OneToMany((type) => Product, (product) => product.parentGroup)
+  @OneToMany((type) => Product, (product) => product.parentGroup, { cascade: true })
   products: Product[]
 }

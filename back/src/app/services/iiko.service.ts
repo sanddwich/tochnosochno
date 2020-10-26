@@ -305,8 +305,11 @@ export class Iiko {
       const menu: Menu = await res.json()
       const groups = await getRepository(Group).save(menu.groups)
       const productCategories = await getRepository(ProductCategory).save(menu.productCategories)
-      const products = await productRepository.save(menu.products)
-      return products
+      menu.products.map(async (prod: Product) => {
+        const product = await productRepository.save(prod)
+      })
+
+      return true
     } catch (error) {
       this.logger.iiko('iiko.service.getMenu()', error)
       this.logger.error(`iiko.service.getMenu() ${error}`)

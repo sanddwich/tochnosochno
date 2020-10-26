@@ -5,6 +5,7 @@ import ActionButton from '../ActionButton/ActionButton'
 import NumberInput from '../NumberInput/NumberInput'
 import RoundButton from '../RoundButton/RoundButton'
 import { deleteOrderItem, setOrderItemAmount } from '../../Redux/actions/order'
+import { showProductModal } from '../../Redux/actions/app'
 import { cartAnimation } from '../../utils/animation'
 import './LineProductWithNumberInput.scss'
 import { connect } from 'react-redux'
@@ -13,6 +14,7 @@ interface LineProductWithNumberInputProps {
   orderItem: OrderItem
   deleteOrderItem: (orderItem: OrderItem) => void
   setOrderItemAmount: (orderItem: OrderItem, amount: number) => void
+  showProductModal: (product: Product) => void
 }
 
 interface LineProductWithNumberInputState {}
@@ -37,7 +39,12 @@ class LineProductWithNumberInput extends React.Component<
             <img src={`${this.props.orderItem.product.imageLinks[0]}`} alt="" />
           </div>
 
-          <div className="LineProductWithNumberInput__product__name ">{this.props.orderItem.product.name}</div>
+          <div
+            onClick={() => this.props.showProductModal(this.props.orderItem.product)}
+            className="LineProductWithNumberInput__product__name "
+          >
+            {this.props.orderItem.product.name}
+          </div>
 
           <div className="LineProductWithNumberInput__product__price">
             <div className="LineProductWithNumberInput__product__newPrice ">
@@ -74,6 +81,7 @@ class LineProductWithNumberInput extends React.Component<
 const mapDispatchToProps = {
   deleteOrderItem,
   setOrderItemAmount,
+  showProductModal,
 }
 
 export default connect(null, mapDispatchToProps)(LineProductWithNumberInput)

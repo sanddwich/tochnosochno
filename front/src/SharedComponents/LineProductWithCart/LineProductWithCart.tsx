@@ -35,7 +35,6 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
             <div
               className="lineProductWithCart__product__image d-flex justify-content-center align-items-center"
               onClick={() => this.props.showProductModal(this.props.product)}
-              style={{ cursor: 'pointer' }}
             >
               <img
                 src={
