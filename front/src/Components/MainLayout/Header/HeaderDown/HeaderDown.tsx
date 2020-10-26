@@ -8,11 +8,10 @@ import { RootState } from '../../../../Redux'
 import './HeaderDown.scss'
 
 // Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from 'swiper/react'
 
 // Import Swiper styles
-import 'swiper/swiper.scss';
-
+import 'swiper/swiper.scss'
 
 interface HeaderDownProps {
   menu: Category[]
@@ -32,15 +31,13 @@ class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
           <Container className="p-0 h-100">
             <Row className="p-0 m-0 h-100 d-flex justify-content-between">
               {this.props.menu.map((menuItem, index) => {
-                return (
-                  <NavLink key={menuItem.id + index} to={`/menu/${menuItem.id}`} activeClassName="activatedLink">
-                    <div
-                      className="HeaderDown__menuEl h-100 d-flex align-items-center"
-                    >
-                      {menuItem.name}
-                    </div>
-                  </NavLink>
-                )
+                if (menuItem.isSiteDisplay && !menuItem.isCombo) {
+                  return (
+                    <NavLink key={menuItem.id + index} to={`/menu/${menuItem.id}`} activeClassName="activatedLink">
+                      <div className="HeaderDown__menuEl h-100 d-flex align-items-center">{menuItem.name}</div>
+                    </NavLink>
+                  )
+                }
               })}
             </Row>
           </Container>
@@ -49,13 +46,17 @@ class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
         <Container fluid className="HeaderDownMobile p-0 m-0 d-flex d-lg-none">
           <Swiper slidesPerView={'auto'} spaceBetween={5} loop={true}>
             {this.props.menu.map((menuItem, index) => {
-              return (
-                <SwiperSlide key={menuItem.id + index}>
-                  <NavLink to={`/menu/${menuItem.id}`} activeClassName="activatedLink">
-                    <div className="HeaderDown__menuEl h-100 d-flex justify-content-center align-items-center">{menuItem.name}</div>
-                  </NavLink>
-                </SwiperSlide>
-              )
+              if (menuItem.isSiteDisplay && !menuItem.isCombo) {
+                return (
+                  <SwiperSlide key={menuItem.id + index}>
+                    <NavLink to={`/menu/${menuItem.id}`} activeClassName="activatedLink">
+                      <div className="HeaderDown__menuEl h-100 d-flex justify-content-center align-items-center">
+                        {menuItem.name}
+                      </div>
+                    </NavLink>
+                  </SwiperSlide>
+                )
+              }
             })}
           </Swiper>
         </Container>

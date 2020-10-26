@@ -21,7 +21,7 @@ interface CategoriesContainerState {
   shortMenu: Category[]
 }
 
-const includeString: string = 'сеты '
+const includeString: string = 'сеты'
 
 class CategoriesContainer extends React.Component<CategoriesContainerProps, CategoriesContainerState> {
   constructor(props: CategoriesContainerProps) {
@@ -52,29 +52,37 @@ class CategoriesContainer extends React.Component<CategoriesContainerProps, Cate
         <Container fluid className="CategoriesContainer d-none d-md-block m-0 p-0">
           <Row className="p-0 m-0">
             {this.state.longMenu.map((category, index) => {
-              return (
-                <Col key={category.id + index} xs={6} className="CategoriesContainer__LongNavLinkItem p-0 m-0">
-                  <NavLink to={`/menu/${category.id}`}>
-                    <LongMenuItem category={category} />
-                  </NavLink>
-                </Col>
-              )
+              if (category.isSiteDisplay && !category.isCombo) {
+                return (
+                  <Col key={category.id + index} xs={6} className="CategoriesContainer__LongNavLinkItem p-0 m-0">
+                    <NavLink to={`/menu/${category.id}`}>
+                      <LongMenuItem category={category} />
+                    </NavLink>
+                  </Col>
+                )
+              }
             })}
           </Row>
           <Row className="p-0 m-0">
             {this.state.shortMenu.map((category, index) => {
-              return (
-                <Col key={category.id + index} xs={4} className="CategoriesContainer__ShortNavLinkItem p-0 m-0">
-                  <NavLink to={`/menu/${category.id}`}>
-                    <ShortMenuItem category={category} />
-                  </NavLink>
-                </Col>
-              )
+              if (category.isSiteDisplay && !category.isCombo) {
+                return (
+                  <Col key={category.id + index} xs={4} className="CategoriesContainer__ShortNavLinkItem p-0 m-0">
+                    <NavLink to={`/menu/${category.id}`}>
+                      <ShortMenuItem category={category} />
+                    </NavLink>
+                  </Col>
+                )
+              }
             })}
           </Row>
         </Container>
 
-        <Container key={this.state.shortMenu.length} fluid className="CategoriesContainerMobile d-block d-md-none m-0 p-0">
+        <Container
+          key={this.state.shortMenu.length}
+          fluid
+          className="CategoriesContainerMobile d-block d-md-none m-0 p-0"
+        >
           <CategorySlider longMenu={this.state.longMenu} shortMenu={this.state.shortMenu} />
         </Container>
       </Container>

@@ -83,6 +83,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
 
   getProducts = (): void => {
     const category = this.props.menu.find((cat) => cat.id === this.props.categoryId) as Category
+
     const sortProducts: Product[] = typeof category.products !== 'undefined' ? category?.products : []
 
     // const sortProducts: Product[] = []

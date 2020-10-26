@@ -1,5 +1,5 @@
 .ProductCard {
-  // min-width: 300px;
+  // min-height: 100%;
 
   .ProductCard__container {
     background: #ffffff;
@@ -22,8 +22,9 @@
 
   .ProductCard__img {
     margin-top: -80px;
-
-    // height: 300px;       // =========== Каринки
+    img {
+      height: 250px;       // =========== Картинки
+    }
   }
 
   #productToCart {
@@ -55,17 +56,18 @@
     .ProductCard__title {
       cursor: pointer;
       margin-top: 20px; //Отступ наименования продукта
+      overflow: hidden;
+      height: 50px;
       h1 {
         font-family: 'Montserrat';
         font-style: normal;
         font-weight: bold;
-        font-size: 24px;
+        font-size: 22px;
         line-height: 24px;
 
         color: #303030;
 
         height: 50px;
-        overflow: hidden;
       }
     }
 
@@ -83,7 +85,7 @@
   }
 
   .ProductCard__priceLine {
-    margin-top: 10px;
+    margin-top: 30px;
     padding-left: 19px !important;
     padding-right: 19px !important;
 

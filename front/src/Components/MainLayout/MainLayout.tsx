@@ -36,9 +36,9 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
         <PageContent>
           <Switch>
             <Route path="/menu/:id" exact component={Menu} />
+            <Route path="/actions" exact component={Actions} />
             <Route path="/product/:id" exact component={Product} />
             <Route path="/cart" exact component={Cart} />
-            <Route path="/actions" exact component={Actions} />
             <Route path="/contacts" exact component={Contacts} />
             {this.props.isAuth ? <Route path="/profile" exact component={Profile} /> : null}
 
