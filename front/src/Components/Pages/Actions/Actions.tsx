@@ -26,7 +26,7 @@ class Actions extends React.Component<ActionsProps, ActionsState> {
   }
 
   componentDidMount() {
-    console.log(this.state.combos)
+    // console.log(this.state.combos)
   }
 
   render() {

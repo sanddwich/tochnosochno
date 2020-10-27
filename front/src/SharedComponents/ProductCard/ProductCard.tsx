@@ -53,10 +53,6 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
   render() {
     return (
       <React.Fragment>
-        {/* {this.state.showProductModal ? (
-          <ProductModal product={this.props.product} toggleModal={this.toggleModal} />
-        ) : null} */}
-
         <Container className="ProductCard p-3 m-0">
           <Container className="ProductCard__container p-0 m-0">
             <Row className="ProductCard__firstLine p-0 m-0 d-flex justify-content-between">

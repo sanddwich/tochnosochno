@@ -4,7 +4,8 @@ export default interface Category {
   additionalInfo: string
   description: string
   id: string
-  images: string
+  images: string  
+  imageLinks: String[]
   isDeleted: boolean
   isIcludedInMenu: boolean
   isSiteDisplay: boolean

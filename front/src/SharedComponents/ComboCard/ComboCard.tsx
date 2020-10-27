@@ -80,8 +80,8 @@ class ComboCard extends React.Component<ComboCardProps, ComboCardState> {
               <img
                 className="img-fluid"
                 src={
-                  typeof this.props.combo.images[0] !== 'undefined'
-                    ? `${this.props.combo.images[0]}`
+                  typeof this.props.combo.imageLinks[0] !== 'undefined'
+                    ? `${this.props.combo.imageLinks[0]}`
                     : '/images/products/no-photo.png'
                 }
                 alt={this.props.combo.name}
