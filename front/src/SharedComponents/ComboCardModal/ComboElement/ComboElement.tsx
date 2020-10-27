@@ -6,6 +6,7 @@ import './ComboElement.scss'
 
 interface ComboElementProps {
   product: Product
+  comboConsistArrayElement: number
   changeProductAtCombo: (id: number) => void
 }
 
@@ -17,7 +18,7 @@ export default class ComboElement extends React.Component<ComboElementProps, Com
       <Container
         fluid
         className="ComboElement w-100 p-0 m-0"
-        onClick={() => this.props.changeProductAtCombo(this.props.product.id)}
+        onClick={() => this.props.changeProductAtCombo(this.props.comboConsistArrayElement)}
       >
         <Row className="ComboElement__img p-0 m-0 pb-2">
           <Col className="p-0 m-0 d-flex align-items-center justify-content-center" xs={3}>

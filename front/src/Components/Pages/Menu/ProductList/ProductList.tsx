@@ -67,7 +67,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
   }
 
   componentDidMount() {
-    // console.log(this.props)
+    // console.log(this.props.menu)
     this.getProducts()
   }
 

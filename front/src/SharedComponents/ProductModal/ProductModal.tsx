@@ -24,8 +24,8 @@ interface ProductModalState {
 }
 
 class ProductModal extends React.Component<ProductModalProps, ProductModalState> {
-  favoriteClick = (): void => {
-    console.log('favoriteClick')
+  componentDidMount() {
+    // console.log(this.props.productModalProduct)
   }
 
   render() {
