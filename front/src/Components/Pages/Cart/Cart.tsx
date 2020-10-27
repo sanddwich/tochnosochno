@@ -7,13 +7,15 @@ import ActionButton from '../../../SharedComponents/ActionButton/ActionButton'
 import BlockName from '../../../SharedComponents/BlockName/BlockName'
 import CartOrder from '../../../SharedComponents/CartOrder/CartOrder'
 import RecomendedProducts from '../../../SharedComponents/RecomendedProducts/RecomendedProducts'
-
+import { setDelivery } from '../../../Redux/actions/order'
 import './Cart.scss'
 import DeliveryByClient from './Components/DeliveryByClient/DeliveryByClient'
 import DeliveryByCourier from './Components/DeliveryByCourier/DeliveryByCourier'
+import Address from '../../../Interfaces/Address'
 
 interface CartProps {
   order: Order
+  setDelivery: (isDelivery: boolean, address: Address) => void
 }
 
 interface CartState {
@@ -39,6 +41,7 @@ class Cart extends React.Component<CartProps, CartState> {
     this.setState({
       isDelivery: false,
     })
+    this.props.setDelivery(false, { street: { name: '' }, house: '' })
   }
 
   render() {
@@ -93,7 +96,9 @@ class Cart extends React.Component<CartProps, CartState> {
   }
 }
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  setDelivery,
+}
 
 const mapStateToProps = (state: RootState) => {
   const { order } = state.order

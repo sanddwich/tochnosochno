@@ -113,18 +113,19 @@ export class AuthController {
     let aiikoCustomer = await this.iiko.getCustomer(phone)
 
     if (aiikoCustomer) aiikoCustomer = this.customerService.setBonuses(aiikoCustomer)
-
+    console.log(aiikoCustomer)
     if (aiikoCustomer && aiikoCustomer.id) {
       await repositoryCustomer.save(aiikoCustomer)
     } else {
       const customerDb = await repositoryCustomer.findOne({ phone: phone })
+      console.log(phone)
       if (!customerDb) {
         customer = new Customer()
         customer.phone = phone
         customer.id = uuidv4()
         customer.addresses = []
         customer.orders = []
-        customer.name = 'Клиент с сайта myaso.cafe'
+        customer.name = 'Клиент с сайта'
         customer = await repositoryCustomer.save(customer)
       }
     }

@@ -76,7 +76,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
         name: '',
         id: '',
       },
-      phone: '',
+      phone: this.props.customer?.phone,
       validationTextfields: [
         {
           name: 'street',
@@ -94,7 +94,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
         },
         {
           name: 'phone',
-          minLength: 11,
+          minLength: 10,
           required: true,
           touched: false,
           isValid: false,
@@ -131,7 +131,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
       let value = ''
       textfield.name === 'street' && (value = this.state.deliveryAddress.street.name)
       textfield.name === 'house' && (value = this.state.deliveryAddress.house)
-      textfield.name === 'phone' && (value = this.props.phone)
+      textfield.name === 'phone' && (value = this.props.phone || this.props.customer.phone)
 
       if (textfield.required) {
         isValid = isValid && value.trim() !== ''
@@ -355,7 +355,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                   type="text"
                   placeholder="Николай.."
                   // value={this.props.customer?.name || ''}
-                  defaultValue={this.props.order.address?.name}
+                  defaultValue={this.props.customer?.name || ''}
                   //  / value={this.props.order.address?.name}
                   onInput={(e: React.FormEvent<HTMLInputElement>) => {
                     this.textFieldInputHandler(e.currentTarget.value, 'name')
@@ -366,7 +366,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                 <label htmlFor="phone">Телефон*</label>
                 <InputMask
                   mask="8(999) 999-99-99"
-                  value={this.props.phone || this.props.customer?.phone.substring(2)}
+                  defaultValue={this.props.phone || this.props.customer?.phone.substring(2)}
                   onChange={(e: React.FormEvent<HTMLInputElement>) => {
                     this.textFieldInputHandler(e.currentTarget.value, 'phone')
                   }}
