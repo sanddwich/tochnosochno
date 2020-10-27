@@ -22,7 +22,7 @@ export default class ComboElementChangeList extends React.Component<
         <Container fluid className="ComboElementChangeList__cont p-0 m-0">
           <Row className="p-0 m-0 d-flex justify-content-center">
             {this.props.products.map((product, index) => {
-              if (!this.props.comboConsist.find((ccproduct) => product.id === ccproduct.id)) {
+              // if (!this.props.comboConsist.find((ccproduct) => product.id === ccproduct.id)) {
                 return (
                   <Col
                     xs={4}
@@ -36,7 +36,7 @@ export default class ComboElementChangeList extends React.Component<
                     <div className="ComboElementChangeList_elementTitle p-0 m-0">{product.name}</div>
                   </Col>
                 )
-              }
+              // }
             })}
           </Row>
         </Container>

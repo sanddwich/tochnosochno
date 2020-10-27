@@ -34,7 +34,7 @@ interface ComboCardModalProps {
 interface ComboCardModalState {
   comboConsist: Product[]
   comboProductVariants: Product[]
-  comboProductChangeId: number
+  comboConsistArrayElement: number
 }
 
 class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModalState> {
@@ -45,7 +45,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
         typeof this.props.comboModalElement !== 'undefined' ? this.props.comboModalElement.products.slice(0, 3) : [],
       comboProductVariants:
         typeof this.props.comboModalElement !== 'undefined' ? this.props.comboModalElement.products : [],
-      comboProductChangeId: 0,
+        comboConsistArrayElement: -1,
     }
   }
 
@@ -53,22 +53,22 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
     // console.log(this.state)
   }
 
-  changeProductAtCombo = (productId: number) => {
-    const comboProductChangeId: number = productId
-    this.setState({ comboProductChangeId })
+  changeProductAtCombo = (comboConsistArrayElement: number) => {
+    // console.log(comboConsistArrayElement)
+    this.setState({ comboConsistArrayElement })
   }
 
   addNewProductAtCombo = (newProductId: number) => {
-    let comboProductChangeId = this.state.comboProductChangeId
-    const comboConsist = this.state.comboConsist.map((product) => {
-      if (product.id === comboProductChangeId) {
-        return this.state.comboProductVariants.find((product) => product.id === newProductId)
-      } else {
-        return product
-      }
-    }) as Product[]
-    comboProductChangeId = 0
-    this.setState({ comboProductChangeId, comboConsist })
+    let comboConsistArrayElement = this.state.comboConsistArrayElement
+    const comboConsist = this.state.comboConsist
+    const insertProduct = this.state.comboProductVariants.find(product => product.id === newProductId) as Product
+    comboConsist[comboConsistArrayElement] = insertProduct
+
+    // console.log(insertProduct)
+    // console.log(comboConsist)
+
+    comboConsistArrayElement = -1
+    this.setState({ comboConsistArrayElement, comboConsist })
   }
 
   render() {
@@ -108,6 +108,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                           <ComboElement
                             key={product.id + index}
                             product={product}
+                            comboConsistArrayElement={index}
                             changeProductAtCombo={this.changeProductAtCombo}
                           />
                         )
@@ -122,22 +123,13 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                       <span>руб</span>
                     </div>
                     <div className="ComboCardModal__resultActionButton">
-                      <AddComboButton products={this.state.comboConsist} comboId={this.props.comboModalElement.id} />
-                      {/* <ActionButton
-                        onClick={() => console.log('add to cart')}
-                        textColor="white"
-                        width="180px"
-                        text="В корзину"
-                        backgroundColor="#303030"
-                        icon="cart_dark.svg"
-                        hideTextMobile={true}
-                      /> */}
+                      <AddComboButton products={this.state.comboConsist} comboId={this.props.comboModalElement.id} />                      
                     </div>
                   </Row>
                 </Col>
 
                 <Col md={6} className="ComboCardModal__img p-0 h-100 d-flex align-items-start">
-                  {this.state.comboProductChangeId !== 0 ? (
+                  {this.state.comboConsistArrayElement !== -1 ? (
                     <ComboElementChangeList
                       products={this.state.comboProductVariants}
                       addNewProductAtCombo={this.addNewProductAtCombo}
@@ -171,7 +163,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
               </Row>
 
               <Row className="ComboCardModalMob__img p-0 d-flex align-items-start">
-                {this.state.comboProductChangeId !== 0 ? (
+                {this.state.comboConsistArrayElement !== 0 ? (
                   <React.Fragment>
                     <Swiper loop={true} pagination={{ clickable: true, el: '#paginationComboProduct' }}>
                       {this.state.comboProductVariants.map((product, index) => {
@@ -239,6 +231,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                           <ComboElement
                             key={product.id + index}
                             product={product}
+                            comboConsistArrayElement={index}
                             changeProductAtCombo={this.changeProductAtCombo}
                           />
                         )

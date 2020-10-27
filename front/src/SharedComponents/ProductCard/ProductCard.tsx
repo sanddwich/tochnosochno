@@ -43,7 +43,9 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
     }
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    // console.log(this.props.product)
+  }
 
   toggleModal = (): void => {
     const showProductModal: boolean = !this.state.showProductModal

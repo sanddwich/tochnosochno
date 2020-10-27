@@ -14,6 +14,16 @@ interface ShortMenuItemMobState {}
 export default class ShortMenuItemMob extends React.Component<ShortMenuItemMobProps, ShortMenuItemMobState> {
   componentDidMount() {}
 
+  suffixGen = (num: number): string => {
+    if (num === 1) {
+      return 'ая'
+    }
+    if (num >= 2 && num <= 4) {
+      return 'ые'
+    }
+    return 'ых'
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -31,7 +41,10 @@ export default class ShortMenuItemMob extends React.Component<ShortMenuItemMobPr
             <Container
               className="m-0 p-0"
               style={{
-                background: (this.props.category.images !== null && this.props.category.images !== ''  ) ? `url(${this.props.category.images})` : `url(/images/categories/rolls.png)`,
+                background:
+                  this.props.category.images !== null && this.props.category.images !== ''
+                    ? `url(${this.props.category.images})`
+                    : `url(/images/categories/rolls.png)`,
                 backgroundRepeat: 'no-repeat',
                 // backgroundAttachment: 'fixed',
                 backgroundPosition: 'right',
@@ -44,7 +57,10 @@ export default class ShortMenuItemMob extends React.Component<ShortMenuItemMobPr
                     <div className="ShortMenuItemMob__title">
                       <h1>{this.props.category.name}</h1>
                     </div>
-                    <div className="ShortMenuItemMob__desc">{this.props.category.products.length} сочныйх позиций</div>
+                    <div className="ShortMenuItemMob__desc">
+                      {this.props.category.products.length} сочн{this.suffixGen(this.props.category.products.length)}{' '}
+                      позиций
+                    </div>
                   </div>
                 </Col>
               </Row>
