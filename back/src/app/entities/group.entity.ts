@@ -54,6 +54,12 @@ export class Group {
   @Column({ nullable: true, default: false })
   isCombo: boolean
 
+  @Column({ nullable: true })
+  comboProductsCount: number
+
+  @Column('simple-array')
+  imageLinks: string[]
+
   // @ManyToOne((type) => Group, (group) => group.id)
   // parentGroup: Group
   @Column({ nullable: true })
