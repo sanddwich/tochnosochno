@@ -1,3 +1,63 @@
 .Actions {
-  
+  margin-bottom: 20px !important;
+
+  #paginationCombo {
+    position: relative;
+    z-index: 1000;
+    margin-right: 20px;
+
+    .swiper-pagination-bullet {
+      background-color: #ffffff !important;
+      border: 2px solid #ffd12d;
+      box-sizing: border-box;
+      margin-right: 4px;
+      width: 12px !important;
+      height: 12px;
+      opacity: 1;
+    }
+
+    .swiper-pagination-bullet-active {
+      background-color: #ffd12d !important;
+    }
+  }
+
+  .Actions__arrows {
+    display: flex;
+    position: relative;
+    z-index: 1000;
+    
+  }
+
+  .Actions__arrow {
+    background-color: #303030;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    h1 {
+      font-size: 30px;
+      line-height: 37px;
+    }
+
+    .Actions__arrow {
+      width: 35px;
+      height: 35px;
+    }
+
+    .Actions__arrow {
+      margin-right: 10px;
+    }
+  }
 }

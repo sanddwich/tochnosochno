@@ -51,11 +51,7 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
                   <Row className="ProductModal__firstLine p-0 m-0 d-flex justify-content-between">
                     <div className="ProductModal__favoriteButton">
                       <FavouriteRoundButton product={this.props.productModalProduct} />
-                      {/* <RoundButton
-                        icon="favorite.svg"
-                        backgroundColor="##F2F2F2"
-                        onClick={() => this.favoriteClick()}
-                      /> */}
+
                     </div>
                     <div className="ProductModal__stickerCont">
                       <Sticker title="Новинка" backgroundColor="#FFD74B" />

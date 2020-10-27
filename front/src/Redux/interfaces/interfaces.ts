@@ -49,6 +49,7 @@ export interface AppState {
   orderHistory?: Order
   showProductModal: boolean
   productModalProduct?: Product
+  comboModalElement?: Category
   showLogin: boolean
   showComboModal: boolean
 }

@@ -1,3 +1,4 @@
+import Category from '../../Interfaces/Category'
 import Order from '../../Interfaces/Order'
 import Product from '../../Interfaces/Product'
 import {
@@ -65,6 +66,7 @@ interface HideProductModal {
 }
 interface ShowComboModal {
   type: typeof SHOW_COMBO_MODAL
+  combo: Category
 }
 interface HideComboModal {
   type: typeof HIDE_COMBO_MODAL

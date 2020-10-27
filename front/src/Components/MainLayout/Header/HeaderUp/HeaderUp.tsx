@@ -7,7 +7,7 @@ import ProductModal from '../../../../SharedComponents/ProductModal/ProductModal
 import ComboCardModal from '../../../../SharedComponents/ComboCardModal/ComboCardModal'
 import RoundButton from '../../../../SharedComponents/RoundButton/RoundButton'
 import * as Scroll from 'react-scroll'
-import { showLoginModal, showComboModal } from '../../../../Redux/actions/app'
+import { showLoginModal } from '../../../../Redux/actions/app'
 
 import './HeaderUp.scss'
 import CartRoundButton from '../../../../SharedComponents/CartRoundButton/CartRoundButton'
@@ -16,7 +16,7 @@ interface HeaderUpProps {
   isAuth: boolean
   showLogin: boolean
   showLoginModal: () => void
-  showComboModal: () => void
+  showComboModal: boolean
 }
 
 interface HeaderUpState {
@@ -44,7 +44,8 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
   render() {
     return (
       <React.Fragment>
-        <ComboCardModal />
+        {/* <ComboCardModal key={this.props.comboModalElement.id} /> */}
+        <ComboCardModal key={this.props.showComboModal.toString()} />
         <ProductModal />
 
         <Container className="HeaderUp p-0 d-none d-lg-flex justify-content-between align-items-center">
@@ -65,8 +66,8 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
                 <RoundButton
                   backgroundColor="#303030"
                   icon="vk_white.svg"
-                  // onClick={() => window.open('http://vk.com')}
-                  onClick={this.props.showComboModal}
+                  onClick={() => window.open('http://vk.com')}
+                  // onClick={this.props.showComboModal}
                 />
               </Col>
             </Row>
@@ -258,15 +259,15 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
 
 const mapDispatchToProps = {
   showLoginModal,
-  showComboModal,
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { showLogin } = state.app
+  const { showLogin, showComboModal } = state.app
   const { isAuth } = state.auth
   return {
     isAuth,
     showLogin,
+    showComboModal,
   }
 }
 

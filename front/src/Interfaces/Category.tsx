@@ -3,6 +3,7 @@ import Product from './Product'
 export default interface Category {
   additionalInfo: string
   description: string
+  comboProductsCount?: number
   id: string
   images: string  
   imageLinks: String[]

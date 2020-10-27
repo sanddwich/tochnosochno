@@ -1,3 +1,4 @@
+import Category from '../../Interfaces/Category'
 import Order from '../../Interfaces/Order'
 import Product from '../../Interfaces/Product'
 import {
@@ -63,8 +64,9 @@ export const hideProductModal = () => ({
   type: HIDE_PRODUCT_MODAL,
 })
 
-export const showComboModal = () => ({
+export const showComboModal = (combo: Category) => ({
   type: SHOW_COMBO_MODAL,
+  combo: combo,
 })
 
 export const hideComboModal = () => ({

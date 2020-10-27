@@ -27,7 +27,7 @@ SwiperCore.use([Navigation, Pagination, Autoplay])
 interface ComboCardModalProps {
   hideComboModal: () => void
   showComboModal: boolean
-  menu: Category[]
+  comboModalElement: Category
 }
 
 interface ComboCardModalState {
@@ -40,21 +40,14 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
   constructor(props: ComboCardModalProps) {
     super(props)
     this.state = {
-      comboConsist: [],
-      comboProductVariants: [],
+      comboConsist: typeof this.props.comboModalElement !== 'undefined' ? this.props.comboModalElement.products.slice(0, 3) : [],
+      comboProductVariants: typeof this.props.comboModalElement !== 'undefined' ? this.props.comboModalElement.products : [],
       comboProductChangeId: 0,
     }
   }
 
   componentDidMount() {
-    const comboConsist: Product[] = this.props.menu[0].products.slice(0, 3)
-    let comboProductVariants: Product[] = []
-    this.props.menu.map((cat) => {
-      cat.products.map((product) => {
-        comboProductVariants.push(product)
-      })
-    })
-    this.setState({ comboConsist, comboProductVariants })
+    // console.log(this.state)
   }
 
   changeProductAtCombo = (productId: number) => {
@@ -75,7 +68,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
     this.setState({ comboProductChangeId, comboConsist })
   }
 
-  render() {
+  render() {    
     return (
       <React.Fragment>
         {this.props.showComboModal ? (
@@ -92,14 +85,12 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                 <Col md={6} className="ComboCardModal__leftColumn p-0 d-flex flex-column align-items-start">
                   <Row className="w-100">
                     <Col className="ComboCardModal__title">
-                      <BlockName name="Комбо - 3 пиццы 25см" />
+                      <BlockName name={`${this.props.comboModalElement.name}`} />
                     </Col>
                   </Row>
                   <Row>
                     <Col className="ComboCardModal__descr">
-                      ролл Сочный краб, ролл Сочный лосось, ролл Медовый лосось 637 г ролл Сочный краб, ролл Сочный
-                      лосось, ролл Медовый лосось 637 г ролл Сочный краб, ролл Сочный лосось, ролл Медовый лосось 637 г
-                      ролл Сочный краб, ролл Сочный лосось, ролл Медовый лосось 637 г
+                      {this.props.comboModalElement.description}
                     </Col>
                   </Row>
                   <Row className="ComboCardModal__productsList d-flex p-0">
@@ -277,11 +268,10 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { showComboModal } = state.app
-  const { menu } = state.menu
+  const { showComboModal, comboModalElement } = state.app
   return {
     showComboModal,
-    menu,
+    comboModalElement,
   }
 }
 

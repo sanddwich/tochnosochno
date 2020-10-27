@@ -104,11 +104,13 @@ const app = (state: AppState = initialState, action: AppActionType) => {
       return {
         ...state,
         showComboModal: true,
+        comboModalElement: action.combo
       }
     case HIDE_COMBO_MODAL:
       return {
         ...state,
         showComboModal: false,
+        comboModalElement: undefined,
       }
 
     case SHOW_LOGIN:
