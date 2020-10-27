@@ -4,18 +4,28 @@ import './PaymentSection.scss'
 import 'react-datepicker/dist/react-datepicker.css'
 import CheckBox from '../CheckBox/CheckBox'
 import RadioButton from '../RadioButton/RadioButton'
+import PaymentType from '../../Interfaces/PaymentType'
+import { connect } from 'react-redux'
+import { setOrderPayment } from '../../Redux/actions/order'
+import Order from '../../Interfaces/Order'
 
 interface PaymentSectionProps {
   isDelivery: boolean
+  setOrderPayment: (isPayment: boolean, payment: PaymentType) => {}
+  order: Order
 }
 
 interface PaymentSectionState {
   paymentType: string
 }
 
-export default class PaymentSection extends React.Component<PaymentSectionProps, PaymentSectionState> {
+class PaymentSection extends React.Component<PaymentSectionProps, PaymentSectionState> {
   constructor(props: PaymentSectionProps) {
     super(props)
+  }
+
+  setPayment = (isPayment: boolean, paymentType: PaymentType) => {
+    this.props.setOrderPayment(isPayment, paymentType)
   }
 
   render() {
@@ -24,44 +34,44 @@ export default class PaymentSection extends React.Component<PaymentSectionProps,
         {this.props.isDelivery ? (
           <div className="PaymentSection">
             <RadioButton
-              selected={false}
+              selected={this.props.order.payment === 'online'}
               label="Оплатить онлайн"
               name="payment"
               id="onlineRadio"
-              onClick={() => console.log('onlineRadio')}
+              onClick={() => this.setPayment(false, 'online')}
             />
 
             <RadioButton
-              selected={true}
+              selected={this.props.order.payment === 'credit'}
               label="Картой курьеру"
               name="payment"
               id="creditRadio"
-              onClick={() => console.log('creditRadio')}
+              onClick={() => this.setPayment(false, 'credit')}
             />
             <RadioButton
-              selected={false}
+              selected={this.props.order.payment === 'cash'}
               label="Наличными курьеру"
               name="payment"
               id="cashRadio"
-              onClick={() => console.log('cashRadio')}
+              onClick={() => this.setPayment(false, 'cash')}
             />
           </div>
         ) : (
           <div className="PaymentSection">
             <RadioButton
-              selected={false}
+              selected={this.props.order.payment === 'online'}
               label="Оплатить онлайн"
               name="payment"
               id="onlineRadio"
-              onClick={() => console.log('onlineRadio')}
+              onClick={() => this.setPayment(false, 'online')}
             />
 
             <RadioButton
-              selected={true}
+              selected={this.props.order.payment === 'cash'}
               label="Оплатить при получении"
               name="payment"
               id="cashRadio"
-              onClick={() => console.log('cashRadio')}
+              onClick={() => this.setPayment(false, 'cash')}
             />
           </div>
         )}
@@ -69,3 +79,16 @@ export default class PaymentSection extends React.Component<PaymentSectionProps,
     )
   }
 }
+
+const mapDispatchToProps = {
+  setOrderPayment,
+}
+
+const mapStateToProps = (state: any) => {
+  const { order } = state.order
+  return {
+    order,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PaymentSection)

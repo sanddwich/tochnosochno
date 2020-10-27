@@ -27,7 +27,7 @@ export default class ActionButton extends React.Component<ActionButtonProps, Act
         }}
         className={`actionButton  noselect ${this.props.hideTextMobile ? 'mobile' : ''} ${
           this.props.active ? 'active' : ''
-        }`}
+        } ${this.props.disabled ? 'disabled' : ''}`}
         style={{ backgroundColor: this.props.backgroundColor, width: this.props.width, color: this.props.textColor }}
       >
         <div className={`actionButton__text`}>{this.props.text}</div>

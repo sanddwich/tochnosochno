@@ -67,14 +67,16 @@ export const applyBonusOrder = (isClear?: boolean) => {
 export const processOrder = (): ThunkAction<void, RootState, null, any> => {
   return async (dispatch, getState) => {
     try {
-      const { order } = getState().order
-      const { token } = getState().auth
       const auth: AuthState = getState().auth
       const phone = auth.customer?.phone
-      const cookies = new Cookies()
-      const csrfToken = cookies.get('csrfToken')
       dispatch(setLoading())
       dispatch(setOrderPhone(phone || ''))
+      const { order } = getState().order
+      const { token } = getState().auth
+
+      const cookies = new Cookies()
+      const csrfToken = cookies.get('csrfToken')
+
       const res = await fetch(`${apiServer}/api/order`, {
         method: 'POST',
         headers: {

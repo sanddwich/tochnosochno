@@ -38,7 +38,7 @@ class PoliticSection extends React.Component<PoliticSectionProps, PoliticSection
         <CheckBox
           id="ruleCheck"
           name="ruleCheck"
-          selected={false}
+          selected={this.props.ruleCheck}
           onClick={(event: React.ChangeEvent<HTMLInputElement>, selected) => this.ruleCheckHandle(event, selected)}
           label="Я подтверждаю, что ознакомился с правилами продажи 
         товаров, а также cо всеми документами, размещенными на сайте по адресу и 
@@ -47,7 +47,7 @@ class PoliticSection extends React.Component<PoliticSectionProps, PoliticSection
         <CheckBox
           id="personCheck"
           name="personCheck"
-          selected={false}
+          selected={this.props.personCheck}
           onClick={(event: React.ChangeEvent<HTMLInputElement>, selected) => this.ruleCheckHandle(event, selected)}
           label="Я даю свое согласие на сбор и обработку моих 
          персональных данных в соответствии с политикой конфиденциальности."
@@ -55,7 +55,7 @@ class PoliticSection extends React.Component<PoliticSectionProps, PoliticSection
         <CheckBox
           id="smsCheck"
           name="smsCheck"
-          selected={false}
+          selected={this.props.smsCheck}
           onClick={(event: React.ChangeEvent<HTMLInputElement>, selected) => this.ruleCheckHandle(event, selected)}
           label="Осуществляя заказ на сайте я даю свое согласие на 
                получение направляемых мне смс-сообщений и электронных писем 

@@ -25,6 +25,7 @@ import IIkoOrderItem from '../interfaces/IIkoOrderItem'
 import IIkoOrderItemModifier from '../interfaces/IIkoOrderItemModifier'
 import IIkoOrderItemType from '../interfaces/IIkoOrderItemType'
 import OrderServiceType from '../interfaces/OrderServiceType'
+import { GeoCoder } from './geo-coder.service'
 import { LoggerService } from './logger.service'
 
 const fetch = require('node-fetch')
@@ -41,6 +42,9 @@ interface Menu {
 export class Iiko {
   @dependency
   logger: LoggerService
+
+  @dependency
+  geo: GeoCoder
 
   private readonly apiServer = Config.get('iiko.apiUrl')
   private readonly iikoUser = Config.get('iiko.iikoUser')
@@ -96,10 +100,16 @@ export class Iiko {
   }
 
   async sendOrderToIiko(order: Order, terminalGroupId?: Terminal | null) {
-    const terminalId = terminalGroupId ? terminalGroupId.toString() : null
+    // const terminalId = terminalGroupId ? terminalGroupId.toString() : null
+    const terminalId = '121b5392-d62c-7611-0165-959330ae00c9'
+    const coordinates = await this.geo.getCoordinates(order.address)
 
     const organization = await getRepository(Organization).findOne()
     const iikoOrder = this.formatOrderForIiko(order)
+
+    if (iikoOrder.deliveryPoint) {
+      iikoOrder.deliveryPoint.coordinates = coordinates
+    }
 
     try {
       if (organization) {
@@ -128,6 +138,7 @@ export class Iiko {
           throw new Error(`${res.status} ${res.statusText}. ${error.errorDescription}. Ошибка на сервере IIKO.`)
         }
         const iOrder = await res.json()
+        console.log(iOrder.orderInfo)
         return iOrder
       }
     } catch (error) {
@@ -383,11 +394,11 @@ export class Iiko {
     order.items.map((item: OrderItem) => {
       const iikoOrderItemModifers: IIkoOrderItemModifier[] = [
         //БЕЗ ДОПОЛНЕНИЙ ДОЛЖНО БЫТЬ
-        {
-          productId: '51c9c4b8-2235-480c-ada2-84fed3df300f',
-          productGroupId: 'a062ac01-a16e-4b11-9398-c873d2b80215',
-          amount: 1,
-        },
+        // {
+        //   productId: '51c9c4b8-2235-480c-ada2-84fed3df300f',
+        //   productGroupId: 'a062ac01-a16e-4b11-9398-c873d2b80215',
+        //   amount: 1,
+        // },
       ]
 
       item.orderItemModifiers.map((orderItemModifier: OrderItemModifier) => {
@@ -415,7 +426,7 @@ export class Iiko {
 
       deliveryPoint = {
         address: order.address,
-        coordinates: { latitude: order.address.latitude, longitude: order.address.longitude },
+        // coordinates: { latitude: order.address.latitude, longitude: order.address.longitude },
         comment: order.address.comment,
       }
       orderServiceType = 'DeliveryByCourier'
@@ -432,7 +443,7 @@ export class Iiko {
       sourceKey: 'myaso.cafe',
       items: iikoOrderItems,
     }
-
+    console.log(iikoOrder)
     return iikoOrder
   }
 

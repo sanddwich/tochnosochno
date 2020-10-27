@@ -25,6 +25,10 @@ export default class CheckBox extends React.Component<CheckBoxProps, CheckBoxSta
     }
   }
 
+  onChangeHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ checked: !this.state.checked }, () => this.props.onClick(event, this.state.checked))
+  }
+
   render() {
     return (
       <div
@@ -32,12 +36,16 @@ export default class CheckBox extends React.Component<CheckBoxProps, CheckBoxSta
         className="CheckBox"
       >
         <input
-          onChange={(event) => this.props.onClick(event, this.props.selected)}
+          onChange={(event) => {
+            event.persist()
+            this.onChangeHandle(event)
+          }}
           type="checkbox"
           className="CheckBox__input"
           id={this.props.id}
           name={this.props.name}
-          value="checked"
+          // value="checked"
+          checked={this.state.checked}
         />
         <label className="CheckBox__label" htmlFor={this.props.id}>
           {this.props.label}

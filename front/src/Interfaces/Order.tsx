@@ -5,6 +5,7 @@ import OrderItem from './OrderItem'
 import OrderItemModifier from './OrderItemModifier'
 import OrderServiceType from './OrderServiceType'
 import PaymentType from './PaymentType'
+import { v4 as uuidv4 } from 'uuid'
 
 export default class Order {
   id?: number
@@ -44,6 +45,13 @@ export default class Order {
     this.guests = {
       count: 1,
       splitBetweenPersons: false,
+    }
+    this.address = {
+      id: uuidv4(),
+      street: {
+        name: '',
+      },
+      house: '',
     }
   }
 

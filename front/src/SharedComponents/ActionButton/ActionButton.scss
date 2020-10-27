@@ -43,6 +43,15 @@
   opacity: 0.6;
 }
 
+.actionButton.disabled {
+  opacity: 0.6;
+  &:hover {
+    cursor: default;
+    color: white !important;
+    background-color: #303030 !important;
+  }
+}
+
 @media (max-width: 620px) {
   .actionButton.mobile {
     width: 60px !important;
