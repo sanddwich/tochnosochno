@@ -1,8 +1,9 @@
 import React from 'react'
-import { Container } from 'react-bootstrap'
+import { Col, Container, Row } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import Category from '../../../Interfaces/Category'
 import { RootState } from '../../../Redux'
+import ComboCard from '../../../SharedComponents/ComboCard/ComboCard'
 import SliderContainer from '../../../SharedComponents/SliderContainer/SliderContainer'
 
 import './Actions.scss'
@@ -24,13 +25,25 @@ class Actions extends React.Component<ActionsProps, ActionsState> {
     }
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    console.log(this.state.combos)
+  }
 
   render() {
     return (
       <Container fluid className="Actions p-0 m-0">
         <SliderContainer />
-        <h1>Actions</h1>
+        <Container className="p-0 m-0">
+          <Row className="p-0 m-0">
+            {this.state.combos.map((comboEl, index) => {
+              return (
+                <Col key={index} xs={4} className="p-0 m-0">
+                  <ComboCard combo={comboEl} />
+                </Col>
+              )
+            })}
+          </Row>
+        </Container>
       </Container>
     )
   }
