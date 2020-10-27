@@ -5,17 +5,20 @@ import OrderItem from '../../Interfaces/OrderItem'
 import Product from '../../Interfaces/Product'
 import { RootState } from '../../Redux'
 import { addOrderItemToOrder, setOrderItemAmount, deleteOrderItem } from '../../Redux/actions/order'
+import { hideComboModal } from '../../Redux/actions/app'
 import ActionButton from '../ActionButton/ActionButton'
 import NumberInput from '../NumberInput/NumberInput'
 import { cartAnimation } from '../../utils/animation'
 import Category from '../../Interfaces/Category'
 
 interface AddComboButtonProps {
+  comboId: string
   order: Order
-  combo: Category
+  products: Product[]
   addOrderItemToOrder: (orderItem: OrderItem) => void
   setOrderItemAmount: (orderItem: OrderItem, amount: number) => void
   deleteOrderItem: (orderItem: OrderItem) => void
+  hideComboModal: () => void
 }
 
 interface AddComboButtonState {
@@ -30,9 +33,7 @@ class AddComboButton extends React.Component<AddComboButtonProps, AddComboButton
     }
   }
 
-  componentDidMount() {
-    this.isProductInOrder()
-  }
+  componentDidMount() {}
 
   setOrderItemAmount = (amount: number) => {
     if (this.state.orderItem) {
@@ -45,46 +46,37 @@ class AddComboButton extends React.Component<AddComboButtonProps, AddComboButton
     cartAnimation()
   }
 
-  isProductInOrder = () => {
-    if (this.props.order.items) {
-      console.log(this.props.order.items)
-    }
-  }
+  addToCartButton = (products: Product[]): void => {
+    const pickDate = new Date().valueOf()
+    products.map((product) => {
+      const orderItem: OrderItem = {
+        product: product,
+        amount: 1,
+        orderItemModifiers: [],
+        value: product.sizePrices[0].price.currentPrice,
+        comboId: this.props.comboId,
+        pickDate: pickDate,
+      }
 
-  addToCartButton = (product: Product): void => {
-    const orderItem = {
-      product: product,
-      amount: 1,
-      orderItemModifiers: [],
-      value: product.sizePrices[0].price.currentPrice,
-    }
-    this.props.addOrderItemToOrder(orderItem)
-    this.setState({ orderItem })
+      this.props.addOrderItemToOrder(orderItem)
+    })
+
+    this.props.hideComboModal()
     cartAnimation()
   }
 
   render() {
     return (
       <React.Fragment>
-        {this.state.orderItem ? (
-          <NumberInput
-            minValue={0}
-            value={this.state.orderItem.amount}
-            label=""
-            hideLabel={true}
-            onChange={(amount: number) => this.setOrderItemAmount(amount)}
-          />
-        ) : (
-          <ActionButton
-            backgroundColor="#303030"
-            icon="cart_dark.svg"
-            text="В корзину"
-            width="180px"
-            textColor="#ffffff"
-            onClick={() => console.log('AddComboButton')}
-            // onClick={() => this.addToCartButton(this.props.product)}
-          />
-        )}
+        <ActionButton
+          backgroundColor="#303030"
+          icon="cart_dark.svg"
+          text="В корзину"
+          width="180px"
+          textColor="#ffffff"
+          // onClick={() => console.log('AddComboButton')}
+          onClick={() => this.addToCartButton(this.props.products)}
+        />
       </React.Fragment>
     )
   }
@@ -94,6 +86,7 @@ const mapDispatchToProps = {
   addOrderItemToOrder,
   setOrderItemAmount,
   deleteOrderItem,
+  hideComboModal,
 }
 
 const mapStateToProps = (state: RootState) => {

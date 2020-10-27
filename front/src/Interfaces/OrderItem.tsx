@@ -10,4 +10,6 @@ export default interface OrderItem {
   orderItemModifiers: OrderItemModifier[]
   value: number
   order?: number
+  comboId?: string
+  pickDate?: number
 }

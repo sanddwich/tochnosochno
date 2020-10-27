@@ -20,6 +20,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/swiper.scss'
 import 'swiper/components/navigation/navigation.scss'
 import 'swiper/components/pagination/pagination.scss'
+import AddComboButton from '../AddComboButton/AddComboButton'
 
 // install Swiper components
 SwiperCore.use([Navigation, Pagination, Autoplay])
@@ -40,8 +41,10 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
   constructor(props: ComboCardModalProps) {
     super(props)
     this.state = {
-      comboConsist: typeof this.props.comboModalElement !== 'undefined' ? this.props.comboModalElement.products.slice(0, 3) : [],
-      comboProductVariants: typeof this.props.comboModalElement !== 'undefined' ? this.props.comboModalElement.products : [],
+      comboConsist:
+        typeof this.props.comboModalElement !== 'undefined' ? this.props.comboModalElement.products.slice(0, 3) : [],
+      comboProductVariants:
+        typeof this.props.comboModalElement !== 'undefined' ? this.props.comboModalElement.products : [],
       comboProductChangeId: 0,
     }
   }
@@ -68,7 +71,14 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
     this.setState({ comboProductChangeId, comboConsist })
   }
 
-  render() {    
+  render() {
+    let comboPrice: number = 0
+    typeof this.props.comboModalElement !== 'undefined'
+      ? (comboPrice =
+          this.props.comboModalElement.products[0].sizePrices[0].price.currentPrice *
+          (this.props.comboModalElement.comboProductsCount || 1))
+      : (comboPrice = 0)
+    // this.props.comboModalElement.products[0].sizePrices[0].price.currentPrice * (this.props.comboModalElement.comboProductsCount || 1)
     return (
       <React.Fragment>
         {this.props.showComboModal ? (
@@ -89,9 +99,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                     </Col>
                   </Row>
                   <Row>
-                    <Col className="ComboCardModal__descr">
-                      {this.props.comboModalElement.description}
-                    </Col>
+                    <Col className="ComboCardModal__descr">{this.props.comboModalElement.description}</Col>
                   </Row>
                   <Row className="ComboCardModal__productsList d-flex p-0">
                     <Col className="p-0">
@@ -110,10 +118,12 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                   <Row className="ComboCardModal__result p-0 m-0 mt-auto d-flex justify-content-around align-items-center">
                     <div className="ComboCardModal__resultTitle">Итого:</div>
                     <div className="ComboCardModal__resultPrice">
-                      980<span>руб</span>
+                      {comboPrice}
+                      <span>руб</span>
                     </div>
                     <div className="ComboCardModal__resultActionButton">
-                      <ActionButton
+                      <AddComboButton products={this.state.comboConsist} comboId={this.props.comboModalElement.id} />
+                      {/* <ActionButton
                         onClick={() => console.log('add to cart')}
                         textColor="white"
                         width="180px"
@@ -121,7 +131,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                         backgroundColor="#303030"
                         icon="cart_dark.svg"
                         hideTextMobile={true}
-                      />
+                      /> */}
                     </div>
                   </Row>
                 </Col>
