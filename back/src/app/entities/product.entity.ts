@@ -126,7 +126,11 @@ export class Product {
   })
   sizePrices: SizePrice[]
 
-  @OneToMany((type) => ProductModifier, (productModifier) => productModifier.product, { cascade: true })
+  // @OneToMany((type) => ProductModifier, (productModifier) => productModifier.product, { cascade: true })
+  // modifiers: ProductModifier[]
+
+  @ManyToMany((type) => ProductModifier, { cascade: true })
+  @JoinTable({ name: 'product_modifiers' })
   modifiers: ProductModifier[]
 
   @OneToMany((type) => ProductVariant, (productVariant) => productVariant.product)
@@ -135,7 +139,7 @@ export class Product {
   @OneToMany((type) => OrderItem, (orderItem) => orderItem.product)
   orderItems: OrderItem[]
 
-  @ManyToOne((type) => Group, (group) => group.products)
+  @ManyToOne((type) => Group, (group) => group.products, { cascade: true })
   parentGroup: Group
 
   @OneToMany((type) => Facet, (facet) => facet.product)

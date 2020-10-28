@@ -79,7 +79,7 @@ class CookingTime extends React.Component<CookingTimeProps, CookingTimeState> {
       isSelectTime: true,
     })
     if (this.state.cookingTime) {
-      this.props.setPrepareDate(format(new Date(this.state.cookingTime.toString()), 'YYYY-MM-DD HH:mm'))
+      this.props.setPrepareDate(format(new Date(this.state.cookingTime.toString()), 'YYYY-MM-DD HH:mm:ss.SSS'))
     }
   }
 
@@ -88,7 +88,7 @@ class CookingTime extends React.Component<CookingTimeProps, CookingTimeState> {
       isSelectTime: false,
     })
     // this.props.setPrepareDate(this.addHour(1).toString())
-    this.props.setPrepareDate(format(this.addHour(1), 'YYYY-MM-DD HH:mm'))
+    this.props.setPrepareDate(format(this.addHour(1), 'YYYY-MM-DD HH:mm:ss.SSS'))
   }
 
   setCookingTime = (cookingTime: Date | [Date, Date] | null) => {
@@ -100,7 +100,7 @@ class CookingTime extends React.Component<CookingTimeProps, CookingTimeState> {
       //     new Date(cookingTime.toString()).toLocaleTimeString()
       // )
 
-      this.props.setPrepareDate(format(new Date(cookingTime.toString()), 'YYYY-MM-DD HH:mm'))
+      this.props.setPrepareDate(format(new Date(cookingTime.toString()), 'YYYY-MM-DD HH:mm:ss.SSS'))
     }
   }
 

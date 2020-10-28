@@ -184,21 +184,34 @@ export class ApiController {
         isGroupModifier: false,
         // isSiteDisplay: true,
       },
+
       relations: [
         'products',
         'products.sizePrices',
+        'products.sizePrices.price',
+        'products.parentGroup',
         'products.groupModifiers',
         'products.groupModifiers.group',
         'products.groupModifiers.childModifiers',
         'products.groupModifiers.childModifiers.product',
         'products.groupModifiers.childModifiers.product.sizePrices',
         'products.groupModifiers.childModifiers.product.sizePrices.price',
-        'products.sizePrices.price',
         'products.modifiers',
-        'products.variants',
+        'products.modifiers.product',
         'products.modifiers.modifier',
+        'products.variants',
         'products.facets',
       ],
+    })
+
+    products.map((rootGroup) => {
+      if (!rootGroup.parentGroup) {
+        products.map((group) => {
+          if (group.parentGroup === rootGroup.id) {
+            rootGroup.products.push(...group.products)
+          }
+        })
+      }
     })
 
     const terminals = await getRepository(Terminal).find({ isAlive: true })
@@ -389,6 +402,7 @@ export class ApiController {
           throw new Error(iikoOrder.message)
         }
         order.orderIikoId = iikoOrder.orderInfo.id
+
         const orderDb = await repositoryOrder.save(order)
       }
     } catch (error) {

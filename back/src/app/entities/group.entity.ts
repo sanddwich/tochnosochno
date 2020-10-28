@@ -65,6 +65,6 @@ export class Group {
   @Column({ nullable: true })
   parentGroup: string
 
-  @OneToMany((type) => Product, (product) => product.parentGroup, { cascade: true })
+  @OneToMany((type) => Product, (product) => product.parentGroup)
   products: Product[]
 }

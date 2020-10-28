@@ -131,7 +131,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
       let value = ''
       textfield.name === 'street' && (value = this.state.deliveryAddress.street.name)
       textfield.name === 'house' && (value = this.state.deliveryAddress.house)
-      textfield.name === 'phone' && (value = this.props.phone || this.props.customer.phone)
+      textfield.name === 'phone' && (value = this.props.phone || this.props.customer?.phone || '')
 
       if (textfield.required) {
         isValid = isValid && value.trim() !== ''

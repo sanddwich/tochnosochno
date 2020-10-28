@@ -10,9 +10,10 @@ import OrderTotalPrice from '../../../../../SharedComponents/OrderTotalPrice/Ord
 import PaymentSection from '../../../../../SharedComponents/PaymentSection/PaymentSection'
 import PoliticSection from '../../../../../SharedComponents/PoliticSection/PoliticSection'
 import { showLoginModal } from '../../../../../Redux/actions/app'
+import { processOrder } from '../../../../../Redux/actions/order'
 import { setPhone } from '../../../../../Redux/actions/auth'
 import InputMask from 'react-input-mask'
-
+import * as Scroll from 'react-scroll'
 import './DeliveryByClient.scss'
 import { DeliveryAddressValidation } from '../../../../../Interfaces/DeliveryAddressValidation'
 import Customer from '../../../../../Interfaces/Customer'
@@ -26,17 +27,20 @@ interface DeliveryByClientProps {
   setPhone: (phone: string) => void
   phone: string
   customer: Customer
+  processOrder: any
 }
 
 interface DeliveryByClientState {
   loading: boolean
   validationTextfields: DeliveryAddressValidation[]
+  formSubmitted: boolean
 }
 
 class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryByClientState> {
   constructor(props: DeliveryByClientProps) {
     super(props)
     this.state = {
+      formSubmitted: false,
       loading: true,
       validationTextfields: [
         {
@@ -51,8 +55,42 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
   }
 
   processOrder = () => {
-    if (!this.props.isAuth) {
-      this.props.showLoginModal()
+    this.setState({ formSubmitted: true })
+
+    let formValid: boolean = true
+    const validationTextfields = this.state.validationTextfields
+    validationTextfields.map((textfield) => {
+      let isValid: boolean = true
+      let value = ''
+      textfield.name === 'phone' && (value = this.props.phone || this.props.customer?.phone || '')
+
+      if (textfield.required) {
+        isValid = isValid && value.trim() !== ''
+      }
+      if (textfield.minLength > 0) {
+        isValid = isValid && value.trim().length > textfield.minLength
+      }
+
+      textfield.touched = true
+      textfield.isValid = isValid
+
+      formValid = formValid && isValid
+    })
+
+    if (formValid) {
+      if (!this.props.isAuth) {
+        this.props.showLoginModal()
+      } else {
+        this.props.processOrder()
+      }
+    } else {
+      Scroll.scroller.scrollTo('formElement', {
+        duration: 800,
+        delay: 0,
+        smooth: true,
+        offset: -200,
+      })
+      this.setState({ validationTextfields })
     }
   }
 
@@ -64,8 +102,6 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
     const state = this.state
     let phone = ''
 
-    // textFieldName === 'name' && (state.deliveryAddress.name = value)
-    // textFieldName === 'street' && (state.deliveryAddress.street.name = value)
     textFieldName === 'phone' && this.props.setPhone(value)
 
     state.validationTextfields.map((textfield) => {
@@ -118,73 +154,78 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
               </Map>
             </YMaps>
           </div>
-          <form className="DeliveryByClient__form">
-            <div className="DeliveryByClient__form__row">
-              <div className="DeliveryByClient__form__group">
-                <label htmlFor="name">Ваше имя*</label>
-                <input
-                  onInput={(e: React.FormEvent<HTMLInputElement>) => {
-                    this.textFieldInputHandler(e.currentTarget.value, 'name')
-                  }}
-                  value={this.props.customer?.name || ''}
-                  className="DeliveryByClient__form__name"
-                  id="name"
-                  type="text"
-                  placeholder="Николай.."
-                />
+          <Scroll.Element name="formElement">
+            <form className="DeliveryByClient__form">
+              <div className="DeliveryByClient__form__row">
+                <div className="DeliveryByClient__form__group">
+                  <label htmlFor="name">Ваше имя*</label>
+                  <input
+                    onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                      this.textFieldInputHandler(e.currentTarget.value, 'name')
+                    }}
+                    defaultValue={this.props.customer?.name || ''}
+                    className="DeliveryByClient__form__name"
+                    id="name"
+                    type="text"
+                    placeholder="Николай.."
+                  />
+                </div>
+                <div className="DeliveryByClient__form__group">
+                  <label htmlFor="phone">Телефон*</label>
+                  <InputMask
+                    mask="8(999) 999-99-99"
+                    defaultValue={this.props.phone || this.props.customer?.phone.substring(2)}
+                    onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                      this.textFieldInputHandler(e.currentTarget.value, 'phone')
+                    }}
+                    maskChar=" "
+                  >
+                    {(inputProps: any) => (
+                      <input
+                        {...inputProps}
+                        id="phone"
+                        // className={`${this.state.phoneError && !this.state.phoneValid ? 'error' : ''} ${
+                        //   this.state.phoneValid ? 'correct' : ''
+                        // }`}
+                        type="text"
+                        placeholder="8 (999) 123-45-67"
+                      />
+                    )}
+                  </InputMask>
+                  {this.state.validationTextfields[0].touched && !this.state.validationTextfields[0].isValid ? (
+                    <div className="DeliveryByCourier__form__error">Введите номер телефона</div>
+                  ) : null}
+                </div>
               </div>
-              <div className="DeliveryByClient__form__group">
-                <label htmlFor="phone">Телефон*</label>
-                <InputMask
-                  mask="8(999) 999-99-99"
-                  value={this.props.phone || this.props.customer?.phone.substring(2)}
-                  onInput={(e: React.FormEvent<HTMLInputElement>) => {
-                    this.textFieldInputHandler(e.currentTarget.value, 'phone')
-                  }}
-                  maskChar=" "
-                >
-                  {(inputProps: any) => (
-                    <input
-                      {...inputProps}
-                      id="phone"
-                      // className={`${this.state.phoneError && !this.state.phoneValid ? 'error' : ''} ${
-                      //   this.state.phoneValid ? 'correct' : ''
-                      // }`}
-                      type="text"
-                      placeholder="8 (999) 123-45-67"
-                    />
-                  )}
-                </InputMask>
+              <div className="DeliveryByClient__form__row">
+                <div className="DeliveryByClient__form__group">
+                  <label htmlFor="email">E-mail</label>
+                  <input
+                    onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                      this.textFieldInputHandler(e.currentTarget.value, 'email')
+                    }}
+                    id="email"
+                    type="text"
+                    placeholder="tochno-sochno@mail.ru"
+                  />
+                </div>
               </div>
-            </div>
-            <div className="DeliveryByClient__form__row">
-              <div className="DeliveryByClient__form__group">
-                <label htmlFor="email">E-mail</label>
-                <input
-                  onInput={(e: React.FormEvent<HTMLInputElement>) => {
-                    this.textFieldInputHandler(e.currentTarget.value, 'email')
-                  }}
-                  id="email"
-                  type="text"
-                  placeholder="tochno-sochno@mail.ru"
-                />
-              </div>
-            </div>
-            <CookingTime />
-            <OrderTotalPrice />
+              <CookingTime />
+              <OrderTotalPrice />
 
-            <PoliticSection />
-            <PaymentSection isDelivery={false} />
-            <ActionButton
-              disabled={!(this.props.ruleCheck && this.props.smsCheck && this.props.personCheck)}
-              onClick={() => this.processOrder()}
-              textColor="white"
-              width="280px"
-              text="Завершить заказ"
-              backgroundColor="#303030"
-              icon="cart_dark.svg"
-            />
-          </form>
+              <PoliticSection />
+              <PaymentSection isDelivery={false} />
+              <ActionButton
+                disabled={!(this.props.ruleCheck && this.props.smsCheck && this.props.personCheck)}
+                onClick={() => this.processOrder()}
+                textColor="white"
+                width="280px"
+                text="Завершить заказ"
+                backgroundColor="#303030"
+                icon="cart_dark.svg"
+              />
+            </form>
+          </Scroll.Element>
         </div>
 
         <div hidden={!this.state.loading} className="DeliveryByClient__loader">
@@ -198,6 +239,7 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
 const mapDispatchToProps = {
   showLoginModal,
   setPhone,
+  processOrder,
 }
 
 const mapStateToProps = (state: RootState) => {
