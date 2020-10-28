@@ -1,5 +1,5 @@
 import { Config, dependency, HttpResponseBadRequest } from '@foal/core'
-import { getRepository } from 'typeorm'
+import { getConnection, getRepository } from 'typeorm'
 import {
   Group,
   Product,
@@ -17,6 +17,8 @@ import {
   OrderItemModifier,
   ProductModifier,
   Terminal,
+  GroupModifier,
+  Modifier,
 } from '../entities'
 import { Organization } from '../entities/organization.entity'
 import DeliveryPoint from '../interfaces/DeliveryPoint'
@@ -314,13 +316,92 @@ export class Iiko {
       if (!res.ok) {
         throw new Error(`${res.status} ошибка на сервере IIKO.`)
       }
+      const connection = getConnection()
       const productRepository = getRepository(Product)
-      const sizePriceRepository = getRepository(SizePrice)
+      const sizeRepository = getRepository(Size)
       const menu: Menu = await res.json()
       const groups = await getRepository(Group).save(menu.groups)
       const productCategories = await getRepository(ProductCategory).save(menu.productCategories)
+      const sizes = await sizeRepository.save(menu.sizes)
+
       menu.products.map(async (prod: Product) => {
+        const productModifiers = prod.modifiers
+        const productGroupModifiers = prod.groupModifiers
+
+        prod.groupModifiers = []
+        prod.modifiers = []
+
         const product = await productRepository.save(prod)
+        if (productModifiers.length > 0) {
+          productModifiers.map(async (modifier) => {
+            await connection
+              .createQueryBuilder()
+              .insert()
+              .into(ProductModifier)
+              .values(modifier)
+              .orUpdate({ conflict_target: ['id'], overwrite: ['defaultAmount', 'minAmount', 'maxAmount', 'required'] })
+              .execute()
+
+            await connection
+              .createQueryBuilder()
+              .insert()
+              .into('product_modifiers')
+              .values({ productId: product.id, productModifierId: modifier.id })
+              .orUpdate({
+                conflict_target: ['productId', 'productModifierId'],
+                overwrite: ['productId', 'productModifierId'],
+              })
+              .execute()
+          })
+        }
+
+        if (productGroupModifiers.length > 0) {
+          productGroupModifiers.map(async (productGroupModifier) => {
+            await connection
+              .createQueryBuilder()
+              .insert()
+              .into(GroupModifier)
+              .values(productGroupModifier)
+              .orUpdate({ conflict_target: ['id'], overwrite: ['defaultAmount', 'minAmount', 'maxAmount', 'required'] })
+              .execute()
+            await connection
+              .createQueryBuilder()
+              .insert()
+              .into('product_group_modifiers')
+              .values({ productId: product.id, groupModifierId: productGroupModifier.id })
+              .orUpdate({
+                conflict_target: ['productId', 'groupModifierId'],
+                overwrite: ['productId', 'groupModifierId'],
+              })
+              .execute()
+
+            if (productGroupModifier.childModifiers.length > 0) {
+              productGroupModifier.childModifiers.map(async (childModifier) => {
+                await connection
+                  .createQueryBuilder()
+                  .insert()
+                  .into(Modifier)
+                  .values(childModifier)
+                  .orUpdate({
+                    conflict_target: ['id'],
+                    overwrite: ['defaultAmount', 'minAmount', 'maxAmount', 'required'],
+                  })
+                  .execute()
+
+                await connection
+                  .createQueryBuilder()
+                  .insert()
+                  .into('group_modifier_childModifiers')
+                  .values({ modifierId: childModifier.id, groupModifierId: productGroupModifier.id })
+                  .orUpdate({
+                    conflict_target: [' modifierId', 'groupModifierId'],
+                    overwrite: [' modifierId', 'groupModifierId'],
+                  })
+                  .execute()
+              })
+            }
+          })
+        }
       })
 
       return true
@@ -404,7 +485,8 @@ export class Iiko {
       item.orderItemModifiers.map((orderItemModifier: OrderItemModifier) => {
         iikoOrderItemModifers.push({
           productId: orderItemModifier.productModifier.id,
-          productGroupId: orderItemModifier.productModifier.product.groupId,
+          // productGroupId: orderItemModifier.productModifier.product.groupId,
+          productGroupId: orderItemModifier.product.groupId,
           amount: orderItemModifier.amount,
         })
       })
@@ -440,7 +522,7 @@ export class Iiko {
       comment: comment,
       deliveryPoint,
       orderServiceType: orderServiceType,
-      sourceKey: 'myaso.cafe',
+      sourceKey: 'site',
       items: iikoOrderItems,
     }
     console.log(iikoOrder)

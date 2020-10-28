@@ -25,6 +25,7 @@ class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
   }
 
   render() {
+    console.log(this.props.menu)
     return (
       <React.Fragment>
         <Container fluid className="HeaderDown p-0 m-0 d-none d-lg-flex">

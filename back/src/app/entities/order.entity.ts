@@ -59,7 +59,8 @@ export class Order {
   @ManyToOne((type) => Customer, (customer) => customer.orders)
   customer: Customer
 
-  @ManyToOne((type) => Address, (address) => address.orders, { cascade: true })
+  //Чтобы добавлялся новый адрес нужно поставить cascade: true
+  @ManyToOne((type) => Address, (address) => address.orders)
   address: Address
 
   @OneToMany((type) => OrderItem, (orderItem) => orderItem.order, { cascade: true })

@@ -9,6 +9,7 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryColumn,
+  JoinColumn,
 } from 'typeorm'
 import { Product, OrderItemModifier, GroupModifier } from '.'
 import { Modifier } from './modifier.entity'
@@ -30,8 +31,12 @@ export class ProductModifier {
   @Column()
   defaultAmount: number
 
-  @ManyToOne((type) => Product, (product) => product.modifiers)
+  @OneToOne((type) => Product)
+  @JoinColumn({ name: 'id', referencedColumnName: 'id' })
   product: Product
+
+  // @ManyToOne((type) => Product, (product) => product.modifiers)
+  // product: Product
 
   @ManyToOne((type) => Modifier, (modifier) => modifier.productModifier)
   modifier: Modifier
