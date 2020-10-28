@@ -32,7 +32,7 @@ import {
 import { AuthState } from '../interfaces/interfaces'
 import { OrderActionType } from '../interfaces/order'
 
-import { showProductDialog, showCartDialog, showCreditCardForm } from './app'
+import { showProductDialog, showCartDialog, showCreditCardForm, showSuccessModal } from './app'
 import { getCustomer } from './auth'
 
 const apiServer = 'http://localhost:3001'
@@ -94,6 +94,7 @@ export const processOrder = (): ThunkAction<void, RootState, null, any> => {
       if (res.status === 201) {
         dispatch(setNewOrder())
         dispatch(getCustomer())
+        dispatch(showSuccessModal())
       }
       if (res.status === 200) {
         dispatch(showCreditCardForm())

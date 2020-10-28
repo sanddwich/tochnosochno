@@ -4,6 +4,7 @@ import {
   HIDE_LOGIN,
   HIDE_PRODUCT_MODAL,
   HIDE_SIDE_DIALOG,
+  HIDE_SUCCESS_MODAL,
   SHOW_CART,
   SHOW_COMBO_MODAL,
   SHOW_COOKING_TIME,
@@ -15,6 +16,7 @@ import {
   SHOW_PAYMENT,
   SHOW_PRODUCT,
   SHOW_PRODUCT_MODAL,
+  SHOW_SUCCESS_MODAL,
 } from '../constants/ActionTypes'
 import { AppActionType } from '../interfaces/app'
 import { AppState } from '../interfaces/interfaces'
@@ -28,6 +30,7 @@ const initialState: AppState = {
   showProductModal: false,
   showLogin: false,
   showComboModal: false,
+  isShowSuccessModal: false,
 }
 const app = (state: AppState = initialState, action: AppActionType) => {
   switch (action.type) {
@@ -104,7 +107,7 @@ const app = (state: AppState = initialState, action: AppActionType) => {
       return {
         ...state,
         showComboModal: true,
-        comboModalElement: action.combo
+        comboModalElement: action.combo,
       }
     case HIDE_COMBO_MODAL:
       return {
@@ -122,6 +125,16 @@ const app = (state: AppState = initialState, action: AppActionType) => {
       return {
         ...state,
         showLogin: false,
+      }
+    case SHOW_SUCCESS_MODAL:
+      return {
+        ...state,
+        isShowSuccessModal: true,
+      }
+    case HIDE_SUCCESS_MODAL:
+      return {
+        ...state,
+        isShowSuccessModal: false,
       }
     default:
       return state

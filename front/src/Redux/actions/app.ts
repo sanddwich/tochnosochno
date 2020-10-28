@@ -6,6 +6,7 @@ import {
   HIDE_LOGIN,
   HIDE_PRODUCT_MODAL,
   HIDE_SIDE_DIALOG,
+  HIDE_SUCCESS_MODAL,
   SHOW_CART,
   SHOW_COMBO_MODAL,
   SHOW_COOKING_TIME,
@@ -17,6 +18,7 @@ import {
   SHOW_PAYMENT,
   SHOW_PRODUCT,
   SHOW_PRODUCT_MODAL,
+  SHOW_SUCCESS_MODAL,
 } from '../constants/ActionTypes'
 
 export const showProductDialog = (isChangeProduct: boolean) => ({
@@ -79,4 +81,12 @@ export const showLoginModal = () => ({
 
 export const hideLoginModal = () => ({
   type: HIDE_LOGIN,
+})
+
+export const showSuccessModal = () => ({
+  type: SHOW_SUCCESS_MODAL,
+})
+
+export const hideSuccessModal = () => ({
+  type: HIDE_SUCCESS_MODAL,
 })

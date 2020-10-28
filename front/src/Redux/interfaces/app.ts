@@ -7,6 +7,7 @@ import {
   HIDE_LOGIN,
   HIDE_PRODUCT_MODAL,
   HIDE_SIDE_DIALOG,
+  HIDE_SUCCESS_MODAL,
   SHOW_CART,
   SHOW_COMBO_MODAL,
   SHOW_COOKING_TIME,
@@ -18,6 +19,7 @@ import {
   SHOW_PAYMENT,
   SHOW_PRODUCT,
   SHOW_PRODUCT_MODAL,
+  SHOW_SUCCESS_MODAL,
 } from '../constants/ActionTypes'
 
 interface GetAppAction {
@@ -80,6 +82,14 @@ interface HideLoginModal {
   type: typeof HIDE_LOGIN
 }
 
+interface ShowSuccessModal {
+  type: typeof SHOW_SUCCESS_MODAL
+}
+
+interface HideSuccessModal {
+  type: typeof HIDE_SUCCESS_MODAL
+}
+
 export type AppActionType =
   | GetAppAction
   | ShowProductDialogAction
@@ -97,3 +107,5 @@ export type AppActionType =
   | HideLoginModal
   | ShowComboModal
   | HideComboModal
+  | ShowSuccessModal
+  | HideSuccessModal

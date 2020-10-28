@@ -52,4 +52,5 @@ export interface AppState {
   comboModalElement?: Category
   showLogin: boolean
   showComboModal: boolean
+  isShowSuccessModal: boolean
 }
