@@ -15,19 +15,15 @@ import OrderTotalPrice from '../OrderTotalPrice/OrderTotalPrice'
 import { setGuestCount } from '../../Redux/actions/order'
 
 import './CartOrder.scss'
-import ComboOrderBlockDescription from '../ComboOrderBlockDescription/ComboOrderBlockDescription'
-import _ from 'lodash'
-import ComboItemOrder from '../../Interfaces/ComboItemOrder'
 
 interface CartOrderProps {
-  menu: Category[]
   order: Order
   setGuestCount: (count: number) => void
 }
 
 interface CartOrderState {
   cartProducts: OrderItem[]
-  cartCombos: ComboItemOrder[]
+  cartCombos: OrderItem[]
 }
 
 class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
@@ -37,40 +33,10 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
       cartProducts: this.setStateCartProducts() || [],
       cartCombos: this.setStateCartCombos() || [],
     }
-    // console.log(this.props.menu)
-  }
-
-  getCombos = (comboProducts: OrderItem[]): ComboItemOrder[] => {
-    // Уникальные значения pickData
-    let pickDatas: number[] = []
-    comboProducts.map((item) => {
-      pickDatas.push(item.pickDate || 0)
-    })
-    pickDatas = _.uniq(pickDatas)
-
-    //Получение массива подмассивов OrderItem с уникальными pickData
-    let orderItemsPools = pickDatas.map((pd) => {
-      const pdProducts = comboProducts.filter((cp) => cp.pickDate === pd)
-      return pdProducts
-    })
-
-    //Формирование массива элементов типа Combo (ComboItemOrder)
-    const comboItemsOrder: ComboItemOrder[] = orderItemsPools.map((comboItems) => {
-      const result: ComboItemOrder = {
-        comboId: comboItems[0].id || Math.random(),
-        name: this.props.menu.find((cat) => cat.id === comboItems[0].comboId)?.name || '',
-        pickData: comboItems[0].id || 0,
-        image: this.props.menu.find((cat) => cat.id === comboItems[0].comboId)?.imageLinks,
-        products: comboItems.map((comboItem) => comboItem.product),
-      }
-      return result
-    })
-
-    return comboItemsOrder
   }
 
   setStateCartProducts = (): OrderItem[] => {
-    let cartProducts: any = this.props.order.items?.filter((item) => {
+    let cartProducts: any = this.props.order.items?.filter(item => {
       if (typeof item.comboId === 'undefined') {
         return item
       }
@@ -78,44 +44,20 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
     return cartProducts
   }
 
-  setStateCartCombos = (): ComboItemOrder[] => {
-    let cartCombo: any = this.props.order.items?.filter((item) => {
+  setStateCartCombos = (): OrderItem[] => {
+    let cartCombo: any = this.props.order.items?.filter(item => {
       if (typeof item.comboId !== 'undefined') {
         return item.product
       }
     })
-
-    return cartCombo.length > 0 ? this.getCombos(cartCombo) : []
-    // return this.getCombos(cartCombo)
+    return cartCombo
   }
 
-  renderComboListBlock = (): any => {
-    return (
-      <div className="CartOrder__products">
-        <h1>Наборы Комбо:</h1>
-        {this.state.cartCombos.map((comboItem: ComboItemOrder, index) => {
-          return <ComboOrderBlockDescription key={index+comboItem.comboId} comboItem={comboItem} />
-        })}
-      </div>
-    )
-  }
-
-  renderProductListBlock = (): any => {
-    return (
-      <div className="CartOrder__products">
-        <h1>Продукты:</h1>
-        {this.state.cartProducts.map((orderItem: OrderItem) => {
-          return <LineProductWithNumberInput key={orderItem.id} orderItem={orderItem} />
-        })}
-      </div>
-    )
-  }
+  componentDidMount() {}
 
   render() {
     console.log(this.state.cartProducts)
     console.log(this.state.cartCombos)
-    // console.log(this.getCombos(this.state.cartCombos))
-
     return (
       <div className="CartOrder">
         <div className="CartOrder__banner-mob">
@@ -126,9 +68,11 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
           <React.Fragment>
             {this.props.order.items && this.props.order.items.length > 0 ? (
               <React.Fragment>
-                {this.state.cartCombos.length > 0 ? this.renderComboListBlock() : null}
-
-                {this.state.cartProducts.length > 0 ? this.renderProductListBlock() : null}
+                <div className="CartOrder__products">
+                  {this.props.order.items.map((orderItem: OrderItem) => {
+                    return <LineProductWithNumberInput key={orderItem.id} orderItem={orderItem} />
+                  })}
+                </div>
 
                 <div className="CartOrder__guests">
                   <NumberInput
@@ -178,10 +122,8 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: RootState) => {
   const { order } = state.order
-  const { menu } = state.menu
   return {
     order,
-    menu,
   }
 }
 
