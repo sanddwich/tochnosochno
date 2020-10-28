@@ -16,11 +16,11 @@ class ComboOrderBlockDescription extends React.Component<
   render() {
     return (
       <Container fluid className="ComboOrderBlockDescription m-0 p-0">
-        <Row className="ComboOrderBlockDescription__actionLine m-0 p-0 d-flex justify-content-between">
-          <div className="ComboOrderBlockDescription__actionLineImg">
+        <Row className="ComboOrderBlockDescription__actionLine m-0 p-0 d-flex justify-content-between align-items-center">
+          <div className="ComboOrderBlockDescription__actionLineImg ">
             <img
               src={`${
-                typeof this.props.comboItem.image !== 'undefined'
+                typeof this.props.comboItem.image !== 'undefined' && this.props.comboItem.image.length > 0
                   ? this.props.comboItem.image[0]
                   : '/images/products/no-photo.png'
               }`}

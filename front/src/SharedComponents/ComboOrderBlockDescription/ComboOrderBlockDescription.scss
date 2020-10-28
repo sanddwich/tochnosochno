@@ -1,6 +1,12 @@
 .ComboOrderBlockDescription {
 
   .ComboOrderBlockDescription__actionLine {
-    
+    height:70px;
+  }
+
+  .ComboOrderBlockDescription__actionLineImg {
+    img {
+      height: 50px;
+    }
   }
 }

@@ -112,8 +112,8 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
   }
 
   render() {
-    console.log(this.state.cartProducts)
-    console.log(this.state.cartCombos)
+    // console.log(this.state.cartProducts)
+    // console.log(this.state.cartCombos)
     // console.log(this.getCombos(this.state.cartCombos))
 
     return (
