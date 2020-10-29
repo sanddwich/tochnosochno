@@ -32,7 +32,7 @@ import {
 import { AuthState } from '../interfaces/interfaces'
 import { OrderActionType } from '../interfaces/order'
 
-import { showProductDialog, showCartDialog, showCreditCardForm, showSuccessModal } from './app'
+import { showProductDialog, showCartDialog, showCreditCardForm, showSuccessModal, showLoginModal } from './app'
 import { getCustomer } from './auth'
 
 const apiServer = 'http://localhost:3001'
@@ -95,6 +95,9 @@ export const processOrder = (): ThunkAction<void, RootState, null, any> => {
         dispatch(setNewOrder())
         dispatch(getCustomer())
         dispatch(showSuccessModal())
+      }
+      if (res.status === 401) {
+        dispatch(showLoginModal())
       }
       if (res.status === 200) {
         dispatch(showCreditCardForm())
@@ -228,6 +231,45 @@ export const getStreetsByCity = (street: string, cityId: string): ThunkAction<vo
         dispatch(hideLoading())
       }
       const resData: [] = await res.json()
+      return resData
+    } catch (err) {
+      dispatch(setError(err.message))
+    }
+  }
+}
+
+export const getDeliveryRestrictions = (
+  streetId: string,
+  deliverySum: number,
+  house: string,
+  isCourierDelivery: boolean
+): ThunkAction<void, RootState, null, any> => {
+  return async (dispatch, getState) => {
+    try {
+      const { token } = getState().auth
+
+      const cookies = new Cookies()
+      const csrfToken = cookies.get('csrfToken')
+
+      dispatch(setLoading())
+      const res = await fetch(`${apiServer}/api/delivery`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          'CSRF-Token': csrfToken,
+        },
+        body: JSON.stringify({ streetId, deliverySum, house, isCourierDelivery }),
+      })
+
+      if (!res.ok) {
+        const resData: ApiResponse = await res.json()
+        throw new Error(resData.message)
+      }
+      if (res.status === 200) {
+        dispatch(hideLoading())
+      }
+      const resData = await res.json()
       return resData
     } catch (err) {
       dispatch(setError(err.message))

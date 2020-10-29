@@ -19,6 +19,7 @@ import {
   setDelivery,
   setPrepareDate,
   processOrder,
+  getDeliveryRestrictions,
 } from '../../../../../Redux/actions/order'
 
 import './DeliveryByCourier.scss'
@@ -27,7 +28,9 @@ import Order from '../../../../../Interfaces/Order'
 import Address from '../../../../../Interfaces/Address'
 import { DeliveryAddressValidation } from '../../../../../Interfaces/DeliveryAddressValidation'
 import Customer from '../../../../../Interfaces/Customer'
+import { YMaps, Map, Placemark } from 'react-yandex-maps'
 import * as Scroll from 'react-scroll'
+import Loader from '../../../../../SharedComponents/Loader/Loader'
 
 interface DeliveryByCourierProps {
   getStreetVariants: any
@@ -40,6 +43,7 @@ interface DeliveryByCourierProps {
   isAuth: boolean
   showLoginModal: () => void
   setDelivery: (isDelivery: boolean, address: Address) => void
+  getDeliveryRestrictions: any
   smsCheck: boolean
   ruleCheck: boolean
   personCheck: boolean
@@ -56,12 +60,18 @@ interface DeliveryByCourierState {
   phone: string
   validCity: boolean
   formSubmitted: boolean
+  loading: boolean
+  coordinates: number[]
+  deliverySum: number
 }
 
 class DeliveryByCourier extends React.Component<DeliveryByCourierProps, DeliveryByCourierState> {
   constructor(props: DeliveryByCourierProps) {
     super(props)
     this.state = {
+      deliverySum: 0,
+      loading: true,
+      coordinates: [46.347801, 48.037095],
       formSubmitted: false,
       validCity: false,
       isDelivery: true,
@@ -103,12 +113,38 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     }
   }
 
+  setLoading = (loading: boolean) => {
+    this.setState({ loading })
+  }
+
   checkValidation = () => {
     if (this.state.cityId.length < 28) this.setState({ validCity: true })
   }
 
   componentDidMount() {
     this.selectCitiesFromIiko()
+  }
+
+  getDeliveryRestrictions = async () => {
+    const streetId = this.props.order.address?.street.id
+    const house = this.props.order.address?.house
+    const deliverySum = this.props.order.amount
+    const isCourierDelivery = true
+    if (streetId && house) {
+      const deliveryRestriction = await this.props.getDeliveryRestrictions(
+        streetId,
+        deliverySum,
+        house,
+        isCourierDelivery
+      )
+      console.log(deliveryRestriction)
+      if (deliveryRestriction.location) {
+        this.setState({ coordinates: [deliveryRestriction.location.latitude, deliveryRestriction.location.longitude] })
+
+        if (deliveryRestriction.allowedItems.length > 0) {
+        }
+      }
+    }
   }
 
   processOrder = () => {
@@ -269,12 +305,15 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
 
     this.setState({ ...state })
     this.props.setDelivery(this.state.isDelivery, state.deliveryAddress)
+    if (textFieldName === 'street' || textFieldName === 'house') {
+      this.getDeliveryRestrictions()
+    }
   }
 
   render() {
     return (
       <Container className="DeliveryByCourier p-0  mt-5">
-        <Scroll.Element name="formElement">
+        <Scroll.Element hidden={this.state.loading} name="formElement">
           <form autoComplete="off" className="DeliveryByCourier__form">
             <div className="DeliveryByCourier__form__group">
               <div className="DeliveryByCourier__form__row">
@@ -346,6 +385,22 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                   <div className="DeliveryByCourier__form__error">Введите дом и корпус</div>
                 ) : null}
               </div>
+            </div>
+
+            <div className="DeliveryByClient__map mt-4">
+              <YMaps>
+                <Map
+                  onLoad={() => this.setLoading(false)}
+                  onError={() => this.setLoading(false)}
+                  className="DeliveryByClient__map__yandex"
+                  state={{
+                    center: this.state.coordinates,
+                    zoom: 17,
+                  }}
+                >
+                  <Placemark geometry={this.state.coordinates} />
+                </Map>
+              </YMaps>
             </div>
             <div className="DeliveryByCourier__form__row">
               <div className="DeliveryByCourier__form__group">
@@ -481,6 +536,9 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
             </div>
           </form>
         </Scroll.Element>
+        <div hidden={!this.state.loading} className="DeliveryByClient__loader">
+          <Loader />
+        </div>
       </Container>
     )
   }
@@ -495,6 +553,7 @@ const mapDispatchToProps = {
   showLoginModal,
   setDelivery,
   processOrder,
+  getDeliveryRestrictions,
 }
 
 const mapStateToProps = (state: any) => {
