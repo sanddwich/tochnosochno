@@ -5,10 +5,10 @@ export default interface Category {
   description: string
   comboProductsCount?: number
   id: string
-  images: string  
+  images: string
   imageLinks: String[]
   isDeleted: boolean
-  isIcludedInMenu: boolean
+  isIncludedInMenu: boolean
   isSiteDisplay: boolean
   isCombo: boolean
   name: string
@@ -20,4 +20,5 @@ export default interface Category {
   seoTitle: string
   tags: string
   active?: boolean
+  parentGroup: string
 }

@@ -223,7 +223,6 @@ export class ApiController {
         })
       }
     })
-    console.log(products)
 
     const terminals = await getRepository(Terminal).find({ isAlive: true })
 
@@ -569,7 +568,6 @@ export class ApiController {
   @Post('/cities')
   @ApiServer({ url: '/api', description: 'Main API URL' })
   async getAllCities(ctx: Context<Customer, Session>) {
-    const city: string = ctx.request.body.city
     const cities = await getRepository(City).find({ where: { isDeleted: false }, order: { classifierId: 'ASC' } })
     return new HttpResponseOK(cities)
   }
@@ -596,5 +594,36 @@ export class ApiController {
       order: { classifierId: 'ASC' },
     })
     return new HttpResponseOK(streets)
+  }
+
+  @Post('/delivery')
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      streetId: { type: 'string' },
+      house: { type: 'string' },
+      deliverySum: { type: 'number' },
+      isCourierDelivery: { type: 'boolean' },
+    },
+    required: ['streetId', 'deliverySum', 'house', 'isCourierDelivery'],
+    type: 'object',
+  })
+  @ApiServer({ url: '/api', description: 'Main API URL' })
+  async getDeliveryRestirctions(ctx: Context<Customer, Session>) {
+    const streetId: string = ctx.request.body.streetId
+    const deliverySum: number = ctx.request.body.deliverySum
+    const house: string = ctx.request.body.house
+    const isCourierDelivery: boolean = ctx.request.body.isCourierDelivery
+    await this.iiko.init()
+    const deliveryRestriction = await this.iiko.getDeliveryRestirctions(streetId, house, deliverySum, isCourierDelivery)
+    if (deliveryRestriction) {
+      return new HttpResponseOK({
+        isAllowed: deliveryRestriction.isAllowed,
+        allowedItems: deliveryRestriction.allowedItems,
+        location: deliveryRestriction.location,
+      })
+    } else {
+      return new HttpResponseNotFound('Не найдена доставка по данному адресу')
+    }
   }
 }
