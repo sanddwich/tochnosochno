@@ -1,4 +1,5 @@
 import Category from '../../Interfaces/Category'
+import ComboItemOrder from '../../Interfaces/ComboItemOrder'
 import Customer from '../../Interfaces/Customer'
 import FormType from '../../Interfaces/FormType'
 import Order from '../../Interfaces/Order'
@@ -50,6 +51,7 @@ export interface AppState {
   showProductModal: boolean
   productModalProduct?: Product
   comboModalElement?: Category
+  comboItemOrder?: ComboItemOrder
   showLogin: boolean
   showComboModal: boolean
   isShowSuccessModal: boolean

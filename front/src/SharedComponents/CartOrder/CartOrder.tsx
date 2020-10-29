@@ -56,8 +56,9 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
 
     //Формирование массива элементов типа Combo (ComboItemOrder)
     const comboItemsOrder: ComboItemOrder[] = orderItemsPools.map((comboItems) => {
+      // console.log(comboItems)
       const result: ComboItemOrder = {
-        comboId: comboItems[0].id || Math.random(),
+        comboId: comboItems[0].comboId || '',
         name: this.props.menu.find((cat) => cat.id === comboItems[0].comboId)?.name || '',
         pickData: comboItems[0].id || 0,
         image: this.props.menu.find((cat) => cat.id === comboItems[0].comboId)?.imageLinks,
@@ -91,10 +92,11 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
 
   renderComboListBlock = (): any => {
     return (
-      <div className="CartOrder__products">
+      <div className="CartOrder__products mt-3 mb-3">
         <h1>Наборы Комбо:</h1>
         {this.state.cartCombos.map((comboItem: ComboItemOrder, index) => {
-          return <ComboOrderBlockDescription key={index+comboItem.comboId} comboItem={comboItem} />
+          const category = this.props.menu.find(cat => cat.id === comboItem.comboId) as Category
+          return <ComboOrderBlockDescription key={index+comboItem.comboId} comboItem={comboItem} category={category} />
         })}
       </div>
     )
@@ -102,7 +104,7 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
 
   renderProductListBlock = (): any => {
     return (
-      <div className="CartOrder__products">
+      <div className="CartOrder__products mb-3">
         <h1>Продукты:</h1>
         {this.state.cartProducts.map((orderItem: OrderItem) => {
           return <LineProductWithNumberInput key={orderItem.id} orderItem={orderItem} />

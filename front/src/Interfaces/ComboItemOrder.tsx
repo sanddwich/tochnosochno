@@ -1,7 +1,7 @@
 import Product from "./Product";
 
 export default interface ComboItemOrder {
-  comboId: number
+  comboId: string
   pickData: number
   name: String
   products: Product[]
