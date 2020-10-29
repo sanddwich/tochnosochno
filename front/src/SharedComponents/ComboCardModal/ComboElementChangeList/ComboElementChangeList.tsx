@@ -7,7 +7,7 @@ import './ComboElementChangeList.scss'
 interface ComboElementChangeListProps {
   products: Product[]
   comboConsist: Product[]
-  addNewProductAtCombo: (newProductId: number) => void
+  addNewProductAtCombo: (newProductId: string) => void
 }
 
 interface ComboElementChangeListState {}

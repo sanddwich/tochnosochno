@@ -66,7 +66,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
     this.setState({ comboConsistArrayElement })
   }
 
-  addNewProductAtCombo = (newProductId: number) => {
+  addNewProductAtCombo = (newProductId: string) => {
     let comboConsistArrayElement = this.state.comboConsistArrayElement
     const comboConsist = this.state.comboConsist
     const insertProduct = this.state.comboProductVariants.find((product) => product.id === newProductId) as Product
