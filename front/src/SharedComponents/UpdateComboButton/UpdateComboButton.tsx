@@ -5,7 +5,7 @@ import OrderItem from '../../Interfaces/OrderItem'
 import Product from '../../Interfaces/Product'
 import { RootState } from '../../Redux'
 import { addOrderItemToOrder, deleteOrderItem } from '../../Redux/actions/order'
-import { hideComboModal } from '../../Redux/actions/app'
+import { hideComboModal, appUpdateKey } from '../../Redux/actions/app'
 import ActionButton from '../ActionButton/ActionButton'
 import { cartAnimation } from '../../utils/animation'
 
@@ -14,6 +14,7 @@ interface UpdateComboButtonProps {
   pickDate: number
   comboId: string
   products: Product[]
+  appUpdateKey: () => void
   addOrderItemToOrder: (orderItem: OrderItem) => void
   hideComboModal: () => void
   deleteOrderItem: (orderItem: OrderItem) => void
@@ -36,33 +37,33 @@ class UpdateComboButton extends React.Component<UpdateComboButtonProps, UpdateCo
   }
 
   updateComboButton = (products: Product[]): void => {
-    // console.log('updateComboButton')
-    // console.log(this.props)
     const pickDate = new Date().valueOf()
 
     if (this.props.order.items) {
       this.props.order.items.map((item) => {
-        // console.log(item)
+        // console.log(item.comboId + " / " + this.props.comboId + " ====== " + item.pickDate + " / " + this.props.pickDate)
         if (item.comboId === this.props.comboId && item.pickDate === this.props.pickDate) {
-          console.log('deleted')
+          // console.log('Deleted: ' + item.comboId)
           this.props.deleteOrderItem(item)
         }
       })
 
-      // products.map((product) => {
-      //   const orderItem: OrderItem = {
-      //     product: product,
-      //     amount: 1,
-      //     orderItemModifiers: [],
-      //     value: product.sizePrices[0].price.currentPrice,
-      //     comboId: this.props.comboId,
-      //     pickDate: pickDate,
-      //   }
+      // console.log(products)
+      products.map((product) => {
+        const orderItem: OrderItem = {
+          product: product,
+          amount: 1,
+          orderItemModifiers: [],
+          value: product.sizePrices[0].price.currentPrice,
+          comboId: this.props.comboId,
+          pickDate: pickDate,
+        }
 
-      //   this.props.addOrderItemToOrder(orderItem)
-      // })
+        this.props.addOrderItemToOrder(orderItem)
+      })
 
-      // this.props.hideComboModal()
+      this.props.appUpdateKey()
+      this.props.hideComboModal()
     }
   }
 
@@ -87,6 +88,7 @@ const mapDispatchToProps = {
   addOrderItemToOrder,
   deleteOrderItem,
   hideComboModal,
+  appUpdateKey,
 }
 
 const mapStateToProps = (state: RootState) => {

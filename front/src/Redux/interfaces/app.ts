@@ -3,6 +3,7 @@ import ComboItemOrder from '../../Interfaces/ComboItemOrder'
 import Order from '../../Interfaces/Order'
 import Product from '../../Interfaces/Product'
 import {
+  APP_UPDATE_KEY,
   GET_APP,
   HIDE_COMBO_MODAL,
   HIDE_LOGIN,
@@ -76,6 +77,10 @@ interface HideComboModal {
   type: typeof HIDE_COMBO_MODAL
 }
 
+interface AppUpdateKey {
+  type: typeof APP_UPDATE_KEY
+}
+
 interface ShowLoginModal {
   type: typeof SHOW_LOGIN
 }
@@ -111,3 +116,4 @@ export type AppActionType =
   | HideComboModal
   | ShowSuccessModal
   | HideSuccessModal
+  | AppUpdateKey

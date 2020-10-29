@@ -33,7 +33,22 @@
       }
     }
 
+    .ComboOrderBlockDescription__actionLineName {
+      cursor: pointer;
+
+      &:hover {
+        color: #ffc107;
+        // filter: brightness(0.7);
+      }
+    }
+
     .ComboOrderBlockDescription__actionLineImg {
+      cursor: pointer;
+
+      &:hover {
+        filter: brightness(0.7);
+      }
+
       img {
         height: 50px;
       }
@@ -42,7 +57,7 @@
     .ComboOrderBlockDescription__actionLineButtons {
       .roundButton {
         &:first-child {
-          margin-right: 5px;
+          margin-right: 10px;
         }
       }
     }

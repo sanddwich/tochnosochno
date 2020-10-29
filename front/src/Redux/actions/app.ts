@@ -3,6 +3,7 @@ import ComboItemOrder from '../../Interfaces/ComboItemOrder'
 import Order from '../../Interfaces/Order'
 import Product from '../../Interfaces/Product'
 import {
+  APP_UPDATE_KEY,
   HIDE_COMBO_MODAL,
   HIDE_LOGIN,
   HIDE_PRODUCT_MODAL,
@@ -75,6 +76,10 @@ export const showComboModal = (combo: Category, comboItemOrder?: ComboItemOrder)
 
 export const hideComboModal = () => ({
   type: HIDE_COMBO_MODAL,
+})
+
+export const appUpdateKey = () => ({
+  type: APP_UPDATE_KEY,
 })
 
 export const showLoginModal = () => ({

@@ -1,4 +1,5 @@
 import {
+  APP_UPDATE_KEY,
   GET_APP,
   HIDE_COMBO_MODAL,
   HIDE_LOGIN,
@@ -31,6 +32,7 @@ const initialState: AppState = {
   showLogin: false,
   showComboModal: false,
   isShowSuccessModal: false,
+  keyUpdate: Math.random(),
 }
 const app = (state: AppState = initialState, action: AppActionType) => {
   switch (action.type) {
@@ -108,7 +110,7 @@ const app = (state: AppState = initialState, action: AppActionType) => {
         ...state,
         showComboModal: true,
         comboModalElement: action.combo,
-        comboItemOrder: action.comboItemOrder
+        comboItemOrder: action.comboItemOrder,
       }
     case HIDE_COMBO_MODAL:
       return {
@@ -117,7 +119,11 @@ const app = (state: AppState = initialState, action: AppActionType) => {
         comboModalElement: undefined,
         comboItemOrder: undefined,
       }
-
+    case APP_UPDATE_KEY:
+      return {
+        ...state,
+        keyUpdate: Math.random(),
+      }
     case SHOW_LOGIN:
       return {
         ...state,

@@ -55,4 +55,5 @@ export interface AppState {
   showLogin: boolean
   showComboModal: boolean
   isShowSuccessModal: boolean
+  keyUpdate: number
 }

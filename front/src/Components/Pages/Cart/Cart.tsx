@@ -15,6 +15,7 @@ import Address from '../../../Interfaces/Address'
 
 interface CartProps {
   order: Order
+  keyUpdate: number
   setDelivery: (isDelivery: boolean, address: Address) => void
 }
 
@@ -47,7 +48,7 @@ class Cart extends React.Component<CartProps, CartState> {
   render() {
     return (
       <Container className="Cart  mt-5">
-        <CartOrder />
+        <CartOrder key={this.props.keyUpdate} />
         {this.props.order.items && this.props.order.items.length > 0 ? (
           <React.Fragment>
             <RecomendedProducts product={this.props.order.items[0].product} />
@@ -102,8 +103,10 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: RootState) => {
   const { order } = state.order
+  const { keyUpdate } = state.app
   return {
     order,
+    keyUpdate,
   }
 }
 
