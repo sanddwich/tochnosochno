@@ -10,7 +10,7 @@ import {
 } from '@foal/core'
 import { fetchUser, TypeORMStore } from '@foal/typeorm'
 import { User } from '../entities'
-import { Iiko, PaymentService } from '../services'
+import { Iiko, PaymentService, SmsService } from '../services'
 
 export class AdminController {
   @dependency
@@ -18,6 +18,9 @@ export class AdminController {
 
   @dependency
   bank: PaymentService
+
+  @dependency
+  senderService: SmsService
 
   @Get('/signin')
   signin(ctx: Context) {
@@ -105,4 +108,15 @@ export class AdminController {
       return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления городов' })
     }
   }
+
+  // @Put('/email')
+  // async sendEmail() {
+  //   // const result = await this.senderService.sendEmail()
+
+  //   if (result) {
+  //     return new HttpResponseCreated(result)
+  //   } else {
+  //     return new HttpResponseBadRequest({ error: true, message: 'Ошибка отправления почты' })
+  //   }
+  // }
 }

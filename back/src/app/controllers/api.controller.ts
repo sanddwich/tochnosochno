@@ -36,7 +36,7 @@ import {
 } from '../entities'
 import { fetchUser, TypeORMStore } from '@foal/typeorm'
 import * as _ from 'lodash'
-import { GeoCoder, Iiko, MenuService, OrderService, PaymentService } from '../services'
+import { GeoCoder, Iiko, MenuService, OrderService, PaymentService, SmsService } from '../services'
 import { CsrfTokenRequired } from '@foal/csrf'
 import { ApiInfo } from '@foal/core'
 import { get } from 'https'
@@ -68,6 +68,9 @@ export class ApiController {
 
   @dependency
   menuService: MenuService
+
+  @dependency
+  sender: SmsService
 
   @Options('*')
   options(ctx: Context) {
@@ -406,13 +409,13 @@ export class ApiController {
         console.log(bankResponse)
         return new HttpResponseOK(bankResponse)
       } else if (order.payment === 'cash' || order.payment === 'credit') {
-        await this.iiko.init()
-        const iikoOrder = await this.iiko.sendOrderToIiko(order, order.terminalId)
-        if (iikoOrder.error) {
-          throw new Error(iikoOrder.message)
-        }
-        order.orderIikoId = iikoOrder.orderInfo.id
-
+        // await this.iiko.init()
+        // const iikoOrder = await this.iiko.sendOrderToIiko(order, order.terminalId)
+        // if (iikoOrder.error) {
+        //   throw new Error(iikoOrder.message)
+        // }
+        // order.orderIikoId = iikoOrder.orderInfo.id
+        console.log(await this.sender.sendOrderEmail(order))
         const orderDb = await repositoryOrder.save(order)
       }
     } catch (error) {
@@ -615,6 +618,7 @@ export class ApiController {
     const house: string = ctx.request.body.house
     const isCourierDelivery: boolean = ctx.request.body.isCourierDelivery
     await this.iiko.init()
+    console.log({ deliverySum })
     const deliveryRestriction = await this.iiko.getDeliveryRestirctions(streetId, house, deliverySum, isCourierDelivery)
     if (deliveryRestriction) {
       return new HttpResponseOK({
