@@ -55,7 +55,7 @@ export class SmsService {
 
     order.items.map((orderItem, index) => {
       const html = `<tr>
-     <td style="width: 4.298%;">${index}</td>
+     <td style="width: 4.298%;">${index + 1}</td>
      <td style="width: 35.8166%;">
          <div style="text-align: center;">${orderItem.product.name}</div>
      </td>
@@ -100,11 +100,15 @@ export class SmsService {
     <p style="text-align: center;"><strong><span style="font-size: 24px;">Клиент</span></strong></p>
     <p><span style="font-size: 17px;">Имя: ${order.customer.name}</span></p>
     <p><span style="font-size: 17px;">Телефон: ${order.customer.phone || order.phone}</span></p>
-    <p>Доставка: ${order.isDelivery ? '<b>курьером</b>' : '<b>самовывоз </b>'}</p>
-    <p>Адрес доставки: ул. ${order.address.street.name}, д. ${order.address.house} кв. ${order.address.flat} ${
-      order.address.entrance
-    } подъезд, ${order.address.floor} этаж</p>
-    <p>Комментарий: ${order.comment}</p>`
+    <p><span style="font-size: 17px;">Доставка: ${order.isDelivery ? '<b>курьером</b>' : '<b>самовывоз </b>'}</span></p>
+    <p><span style="font-size: 17px;">Адрес доставки: ул. ${order.address.street.name}, д. ${
+      order.address.house
+    }, кв. ${order.address.flat}, ${order.address.entrance} подъезд, ${order.address.floor} этаж</span></p>
+    <p><span style="font-size: 17px;">Количество персон: ${order.guests.count}</span></p>
+    <p><span style="font-size: 17px;">Оплата: ${
+      order.payment === 'credit' ? 'кредитной картой' : 'наличными'
+    }</span></p>
+    <p><span style="font-size: 17px;">Комментарий: ${order.comment}</span></p>`
 
     const transporter = nodemailer.createTransport({
       host: 'mail.hostland.ru',
@@ -120,8 +124,8 @@ export class SmsService {
       from: '"sochno30.ru" <info@myaso.cafe>',
       to: 'denristun@gmail.com',
       subject: 'Заказ с сайта',
-      text: 'This message was sent from Node js server.',
-      html: 'This <i>message</i> was sent from <strong>Node js</strong> server.',
+      text: 'Новый заказ',
+      html: html,
     })
     return result
   }

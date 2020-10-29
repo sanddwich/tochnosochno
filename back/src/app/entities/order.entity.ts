@@ -5,6 +5,7 @@ import { Address } from './address.entity'
 import { OrderItem } from './order-item.entity'
 import { Payment } from './payment.entity'
 import { Terminal } from './terminal.entity'
+import Guests from '../interfaces/Guests'
 
 @Entity()
 export class Order {
@@ -60,7 +61,7 @@ export class Order {
   customer: Customer
 
   //Чтобы добавлялся новый адрес нужно поставить cascade: true
-  @ManyToOne((type) => Address, (address) => address.orders)
+  @ManyToOne((type) => Address, (address) => address.orders, { cascade: true })
   address: Address
 
   @OneToMany((type) => OrderItem, (orderItem) => orderItem.order, { cascade: true })
@@ -71,4 +72,6 @@ export class Order {
 
   @ManyToOne((type) => Terminal, (terminal) => terminal.orders)
   terminalId: Terminal
+
+  guests: Guests
 }
