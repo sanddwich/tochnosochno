@@ -58,7 +58,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
 
   componentDidMount() {
     // console.log(this.state)
-    console.log(this.props.comboItemOrder)
+    // console.log(this.props.comboItemOrder)
   }
 
   changeProductAtCombo = (comboConsistArrayElement: number) => {
@@ -132,7 +132,11 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                     </div>
                     <div className="ComboCardModal__resultActionButton">
                       {typeof this.props.comboItemOrder !== 'undefined' ? (
-                        <UpdateComboButton products={this.state.comboConsist} comboId={this.props.comboItemOrder.comboId} pickData={this.props.comboItemOrder.pickData} />
+                        <UpdateComboButton
+                          products={this.state.comboConsist}
+                          comboId={this.props.comboItemOrder.comboId}
+                          pickDate={this.props.comboItemOrder.pickDate}
+                        />
                       ) : (
                         <AddComboButton products={this.state.comboConsist} comboId={this.props.comboModalElement.id} />
                       )}
@@ -256,7 +260,15 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                       <span>руб</span>
                     </div>
                     <div className="ComboCardModalMob__resultActionButton">
-                      <AddComboButton products={this.state.comboConsist} comboId={this.props.comboModalElement.id} />
+                      {typeof this.props.comboItemOrder !== 'undefined' ? (
+                        <UpdateComboButton
+                          products={this.state.comboConsist}
+                          comboId={this.props.comboItemOrder.comboId}
+                          pickDate={this.props.comboItemOrder.pickDate}
+                        />
+                      ) : (
+                        <AddComboButton products={this.state.comboConsist} comboId={this.props.comboModalElement.id} />
+                      )}
                     </div>
                   </Row>
                 </Col>

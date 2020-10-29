@@ -60,7 +60,7 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
       const result: ComboItemOrder = {
         comboId: comboItems[0].comboId || '',
         name: this.props.menu.find((cat) => cat.id === comboItems[0].comboId)?.name || '',
-        pickData: comboItems[0].id || 0,
+        pickDate: comboItems[0].pickDate || 0,
         image: this.props.menu.find((cat) => cat.id === comboItems[0].comboId)?.imageLinks,
         products: comboItems.map((comboItem) => comboItem.product),
       }

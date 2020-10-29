@@ -4,20 +4,19 @@ import Order from '../../Interfaces/Order'
 import OrderItem from '../../Interfaces/OrderItem'
 import Product from '../../Interfaces/Product'
 import { RootState } from '../../Redux'
-import { addOrderItemToOrder, setOrderItemAmount, deleteOrderItem } from '../../Redux/actions/order'
+import { addOrderItemToOrder, deleteOrderItem } from '../../Redux/actions/order'
 import { hideComboModal } from '../../Redux/actions/app'
 import ActionButton from '../ActionButton/ActionButton'
 import { cartAnimation } from '../../utils/animation'
 
 interface UpdateComboButtonProps {
-  pickData: number
-  comboId: string
   order: Order
+  pickDate: number
+  comboId: string
   products: Product[]
   addOrderItemToOrder: (orderItem: OrderItem) => void
-  setOrderItemAmount: (orderItem: OrderItem, amount: number) => void
-  deleteOrderItem: (orderItem: OrderItem) => void
   hideComboModal: () => void
+  deleteOrderItem: (orderItem: OrderItem) => void
 }
 
 interface UpdateComboButtonState {
@@ -32,36 +31,39 @@ class UpdateComboButton extends React.Component<UpdateComboButtonProps, UpdateCo
     }
   }
 
-  componentDidMount() {}
-
-  setOrderItemAmount = (amount: number) => {
-    if (this.state.orderItem) {
-      this.props.setOrderItemAmount(this.state.orderItem, amount)
-      if (amount === 0) {
-        this.props.deleteOrderItem(this.state.orderItem)
-        this.setState({ orderItem: null })
-      }
-    }
-    cartAnimation()
+  componentDidMount() {
+    // console.log(this.props)
   }
 
-  addToCartButton = (products: Product[]): void => {
+  updateComboButton = (products: Product[]): void => {
+    // console.log('updateComboButton')
+    // console.log(this.props)
     const pickDate = new Date().valueOf()
-    products.map((product) => {
-      const orderItem: OrderItem = {
-        product: product,
-        amount: 1,
-        orderItemModifiers: [],
-        value: product.sizePrices[0].price.currentPrice,
-        comboId: this.props.comboId,
-        pickDate: pickDate,
-      }
 
-      this.props.addOrderItemToOrder(orderItem)
-    })
+    if (this.props.order.items) {
+      this.props.order.items.map((item) => {
+        // console.log(item)
+        if (item.comboId === this.props.comboId && item.pickDate === this.props.pickDate) {
+          console.log('deleted')
+          this.props.deleteOrderItem(item)
+        }
+      })
 
-    this.props.hideComboModal()
-    cartAnimation()
+      // products.map((product) => {
+      //   const orderItem: OrderItem = {
+      //     product: product,
+      //     amount: 1,
+      //     orderItemModifiers: [],
+      //     value: product.sizePrices[0].price.currentPrice,
+      //     comboId: this.props.comboId,
+      //     pickDate: pickDate,
+      //   }
+
+      //   this.props.addOrderItemToOrder(orderItem)
+      // })
+
+      // this.props.hideComboModal()
+    }
   }
 
   render() {
@@ -70,11 +72,11 @@ class UpdateComboButton extends React.Component<UpdateComboButtonProps, UpdateCo
         <ActionButton
           backgroundColor="#303030"
           icon="cart_dark.svg"
-          text="В корзину"
+          text="Обновить"
           width="180px"
           textColor="#ffffff"
           // onClick={() => console.log('UpdateComboButton')}
-          onClick={() => this.addToCartButton(this.props.products)}
+          onClick={() => this.updateComboButton(this.props.products)}
         />
       </React.Fragment>
     )
@@ -83,7 +85,6 @@ class UpdateComboButton extends React.Component<UpdateComboButtonProps, UpdateCo
 
 const mapDispatchToProps = {
   addOrderItemToOrder,
-  setOrderItemAmount,
   deleteOrderItem,
   hideComboModal,
 }

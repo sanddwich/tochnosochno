@@ -19,6 +19,10 @@ class ComboOrderBlockDescription extends React.Component<
   ComboOrderBlockDescriptionProps,
   ComboOrderBlockDescriptionState
 > {
+  componentDidMount() {
+    console.log(this.props)
+  }
+
   deleteOrderComboItem = (comboId: string, pickData: number) => {
     console.log('deleteOrderComboItem')
   }
@@ -74,7 +78,7 @@ class ComboOrderBlockDescription extends React.Component<
               height="50px"
               backgroundColor="#F2F2F2"
               icon="trash.svg"
-              onClick={() => this.deleteOrderComboItem(this.props.comboItem.comboId, this.props.comboItem.pickData)}
+              onClick={() => this.deleteOrderComboItem(this.props.comboItem.comboId, this.props.comboItem.pickDate)}
             />
           </Col>
         </Row>
