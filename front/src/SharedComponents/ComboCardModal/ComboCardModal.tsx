@@ -81,11 +81,13 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
 
   render() {
     let comboPrice: number = 0
-    typeof this.props.comboModalElement !== 'undefined'
-      ? (comboPrice =
-          this.props.comboModalElement.products[0].sizePrices[0].price.currentPrice *
-          (this.props.comboModalElement.comboProductsCount || 1))
-      : (comboPrice = 0)
+    if (typeof this.props.comboModalElement !== 'undefined') {
+      if (this.props.comboModalElement.comboProductsCount && this.props.comboModalElement.comboProductsCount > 2) {
+        for (let i = 0; i < this.props.comboModalElement.comboProductsCount; i++) {
+          comboPrice = comboPrice + this.state.comboConsist[i].sizePrices[0].price.currentPrice
+        }
+      }
+    }
     // this.props.comboModalElement.products[0].sizePrices[0].price.currentPrice * (this.props.comboModalElement.comboProductsCount || 1)
     return (
       <React.Fragment>

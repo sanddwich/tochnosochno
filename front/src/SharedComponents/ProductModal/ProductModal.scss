@@ -33,7 +33,7 @@
     margin-top: -50px;
     div {
       img {
-        // height: 280px;       // =========== Каринки
+        height: 280px; // =========== Каринки
       }
     }
   }
@@ -128,18 +128,29 @@
       margin-left: -40px;
     }
 
+    .LineProductWithSizeInput__action {
+      .actionButton {
+        &:hover {
+          background-color: #ffd12d !important;
+        }
+      }
+    }
+
     .BlockName__title {
       h1 {
         font-size: 24px;
         line-height: 29px;
       }
     }
-    
+
     .ProductModal__recomendCont {
       height: 200px;
     }
 
-    .ProductModal__title, .ProductModal__descr, .ProductModal__Content, .ProductModal__recomendCont {
+    .ProductModal__title,
+    .ProductModal__descr,
+    .ProductModal__Content,
+    .ProductModal__recomendCont {
       padding-left: 20px !important;
       padding-right: 20px !important;
     }

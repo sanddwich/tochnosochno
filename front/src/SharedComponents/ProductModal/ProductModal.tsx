@@ -12,20 +12,42 @@ import Sticker from '../Sticker/Sticker'
 import { hideProductModal } from '../../Redux/actions/app'
 import './ProductModal.scss'
 import FavouriteRoundButton from '../FavouriteRoundButton/FavouriteRoundButton'
+import Category from '../../Interfaces/Category'
 
 interface ProductModalProps {
+  menu: Category[]
   productModalProduct: Product
   showProductModal: boolean
   hideProductModal: () => void
 }
 
 interface ProductModalState {
-  product: Product
+  newItemsConsist: boolean
 }
 
 class ProductModal extends React.Component<ProductModalProps, ProductModalState> {
-  componentDidMount() {
-    // console.log(this.props.productModalProduct)
+  constructor(props: ProductModalProps) {
+    super(props)
+    this.state = {
+      newItemsConsist: false,
+    }
+  }
+
+  componentDidMount() {}
+
+  newItemDefine = (): boolean => {
+    let newItemsConsist: boolean = false
+    if (typeof this.props.productModalProduct !== 'undefined') {
+      this.props.menu.map((cat) => {
+        if (cat.products.find((product) => product.id === this.props.productModalProduct.id)) {
+          cat.products[cat.products.length - 1].id === this.props.productModalProduct.id
+            ? (newItemsConsist = true)
+            : (newItemsConsist = false)
+        }
+      })
+    }
+
+    return newItemsConsist
   }
 
   render() {
@@ -51,11 +73,10 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
                   <Row className="ProductModal__firstLine p-0 m-0 d-flex justify-content-between">
                     <div className="ProductModal__favoriteButton">
                       <FavouriteRoundButton product={this.props.productModalProduct} />
-
                     </div>
                     <div className="ProductModal__stickerCont">
-                      <Sticker title="Новинка" backgroundColor="#FFD74B" />
-                      <Sticker title="Акция" backgroundColor="#FF371C" />
+                      {this.newItemDefine() ? <Sticker title="Новинка" backgroundColor="#FFD74B" /> : null}
+                      {/* <Sticker title="Акция" backgroundColor="#FF371C" /> */}
                     </div>
                   </Row>
 
@@ -113,9 +134,11 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: RootState) => {
   const { showProductModal, productModalProduct } = state.app
+  const { menu } = state.menu
   return {
     showProductModal,
     productModalProduct,
+    menu,
   }
 }
 

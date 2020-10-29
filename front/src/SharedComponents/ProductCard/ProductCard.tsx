@@ -15,9 +15,11 @@ import Order from '../../Interfaces/Order'
 import NumberInput from '../NumberInput/NumberInput'
 import AddProductButton from '../AddProductButton/AddProductButton'
 import FavouriteRoundButton from '../FavouriteRoundButton/FavouriteRoundButton'
+import Category from '../../Interfaces/Category'
 // import { NavLink } from 'react-router-dom'
 
 interface ProductCardProps {
+  menu: Category[]
   order: Order
   product: Product
   showProductModal: (product: Product) => void
@@ -52,6 +54,21 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
     this.setState({ showProductModal })
   }
 
+  newItemDefine = (): boolean => {
+    let newItemsConsist: boolean = false
+    if (typeof this.props.product !== 'undefined') {
+      this.props.menu.map((cat) => {
+        if (cat.products.find((product) => product.id === this.props.product.id)) {
+          cat.products[cat.products.length - 1].id === this.props.product.id
+            ? (newItemsConsist = true)
+            : (newItemsConsist = false)
+        }
+      })
+    }
+
+    return newItemsConsist
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -63,8 +80,8 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
                 {/* <RoundButton icon="favorite.svg" backgroundColor="##F2F2F2" onClick={() => this.favoriteClick()} /> */}
               </div>
               <div className="ProductCard__stickerCont">
-                <Sticker title="Новинка" backgroundColor="#FFD74B" />
-                <Sticker title="Акция" backgroundColor="#FF371C" />
+                {this.newItemDefine() ? <Sticker title="Новинка" backgroundColor="#FFD74B" /> : null}
+                {/* <Sticker title="Акция" backgroundColor="#FF371C" /> */}
               </div>
             </Row>
 
@@ -99,11 +116,11 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
                     : newPrice.toFixed(0).toString()}{' '}
                   <span>руб</span>
                 </div>
-                <div className="ProductCard__oldPrice d-inline-block">{oldPrice.toFixed(0).toString()}р</div>
+                {/* <div className="ProductCard__oldPrice d-inline-block">{oldPrice.toFixed(0).toString()}р</div> */}
               </div>
 
               <div className="ProductCard__button d-flex justify-content-end">
-                <AddProductButton product={this.props.product} />                
+                <AddProductButton product={this.props.product} />
               </div>
             </Row>
           </Container>
@@ -122,9 +139,10 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: RootState) => {
   const { order } = state.order
-
+  const { menu } = state.menu
   return {
     order,
+    menu,
   }
 }
 

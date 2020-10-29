@@ -7,13 +7,24 @@ import './ProductCardMobile.scss'
 import ActionButton from '../ActionButton/ActionButton'
 import Sticker from '../Sticker/Sticker'
 import { connect } from 'react-redux'
+
 import { showProductModal } from '../../Redux/actions/app'
+import { addOrderItemToOrder, setOrderItemAmount, deleteOrderItem } from '../../Redux/actions/order'
 import AddProductButton from '../AddProductButton/AddProductButton'
 import FavouriteRoundButton from '../FavouriteRoundButton/FavouriteRoundButton'
+import { RootState } from '../../Redux'
+import Category from '../../Interfaces/Category'
+import Order from '../../Interfaces/Order'
+import OrderItem from '../../Interfaces/OrderItem'
 
 interface ProductCardMobileProps {
+  menu: Category[]
+  order: Order
   product: Product
   showProductModal: (product: Product) => void
+  addOrderItemToOrder: (orderItem: OrderItem) => void
+  setOrderItemAmount: (orderItem: OrderItem, amount: number) => void
+  deleteOrderItem: (orderItem: OrderItem) => void
 }
 
 interface ProductCardMobileState {}
@@ -30,6 +41,21 @@ class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductC
     console.log('addToCartButton ' + id.toString())
   }
 
+  newItemDefine = (): boolean => {
+    let newItemsConsist: boolean = false
+    if (typeof this.props.product !== 'undefined') {
+      this.props.menu.map((cat) => {
+        if (cat.products.find((product) => product.id === this.props.product.id)) {
+          cat.products[cat.products.length - 1].id === this.props.product.id
+            ? (newItemsConsist = true)
+            : (newItemsConsist = false)
+        }
+      })
+    }
+
+    return newItemsConsist
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -43,8 +69,8 @@ class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductC
                     {/* <RoundButton icon="favorite.svg" backgroundColor="##F2F2F2" onClick={() => this.favoriteClick()} /> */}
                   </div>
                   <div className="ProductCardMobile__stickerCont">
-                    <Sticker title="Новинка" backgroundColor="#FFD74B" />
-                    <Sticker title="Акция" backgroundColor="#FF371C" />
+                    {this.newItemDefine() ? <Sticker title="Новинка" backgroundColor="#FFD74B" /> : null}
+                    {/* <Sticker title="Акция" backgroundColor="#FF371C" /> */}
                   </div>
                 </Row>
 
@@ -83,7 +109,7 @@ class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductC
                         : newPrice.toFixed(0).toString()}{' '}
                       <span>руб</span>
                     </div>
-                    <div className="ProductCardMobile__oldPrice d-inline-block">{oldPrice.toFixed(0).toString()}р</div>
+                    {/* <div className="ProductCardMobile__oldPrice d-inline-block">{oldPrice.toFixed(0).toString()}р</div> */}
                   </div>
 
                   <div className="ProductCardMobile__button d-flex justify-content-end">
@@ -109,6 +135,18 @@ class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductC
 
 const mapDispatchToProps = {
   showProductModal,
+  addOrderItemToOrder,
+  setOrderItemAmount,
+  deleteOrderItem,
 }
 
-export default connect(null, mapDispatchToProps)(ProductCardMobile)
+const mapStateToProps = (state: RootState) => {
+  const { order } = state.order
+  const { menu } = state.menu
+  return {
+    order,
+    menu,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductCardMobile)

@@ -21,10 +21,10 @@ export default class LineProductWithSizeInput extends React.Component<
       <Container fluid className="LineProductWithSizeInput m-0 p-0">
         {/* Размеры продукта на мобильных устройствах */}
         <Row className="d-flex d-md-none justify-content-start pt-3 pl-3 pr-3">
-          <div id="active" className="LineProductWithSizeInput__size">
+          {/* <div id="active" className="LineProductWithSizeInput__size">
             30 см
           </div>
-          <div className="LineProductWithSizeInput__size">45 см</div>
+          <div className="LineProductWithSizeInput__size">45 см</div> */}
         </Row>
 
         <Row className="m-0 p-0 d-flex align-items-center pl-3 pr-3">
@@ -34,7 +34,7 @@ export default class LineProductWithSizeInput extends React.Component<
                 {this.props.product.sizePrices[0].price.currentPrice}
                 <span>руб</span>
               </div>
-              <div className="LineProductWithSizeInput__priceOld">200р</div>
+              {/* <div className="LineProductWithSizeInput__priceOld">200р</div> */}
             </Row>
           </Col>
           <Col className="p-1 d-none d-md-block pr-4" md={4}>
