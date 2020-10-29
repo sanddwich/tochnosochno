@@ -207,7 +207,7 @@ export class ApiController {
     products.map((rootGroup) => {
       if (!rootGroup.parentGroup) {
         products.map((group) => {
-          if (group.parentGroup === rootGroup.id) {
+          if (group.parentGroup === rootGroup.id && !group.isCombo) {
             rootGroup.products.push(...group.products)
           }
         })
