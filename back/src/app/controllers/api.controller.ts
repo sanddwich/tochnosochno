@@ -36,7 +36,7 @@ import {
 } from '../entities'
 import { fetchUser, TypeORMStore } from '@foal/typeorm'
 import * as _ from 'lodash'
-import { GeoCoder, Iiko, OrderService, PaymentService } from '../services'
+import { GeoCoder, Iiko, MenuService, OrderService, PaymentService } from '../services'
 import { CsrfTokenRequired } from '@foal/csrf'
 import { ApiInfo } from '@foal/core'
 import { get } from 'https'
@@ -65,6 +65,9 @@ export class ApiController {
 
   @dependency
   iiko: Iiko
+
+  @dependency
+  menuService: MenuService
 
   @Options('*')
   options(ctx: Context) {
@@ -205,6 +208,13 @@ export class ApiController {
     })
 
     products.map((rootGroup) => {
+      rootGroup.products.map((product) => {
+        if (product) {
+          product.recomended = []
+          product.recomended.push(...this.menuService.getRecomendedProducts(product, products, 3))
+        }
+      })
+
       if (!rootGroup.parentGroup) {
         products.map((group) => {
           if (group.parentGroup === rootGroup.id && !group.isCombo) {
@@ -213,6 +223,7 @@ export class ApiController {
         })
       }
     })
+    console.log(products)
 
     const terminals = await getRepository(Terminal).find({ isAlive: true })
 

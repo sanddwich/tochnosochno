@@ -121,6 +121,9 @@ export class Product {
   @Column({ nullable: true })
   canSetOpenPrice: boolean
 
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date
+
   @OneToMany((type) => SizePrice, (sizePrice) => sizePrice.product, {
     cascade: true,
   })
@@ -163,4 +166,6 @@ export class Product {
 
   @OneToMany((type) => FavoriteProduct, (favoriteProduct) => favoriteProduct.product)
   favoriteProducts: FavoriteProduct[]
+
+  recomended: string[]
 }

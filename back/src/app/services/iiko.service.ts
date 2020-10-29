@@ -224,8 +224,15 @@ export class Iiko {
         },
         body: JSON.stringify({ organizationIds: [this.organizations[0].id] }),
       })
-      const terminals = await res.json()
-      return terminals
+      const resJson = await res.json()
+      // await getRepository(Terminal).save(terminals)
+      resJson.terminalGroups.map((terminalGroup) => {
+        terminalGroup.items.map(async (terminal: Terminal) => {
+          terminal.organization = terminalGroup.organizationId
+          await getRepository(Terminal).save(terminal)
+        })
+      })
+      return resJson
     } catch (error) {
       this.logger.iiko('iiko.service.setTerminals()', error)
       this.logger.error(`iiko.service.setTerminals() ${error}`)
@@ -408,6 +415,34 @@ export class Iiko {
     } catch (error) {
       this.logger.iiko('iiko.service.getMenu()', error)
       this.logger.error(`iiko.service.getMenu() ${error}`)
+    }
+  }
+
+  private async getDeliveryTerminalGroups() {
+    this.logger.info(`iiko.service.getOrganization()`)
+    const organizations = await getRepository(Organization).find()
+    if (organizations) {
+      this.organizations = organizations
+    } else {
+      try {
+        const res = await fetch(this.organizationUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.token}`,
+          },
+          body: JSON.stringify({ organizationIds: null, returnAdditionalInfo: false, includeDisabled: false }),
+        })
+        if (!res.ok) {
+          throw new Error(`${res.status} ошибка на сервере IIKO.`)
+        }
+        const json = await res.json()
+        this.logger.iiko('iiko.service.getToken()', json)
+        this.organizations = json.organizations
+      } catch (error) {
+        this.logger.iiko('iiko.service.getOrganization()', error)
+        this.logger.error(`iiko.service.getOrganization() ${error}`)
+      }
     }
   }
 

@@ -9,12 +9,10 @@
   align-items: center;
 
   &__itemCount {
-    position: absolute;
-    top: -4px;
+    position: relative;
+    top: -14px;
     left: 25px;
-
     display: flex;
-
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -24,6 +22,11 @@
     border-radius: 50%;
     font-family: 'Roboto';
     font-size: 13px;
+  }
+  &__icon {
+    position: relative;
+    left: -7px;
+    display: flex;
   }
 
   &:hover {

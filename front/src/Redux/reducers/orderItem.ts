@@ -13,7 +13,7 @@ import { OrderItemAction } from '../interfaces/orderItem'
 
 const product: Product = {
   facets: [],
-  id: 0,
+  id: '0',
   image: '',
   ingredients: '',
   isDeleted: false,
@@ -33,6 +33,7 @@ const product: Product = {
   additionalInfo: '',
   tags: [],
   fullNameEnglish: '',
+  recomended: [],
 }
 
 const initialOrderItem: OrderItem = {

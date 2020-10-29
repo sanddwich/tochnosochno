@@ -5,7 +5,7 @@ import Variant from './Variant'
 
 export default interface Product {
   facets: Facet[]
-  id: number
+  id: string
   image: string
   ingredients: string
   isDeleted: boolean
@@ -45,4 +45,5 @@ export default interface Product {
   additionalInfo: string
   tags: String[]
   fullNameEnglish: string
+  recomended: string[]
 }

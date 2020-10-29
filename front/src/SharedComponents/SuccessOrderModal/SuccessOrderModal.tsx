@@ -17,9 +17,7 @@ interface SuccessOrderModalProps {
 interface SuccessOrderModalState {}
 
 class SuccessOrderModal extends React.Component<SuccessOrderModalProps, SuccessOrderModalState> {
-  componentDidMount() {
-    this.props.showSuccessModal()
-  }
+  componentDidMount() {}
 
   render() {
     console.log(this.props.isShowSuccessModal)

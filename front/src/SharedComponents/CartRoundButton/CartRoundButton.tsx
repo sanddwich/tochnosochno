@@ -37,10 +37,15 @@ class CartRoundButton extends React.Component<CartRoundButtonProps, CartRoundBut
         className="CartRoundButton  noselect"
         style={{ backgroundColor: this.props.backgroundColor, width: this.props.width, height: this.props.height }}
       >
-        <div hidden={!this.props.order.items} className="CartRoundButton__itemCount">
-          {this.itemsCount()}
+        <div>
+          <div hidden={!this.props.order.items} className="CartRoundButton__itemCount">
+            {this.itemsCount()}
+          </div>
         </div>
-        <img src={`/images/icons/${this.props.icon}`} alt="icon" />
+
+        <div className="CartRoundButton__icon">
+          <img src={`/images/icons/${this.props.icon}`} alt="icon" />
+        </div>
       </div>
     )
   }

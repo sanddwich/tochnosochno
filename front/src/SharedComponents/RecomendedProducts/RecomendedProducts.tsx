@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Category from '../../Interfaces/Category'
+import Group from '../../Interfaces/Group'
 import Product from '../../Interfaces/Product'
 import { RootState } from '../../Redux'
 import BlockName from '../BlockName/BlockName'
@@ -9,6 +10,7 @@ import LineProductWithCart from '../LineProductWithCart/LineProductWithCart'
 import './RecomendedProducts.scss'
 
 interface RecomendedProductsProps {
+  product: Product
   menu: Category[]
 }
 
@@ -24,24 +26,30 @@ class RecomendedProducts extends React.Component<RecomendedProductsProps, Recome
     }
   }
 
-  componentDidMount() {
-    let cartProducts: Product[] = []
-    this.props.menu.map((category) => {
-      if (category.products[category.products.length - 1]) {
-        cartProducts.push(category.products[category.products.length - 1])
-      }
+  getRecomendedProducts = (): Product[] => {
+    const recomendedProducts: Product[] = []
+    this.props.menu.map((group: Category) => {
+      group.products.map((product) => {
+        this.props.product.recomended.map((productId) => {
+          if (product.id === productId) {
+            recomendedProducts.push(product)
+          }
+        })
+      })
     })
-    this.setState({ cartProducts })
-    // console.log(lastProducts)
+
+    return recomendedProducts
   }
+
+  componentDidMount() {}
 
   render() {
     return (
       <div className="RecomendedProducts">
         <BlockName name="C этим заказывают" />
         <div className="RecomendedProducts__products">
-          {this.state.cartProducts.map((cartProduct: Product) => {
-            return <LineProductWithCart key={cartProduct.id} product={cartProduct} />
+          {this.getRecomendedProducts().map((product: Product) => {
+            return <LineProductWithCart key={product.id} product={product} />
           })}
         </div>
       </div>
