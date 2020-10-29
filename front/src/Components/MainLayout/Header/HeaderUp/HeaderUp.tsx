@@ -149,17 +149,15 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
             </div>
           </NavLink>
 
-          <NavLink to="/cart">
-            <div className="menuItem h-100 d-flex align-items-center">
-              <NavLink to="/cart">
-                <CartRoundButton
-                  backgroundColor="#303030"
-                  icon="cart_white.svg"
-                  onClick={() => Scroll.animateScroll.scrollToTop()}
-                />
-              </NavLink>
-            </div>
-          </NavLink>
+          <div className="menuItem h-100 d-flex align-items-center">
+            <NavLink to="/cart">
+              <CartRoundButton
+                backgroundColor="#303030"
+                icon="cart_white.svg"
+                onClick={() => Scroll.animateScroll.scrollToTop()}
+              />
+            </NavLink>
+          </div>
         </Container>
 
         <Container fluid className="HeaderUp__toggleMenu p-0 m-0">

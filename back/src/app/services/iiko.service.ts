@@ -67,6 +67,7 @@ export class Iiko {
   private menuUrl = `${this.apiServer}/nomenclature`
   private checkOrderUrl = `${this.apiServer}/deliveries/check_create`
   private orderStatusUrl = `${this.apiServer}/deliveries/by_id`
+  private deliveryResctrictionsUrl = `${this.apiServer}/delivery_restrictions/allowed`
 
   public async init() {
     const tokenAge = (Date.now() - this.tokenTimeStamp) / 60000
@@ -257,6 +258,36 @@ export class Iiko {
     } catch (error) {
       this.logger.iiko('iiko.service.getPaymentTypes()', error)
       this.logger.error(`iiko.service.getPaymentTypes() ${error}`)
+    }
+  }
+
+  async getDeliveryRestirctions(streetId: string, house: string, deliverySum: number, isCourierDelivery: boolean) {
+    const organization = await getRepository(Organization).findOne()
+    this.logger.info(`iiko.service.getDeliveryRestirctions()`)
+    const deliveryAddress = { streetId, house }
+    try {
+      if (organization) {
+        const res = await fetch(this.deliveryResctrictionsUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.token}`,
+          },
+          body: JSON.stringify({
+            organizationIds: [organization.id],
+            deliverySum,
+            deliveryAddress,
+            isCourierDelivery,
+          }),
+        })
+        console.log(deliveryAddress)
+        const response = await res.json()
+        console.log(response)
+        return response
+      }
+    } catch (error) {
+      this.logger.iiko('iiko.service.getDeliveryRestirctions()', error)
+      this.logger.error(`iiko.service.getDeliveryRestirctions() ${error}`)
     }
   }
 

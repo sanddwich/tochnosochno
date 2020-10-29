@@ -122,7 +122,7 @@ export class Product {
   canSetOpenPrice: boolean
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date
+  createdAt: Date
 
   @OneToMany((type) => SizePrice, (sizePrice) => sizePrice.product, {
     cascade: true,

@@ -11,7 +11,7 @@ export class MenuService {
       //   if (randomProduct.id != product.id) {
       //     recomendedProducts.push(randomProduct)
       //   }
-      if (randomProduct) {
+      if (randomProduct && randomProduct.id != product.id && randomProduct.type === 'Dish') {
         recomendedProducts.push(randomProduct.id)
       } else {
         i--
