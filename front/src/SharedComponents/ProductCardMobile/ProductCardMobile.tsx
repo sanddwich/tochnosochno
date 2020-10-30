@@ -113,7 +113,7 @@ class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductC
                   </div>
 
                   <div className="ProductCardMobile__button d-flex justify-content-end">
-                    <AddProductButton product={this.props.product} />
+                    <AddProductButton hideTextMobile={true} product={this.props.product} />
                     {/* <ActionButton
                       backgroundColor="#303030"
                       icon="cart_dark.svg"

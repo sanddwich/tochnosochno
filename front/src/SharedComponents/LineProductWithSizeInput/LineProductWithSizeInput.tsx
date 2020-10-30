@@ -48,7 +48,7 @@ export default class LineProductWithSizeInput extends React.Component<
           </Col>
           <Col className="p-1" xs={6} md={4}>
             <Row className="LineProductWithSizeInput__action d-flex justify-content-end">
-              <AddProductButton product={this.props.product} />
+              <AddProductButton hideTextMobile={true} product={this.props.product} />
             </Row>
           </Col>
         </Row>

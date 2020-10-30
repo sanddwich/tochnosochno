@@ -28,6 +28,7 @@ interface DeliveryByClientProps {
   phone: string
   customer: Customer
   processOrder: any
+  loading: boolean
 }
 
 interface DeliveryByClientState {
@@ -216,6 +217,7 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
               <PoliticSection />
               <PaymentSection isDelivery={false} />
               <ActionButton
+                loading={this.props.loading}
                 disabled={!(this.props.ruleCheck && this.props.smsCheck && this.props.personCheck)}
                 onClick={() => this.processOrder()}
                 textColor="white"
@@ -244,7 +246,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: RootState) => {
   const { isAuth, phone, customer } = state.auth
-  const { smsCheck, ruleCheck, personCheck } = state.order
+  const { smsCheck, ruleCheck, personCheck, loading } = state.order
   return {
     isAuth,
     smsCheck,
@@ -252,6 +254,7 @@ const mapStateToProps = (state: RootState) => {
     personCheck,
     phone,
     customer,
+    loading,
   }
 }
 

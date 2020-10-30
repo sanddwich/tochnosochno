@@ -15,6 +15,7 @@ interface AddProductButtonProps {
   addOrderItemToOrder: (orderItem: OrderItem) => void
   setOrderItemAmount: (orderItem: OrderItem, amount: number) => void
   deleteOrderItem: (orderItem: OrderItem) => void
+  hideTextMobile: boolean
 }
 
 interface AddProductButtonState {

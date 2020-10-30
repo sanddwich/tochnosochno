@@ -22,6 +22,9 @@ export class OrderItem {
   @Column()
   amount: number
 
+  @Column()
+  comboId: string
+
   @ManyToOne((type) => Order, (order) => order.items)
   order: Order
 

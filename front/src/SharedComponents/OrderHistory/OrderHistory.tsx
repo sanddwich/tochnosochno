@@ -6,6 +6,7 @@ import OrderItem from '../../Interfaces/OrderItem'
 import { RootState } from '../../Redux'
 import BlockName from '../BlockName/BlockName'
 import LineProductWithCart from '../LineProductWithCart/LineProductWithCart'
+import { format, setGlobalDateI18n } from 'fecha'
 
 import './OrderHistory.scss'
 
@@ -14,6 +15,23 @@ interface OrderHistoryProps {
 }
 
 interface OrderHistoryState {}
+
+const i18: any = {
+  monthNames: [
+    'января',
+    'февраля',
+    'марта',
+    'апреля',
+    'мая',
+    'июня',
+    'июля',
+    'августа',
+    'сентября',
+    'октября',
+    'ноября',
+    'декабря',
+  ],
+}
 
 class OrderHistory extends React.Component<OrderHistoryProps, OrderHistoryState> {
   constructor(props: OrderHistoryProps) {
@@ -32,9 +50,18 @@ class OrderHistory extends React.Component<OrderHistoryProps, OrderHistoryState>
         </div>
         {this.props.customer.orders.length > 0 ? (
           this.props.customer.orders.map((order: Order) => {
-            return order.items?.map((orderItem: OrderItem) => {
-              return <LineProductWithCart key={orderItem.id} product={orderItem.product} />
-            })
+            return (
+              <React.Fragment key={order.id}>
+                <div className="OrderHistory__date">
+                  {order.completeBefore ? format(new Date(order.completeBefore), 'DD MMMM YYYY', i18) : null}
+                </div>
+                {order.items?.map((orderItem: OrderItem) => {
+                  if (!orderItem.comboId) {
+                    return <LineProductWithCart key={orderItem.id} product={orderItem.product} />
+                  }
+                })}
+              </React.Fragment>
+            )
           })
         ) : (
           <div className="row m-0 mt-4 profile__text">Сейчас тут ничего нет :( И мы ждем вашего заказа :)</div>

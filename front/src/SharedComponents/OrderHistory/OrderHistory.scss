@@ -1,3 +1,14 @@
 .OrderHistory {
   max-width: 620px;
+  &__date {
+    margin-top: 40px;
+    font-family: Roboto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #303030;
+  }
 }
