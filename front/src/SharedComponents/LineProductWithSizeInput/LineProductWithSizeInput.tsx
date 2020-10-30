@@ -40,24 +40,15 @@ export default class LineProductWithSizeInput extends React.Component<
           <Col className="p-1 d-none d-md-block pr-4" md={4}>
             {/* Размеры продукта на десктопных устройствах */}
             <Row className="d-flex justify-content-center">
-              <div id="active" className="LineProductWithSizeInput__size">
+              {/* <div id="active" className="LineProductWithSizeInput__size">
                 30 см
               </div>
-              <div className="LineProductWithSizeInput__size">45 см</div>
+              <div className="LineProductWithSizeInput__size">45 см</div> */}
             </Row>
           </Col>
           <Col className="p-1" xs={6} md={4}>
             <Row className="LineProductWithSizeInput__action d-flex justify-content-end">
               <AddProductButton product={this.props.product} />
-              {/* <ActionButton
-                onClick={() => console.log('add to cart')}
-                textColor="white"
-                width="180px"
-                text="В корзину"
-                backgroundColor="#303030"
-                icon="cart_dark.svg"
-                hideTextMobile={true}
-              /> */}
             </Row>
           </Col>
         </Row>
