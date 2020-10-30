@@ -63,7 +63,7 @@ export class Iiko {
   private cityUrl = `${this.apiServer}/cities`
   private streetUrl = `${this.apiServer}/streets/by_city`
   private createOrderUrl = `${this.apiServer}/deliveries/create`
-  private customerUrl = `${this.apiServer}/loyalty/iiko/customers/get_customer`
+  private customerUrl = `${this.apiServer}/loyalty/iiko/get_customer`
   private menuUrl = `${this.apiServer}/nomenclature`
   private checkOrderUrl = `${this.apiServer}/deliveries/check_create`
   private orderStatusUrl = `${this.apiServer}/deliveries/by_id`
@@ -302,6 +302,10 @@ export class Iiko {
         },
         body: JSON.stringify({ organizationId: this.organizations[0].id, type: 'phone', phone: phone }),
       })
+      console.log(
+        'body JSON ',
+        JSON.stringify({ organizationId: this.organizations[0].id, type: 'phone', phone: phone })
+      )
       if (!res.ok) {
         const error = await res.json()
         throw new Error(`${res.status} ${res.statusText}. ${typeof error}. Ошибка на сервере IIKO.`)

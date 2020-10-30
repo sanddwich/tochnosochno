@@ -30,7 +30,7 @@ class FavouriteRoundButton extends React.Component<FavouriteRoundButtonProps, Fa
   favoriteClick = async () => {
     this.setState({ loading: true })
     if (
-      this.props.customer.favoriteProducts.filter((favProduct) => this.props.product.id === favProduct.product.id)
+      this.props.customer.favoriteProducts?.filter((favProduct) => this.props.product.id === favProduct.product.id)
         .length > 0
     ) {
       await this.props.changeFavorite(this.props.product.id, true)
@@ -48,7 +48,7 @@ class FavouriteRoundButton extends React.Component<FavouriteRoundButtonProps, Fa
             loading={this.state.loading}
             icon="favorite.svg"
             backgroundColor={
-              this.props.customer.favoriteProducts.filter(
+              this.props.customer.favoriteProducts?.filter(
                 (favProduct) => this.props.product.id === favProduct.product.id
               ).length > 0
                 ? '#ffd12d'

@@ -113,7 +113,6 @@ export class AuthController {
     let aiikoCustomer = await this.iiko.getCustomer(phone)
 
     if (aiikoCustomer) aiikoCustomer = this.customerService.setBonuses(aiikoCustomer)
-    console.log(aiikoCustomer)
     if (aiikoCustomer && aiikoCustomer.id) {
       await repositoryCustomer.save(aiikoCustomer)
     } else {

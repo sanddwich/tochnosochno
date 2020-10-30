@@ -18,7 +18,7 @@ export class SmsService {
     if (!oldCode) {
       const code = Math.floor(100000 + Math.random() * 900000)
       const date = new Date()
-      date.setSeconds(date.getSeconds() + 3660)
+      date.setSeconds(date.getSeconds() + 60)
 
       pinCode.phone = phone
       pinCode.pinCode = code
@@ -132,7 +132,7 @@ export class SmsService {
     const result = await transporter.sendMail({
       from: '"sochno30.ru" <info@myaso.cafe>',
       to: 'denristun@gmail.com',
-      subject: 'Заказ с сайта',
+      subject: `Заказ с сайта - ${order.date}`,
       text: 'Новый заказ',
       html: html,
     })
@@ -144,7 +144,7 @@ export class SmsService {
     const pinCode = await repository
       .createQueryBuilder('pincode')
       .where('pincode.phone = :phone', { phone: phone })
-      .andWhere('TIMESTAMPDIFF(SECOND, pincode.expiresIn, CURRENT_TIMESTAMP + INTERVAL 1 HOUR) < 60')
+      .andWhere('TIMESTAMPDIFF(SECOND, pincode.expiresIn, CURRENT_TIMESTAMP ) > 0')
       .getOne()
 
     return pinCode

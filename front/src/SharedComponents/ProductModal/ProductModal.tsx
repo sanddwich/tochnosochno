@@ -114,7 +114,7 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
                   <Row className="mt-auto mb-2">
                     <Col className="ProductModal__recomendCont m-0 p-0">
                       <div className="ProductModal__recomend">
-                        <RecomendedProducts product={this.props.productModalProduct} />
+                        <RecomendedProducts title="С этим заказывают" product={this.props.productModalProduct} />
                       </div>
                     </Col>
                   </Row>

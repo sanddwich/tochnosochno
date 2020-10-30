@@ -51,7 +51,7 @@ class Cart extends React.Component<CartProps, CartState> {
         <CartOrder key={this.props.keyUpdate} />
         {this.props.order.items && this.props.order.items.length > 0 ? (
           <React.Fragment>
-            <RecomendedProducts product={this.props.order.items[0].product} />
+            <RecomendedProducts title="Рекомендуем" product={this.props.order.items[0].product} />
             <div className="Cart__delivery">
               <div className="Cart__delivery__select">
                 <div className="Cart__delivery__select__label mb-4 mb-sm-3 mb-md-3 mb-lg-0">Продолжить оформление</div>
