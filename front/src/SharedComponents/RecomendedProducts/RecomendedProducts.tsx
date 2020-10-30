@@ -12,6 +12,7 @@ import './RecomendedProducts.scss'
 interface RecomendedProductsProps {
   product: Product
   menu: Category[]
+  title: string
 }
 
 interface RecomendedProductsState {
@@ -53,7 +54,7 @@ class RecomendedProducts extends React.Component<RecomendedProductsProps, Recome
   render() {
     return (
       <div className="RecomendedProducts">
-        <BlockName name="C этим заказывают" />
+        <BlockName name={this.props.title} />
         <div className="RecomendedProducts__products">
           {this.getRecomendedProducts().map((product: Product) => {
             return <LineProductWithCart key={product.id} product={product} />
