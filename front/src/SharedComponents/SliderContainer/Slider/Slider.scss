@@ -1,4 +1,12 @@
 .Slider {
+
+  .Slider__slide {
+    img {
+      max-height: 388px;
+      border-radius: 15px 0px;
+    }
+  }
+
   .Slider__actions {
     .Slider__arrows {
       display: flex;

@@ -17,7 +17,6 @@
     overflow: hidden;
 
     .ComboOrderBlockDescription__actionLineName {
-      text-align: center;
       font-weight: 700;
     }
 
@@ -84,6 +83,9 @@
     }
     .ComboOrderBlockDescription__separate {
       margin-top: 10px;
+    }
+    .ComboOrderBlockDescription__actionLineName {
+      text-align: center;
     }
   }
 }

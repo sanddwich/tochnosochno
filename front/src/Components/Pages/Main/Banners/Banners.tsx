@@ -1,5 +1,6 @@
 import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
+import { showComboModal as showComboModalFunc } from '../../../../Redux/actions/app'
 
 import './Banners.scss'
 
@@ -11,26 +12,41 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/swiper.scss'
 import 'swiper/components/navigation/navigation.scss'
 import 'swiper/components/pagination/pagination.scss'
+import { connect } from 'react-redux'
+import { RootState } from '../../../../Redux'
+import Category from '../../../../Interfaces/Category'
 
 // install Swiper components
 SwiperCore.use([Navigation, Pagination, Autoplay])
 
-interface BannersProps {}
+interface BannersProps {
+  menu: Category[]
+  showComboModal: boolean
+  showComboModalFunc: (combo: Category) => void
+}
 
 interface BannersState {}
 
-export default class Banners extends React.Component<BannersProps, BannersState> {
+class Banners extends React.Component<BannersProps, BannersState> {
   render() {
     return (
       <Container fluid className="Banners m-0 p-0">
         <Container className="d-none d-sm-block">
           <Row className="m-0 p-0">
-            <Col xs={6} className="Banners__img m-0 p-0">
-              <img src="/images/banners/banner1.jpg" className="img-fluid" alt="" />
-            </Col>
-            <Col xs={6} className="Banners__img m-0 p-0">
-              <img src="/images/banners/banner1.jpg" className="img-fluid" alt="" />
-            </Col>
+            {this.props.menu.map((cat, index) => {
+              if (cat.isCombo) {
+                // console.log(cat) //Для просмотра ID категории для переименования слайдов
+                return (
+                  <Col xs={6} className="Banners__img m-0 p-0">
+                    <img className="img-fluid" src={`/images/banners/${cat.id}.png`} onError={(event) => {
+                      const el = event.target as HTMLElement
+                      el.setAttribute('src','/images/banners/no-banner.jpg')
+                    }} />
+                    <img src="/images/banners/banner1.jpg" className="img-fluid" alt="" />
+                  </Col>
+                )
+              }
+            })}
           </Row>
         </Container>
 
@@ -61,3 +77,18 @@ export default class Banners extends React.Component<BannersProps, BannersState>
     )
   }
 }
+
+const mapDispatchToProps = {
+  showComboModalFunc,
+}
+
+const mapStateToProps = (state: RootState) => {
+  const { menu } = state.menu
+  const { showComboModal } = state.app
+  return {
+    menu,
+    showComboModal,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Banners)

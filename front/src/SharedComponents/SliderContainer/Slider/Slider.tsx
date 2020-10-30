@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container, Row } from 'react-bootstrap'
+import { showComboModal as showComboModalFunc } from '../../../Redux/actions/app'
 import './Slider.scss'
 
 // Import Swiper React components
@@ -10,15 +11,24 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/swiper.scss'
 import 'swiper/components/navigation/navigation.scss'
 import 'swiper/components/pagination/pagination.scss'
+import { RootState } from '../../../Redux'
+import { connect } from 'react-redux'
+import Category from '../../../Interfaces/Category'
 
 // install Swiper components
 SwiperCore.use([Navigation, Pagination, Autoplay])
 
-interface SliderProps {}
+interface SliderProps {
+  menu: Category[]
+  showComboModal: boolean
+  showComboModalFunc: (combo: Category) => void
+}
 
 interface SliderState {}
 
-export default class Slider extends React.Component<SliderProps, SliderState> {
+class Slider extends React.Component<SliderProps, SliderState> {
+  componentDidMount() {}
+
   render() {
     return (
       <Container fluid className="Slider p-0 m-0">
@@ -32,31 +42,25 @@ export default class Slider extends React.Component<SliderProps, SliderState> {
           autoplay={{ delay: 5000 }}
           pagination={{ clickable: true, el: '#sliderPagination' }}
         >
-          <SwiperSlide>
-            <div className="Slider__slide">
-              <img className="img-fluid" src="/images/slides/slide1.jpg" alt="" />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <div className="Slider__slide">
-              <img className="img-fluid" src="/images/slides/slide1.jpg" alt="" />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <div className="Slider__slide">
-              <img className="img-fluid" src="/images/slides/slide1.jpg" alt="" />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <div className="Slider__slide">
-              <img className="img-fluid" src="/images/slides/slide1.jpg" alt="" />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <div className="Slider__slide">
-              <img className="img-fluid" src="/images/slides/slide1.jpg" alt="" />
-            </div>
-          </SwiperSlide>
+          {this.props.menu.map((cat, index) => {
+            if (cat.isCombo) {
+              // console.log(cat) //Для просмотра ID категории для переименования слайдов
+              return (
+                <SwiperSlide
+                  key={index}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => this.props.showComboModalFunc(cat)}
+                >
+                  <div id={cat.id} className="Slider__slide">
+                    <img className="img-fluid" src={`/images/slides/${cat.id}.png`} onError={(event) => {
+                      const el = event.target as HTMLElement
+                      el.setAttribute('src','/images/slides/no-slide.png')
+                    }} />
+                  </div>
+                </SwiperSlide>
+              )
+            }
+          })}
         </Swiper>
 
         <Row className="Slider__actions m-0 p-0 d-flex justify-content-between">
@@ -75,3 +79,18 @@ export default class Slider extends React.Component<SliderProps, SliderState> {
     )
   }
 }
+
+const mapDispatchToProps = {
+  showComboModalFunc,
+}
+
+const mapStateToProps = (state: RootState) => {
+  const { menu } = state.menu
+  const { showComboModal } = state.app
+  return {
+    menu,
+    showComboModal,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Slider)
