@@ -6,10 +6,15 @@
   text-shadow: 1px 1px 1px #000000;
   border-radius: 20px 0;
   margin-bottom: 10px !important;
+  border-radius: 15px 15px 15px 0px;
   cursor: pointer;
 
   &:hover {
     filter: brightness(0.8);
+  }
+
+  .ShortMenuItemMob__cont {
+    border-radius: 15px 15px 15px 0px;
   }
 
   .ShortMenuItemMob__content {

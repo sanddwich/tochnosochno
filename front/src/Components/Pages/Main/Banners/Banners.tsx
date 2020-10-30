@@ -37,11 +37,21 @@ class Banners extends React.Component<BannersProps, BannersState> {
               if (cat.isCombo) {
                 // console.log(cat) //Для просмотра ID категории для переименования слайдов
                 return (
-                  <Col xs={6} className="Banners__img m-0 p-0">
-                    <img className="img-fluid" src={`/images/banners/${cat.id}.png`} onError={(event) => {
-                      const el = event.target as HTMLElement
-                      el.setAttribute('src','/images/banners/no-banner.jpg')
-                    }} />
+                  <Col
+                    key={index}
+                    xs={6}
+                    className="Banners__img m-0 p-0"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => this.props.showComboModalFunc(cat)}
+                  >
+                    <img
+                      className="img-fluid"
+                      src={`/images/banners/${cat.id}.png`}
+                      onError={(event) => {
+                        const el = event.target as HTMLElement
+                        el.setAttribute('src', '/images/banners/no-banner.jpg')
+                      }}
+                    />
                     <img src="/images/banners/banner1.jpg" className="img-fluid" alt="" />
                   </Col>
                 )
@@ -58,14 +68,28 @@ class Banners extends React.Component<BannersProps, BannersState> {
             spaceBetween={10}
             pagination={{ clickable: true, el: '#paginationBanners' }}
           >
-            {[1, 2].map((slide, index) => {
-              return (
-                <SwiperSlide key={index}>
-                  <Container className="m-0 p-0 ">
-                    <img src="/images/banners/banner1.jpg" className="img-fluid" alt="" />
-                  </Container>
-                </SwiperSlide>
-              )
+            {this.props.menu.map((cat, index) => {
+              if (cat.isCombo) {
+                // console.log(cat) //Для просмотра ID категории для переименования слайдов
+                return (
+                  <SwiperSlide
+                    key={index}
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => this.props.showComboModalFunc(cat)}
+                  >
+                    <Container className="m-0 p-0 ">
+                      <img
+                        className="img-fluid"
+                        src={`/images/banners/${cat.id}.png`}
+                        onError={(event) => {
+                          const el = event.target as HTMLElement
+                          el.setAttribute('src', '/images/banners/no-banner.jpg')
+                        }}
+                      />
+                    </Container>
+                  </SwiperSlide>
+                )
+              }
             })}
           </Swiper>
 

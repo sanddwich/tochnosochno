@@ -41,12 +41,20 @@ class MobSlider extends React.Component<MobSliderProps, MobSliderState> {
               if (cat.isCombo) {
                 // console.log(cat) //Для просмотра ID категории для переименования слайдов
                 return (
-                  <SwiperSlide key={index} style={{cursor:'pointer'}} onClick={() => this.props.showComboModalFunc(cat)}>
+                  <SwiperSlide
+                    key={index}
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => this.props.showComboModalFunc(cat)}
+                  >
                     <Container fluid className="m-0 p-0 d-flex justify-content-center">
-                    <img className="img-fluid" src={`/images/slides/mob/${cat.id}.png`} onError={(event) => {
-                      const el = event.target as HTMLElement
-                      el.setAttribute('src','/images/slides/mob/slide1.jpg')
-                    }} />
+                      <img
+                        className="img-fluid"
+                        src={`/images/slides/mob/${cat.id}.png`}
+                        onError={(event) => {
+                          const el = event.target as HTMLElement
+                          el.setAttribute('src', '/images/slides/mob/slide1.jpg')
+                        }}
+                      />
                     </Container>
                   </SwiperSlide>
                 )

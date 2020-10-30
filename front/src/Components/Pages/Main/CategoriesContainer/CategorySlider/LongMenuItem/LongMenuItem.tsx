@@ -53,7 +53,7 @@ export default class LongMenuItem extends React.Component<LongMenuItemProps, Lon
                 background: (this.props.category.images !== null && this.props.category.images !== ''  ) ? `url(${this.props.category.images})` : `url(/images/categories/rolls.png)` ,
                 backgroundRepeat: 'no-repeat',
                 // backgroundAttachment: 'fixed',
-                backgroundPosition: 'center',
+                backgroundPosition: 'right',
                 // backgroundSize: 'cover',
               }}
             ></Col>

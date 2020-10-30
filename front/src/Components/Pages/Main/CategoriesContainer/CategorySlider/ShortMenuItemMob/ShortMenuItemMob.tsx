@@ -34,12 +34,12 @@ export default class ShortMenuItemMob extends React.Component<ShortMenuItemMobPr
               background: "url('/images/background/bg.png')",
               backgroundRepeat: 'no-repeat',
               // backgroundAttachment: 'fixed',
-              backgroundPosition: 'center',
+              backgroundPosition: 'right',
               // backgroundSize: 'cover',
             }}
           >
             <Container
-              className="m-0 p-0"
+              className="ShortMenuItemMob__cont m-0 p-0"
               style={{
                 background:
                   this.props.category.images !== null && this.props.category.images !== ''

@@ -39,7 +39,7 @@ export default class LongMenuItemMob extends React.Component<LongMenuItemMobProp
             }}
           >
             <Container
-              className="m-0 p-0"
+              className="LongMenuItemMob__cont m-0 p-0"
               style={{
                 background:
                   this.props.category.images !== null && this.props.category.images !== ''
