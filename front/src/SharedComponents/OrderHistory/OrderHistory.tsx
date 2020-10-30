@@ -49,20 +49,33 @@ class OrderHistory extends React.Component<OrderHistoryProps, OrderHistoryState>
           <BlockName name="Последние заказы" />
         </div>
         {this.props.customer.orders.length > 0 ? (
-          this.props.customer.orders.map((order: Order) => {
-            return (
-              <React.Fragment key={order.id}>
-                <div className="OrderHistory__date">
-                  {order.completeBefore ? format(new Date(order.completeBefore), 'DD MMMM YYYY', i18) : null}
-                </div>
-                {order.items?.map((orderItem: OrderItem) => {
-                  if (!orderItem.comboId) {
-                    return <LineProductWithCart key={orderItem.id} product={orderItem.product} />
-                  }
-                })}
-              </React.Fragment>
-            )
-          })
+          <React.Fragment>
+            <input
+              disabled={false}
+              name="birthday"
+              id="profile-birthday"
+              style={{ width: '150px' }}
+              type="date"
+              onChange={(event) => console.log(111)}
+              value={new Date().toISOString().slice(0, 10)}
+              placeholder="мм.мм.гггг"
+            />
+
+            {this.props.customer.orders.map((order: Order) => {
+              return (
+                <React.Fragment key={order.id}>
+                  <div className="OrderHistory__date">
+                    {order.completeBefore ? format(new Date(order.completeBefore), 'DD MMMM YYYY', i18) : null}
+                  </div>
+                  {order.items?.map((orderItem: OrderItem) => {
+                    if (!orderItem.comboId) {
+                      return <LineProductWithCart key={orderItem.id} product={orderItem.product} />
+                    }
+                  })}
+                </React.Fragment>
+              )
+            })}
+          </React.Fragment>
         ) : (
           <div className="row m-0 mt-4 profile__text">Сейчас тут ничего нет :( И мы ждем вашего заказа :)</div>
         )}

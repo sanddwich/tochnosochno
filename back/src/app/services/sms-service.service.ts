@@ -140,11 +140,12 @@ export class SmsService {
   }
 
   private async checkPhone(phone: string) {
+    const date = new Date()
     const repository = getRepository(PinCode)
     const pinCode = await repository
       .createQueryBuilder('pincode')
       .where('pincode.phone = :phone', { phone: phone })
-      .andWhere('TIMESTAMPDIFF(SECOND, pincode.expiresIn, CURRENT_TIMESTAMP ) > 0')
+      .andWhere('TIMESTAMPDIFF(SECOND, pincode.expiresIn, CURRENT_TIMESTAMP )  < 60')
       .getOne()
 
     return pinCode
