@@ -120,7 +120,7 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
               </div>
 
               <div className="ProductCard__button d-flex justify-content-end">
-                <AddProductButton hideTextMobile={true} product={this.props.product} />
+                <AddProductButton hideTextMobile={false} product={this.props.product} />
               </div>
             </Row>
           </Container>

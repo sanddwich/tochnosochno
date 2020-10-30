@@ -22,8 +22,11 @@
 
   .ProductCard__img {
     margin-top: -80px;
+    &:hover {
+      cursor: pointer;
+    }
     img {
-      height: 250px;       // =========== Картинки
+      height: 250px; // =========== Картинки
     }
   }
 

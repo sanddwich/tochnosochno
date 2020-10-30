@@ -80,6 +80,7 @@ class AddProductButton extends React.Component<AddProductButtonProps, AddProduct
           />
         ) : (
           <ActionButton
+            hideTextMobile={this.props.hideTextMobile}
             backgroundColor="#303030"
             icon="cart_dark.svg"
             text="В корзину"

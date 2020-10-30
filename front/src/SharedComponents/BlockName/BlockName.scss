@@ -1,5 +1,6 @@
 .BlockName {
   display: flex;
+  z-index: 3;
 
   .BlockName__title {
     h1 {
@@ -16,13 +17,14 @@
   }
 
   .BlockName__underLine {
-    position: absolute;
+    position: relative;
     width: 105%;
     height: 19px;
     background-color: #ffd74b !important;
     border-radius: 15px 0px;
-    margin-top: -25px;
+    // margin-top: -30px;
     z-index: -1;
+    top: 2em;
   }
 
   @media screen and (max-width: 768px) {
@@ -34,7 +36,7 @@
     }
 
     .BlockName__underLine {
-      margin-top: -20px;
+      // margin-top: -23px;
     }
   }
 }
