@@ -15,6 +15,7 @@ import _, { String } from 'lodash'
 import './Profile.scss'
 import Customer from '../../../Interfaces/Customer'
 import FavoriteProduct from '../../../Interfaces/FavoriteProduct'
+import OrderHistory from '../../../SharedComponents/OrderHistory/OrderHistory'
 
 interface ProfileProps {
   menu: Category[]
@@ -155,10 +156,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
           />
         </div>
 
-        <div className="row m-0 mt-5">
-          <BlockName name="Последние заказы" />
-        </div>
-        <div className="row m-0 mt-4 profile__text">Сейчас тут ничего нет :( И мы ждем вашего заказа :)</div>
+        <OrderHistory />
 
         <div>{/* <LineProductWithCart product={this.props.menu[0].products[0]} /> */}</div>
 

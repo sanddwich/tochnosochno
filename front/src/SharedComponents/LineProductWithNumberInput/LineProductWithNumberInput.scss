@@ -8,7 +8,7 @@
 
   &__delete {
     order: 2;
-    margin-left: 30px;
+    margin-left: auto;
   }
 
   &__product {
@@ -31,8 +31,9 @@
       font-weight: 400;
       font-size: 16px;
       flex-grow: 5;
-      text-align: center;
+      text-align: left;
       line-height: 16px;
+      width: 100px;
       &:hover {
         cursor: pointer;
         color: #ffd12d;
@@ -41,7 +42,7 @@
     &__price {
       // display: flex;
       // flex-wrap: wrap;
-      padding: 20px 10px;
+      // padding: 20px 10px;
       line-height: 60px;
     }
 

@@ -101,14 +101,23 @@ export class SmsService {
     <p><span style="font-size: 17px;">Имя: ${order.customer.name}</span></p>
     <p><span style="font-size: 17px;">Телефон: ${order.customer.phone || order.phone}</span></p>
     <p><span style="font-size: 17px;">Доставка: ${order.isDelivery ? '<b>курьером</b>' : '<b>самовывоз </b>'}</span></p>
-    <p><span style="font-size: 17px;">Адрес доставки: ул. ${order.address.street.name}, д. ${
-      order.address.house
-    }, кв. ${order.address.flat}, ${order.address.entrance} подъезд, ${order.address.floor} этаж</span></p>
+    ${
+      order.isDelivery
+        ? ` <p><span style="font-size: 17px;">Адрес доставки: ул. ${order.address.street.name}, д. ${order.address.house}, кв. ${order.address.flat}, ${order.address.entrance} подъезд, ${order.address.floor} этаж</span></p>`
+        : ''
+    }
+   
     <p><span style="font-size: 17px;">Количество персон: ${order.guests.count}</span></p>
     <p><span style="font-size: 17px;">Оплата: ${
       order.payment === 'credit' ? 'кредитной картой' : 'наличными'
     }</span></p>
-    <p><span style="font-size: 17px;">Комментарий: ${order.comment}</span></p>`
+    ${order.comment ? `<p><span style="font-size: 17px;">Комментарий: ${order.comment}</span></p>` : ''}
+    ${
+      order.completeBefore
+        ? `<p><span style="font-size: 17px;">Приготовить ко времени: ${order.completeBefore}</span></p>`
+        : ''
+    }
+   `
 
     const transporter = nodemailer.createTransport({
       host: 'mail.hostland.ru',

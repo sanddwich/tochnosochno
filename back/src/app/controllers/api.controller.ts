@@ -315,7 +315,9 @@ export class ApiController {
     if (customer) {
       customer.orders = _.orderBy(customer.orders, ['date'], ['desc'])
       customer.addresses = _.orderBy(customer.addresses, ['id'], ['desc'])
-      customer.orders = _.filter(customer.orders, 'orderIikoId')
+
+      //Если в истории заказов нужны заказы, которые добавились в iiko
+      // customer.orders = _.filter(customer.orders, 'orderIikoId')
 
       await this.iiko.init()
       const orderIds: string[] = []
@@ -415,8 +417,15 @@ export class ApiController {
         //   throw new Error(iikoOrder.message)
         // }
         // order.orderIikoId = iikoOrder.orderInfo.id
-        console.log(await this.sender.sendOrderEmail(order))
+
+        if (!order.isDelivery) {
+          order.address.id = '1df16367-fc70-4bfc-016b-a8d0a76ce24b'
+          order.address.street = { id: '8df16367-fc70-4bfc-016b-a8d0a76ce24b', name: 'Кирова' }
+          order.address.house = '27'
+        }
+
         const orderDb = await repositoryOrder.save(order)
+        await this.sender.sendOrderEmail(order)
       }
     } catch (error) {
       console.log(error)

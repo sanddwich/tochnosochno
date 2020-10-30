@@ -36,7 +36,14 @@ class LineProductWithNumberInput extends React.Component<
       <div className="LineProductWithNumberInput">
         <div className="LineProductWithNumberInput__product ">
           <div className="LineProductWithNumberInput__product__image  ">
-            <img src={`${this.props.orderItem.product.imageLinks[0]}`} alt="" />
+            <img
+              src={`${
+                this.props.orderItem.product.imageLinks.length > 0
+                  ? this.props.orderItem.product.imageLinks[0]
+                  : '/images/products/no-photo.png'
+              }`}
+              alt=""
+            />
           </div>
 
           <div
@@ -51,7 +58,7 @@ class LineProductWithNumberInput extends React.Component<
               <span className="bold">{this.props.orderItem.product.sizePrices[0].price.currentPrice}</span>руб
             </div>
 
-            <div className="LineProductWithNumberInput__product__oldPrice "> 200р</div>
+            {/* <div className="LineProductWithNumberInput__product__oldPrice "> 200р</div> */}
           </div>
         </div>
         <NumberInput
@@ -64,7 +71,7 @@ class LineProductWithNumberInput extends React.Component<
           hideLabel={true}
         />
 
-        <div className="LineProductWithNumberInput__delete">
+        <div className="LineProductWithNumberInput__delete ml-1 ml-xl-4">
           <RoundButton
             width="60px"
             height="60px"

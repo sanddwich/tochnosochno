@@ -28,7 +28,7 @@ class CookingTime extends React.Component<CookingTimeProps, CookingTimeState> {
   }
 
   componentDidMount() {
-    console.log(this.state.cookingTime)
+    this.selectSoon()
   }
 
   excludeTimes = (startWorkHour: number, minutesRange: number) => {
@@ -87,19 +87,12 @@ class CookingTime extends React.Component<CookingTimeProps, CookingTimeState> {
     this.setState({
       isSelectTime: false,
     })
-    // this.props.setPrepareDate(this.addHour(1).toString())
     this.props.setPrepareDate(format(this.addHour(1), 'YYYY-MM-DD HH:mm:ss.SSS'))
   }
 
   setCookingTime = (cookingTime: Date | [Date, Date] | null) => {
     this.setState({ cookingTime })
     if (cookingTime) {
-      // this.props.setPrepareDate(
-      //   new Date(cookingTime.toString()).toLocaleDateString() +
-      //     ' ' +
-      //     new Date(cookingTime.toString()).toLocaleTimeString()
-      // )
-
       this.props.setPrepareDate(format(new Date(cookingTime.toString()), 'YYYY-MM-DD HH:mm:ss.SSS'))
     }
   }

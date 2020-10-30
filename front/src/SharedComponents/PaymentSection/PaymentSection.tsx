@@ -33,13 +33,13 @@ class PaymentSection extends React.Component<PaymentSectionProps, PaymentSection
       <React.Fragment>
         {this.props.isDelivery ? (
           <div className="PaymentSection">
-            <RadioButton
+            {/* <RadioButton
               selected={this.props.order.payment === 'online'}
               label="Оплатить онлайн"
               name="payment"
               id="onlineRadio"
               onClick={() => this.setPayment(false, 'online')}
-            />
+            /> */}
 
             <RadioButton
               selected={this.props.order.payment === 'credit'}
@@ -58,13 +58,13 @@ class PaymentSection extends React.Component<PaymentSectionProps, PaymentSection
           </div>
         ) : (
           <div className="PaymentSection">
-            <RadioButton
+            {/* <RadioButton
               selected={this.props.order.payment === 'online'}
               label="Оплатить онлайн"
               name="payment"
               id="onlineRadio"
               onClick={() => this.setPayment(false, 'online')}
-            />
+            /> */}
 
             <RadioButton
               selected={this.props.order.payment === 'cash'}

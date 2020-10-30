@@ -46,7 +46,7 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
             </div>
 
             <div
-              className="lineProductWithCart__product__name  d-flex justify-content-center align-items-center"
+              className="lineProductWithCart__product__name  d-flex  align-items-center"
               onClick={() => this.props.showProductModal(this.props.product)}
               style={{ cursor: 'pointer' }}
             >
@@ -57,7 +57,7 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
               <div className="lineProductWithCart__product__newPrice col-sm-6 m-0 p-0">
                 <span className="bold">{this.props.product.sizePrices[0].price.currentPrice}</span>руб
               </div>
-              <div className="lineProductWithCart__product__oldPrice col-sm-6 m-0 p-0"> 300р</div>
+              {/* <div className="lineProductWithCart__product__oldPrice col-sm-6 m-0 p-0"> 300р</div> */}
             </div>
           </div>
         </div>

@@ -11,7 +11,13 @@ export class MenuService {
       //   if (randomProduct.id != product.id) {
       //     recomendedProducts.push(randomProduct)
       //   }
-      if (randomProduct && randomProduct.id != product.id && randomProduct.type === 'Dish') {
+      if (
+        randomProduct &&
+        randomProduct.id != product.id &&
+        randomProduct.type === 'Dish' &&
+        !randomGroup.isCombo &&
+        randomProduct.sizePrices[0].price.currentPrice > 200
+      ) {
         recomendedProducts.push(randomProduct.id)
       } else {
         i--

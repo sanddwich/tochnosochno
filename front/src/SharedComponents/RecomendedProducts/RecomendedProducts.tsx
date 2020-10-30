@@ -32,8 +32,13 @@ class RecomendedProducts extends React.Component<RecomendedProductsProps, Recome
       group.products.map((product) => {
         if (this.props.product.recomended) {
           this.props.product.recomended.map((productId) => {
-            if (product.id === productId && group.parentGroup) {
-              recomendedProducts.push(product)
+            if (product.id === productId) {
+              const recProduct = recomendedProducts.filter((product) => {
+                return product.id === productId
+              })
+              if (recProduct.length === 0) {
+                recomendedProducts.push(product)
+              }
             }
           })
         }

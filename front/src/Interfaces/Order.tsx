@@ -40,7 +40,7 @@ export default class Order {
     this.sourceKey = 'myaso.cafe'
     this.status = 'Новый'
     this.id = Date.now()
-    this.payment = 'online'
+    this.payment = 'cash'
     this.isPayment = false
     this.guests = {
       count: 1,

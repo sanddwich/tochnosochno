@@ -164,7 +164,10 @@ export class AuthController {
     if (customer) {
       customer.orders = _.orderBy(customer.orders, ['date'], ['desc'])
       customer.addresses = _.orderBy(customer.addresses, ['id'], ['desc'])
-      customer.orders = _.filter(customer.orders, 'orderIikoId')
+
+      // Если в истории заказов нужны заказы, которые есть точно  в iiko
+      // customer.orders = _.filter(customer.orders, 'orderIikoId')
+
       const session = await this.store.createAndSaveSessionFromUser(customer, { csrfToken: true })
       const token = session.getToken()
       const response = new HttpResponseOK({
