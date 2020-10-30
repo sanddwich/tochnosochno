@@ -95,23 +95,25 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
       <div className="CartOrder__products mt-3 mb-3">
         <h1>Наборы Комбо:</h1>
         {this.state.cartCombos.map((comboItem: ComboItemOrder, index) => {
-          const category = this.props.menu.find(cat => cat.id === comboItem.comboId) as Category
-          return <ComboOrderBlockDescription key={index+comboItem.comboId} comboItem={comboItem} category={category} />
+          const category = this.props.menu.find((cat) => cat.id === comboItem.comboId) as Category
+          return (
+            <ComboOrderBlockDescription key={index + comboItem.comboId} comboItem={comboItem} category={category} />
+          )
         })}
       </div>
     )
   }
 
-  renderProductListBlock = (): any => {
-    return (
-      <div className="CartOrder__products mb-3">
-        <h1>Продукты:</h1>
-        {this.state.cartProducts.map((orderItem: OrderItem) => {
-          return <LineProductWithNumberInput key={orderItem.id} orderItem={orderItem} />
-        })}
-      </div>
-    )
-  }
+  // renderProductListBlock = (): any => {
+  //   return (
+  //     <div className="CartOrder__products mb-3">
+  //       <h1>Продукты:</h1>
+  //       {this.props.order.items.map((orderItem: OrderItem) => {
+  //         return <LineProductWithNumberInput key={orderItem.id} orderItem={orderItem} />
+  //       })}
+  //     </div>
+  //   )
+  // }
 
   render() {
     // console.log(this.state.cartProducts)
@@ -130,7 +132,16 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
               <React.Fragment>
                 {this.state.cartCombos.length > 0 ? this.renderComboListBlock() : null}
 
-                {this.state.cartProducts.length > 0 ? this.renderProductListBlock() : null}
+                {this.props.order.items.length > 0 ? (
+                  <div className="CartOrder__products mb-3">
+                    <h1>Продукты:</h1>
+                    {this.props.order.items.map((orderItem: OrderItem) => {
+                      if (!orderItem.comboId) {
+                        return <LineProductWithNumberInput key={orderItem.id} orderItem={orderItem} />
+                      }
+                    })}
+                  </div>
+                ) : null}
 
                 <div className="CartOrder__guests">
                   <NumberInput
