@@ -10,6 +10,7 @@ import Category from '../../Interfaces/Category'
 import OrderItem from '../../Interfaces/OrderItem'
 import { RootState } from '../../Redux'
 import Order from '../../Interfaces/Order'
+import COBDItem from './COBDItem/COBDItem'
 
 interface ComboOrderBlockDescriptionProps {
   order: Order
@@ -20,12 +21,21 @@ interface ComboOrderBlockDescriptionProps {
   deleteOrderItem: (orderItem: OrderItem) => void
 }
 
-interface ComboOrderBlockDescriptionState {}
+interface ComboOrderBlockDescriptionState {
+  combosDropList: boolean
+}
 
 class ComboOrderBlockDescription extends React.Component<
   ComboOrderBlockDescriptionProps,
   ComboOrderBlockDescriptionState
 > {
+  constructor(props: ComboOrderBlockDescriptionProps) {
+    super(props)
+    this.state = {
+      combosDropList: false,
+    }
+  }
+
   componentDidMount() {
     // console.log(this.props)
   }
@@ -44,6 +54,11 @@ class ComboOrderBlockDescription extends React.Component<
     }
   }
 
+  toggleDropList = ():void => {
+    const combosDropList = !this.state.combosDropList
+    this.setState({combosDropList})
+  }
+
   render() {
     let price = 0
     this.props.comboItem.products.map((product) => {
@@ -56,7 +71,8 @@ class ComboOrderBlockDescription extends React.Component<
             sm={2}
             xs={12}
             className="ComboOrderBlockDescription__actionLineImg d-flex justify-content-center align-items-center mt-2"
-            onClick={() => this.props.showComboModal(this.props.category, this.props.comboItem)}
+            // onClick={() => this.props.showComboModal(this.props.category, this.props.comboItem)}
+            onClick={() => this.toggleDropList()}
           >
             <img
               src={`${
@@ -72,7 +88,8 @@ class ComboOrderBlockDescription extends React.Component<
             sm={5}
             xs={12}
             className="ComboOrderBlockDescription__actionLineName d-flex align-items-center justify-content-center mt-2"
-            onClick={() => this.props.showComboModal(this.props.category, this.props.comboItem)}
+            // onClick={() => this.props.showComboModal(this.props.category, this.props.comboItem)}
+            onClick={() => this.toggleDropList()}
           >
             {this.props.comboItem.name}
           </Col>
@@ -104,6 +121,20 @@ class ComboOrderBlockDescription extends React.Component<
             />
           </Col>
         </Row>
+
+        {this.state.combosDropList ? (
+          <React.Fragment>
+            <Row className="ComboOrderBlockDescription__separate w-100"></Row>
+            {this.props.comboItem.products && this.props.comboItem.products.length > 0 ? (
+              <Row className="ComboOrderBlockDescription__productList p-0 m-0 mt-3">
+                {this.props.comboItem.products.map((product, index) => {
+                  return <COBDItem key={index} product={product} />
+                })}
+              </Row>
+            ) : null}
+          </React.Fragment>
+        ) : null}
+
       </Container>
     )
   }

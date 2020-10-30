@@ -33,6 +33,7 @@ export default interface Product {
   orderItemType?: string
   modifierSchemaName?: string
   measureUnit?: string
+  createdAt?: string
 
   sizePrices: SizePrice[]
   modifiers: Modifier[]

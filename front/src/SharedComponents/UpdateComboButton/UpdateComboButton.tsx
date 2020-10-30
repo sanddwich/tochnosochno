@@ -72,7 +72,7 @@ class UpdateComboButton extends React.Component<UpdateComboButtonProps, UpdateCo
       <React.Fragment>
         <ActionButton
           backgroundColor="#303030"
-          icon="cart_dark.svg"
+          icon="check.svg"
           text="Обновить"
           width="180px"
           textColor="#ffffff"

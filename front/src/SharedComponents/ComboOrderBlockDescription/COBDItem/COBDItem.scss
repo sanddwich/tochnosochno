@@ -1,0 +1,60 @@
+.COBDItem {
+  color: #212529;
+  font-family: 'Roboto';
+  font-style: normal;
+  margin-bottom: 15px !important;
+
+  .COBDItem__productLine_img {
+    img {
+      height: 50px;
+    }
+  }
+
+  .COBDItem__title {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 18px;
+    padding-bottom: 5px;
+  }
+
+  .COBDItem__desc {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 16px;
+
+    color: #8e8e8e;
+  }
+
+  .COBDItem__weight {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+
+    span {
+      font-weight: 500;
+      font-size: 16px;
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .COBDItem__title {
+      font-size: 14;
+    }
+
+    .COBDItem__desc {
+      font-size: 12;
+    }
+    
+    .COBDItem__weight {
+      span {
+        font-size: 14px;
+      }
+    }
+  }
+}
