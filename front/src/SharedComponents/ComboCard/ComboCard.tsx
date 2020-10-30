@@ -95,7 +95,7 @@ class ComboCard extends React.Component<ComboCardProps, ComboCardState> {
                   {comboPrice.toFixed(0).toString() + ' '}
                   <span>руб</span>
                 </div>
-                <div className="ComboCard__oldPrice d-inline-block">{oldPrice.toFixed(0).toString()}р</div>
+                {/* <div className="ComboCard__oldPrice d-inline-block">{oldPrice.toFixed(0).toString()}р</div> */}
               </div>
 
               <div className="ComboCard__button d-flex justify-content-end">
