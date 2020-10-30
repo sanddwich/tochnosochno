@@ -14,10 +14,14 @@ export default class ShortMenuItem extends React.Component<ShortMenuItemProps, S
   componentDidMount() {}
 
   suffixGen = (num: number): string => {
-    if (num === 1) {
+    // console.log(num % 10)
+    if (num >= 10 && num <=20) {
+      return 'ых'
+    }
+    if ((num % 10) === 1) {
       return 'ая'
     }
-    if (num >= 2 && num <= 4) {
+    if ((num % 10) >= 2 && (num % 10) <= 4) {
       return 'ые'
     }
     return 'ых'
