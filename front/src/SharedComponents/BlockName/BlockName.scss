@@ -1,6 +1,11 @@
 .BlockName {
   display: flex;
-  z-index: 3;
+  z-index: 24;
+  max-width: 90%;
+
+  &__cont {
+    z-index: 5;
+  }
 
   .BlockName__title {
     h1 {
@@ -24,7 +29,7 @@
     border-radius: 15px 0px;
     // margin-top: -30px;
     z-index: -1;
-    top: 2em;
+    top: 2.2em;
   }
 
   @media screen and (max-width: 768px) {

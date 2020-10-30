@@ -74,7 +74,11 @@ class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductC
                   </div>
                 </Row>
 
-                <Row className="ProductCardMobile__img" style={{cursor:'pointer'}} onClick={() => this.props.showProductModal(this.props.product)}>
+                <Row
+                  className="ProductCardMobile__img"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => this.props.showProductModal(this.props.product)}
+                >
                   <img
                     className="img-fluid"
                     src={
@@ -113,7 +117,7 @@ class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductC
                   </div>
 
                   <div className="ProductCardMobile__button d-flex justify-content-end">
-                    <AddProductButton hideTextMobile={true} product={this.props.product} />
+                    <AddProductButton hideTextMobile={false} product={this.props.product} />
                     {/* <ActionButton
                       backgroundColor="#303030"
                       icon="cart_dark.svg"
