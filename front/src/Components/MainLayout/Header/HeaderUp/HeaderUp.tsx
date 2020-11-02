@@ -150,13 +150,32 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
           </NavLink>
 
           <div className="menuItem h-100 d-flex align-items-center">
-            <NavLink to="/cart">
-              <CartRoundButton
-                backgroundColor="#303030"
-                icon="cart_white.svg"
-                onClick={() => Scroll.animateScroll.scrollToTop()}
-              />
-            </NavLink>
+            <div style={{ marginRight: '5px' }}>
+              <NavLink to="/cart">
+                <CartRoundButton
+                  backgroundColor="#303030"
+                  icon="cart_white.svg"
+                  onClick={() => {
+                    Scroll.animateScroll.scrollToTop()
+                  }}
+                />
+              </NavLink>
+            </div>
+            <div>
+              {this.props.isAuth ? (
+                <NavLink to="/profile">
+                  <RoundButton backgroundColor="#303030" icon="user_white.svg" onClick={() => this.noAction()} />
+                </NavLink>
+              ) : (
+                <RoundButton
+                  backgroundColor="#303030"
+                  icon="user_white.svg"
+                  onClick={() => {
+                    this.props.showLoginModal()
+                  }}
+                />
+              )}
+            </div>
           </div>
         </Container>
 
@@ -177,13 +196,38 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
               </NavLink>
             </div>
             <div className="menuItem h-100 d-flex align-items-center">
-              <NavLink to="/cart">
-                <CartRoundButton
-                  backgroundColor="#303030"
-                  icon="cart_white.svg"
-                  onClick={() => Scroll.animateScroll.scrollToTop()}
-                />
-              </NavLink>
+              <div style={{ marginRight: '5px' }}>
+                <NavLink to="/cart">
+                  <CartRoundButton
+                    backgroundColor="#303030"
+                    icon="cart_white.svg"
+                    onClick={() => {
+                      this.burgerButtonClick()
+                      Scroll.animateScroll.scrollToTop()
+                    }}
+                  />
+                </NavLink>
+              </div>
+              <div>
+                {this.props.isAuth ? (
+                  <NavLink to="/profile">
+                    <RoundButton
+                      backgroundColor="#303030"
+                      icon="user_white.svg"
+                      onClick={() => this.burgerButtonClick()}
+                    />
+                  </NavLink>
+                ) : (
+                  <RoundButton
+                    backgroundColor="#303030"
+                    icon="user_white.svg"
+                    onClick={() => {
+                      this.burgerButtonClick()
+                      this.props.showLoginModal()
+                    }}
+                  />
+                )}
+              </div>
             </div>
           </Container>
 
@@ -246,12 +290,29 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
             </Row>
 
             <Row className="pl-3 pr-3 d-flex justify-content-center">
-              <div className="HeaderUp__toggleMenuButton d-flex">
-                <div className="HeaderUp__toggleMenuButtonText">Войти в личный кабинет</div>
-                <div className="HeaderUp__toggleMenuButtonIcon">
-                  <img src="/images/icons/profile.svg" alt="" />
+              {this.props.isAuth ? (
+                <NavLink to="/profile" onClick={() => this.burgerButtonClick()}>
+                  <div className="HeaderUp__toggleMenuButton d-flex">
+                    <div className="HeaderUp__toggleMenuButtonText">Войти в личный кабинет</div>
+                    <div className="HeaderUp__toggleMenuButtonIcon">
+                      <img src="/images/icons/profile.svg" alt="" />
+                    </div>
+                  </div>
+                </NavLink>
+              ) : (
+                <div
+                  className="HeaderUp__toggleMenuButton d-flex"
+                  onClick={() => {
+                    this.burgerButtonClick()
+                    this.props.showLoginModal()
+                  }}
+                >
+                  <div className="HeaderUp__toggleMenuButtonText">Войти в личный кабинет</div>
+                  <div className="HeaderUp__toggleMenuButtonIcon">
+                    <img src="/images/icons/profile.svg" alt="" />
+                  </div>
                 </div>
-              </div>
+              )}
             </Row>
           </Container>
         </Container>
