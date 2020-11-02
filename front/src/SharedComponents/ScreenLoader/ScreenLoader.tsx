@@ -1,24 +1,20 @@
 import React from 'react'
 
-import './Loader.scss'
+import './ScreenLoader.scss'
 
-interface LoaderProps {
-  dark?: boolean
-}
+interface ScreenLoaderProps {}
 
-interface LoaderState {}
+interface ScreenLoaderState {}
 
-export default class Loader extends React.Component<LoaderProps, LoaderState> {
-  constructor(props: LoaderProps) {
+export default class ScreenLoader extends React.Component<ScreenLoaderProps, ScreenLoaderState> {
+  constructor(props: ScreenLoaderProps) {
     super(props)
   }
 
   render() {
     return (
-      <div className="Loader text-center">
-        <div className={`spinner-border ${this.props.dark ? '' : 'text-warning'}`} role="status">
-          <span className="sr-only">Loading...</span>
-        </div>
+      <div className="ScreenLoader text-center">
+        <div className="ScreenLoader__spinner"></div>
       </div>
     )
   }

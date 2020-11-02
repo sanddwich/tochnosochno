@@ -8,22 +8,39 @@ import './Main.scss'
 import Banners from './Banners/Banners'
 import PopularProducts from './PopularProducts/PopularProducts'
 import FullBanner from './FullBanner/FullBanner'
+import { RootState } from '../../../Redux'
+import { connect } from 'react-redux'
 
-interface MainProps {}
+interface MainProps {
+  loading: boolean
+}
 
 interface MainState {}
 
-export default class Main extends React.Component<MainProps, MainState> {
+class Main extends React.Component<MainProps, MainState> {
   render() {
     return (
       <Container fluid className="Main p-0 m-0">
         <SliderContainer />
         <CategoriesContainer />
-        <NewItems />
+        {this.props.loading ? null : <NewItems />}
+
         <Banners />
-        <PopularProducts />
+        {this.props.loading ? null : <PopularProducts />}
+
         <FullBanner />
       </Container>
     )
   }
 }
+
+const mapDispatchToProps = {}
+
+const mapStateToProps = (state: RootState) => {
+  const { loading } = state.menu
+  return {
+    loading,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main)
