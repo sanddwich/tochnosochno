@@ -29,15 +29,15 @@
     border-radius: 15px 0px;
     // margin-top: -30px;
     z-index: -1;
-    top: 2em;
+    top: 38px;
   }
 
   @media screen and (max-width: 768px) {
     .BlockName__title {
-      h1 {
-        font-size: 26px;
-        line-height: 28px;
-      }
+      // h1 {
+      //   font-size: 26px;
+      //   line-height: 28px;
+      // }
     }
   }
 }

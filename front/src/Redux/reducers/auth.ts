@@ -39,6 +39,7 @@ const auth = (state: AuthState = initialState, action: AuthActionType) => {
         phone: action.phone,
         smsCodeTime: new Date(),
         loading: false,
+        code: '',
       }
 
     case SEND_CODE:
@@ -73,6 +74,7 @@ const auth = (state: AuthState = initialState, action: AuthActionType) => {
         ...state,
         isAuth: true,
         isSms: false,
+        code: '',
       }
 
     case LOGOUT:
@@ -80,6 +82,7 @@ const auth = (state: AuthState = initialState, action: AuthActionType) => {
         ...state,
         isAuth: false,
         token: '',
+        code: '',
         customer: undefined,
         loading: false,
         isSms: false,
@@ -102,6 +105,7 @@ const auth = (state: AuthState = initialState, action: AuthActionType) => {
         ...state,
         isSms: false,
         error: '',
+        code: '',
       }
     case SET_CUSTOMER_BONUS:
       return {

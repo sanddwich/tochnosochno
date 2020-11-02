@@ -145,7 +145,7 @@ export class SmsService {
     const pinCode = await repository
       .createQueryBuilder('pincode')
       .where('pincode.phone = :phone', { phone: phone })
-      .andWhere('TIMESTAMPDIFF(SECOND, pincode.expiresIn, CURRENT_TIMESTAMP )  < 60')
+      .andWhere('TIMESTAMPDIFF(SECOND, pincode.expiresIn, CURRENT_TIMESTAMP + INTERVAL 1 HOUR )  < 5')
       .getOne()
 
     return pinCode
