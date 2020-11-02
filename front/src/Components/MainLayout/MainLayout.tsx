@@ -15,10 +15,12 @@ import Contacts from '../Pages/Contacts/Contacts'
 import Profile from '../Pages/Profile/Profile'
 import Product from '../Pages/Product/Product'
 import { RootState } from '../../Redux'
+import Loader from '../../SharedComponents/Loader/Loader'
 
 interface MainLayoutProps {
   getMenu: any
   isAuth: boolean
+  loading: boolean
 }
 
 interface MainLayoutState {}
@@ -31,23 +33,28 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
   render() {
     return (
       <Container fluid className="MainLayout p-0 m-0">
-        <Header />
+        {this.props.loading ? (
+          <Loader />
+        ) : (
+          <React.Fragment>
+            <Header />
+            <PageContent>
+              <Switch>
+                <Route path="/menu/:id" exact component={Menu} />
+                <Route path="/actions" exact component={Actions} />
+                <Route path="/product/:id" exact component={Product} />
+                <Route path="/cart" exact component={Cart} />
+                <Route path="/contacts" exact component={Contacts} />
+                {this.props.isAuth ? <Route path="/profile" exact component={Profile} /> : null}
 
-        <PageContent>
-          <Switch>
-            <Route path="/menu/:id" exact component={Menu} />
-            <Route path="/actions" exact component={Actions} />
-            <Route path="/product/:id" exact component={Product} />
-            <Route path="/cart" exact component={Cart} />
-            <Route path="/contacts" exact component={Contacts} />
-            {this.props.isAuth ? <Route path="/profile" exact component={Profile} /> : null}
+                <Route path="/" exact component={Main} />
+                <Redirect to="/" />
+              </Switch>
+            </PageContent>
 
-            <Route path="/" exact component={Main} />
-            <Redirect to="/" />
-          </Switch>
-        </PageContent>
-
-        <Footer />
+            <Footer />
+          </React.Fragment>
+        )}
       </Container>
     )
   }
@@ -59,8 +66,10 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: RootState) => {
   const { isAuth } = state.auth
+  const { loading } = state.menu
   return {
     isAuth,
+    loading,
   }
 }
 

@@ -45,21 +45,23 @@ class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
         </Container>
 
         <Container fluid className="HeaderDownMobile p-0 m-0 d-flex d-lg-none">
-          <Swiper slidesPerView={'auto'} spaceBetween={5} loop={true}>
-            {this.props.menu.map((menuItem, index) => {
-              if (menuItem.isSiteDisplay && !menuItem.isCombo) {
-                return (
-                  <SwiperSlide key={menuItem.id + index}>
-                    <NavLink to={`/menu/${menuItem.id}`} activeClassName="activatedLink">
-                      <div className="HeaderDown__menuEl h-100 d-flex justify-content-center align-items-center">
-                        {menuItem.name}
-                      </div>
-                    </NavLink>
-                  </SwiperSlide>
-                )
-              }
-            })}
-          </Swiper>
+          {this.props.menu.length > 0 ? (
+            <Swiper slidesPerView={'auto'} spaceBetween={5} loop={true}>
+              {this.props.menu.map((menuItem, index) => {
+                if (menuItem.isSiteDisplay && !menuItem.isCombo) {
+                  return (
+                    <SwiperSlide key={menuItem.id + index}>
+                      <NavLink to={`/menu/${menuItem.id}`} activeClassName="activatedLink">
+                        <div className="HeaderDown__menuEl h-100 d-flex justify-content-center align-items-center">
+                          {menuItem.name}
+                        </div>
+                      </NavLink>
+                    </SwiperSlide>
+                  )
+                }
+              })}
+            </Swiper>
+          ) : null}
         </Container>
       </React.Fragment>
     )
