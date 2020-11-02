@@ -26,7 +26,7 @@ export class OrderItem {
   comboId: string
 
   @Column()
-  pickDate: number
+  pickDate: string
 
   @ManyToOne((type) => Order, (order) => order.items)
   order: Order
