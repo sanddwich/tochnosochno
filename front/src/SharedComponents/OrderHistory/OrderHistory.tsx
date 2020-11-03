@@ -46,7 +46,7 @@ const i18: any = {
   ],
 }
 
-const ordersPerPage: number = 2
+const ordersPerPage: number = 5
 
 class OrderHistory extends React.Component<OrderHistoryProps, OrderHistoryState> {
   constructor(props: OrderHistoryProps) {
@@ -178,13 +178,13 @@ class OrderHistory extends React.Component<OrderHistoryProps, OrderHistoryState>
                   <React.Fragment key={order.id}>
                     <div className="OrderHistory__date">
                       <div className="OrderHistory__orderDate">
-                        <span>Оформление заказа: </span>
+                        <span>Заказ оформлен: </span>
                         {order.date
                           ? format(new Date(this.transformDate(order.date)), 'DD MMMM YYYY HH:mm:ss', i18)
                           : null}
                       </div>
                       <div className="OrderHistory__orderToDate">
-                        <span>Время доставки: </span>
+                        <span>Доставка: </span>
                         {order.completeBefore
                           ? format(new Date(order.completeBefore), 'DD MMMM YYYY HH:mm:ss', i18)
                           : null}
