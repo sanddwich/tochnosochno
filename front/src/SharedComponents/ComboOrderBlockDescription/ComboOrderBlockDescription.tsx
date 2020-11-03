@@ -67,7 +67,7 @@ class ComboOrderBlockDescription extends React.Component<
   }
 
   checkComboAtMenu = (comboId: string): boolean => {
-    if (!this.props.menu.find((cat) => cat.id === comboId)) {
+    if (this.props.menu.find((cat) => cat.id === comboId)) {
       return true
     } else {
       return false

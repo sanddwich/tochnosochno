@@ -1,8 +1,10 @@
 .OrderHistory {
   max-width: 620px;
   &__date {
+    padding: 10px;
+    background-color: #f2f2f2;
     margin-top: 40px;
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-size: 18px;
     font-style: normal;
     font-weight: 700;
@@ -10,5 +12,68 @@
     letter-spacing: 0em;
     text-align: left;
     color: #303030;
+
+    .OrderHistory__orderToDate {
+      color: #8e8e8e;
+      font-style: italic;
+      font-size: 14px;
+      line-height: 18px;
+      font-weight: 400;
+    }
+
+    .OrderHistory__orderDate {
+      margin-bottom: 5px;
+    }
+  }
+
+  .OrderHistory__pagesCont {
+    .OrderHistory__pagesTitle {
+      display: flex;
+      align-items: center;
+      h1 {
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 30px;
+        line-height: 40px;
+        color: #303030;
+        margin-bottom: 0;
+      }
+    }
+
+    .OrderHistory__pagesStickers {
+      .OrderHistory__pageNum {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 28px;
+        color: #303030;
+        cursor: pointer;
+
+        width: 48px;
+        height: 48px;
+        border-radius: 10px 0px;
+        margin-right: 15px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:hover {
+          filter: brightness(0.8);
+          -webkit-filter: brightness(0.8);
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width:576px) {
+    &__date{
+      .OrderHistory__orderDate {
+        font-size: 16px;
+        line-height: 18px;
+      }
+    }
   }
 }

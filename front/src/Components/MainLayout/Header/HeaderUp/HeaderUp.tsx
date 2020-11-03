@@ -8,9 +8,12 @@ import ComboCardModal from '../../../../SharedComponents/ComboCardModal/ComboCar
 import RoundButton from '../../../../SharedComponents/RoundButton/RoundButton'
 import * as Scroll from 'react-scroll'
 import { showLoginModal } from '../../../../Redux/actions/app'
+import { animateScroll } from 'react-scroll'
 
 import './HeaderUp.scss'
 import CartRoundButton from '../../../../SharedComponents/CartRoundButton/CartRoundButton'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSortUp } from '@fortawesome/free-solid-svg-icons'
 
 interface HeaderUpProps {
   isAuth: boolean
@@ -31,6 +34,17 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
     }
   }
 
+  componentDidMount() {
+    document.addEventListener('scroll', () => {
+      const elem = document.querySelector('#ToTopArrow') as HTMLElement
+      if (window.pageYOffset > 300) {
+        elem.style.display = 'block'
+      } else {
+        elem.style.display = 'none'
+      }
+    })
+  }
+
   noAction = (): void => {}
 
   burgerButtonClick = (): void => {
@@ -44,6 +58,12 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
   render() {
     return (
       <React.Fragment>
+        <div id="ToTopArrow">
+          <div id="ToTopArrow__cont" onClick={() => animateScroll.scrollToTop()}>
+            <FontAwesomeIcon icon={faSortUp} size="2x"/>
+          </div>
+        </div>
+
         {/* <ComboCardModal key={this.props.comboModalElement.id} /> */}
         <ComboCardModal key={this.props.showComboModal.toString()} />
         <ProductModal />
