@@ -66,12 +66,15 @@ interface DeliveryByCourierState {
   loading: boolean
   coordinates: number[]
   deliverySum: number
+  dadataAddress?: DaDataSuggestion<DaDataAddress> | undefined
+  isPaymentShow: boolean
 }
 
 class DeliveryByCourier extends React.Component<DeliveryByCourierProps, DeliveryByCourierState> {
   constructor(props: DeliveryByCourierProps) {
     super(props)
     this.state = {
+      isPaymentShow: false,
       deliverySum: 0,
       loading: true,
       coordinates: [46.347801, 48.037095],
@@ -114,6 +117,23 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
         },
       ],
     }
+  }
+
+  setDataAddress = (value: DaDataSuggestion<DaDataAddress> | undefined) => {
+    if (value) {
+      this.setState({
+        dadataAddress: value,
+        coordinates: [
+          Number.parseFloat(value.data.geo_lat || '46.347801'),
+          Number.parseFloat(value.data.geo_lon || '48.037095'),
+        ],
+      })
+      // this.props.setDelivery(this.state.isDelivery, {})
+    }
+  }
+
+  showPaymentSection = () => {
+    this.setState({ isPaymentShow: true })
   }
 
   setLoading = (loading: boolean) => {
@@ -350,7 +370,13 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
             </div>
             <div className="DeliveryByCourier__form__row">
               <div hidden={!this.state.cityId} className="DeliveryByCourier__form__group">
-                <AddressSuggestions token="2a4f6368b9d756c95e4092292d7c2f53ccefa7bf" />
+                {/* <AddressSuggestions
+                  token="2a4f6368b9d756c95e4092292d7c2f53ccefa7bf"
+                  value={this.state.dadataAddress}
+                  defaultQuery="Астраханская обл, "
+                  count={5}
+                  onChange={(value) => this.setDataAddress(value)}
+                /> */}
                 <label htmlFor="street">Улица*</label>
                 <input
                   list="list-street"
@@ -527,17 +553,31 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
               </div>
 
               <PoliticSection />
-              <PaymentSection isDelivery={true} />
-              <ActionButton
-                disabled={!(this.props.ruleCheck && this.props.smsCheck && this.props.personCheck)}
-                loading={this.props.loadingOrder}
-                onClick={() => this.processOrder()}
-                textColor="white"
-                width="280px"
-                text="Завершить заказ"
-                backgroundColor="#303030"
-                icon="cart_dark.svg"
-              />
+              {this.state.isPaymentShow ? (
+                <React.Fragment>
+                  <PaymentSection isDelivery={true} />
+                  <ActionButton
+                    disabled={!(this.props.ruleCheck && this.props.smsCheck && this.props.personCheck)}
+                    loading={this.props.loadingOrder}
+                    onClick={() => this.processOrder()}
+                    textColor="white"
+                    width="280px"
+                    text="Завершить заказ"
+                    backgroundColor="#303030"
+                    icon="cart_dark.svg"
+                  />
+                </React.Fragment>
+              ) : (
+                <ActionButton
+                  // disabled={!(this.props.ruleCheck && this.props.smsCheck && this.props.personCheck)}
+                  onClick={() => this.showPaymentSection()}
+                  textColor="white"
+                  width="280px"
+                  text="Выберите способ оплаты"
+                  backgroundColor="#303030"
+                  icon="cart_dark.svg"
+                />
+              )}
             </div>
           </form>
         </Scroll.Element>
