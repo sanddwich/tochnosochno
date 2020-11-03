@@ -31,6 +31,9 @@ import Customer from '../../../../../Interfaces/Customer'
 import { YMaps, Map, Placemark } from 'react-yandex-maps'
 import * as Scroll from 'react-scroll'
 import Loader from '../../../../../SharedComponents/Loader/Loader'
+import { AddressSuggestions, DaDataSuggestion, DaDataAddress } from 'react-dadata'
+
+import 'react-dadata/dist/react-dadata.css'
 
 interface DeliveryByCourierProps {
   getStreetVariants: any
@@ -347,16 +350,18 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
             </div>
             <div className="DeliveryByCourier__form__row">
               <div hidden={!this.state.cityId} className="DeliveryByCourier__form__group">
+                <AddressSuggestions token="2a4f6368b9d756c95e4092292d7c2f53ccefa7bf" />
                 <label htmlFor="street">Улица*</label>
                 <input
-                  disabled={!this.state.cityId}
                   list="list-street"
-                  onKeyPress={(e: React.FormEvent<HTMLInputElement>) => {
+                  onKeyUp={(e: React.FormEvent<HTMLInputElement>) => {
                     this.getStreetsFromIiko(e.currentTarget.value)
                   }}
+                  disabled={!this.state.cityId}
                   className="DeliveryByCourier__form__street"
                   id="street"
                   type="text"
+                  autoComplete="off"
                   placeholder="Укажите улицу"
                   value={this.props.order.address?.street.name}
                   onInput={(e: React.FormEvent<HTMLInputElement>) => {

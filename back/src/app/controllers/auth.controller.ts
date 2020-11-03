@@ -161,7 +161,7 @@ export class AuthController {
 
     //Создаём сессию для пользователя и отправляем ему токен сессии
     if (customer) {
-      customer.orders = _.orderBy(customer.orders, ['date'], ['desc'])
+      customer.orders = _.orderBy(customer.orders, ['id'], ['desc'])
       customer.addresses = _.orderBy(customer.addresses, ['id'], ['desc'])
 
       // Если в истории заказов нужны заказы, которые есть точно  в iiko

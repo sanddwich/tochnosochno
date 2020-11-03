@@ -1,4 +1,14 @@
 {
+  "mail":{
+    "orderEmail": "denristun@gmail.com",
+    "host": "mail.hostland.ru",
+    "port": 465,
+    "secure": true,
+    "auth": {
+      "user": "info@myaso.cafe",
+      "pass": "Zxcfdsa654"
+    }
+  },
 
   "bank":{
     "apiUrl": "https://3dsec.sberbank.ru/payment/rest",

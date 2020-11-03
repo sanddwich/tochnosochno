@@ -2,6 +2,7 @@ import { Order, PinCode } from '../entities'
 import { getRepository } from 'typeorm'
 import * as nodemailer from 'nodemailer'
 import axios from 'axios'
+import { Config } from '@foal/core'
 const quaryString = require('query-string')
 
 const API_EMAIL = 'denristun@gmail.com'
@@ -52,6 +53,14 @@ export class SmsService {
 
   async sendOrderEmail(order: Order) {
     let orderItemsHtml = ''
+    let deliveryAddress = ''
+    if (order.isDelivery) {
+      deliveryAddress = ` ${order.address.street.name ? `ул. ${order.address.street.name},` : ''} 
+       ${order.address.house ? `д. ${order.address.house},` : ''} 
+      ${order.address.flat ? `кв. ${order.address.flat}, ` : ''} 
+      ${order.address.entrance ? `${order.address.entrance} подъезд, ` : ''}  
+      ${order.address.floor ? `${order.address.floor} этаж` : ''}`
+    }
 
     order.items.map((orderItem, index) => {
       const html = `<tr>
@@ -101,11 +110,7 @@ export class SmsService {
     <p><span style="font-size: 17px;">Имя: ${order.customer.name}</span></p>
     <p><span style="font-size: 17px;">Телефон: ${order.customer.phone || order.phone}</span></p>
     <p><span style="font-size: 17px;">Доставка: ${order.isDelivery ? '<b>курьером</b>' : '<b>самовывоз </b>'}</span></p>
-    ${
-      order.isDelivery
-        ? ` <p><span style="font-size: 17px;">Адрес доставки: ул. ${order.address.street.name}, д. ${order.address.house}, кв. ${order.address.flat}, ${order.address.entrance} подъезд, ${order.address.floor} этаж</span></p>`
-        : ''
-    }
+    ${order.isDelivery ? ` <p><span style="font-size: 17px;">Адрес доставки: ${deliveryAddress}</span></p>` : ''}
    
     <p><span style="font-size: 17px;">Количество персон: ${order.guests.count}</span></p>
     <p><span style="font-size: 17px;">Оплата: ${
@@ -120,18 +125,18 @@ export class SmsService {
    `
 
     const transporter = nodemailer.createTransport({
-      host: 'mail.hostland.ru',
-      port: 465,
-      secure: true,
+      host: Config.get('mail.host'),
+      port: Config.get('mail.port'),
+      secure: Config.get('mail.secure'),
       auth: {
-        user: 'info@myaso.cafe',
-        pass: 'Zxcfdsa654',
+        user: Config.get('mail.auth.user'),
+        pass: Config.get('mail.auth.pass'),
       },
     })
 
     const result = await transporter.sendMail({
-      from: '"sochno30.ru" <info@myaso.cafe>',
-      to: 'denristun@gmail.com',
+      from: `"${Config.get('host')}" <${Config.get('mail.auth.user')}>`,
+      to: Config.get('mail.orderEmail'),
       subject: `Заказ с сайта - ${order.date}`,
       text: 'Новый заказ',
       html: html,

@@ -313,7 +313,7 @@ export class ApiController {
       }
     )
     if (customer) {
-      customer.orders = _.orderBy(customer.orders, ['date'], ['desc'])
+      customer.orders = _.orderBy(customer.orders, ['id'], ['desc'])
       customer.addresses = _.orderBy(customer.addresses, ['id'], ['desc'])
 
       //Если в истории заказов нужны заказы, которые добавились в iiko
