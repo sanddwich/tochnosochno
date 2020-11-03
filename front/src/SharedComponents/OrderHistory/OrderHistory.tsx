@@ -46,7 +46,7 @@ const i18: any = {
   ],
 }
 
-const ordersPerPage: number = 5
+const ordersPerPage: number = 6
 
 class OrderHistory extends React.Component<OrderHistoryProps, OrderHistoryState> {
   constructor(props: OrderHistoryProps) {
