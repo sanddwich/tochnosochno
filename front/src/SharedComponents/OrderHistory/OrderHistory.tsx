@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { JSXElementConstructor } from 'react'
 import { connect } from 'react-redux'
 import Customer from '../../Interfaces/Customer'
 import Order from '../../Interfaces/Order'
@@ -12,6 +12,8 @@ import './OrderHistory.scss'
 import ComboItemOrder from '../../Interfaces/ComboItemOrder'
 import Category from '../../Interfaces/Category'
 import _ from 'lodash'
+import ComboOrderBlockDescription from '../ComboOrderBlockDescription/ComboOrderBlockDescription'
+import orderItem from '../../Redux/reducers/orderItem'
 
 interface OrderHistoryProps {
   customer: Customer
@@ -76,6 +78,21 @@ class OrderHistory extends React.Component<OrderHistoryProps, OrderHistoryState>
     return comboItemsOrder
   }
 
+  renderCombos = (order: Order): any => {
+    const filterComboItems = order.items?.filter((orderItem) => orderItem.comboId !== '') as OrderItem[]
+    if (filterComboItems && filterComboItems.length > 0) {
+      return this.getCombos(filterComboItems).map((comboItem, index) => {
+        const category = this.props.menu.find((cat) => cat.id === comboItem.comboId) as Category
+        return (
+          <React.Fragment key={comboItem.comboId}>
+            <h1 style={{ fontWeight: 500, paddingTop: 10 }}>Набор комбо:</h1>
+            <ComboOrderBlockDescription category={category} comboItem={comboItem} history={true} />
+          </React.Fragment>
+        )
+      })
+    }
+  }
+
   render() {
     // console.log(this.props.customer.orders)
     return (
@@ -84,35 +101,30 @@ class OrderHistory extends React.Component<OrderHistoryProps, OrderHistoryState>
           <BlockName name="Последние заказы" />
         </div>
         {this.props.customer.orders.length > 0 ? (
-          <React.Fragment>
-            {/* <input
-              disabled={false}
-              name="birthday"
-              id="profile-birthday"
-              style={{ width: '150px' }}
-              type="date"
-              onChange={(event) => console.log(event.target.value)}
-              value={new Date().toISOString().slice(0, 10)}
-              placeholder="мм.мм.гггг"
-            /> */}
-
+          <React.Fragment key={this.props.customer.orders.length}>
             {this.props.customer.orders.map((order: Order) => {
-              console.log(order)
-              // const orderComboProducts = order.items?.filter(product => product.comboId && product.comboId !== '')
-              // console.log(orderComboProducts)
-              return (
-                <React.Fragment key={order.id}>
-                  <div className="OrderHistory__date">
-                    {order.completeBefore ? format(new Date(order.completeBefore), 'DD MMMM YYYY', i18) : null}
-                  </div>
+              if (order.items && order.items.length > 0) {
+                return (
+                  <React.Fragment key={order.id}>
+                    <div className="OrderHistory__date">
+                      {order.completeBefore ? format(new Date(order.completeBefore), 'DD MMMM YYYY', i18) : null}
+                    </div>
 
-                  {order.items?.map((orderItem: OrderItem) => {
-                    if (!orderItem.comboId) {
-                      return <LineProductWithCart key={orderItem.id} product={orderItem.product} />
-                    }
-                  })}
-                </React.Fragment>
-              )
+                    {this.renderCombos(order)}
+
+                    {order.items?.map((orderItem: OrderItem) => {
+                      if (!orderItem.comboId) {
+                        return (
+                          <React.Fragment key={orderItem.id}>
+                            <h1 style={{ fontWeight: 500, paddingTop: 10,  marginBottom: 0 }}>Блюдо: </h1>
+                            <LineProductWithCart product={orderItem.product} />
+                          </React.Fragment>
+                        )
+                      }
+                    })}
+                  </React.Fragment>
+                )
+              }
             })}
           </React.Fragment>
         ) : (
@@ -129,7 +141,8 @@ const mapStateToProps = (state: RootState) => {
   const { customer } = state.auth
   const { menu } = state.menu
   return {
-    customer, menu
+    customer,
+    menu,
   }
 }
 

@@ -40,7 +40,7 @@ export default class COBDItem extends React.Component<COBDItemProps, COBDItemSta
             <div className="COBDItem__title w-100 d-flex justify-content-start align-items-center">
               {this.props.product.name}
             </div>
-            <div className="COBDItem__desc w-100 d-flex justify-content-start align-items-center">
+            <div className="COBDItem__desc w-100 d-flex justify-content-start align-items-center pr-2">
               {this.props.product.description}
             </div>
           </Col>

@@ -11,8 +11,11 @@ import OrderItem from '../../Interfaces/OrderItem'
 import { RootState } from '../../Redux'
 import Order from '../../Interfaces/Order'
 import COBDItem from './COBDItem/COBDItem'
+import CustomAlert from '../CustomAlert/CustomAlert'
 
 interface ComboOrderBlockDescriptionProps {
+  menu: Category[]
+  history: boolean
   order: Order
   category: Category
   comboItem: ComboItemOrder
@@ -23,6 +26,8 @@ interface ComboOrderBlockDescriptionProps {
 
 interface ComboOrderBlockDescriptionState {
   combosDropList: boolean
+  alertShow: boolean
+  alertRenderKey: number
 }
 
 class ComboOrderBlockDescription extends React.Component<
@@ -33,6 +38,8 @@ class ComboOrderBlockDescription extends React.Component<
     super(props)
     this.state = {
       combosDropList: false,
+      alertShow: false,
+      alertRenderKey: Math.random(),
     }
   }
 
@@ -54,9 +61,22 @@ class ComboOrderBlockDescription extends React.Component<
     }
   }
 
-  toggleDropList = ():void => {
+  toggleDropList = (): void => {
     const combosDropList = !this.state.combosDropList
-    this.setState({combosDropList})
+    this.setState({ combosDropList })
+  }
+
+  checkComboAtMenu = (comboId: string): boolean => {
+    if (!this.props.menu.find((cat) => cat.id === comboId)) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  errorMessage = (): void => {
+    const alertShow = true
+    this.setState({alertShow, alertRenderKey: Math.random()})
   }
 
   render() {
@@ -95,29 +115,60 @@ class ComboOrderBlockDescription extends React.Component<
           </Col>
           <Col
             sm={2}
-            xs={4}
-            className="ComboOrderBlockDescription__actionLinePrice d-flex justify-content-end align-items-center mt-2"
+            xs={6}
+            className="ComboOrderBlockDescription__actionLinePrice d-flex justify-content-center align-items-center mt-2"
           >
             {price.toFixed(0)} <span>руб.</span>
           </Col>
-          <Col
-            sm={3}
-            xs={8}
-            className="ComboOrderBlockDescription__actionLineButtons d-flex justify-content-end align-items-center mt-2"
-          >
-            <RoundButton
-              width="50px"
-              height="50px"
-              backgroundColor="#ffcf25"
-              icon="edit-icon.svg"
-              onClick={() => this.props.showComboModal(this.props.category, this.props.comboItem)}
-            />
-            <RoundButton
-              width="50px"
-              height="50px"
-              backgroundColor="#F2F2F2"
-              icon="trash.svg"
-              onClick={() => this.deleteOrderComboItem(this.props.comboItem.comboId, this.props.comboItem.pickDate)}
+
+          {this.props.history ? (
+            <Col
+              sm={3}
+              xs={6}
+              className="ComboOrderBlockDescription__actionLineButtons d-flex justify-content-end align-items-center mt-2"
+            >
+              <RoundButton
+                width="50px"
+                height="50px"
+                backgroundColor="#ffcf25"
+                icon="cart_dark.svg"
+                onClick={() => {
+                  this.checkComboAtMenu(this.props.category.id)
+                    ? this.props.showComboModal(this.props.category)
+                    : this.errorMessage()
+                }}
+              />
+            </Col>
+          ) : (
+            <Col
+              sm={3}
+              xs={6}
+              className="ComboOrderBlockDescription__actionLineButtons d-flex justify-content-end align-items-center mt-2"
+            >
+              <RoundButton
+                width="50px"
+                height="50px"
+                backgroundColor="#ffcf25"
+                icon="edit-icon.svg"
+                onClick={() => this.props.showComboModal(this.props.category, this.props.comboItem)}
+              />
+              <RoundButton
+                width="50px"
+                height="50px"
+                backgroundColor="#F2F2F2"
+                icon="trash.svg"
+                onClick={() => this.deleteOrderComboItem(this.props.comboItem.comboId, this.props.comboItem.pickDate)}
+              />
+            </Col>
+          )}
+        </Row>
+
+        <Row key={this.state.alertRenderKey} className="ComboOrderBlockDescription__Alert p-0 m-0">
+          <Col className="p-0 m-0">
+            <CustomAlert              
+              message={`Данный товар в настоящее время отсутствует в текущем меню`}
+              variant="danger"
+              show={this.state.alertShow}
             />
           </Col>
         </Row>
@@ -134,7 +185,6 @@ class ComboOrderBlockDescription extends React.Component<
             ) : null}
           </React.Fragment>
         ) : null}
-
       </Container>
     )
   }
@@ -148,8 +198,10 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: RootState) => {
   const { order } = state.order
+  const { menu } = state.menu
   return {
     order,
+    menu,
   }
 }
 

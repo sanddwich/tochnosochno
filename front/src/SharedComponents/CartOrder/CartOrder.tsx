@@ -97,7 +97,7 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
         {this.state.cartCombos.map((comboItem: ComboItemOrder, index) => {
           const category = this.props.menu.find((cat) => cat.id === comboItem.comboId) as Category
           return (
-            <ComboOrderBlockDescription key={index + comboItem.comboId} comboItem={comboItem} category={category} />
+            <ComboOrderBlockDescription key={index + comboItem.comboId} comboItem={comboItem} category={category} history={false} />
           )
         })}
       </div>
