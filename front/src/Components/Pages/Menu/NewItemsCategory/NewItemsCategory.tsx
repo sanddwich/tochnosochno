@@ -77,7 +77,7 @@ class NewItemsCategory extends React.Component<NewItemsCategoryProps, NewItemsCa
         <Row className="p-0 m-0 d-flex justify-content-between">
           <BlockName name="Новинки" />
 
-          <div className="NewItemsCategory__arrows d-none d-md-flex justify-content-start">
+          <div className="NewItemsCategory__arrows d-none d-md-flex justify-content-end align-items-center">
             <div id="prewArrowNewItemsCategory" className="NewItemsCategory__arrow" style={{ paddingRight: 3 }}>
               <img src="/images/icons/arrowLeftFor45.svg" alt="" />
             </div>
@@ -86,7 +86,7 @@ class NewItemsCategory extends React.Component<NewItemsCategoryProps, NewItemsCa
             </div>
           </div>
 
-          <div className="NewItemsCategory__arrows d-flex d-md-none justify-content-start">
+          <div className="NewItemsCategory__arrows d-flex d-md-none justify-content-end align-items-center">
             <div id="prewArrowNewItemsCategory" className="NewItemsCategory__arrow" style={{ paddingRight: 3 }}>
               <img src="/images/icons/arrowLeftMobileFor35.svg" alt="" />
             </div>

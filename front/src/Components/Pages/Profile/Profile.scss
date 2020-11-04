@@ -10,16 +10,16 @@
     display: flex;
     position: relative;
     z-index: 1000;
-    margin-right: 10px;
+    
   }
 
-  .favouriterProducts__arrow {
+  .favouriteProducts__arrow {
     background-color: #303030;
     width: 45px;
     height: 45px;
     border-radius: 50%;
     cursor: pointer;
-    margin-left: 30px;
+    margin-right: 20px;
 
     display: flex;
     justify-content: center;
@@ -48,5 +48,18 @@
 
   .swiper-pagination-bullet-active {
     background-color: #ffd12d !important;
+  }
+
+  @media screen and (max-width: 768px) {
+    h1 {
+      font-size: 30px;
+      line-height: 37px;
+    }
+
+    .favouriteProducts__arrow {
+      width: 35px;
+      height: 35px;
+      margin-right: 10px;
+    }
   }
 }

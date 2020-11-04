@@ -44,15 +44,15 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   }
 
   generateMobileSlides = (separator: number): any => {
-    const lastProducts = this.state.favouriteProducts
-    const resultProducts = _.chunk(lastProducts, separator)
+    const favoriteProducts = this.props.customer.favoriteProducts
+    const resultProducts = _.chunk(favoriteProducts, separator)
     // console.log(resultCategories)
     return resultProducts.map((pool, index) => {
       return (
         <SwiperSlide key={index}>
           <Container fluid className="m-0 p-0">
             {pool.map((product, index) => {
-              return <ProductCardMobile key={product.id + index} product={product} />
+              return <ProductCardMobile key={product.id + index} product={product.product} />
             })}
           </Container>
         </SwiperSlide>
@@ -162,30 +162,32 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
         <div>{/* <LineProductWithNumberInput product={this.props.menu[0].products[0]} /> */}</div>
 
-        <div className="row m-0 mt-5">
-          <BlockName name="Избранное" />
-        </div>
-
         <React.Fragment>
           {this.props.customer.favoriteProducts.length > 0 ? (
             <div>
-              <div className="favouriteProducts__arrows d-none d-md-flex justify-content-start">
-                <div id="prewArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingRight: 3 }}>
-                  <img src="images/icons/arrowLeftFor45.svg" alt="" />
+              <Row className="m-0 p-0 d-flex justify-content-between">
+                <div className="row m-0">
+                  <BlockName name="Избранное" />
                 </div>
-                <div id="nextArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingLeft: 3 }}>
-                  <img src="images/icons/arrowRightFor45.svg" alt="" />
-                </div>
-              </div>
 
-              <div className="favouriteProducts__arrows d-flex d-md-none justify-content-start">
-                <div id="prewArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingRight: 3 }}>
-                  <img src="images/icons/arrowLeftMobileFor35.svg" alt="" />
+                <div className="favouriteProducts__arrows d-none d-md-flex justify-content-end align-items-center">
+                  <div id="prewArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingRight: 3 }}>
+                    <img src="images/icons/arrowLeftFor45.svg" alt="" />
+                  </div>
+                  <div id="nextArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingLeft: 3 }}>
+                    <img src="images/icons/arrowRightFor45.svg" alt="" />
+                  </div>
                 </div>
-                <div id="nextArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingLeft: 3 }}>
-                  <img src="images/icons/arrowRightMobileFor35.svg" alt="" />
+
+                <div className="favouriteProducts__arrows d-flex d-md-none justify-content-end align-items-center">
+                  <div id="prewArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingRight: 3 }}>
+                    <img src="images/icons/arrowLeftMobileFor35.svg" alt="" />
+                  </div>
+                  <div id="nextArrowFavouriteProducts" className="favouriteProducts__arrow" style={{ paddingLeft: 3 }}>
+                    <img src="images/icons/arrowRightMobileFor35.svg" alt="" />
+                  </div>
                 </div>
-              </div>
+              </Row>
 
               <Row className="favouriteProducts__Slider p-0 m-0 d-none d-md-block">
                 <Swiper
@@ -194,7 +196,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
                     nextEl: '#nextArrowFavouriteProducts',
                     prevEl: '#prewArrowFavouriteProducts',
                   }}
-                  pagination={{ clickable: true, el: '#paginationProductsFull' }}
+                  pagination={{ clickable: true, el: '#paginationFavouriteProducts' }}
                 >
                   {this.props.customer.favoriteProducts.map((favProduct: FavoriteProduct, index) => {
                     return (
@@ -205,11 +207,11 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
                   })}
                 </Swiper>
 
-                {/* <Container fluid className="p-0 m-0 d-flex d-none">
-              <Row className="p-0 m-0 d-flex justify-content-center">
-                <div id="paginationProductsFull"></div>
-              </Row>
-            </Container> */}
+                <Container fluid className="p-0 m-0 d-flex justify-content-center mb-4">
+                  <Row className="p-0 m-0 d-flex justify-content-center">
+                    <div id="paginationFavouriteProducts"></div>
+                  </Row>
+                </Container>
               </Row>
 
               <Row className="favouriteProducts__Slider p-0 m-0 d-block d-md-none">
@@ -220,14 +222,17 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
                     nextEl: '#nextArrowFavouriteProducts',
                     prevEl: '#prewArrowFavouriteProducts',
                   }}
-                  pagination={{ clickable: true, el: '#paginationPopularProducts' }}
+                  pagination={{ clickable: true, el: '#paginationFavouriteProductsMob' }}
                 >
                   {this.generateMobileSlides(mobileSlidesSeparator)}
                 </Swiper>
+
+                <Container fluid className="p-0 m-0 d-flex justify-content-center mb-4">
+                  <Row className="p-0 m-0 d-flex justify-content-center">
+                    <div id="paginationFavouriteProductsMob"></div>
+                  </Row>
+                </Container>
               </Row>
-              {/* <Row className="p-0 m-0 d-flex justify-content-center d-block d-md-none">
-            <div id="paginationPopularProducts"></div>
-          </Row> */}
             </div>
           ) : (
             <div className="row m-0 mt-4 mb-5 profile__text">
