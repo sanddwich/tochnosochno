@@ -68,23 +68,15 @@ interface DeliveryByCourierState {
   deliverySum: number
   dadataAddress?: DaDataSuggestion<DaDataAddress> | undefined
   isPaymentShow: boolean
-  mapCenterCoordinates: number[]
-  ymaps: any
-  isAllowedDelivery: boolean
 }
 
 class DeliveryByCourier extends React.Component<DeliveryByCourierProps, DeliveryByCourierState> {
-  daDataInputRef = React.createRef<AddressSuggestions>()
-
   constructor(props: DeliveryByCourierProps) {
     super(props)
     this.state = {
-      isAllowedDelivery: false,
-      ymaps: {},
       isPaymentShow: false,
       deliverySum: 0,
       loading: true,
-      mapCenterCoordinates: [46.347801, 48.037095],
       coordinates: [46.347801, 48.037095],
       formSubmitted: false,
       validCity: false,
@@ -102,20 +94,20 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
       },
       phone: this.props.customer?.phone,
       validationTextfields: [
-        // {
-        //   name: 'street',
-        //   minLength: 3,
-        //   required: true,
-        //   touched: false,
-        //   isValid: false,
-        // },
-        // {
-        //   name: 'house',
-        //   minLength: 0,
-        //   required: true,
-        //   touched: false,
-        //   isValid: false,
-        // },
+        {
+          name: 'street',
+          minLength: 3,
+          required: true,
+          touched: false,
+          isValid: false,
+        },
+        {
+          name: 'house',
+          minLength: 0,
+          required: true,
+          touched: false,
+          isValid: false,
+        },
         {
           name: 'phone',
           minLength: 10,
@@ -127,8 +119,20 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     }
   }
 
-  showPaymentSection = async () => {
-    await this.getDeliveryRestrictions()
+  setDataAddress = (value: DaDataSuggestion<DaDataAddress> | undefined) => {
+    if (value) {
+      this.setState({
+        dadataAddress: value,
+        coordinates: [
+          Number.parseFloat(value.data.geo_lat || '46.347801'),
+          Number.parseFloat(value.data.geo_lon || '48.037095'),
+        ],
+      })
+      // this.props.setDelivery(this.state.isDelivery, {})
+    }
+  }
+
+  showPaymentSection = () => {
     this.setState({ isPaymentShow: true })
   }
 
@@ -136,35 +140,33 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     this.setState({ loading })
   }
 
+  checkValidation = () => {
+    if (this.state.cityId.length < 28) this.setState({ validCity: true })
+  }
+
+  componentDidMount() {
+    this.selectCitiesFromIiko()
+  }
+
   getDeliveryRestrictions = async () => {
     const streetId = this.props.order.address?.street.id
     const house = this.props.order.address?.house
     const deliverySum = this.props.order.amount
-    const latitude = parseFloat(this.props.order.address?.latitude || '')
-    const longitude = parseFloat(this.props.order.address?.longitude || '')
     const isCourierDelivery = true
-    const deliveryRestriction = await this.props.getDeliveryRestrictions(
-      streetId,
-      deliverySum,
-      house,
-      isCourierDelivery,
-      latitude,
-      longitude
-    )
-    console.log(deliveryRestriction)
+    if (streetId && house) {
+      const deliveryRestriction = await this.props.getDeliveryRestrictions(
+        streetId,
+        deliverySum,
+        house,
+        isCourierDelivery
+      )
+      console.log(deliveryRestriction)
+      if (deliveryRestriction.location) {
+        this.setState({ coordinates: [deliveryRestriction.location.latitude, deliveryRestriction.location.longitude] })
 
-    if (deliveryRestriction.isAllowed) {
-      this.setState({ isAllowedDelivery: true })
-    } else {
-      this.setState({ isAllowedDelivery: false })
-    }
-
-    if (deliveryRestriction.location) {
-      this.setState({ coordinates: [deliveryRestriction.location.latitude, deliveryRestriction.location.longitude] })
-
-      if (deliveryRestriction.allowedItems.length > 0) {
+        if (deliveryRestriction.allowedItems.length > 0) {
+        }
       }
-      // }
     }
   }
 
@@ -223,6 +225,74 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     }
   }
 
+  selectCitiesFromIiko = async () => {
+    const cityVariants: City[] = await this.props.getAllCities()
+    const citySelect = document.getElementById('city-select') as HTMLInputElement
+    let options: String[] = []
+    if (citySelect) {
+      cityVariants.map((city) => {
+        options.push(`<option value="${city.id}" data-id=${city.id}>${city.name}</option>`)
+      })
+      citySelect.innerHTML = citySelect.innerHTML + options.join('')
+    }
+  }
+
+  getCitiesFromIiko = async (city: string) => {
+    if (city.length % 4 === 0 && city.length > 0) {
+      const cityVariants: City[] = await this.props.getCityVariants(city)
+      const cityInput = document.getElementById('city') as HTMLInputElement
+      const datalist = document.getElementById('list-city')
+      let options: String[] = []
+      if (datalist && cityInput) {
+        cityVariants.map((city) => {
+          options.push(`<option value="${city.id}" data-id=${city.id}>${city.name}</option>`)
+        })
+        datalist.innerHTML = options.join('')
+      }
+    }
+  }
+
+  getStreetsFromIiko = async (street: string) => {
+    if (street.length % 4 === 0 && street.length > 0) {
+      const streetVariants: Street[] = await this.props.getStreetsByCity(street, this.state.cityId)
+      const streetInput = document.getElementById('street') as HTMLInputElement
+      const datalist = document.getElementById('list-street')
+      let options: String[] = []
+      if (datalist && streetInput) {
+        streetVariants.map((street) => {
+          options.push(`<option value="${street.name}" data-id="${street.id}">${street.name}</option>`)
+        })
+        datalist.innerHTML = options.join('')
+      }
+    }
+  }
+
+  selectCity = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const state = this.state
+    let validCity = true
+    state.deliveryAddress.street.name = ''
+    const datalist = document.getElementById('list-street')
+    if (datalist) {
+      datalist.innerHTML = ''
+    }
+    if (event.target.value.length < 28) validCity = false
+    this.setState({ ...state, cityId: event.target.value, validCity })
+  }
+
+  getStreetId = (): string => {
+    const dataList = document.getElementById('list-street')
+    let streetId = ''
+    if (dataList) {
+      const options = Array.from(dataList.children)
+      options.map((option: any) => {
+        if (option.value === this.state.deliveryAddress.street.name) {
+          streetId = option.dataset.id
+        }
+      })
+    }
+    return streetId
+  }
+
   textFieldInputHandler = (value: string, textFieldName: string): void => {
     const state = this.state
     let phone = ''
@@ -235,6 +305,10 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     textFieldName === 'name' && (state.deliveryAddress.name = value)
     textFieldName === 'street' && (state.deliveryAddress.street.name = value)
     textFieldName === 'phone' && this.props.setPhone(value)
+
+    if (textFieldName === 'street') {
+      state.deliveryAddress.street.id = this.getStreetId()
+    }
 
     state.validationTextfields.map((textfield) => {
       if (textfield.name === textFieldName) {
@@ -259,124 +333,103 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     }
   }
 
-  setYmaps = (ymaps: any) => {
-    this.setState({ ymaps: ymaps })
-  }
-
-  chooseAddressFromInput = (dadataAddress: DaDataSuggestion<DaDataAddress> | undefined) => {
-    if (dadataAddress) {
-      this.setState({
-        dadataAddress,
-        coordinates: [
-          Number.parseFloat(dadataAddress.data.geo_lat || '46.347801'),
-          Number.parseFloat(dadataAddress.data.geo_lon || '48.037095'),
-        ],
-      })
-
-      const house = (dadataAddress.data.house || '').concat(
-        dadataAddress.data.block ? `/${dadataAddress.data.block}` : ''
-      )
-
-      const address = this.props.order.address
-      if (address) {
-        address.street = {
-          name: dadataAddress.data.street || '',
-          classifierId: dadataAddress.data.street_kladr_id || '',
-        }
-        address.house = house
-        address.latitude = dadataAddress.data.geo_lat || ''
-        address.longitude = dadataAddress.data.geo_lon || ''
-        this.props.setDelivery(this.state.isDelivery, address)
-        this.setState({ deliveryAddress: address })
-      }
-    }
-    this.setState({ isPaymentShow: false })
-  }
-
-  chooseAddressOnMap(coordinates: number[]) {
-    if (this.state.ymaps.geocode) {
-      this.state.ymaps.geocode(coordinates, { kind: 'house' }).then((result: any) => {
-        const house = result.geoObjects.get(0).getPremiseNumber()
-        console.log(result.geoObjects.get(0).getAddressLine())
-
-        this.setdaDataAddress(result.geoObjects.get(0).getAddressLine(), house, coordinates)
-      })
-    }
-    this.setState({ isPaymentShow: false })
-  }
-
-  setdaDataAddress = (address: string, house: string, coordinates: number[]) => {
-    if (this.state.dadataAddress) {
-      const daAddress: DaDataSuggestion<DaDataAddress> | undefined = {
-        value: address,
-        data: this.state.dadataAddress.data,
-        unrestricted_value: address,
-      }
-
-      this.setState({ dadataAddress: daAddress })
-    }
-    if (this.daDataInputRef.current) {
-      this.daDataInputRef.current.setInputValue(address)
-    }
-
-    const orderAddress = this.props.order.address
-    if (orderAddress) {
-      const streetName = address.split(',').slice(-2, -1)[0].replace('улица', '').trim()
-
-      orderAddress.house = house
-      orderAddress.latitude = coordinates[0].toString()
-      orderAddress.longitude = coordinates[1].toString()
-      orderAddress.street = {
-        name: streetName,
-      }
-      this.props.setDelivery(this.state.isDelivery, orderAddress)
-      this.setState({ deliveryAddress: orderAddress })
-    }
-  }
-
   render() {
     return (
       <Container className="DeliveryByCourier p-0  mt-5">
         <Scroll.Element hidden={this.state.loading} name="formElement">
           <form autoComplete="off" className="DeliveryByCourier__form">
+            <div className="DeliveryByCourier__form__group">
+              <div className="DeliveryByCourier__form__row">
+                <label htmlFor="city">Населённый пункт*</label>
+                <select
+                  onChange={(event) => this.selectCity(event)}
+                  className="DeliveryByCourier__form__street"
+                  id="city-select"
+                >
+                  <option>Выберите населённый пункт</option>
+                </select>
+                <datalist id="list-city"></datalist>
+                {!this.state.validCity && this.state.formSubmitted ? (
+                  <div className="DeliveryByCourier__form__error">Необходимо выбрать населённый пункт</div>
+                ) : null}
+              </div>
+              {/* <div className="DeliveryByCourier__form__row">
+              <label htmlFor="city">Населённый пункт*</label>
+              <input
+                list="list-city"
+                className="DeliveryByCourier__form__street"
+                id="city"
+                type="text"
+                placeholder="Укажите населённый пункт"
+                onKeyPress={(e: React.FormEvent<HTMLInputElement>) => {
+                  this.getCitiesFromIiko(e.currentTarget.value)
+                }}
+              />
+              <datalist id="list-city"></datalist>
+            </div> */}
+            </div>
             <div className="DeliveryByCourier__form__row">
-              <div className="DeliveryByCourier__form__group">
-                <label htmlFor="address">Адрес*</label>
-                <AddressSuggestions
-                  ref={this.daDataInputRef}
+              <div hidden={!this.state.cityId} className="DeliveryByCourier__form__group">
+                {/* <AddressSuggestions
                   token="2a4f6368b9d756c95e4092292d7c2f53ccefa7bf"
                   value={this.state.dadataAddress}
-                  // defaultQuery="Астраханская обл, "
-                  minChars={5}
-                  delay={500}
-                  // autoload={true}
+                  defaultQuery="Астраханская обл, "
                   count={5}
-                  filterLocations={[{ ['region']: 'астраханская' }]}
-                  onChange={(value) => this.chooseAddressFromInput(value)}
+                  onChange={(value) => this.setDataAddress(value)}
+                /> */}
+                <label htmlFor="street">Улица*</label>
+                <input
+                  list="list-street"
+                  onKeyUp={(e: React.FormEvent<HTMLInputElement>) => {
+                    this.getStreetsFromIiko(e.currentTarget.value)
+                  }}
+                  disabled={!this.state.cityId}
+                  className="DeliveryByCourier__form__street"
+                  id="street"
+                  type="text"
+                  autoComplete="off"
+                  placeholder="Укажите улицу"
+                  value={this.props.order.address?.street.name}
+                  onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                    this.textFieldInputHandler(e.currentTarget.value, 'street')
+                  }}
                 />
+                <datalist id="list-street"></datalist>
+                {this.state.validationTextfields[0].touched && !this.state.validationTextfields[0].isValid ? (
+                  <div className="DeliveryByCourier__form__error">Выберите улицу</div>
+                ) : null}
+              </div>
+
+              <div hidden={!this.state.cityId} className="DeliveryByCourier__form__group">
+                <label htmlFor="house">Дом*</label>
+                <input
+                  disabled={!this.state.cityId}
+                  onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                    this.textFieldInputHandler(e.currentTarget.value, 'house')
+                  }}
+                  id="house"
+                  type="text"
+                  value={this.props.order.address?.house}
+                  placeholder="16/1"
+                />
+                {this.state.validationTextfields[1].touched && !this.state.validationTextfields[1].isValid ? (
+                  <div className="DeliveryByCourier__form__error">Введите дом и корпус</div>
+                ) : null}
               </div>
             </div>
 
-            <div className="DeliveryByCourier__map mt-4">
-              <div className="DeliveryByCourier__map__pin">
-                <img src="/images/map-pin.png" alt="map-pin" />
-              </div>
-              <YMaps query={{ lang: 'ru_RU', apikey: '7e281c05-3c19-476c-a409-21e922596afd' }}>
+            <div className="DeliveryByClient__map mt-4">
+              <YMaps>
                 <Map
-                  modules={['geolocation', 'geocode']}
-                  onBoundsChange={(e: any) => this.chooseAddressOnMap(e.get('target').getCenter())}
-                  onLoad={(ymaps: any) => {
-                    this.setYmaps(ymaps)
-                    this.setLoading(false)
-                  }}
+                  onLoad={() => this.setLoading(false)}
                   onError={() => this.setLoading(false)}
-                  className="DeliveryByCourier__map__yandex"
+                  className="DeliveryByClient__map__yandex"
                   state={{
                     center: this.state.coordinates,
                     zoom: 17,
                   }}
                 >
-                  {/* <Placemark geometry={this.state.coordinates} /> */}
+                  <Placemark geometry={this.state.coordinates} />
                 </Map>
               </YMaps>
             </div>
@@ -406,10 +459,26 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                   maskChar=" "
                 >
                   {(inputProps: any) => (
-                    <input {...inputProps} id="phone" type="text" placeholder="8 (999) 123-45-67" />
+                    <input
+                      {...inputProps}
+                      id="phone"
+                      // className={`${this.state.phoneError && !this.state.phoneValid ? 'error' : ''} ${
+                      //   this.state.phoneValid ? 'correct' : ''
+                      // }`}
+                      type="text"
+                      placeholder="8 (999) 123-45-67"
+                    />
                   )}
                 </InputMask>
-                {this.state.validationTextfields[0].touched && !this.state.validationTextfields[0].isValid ? (
+                {/* <input
+                onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                  this.textFieldInputHandler(e.currentTarget.value, 'phone')
+                }}
+                id="phone"
+                type="text"
+                placeholder="+7 (999) 123-45-67"
+              /> */}
+                {this.state.validationTextfields[2].touched && !this.state.validationTextfields[2].isValid ? (
                   <div className="DeliveryByCourier__form__error">Введите номер телефона</div>
                 ) : null}
               </div>
@@ -479,29 +548,16 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                   placeholder="Пожалуйста, укажите здесь любую информацию, которая поможет курьеру быстрее доставить вам заказа"
                 />
               </div>
-
-              <PoliticSection />
               <div className="w-100">
                 <OrderTotalPrice />
               </div>
+
+              <PoliticSection />
               {this.state.isPaymentShow ? (
                 <React.Fragment>
-                  {!this.state.isAllowedDelivery ? (
-                    <div className="DeliveryByCourier__error">
-                      Доставка по данному адресу не осуществляется. Выберите другой адрес доставки.
-                    </div>
-                  ) : null}
-
                   <PaymentSection isDelivery={true} />
                   <ActionButton
-                    disabled={
-                      !(
-                        this.props.ruleCheck &&
-                        this.props.smsCheck &&
-                        this.props.personCheck &&
-                        this.state.isAllowedDelivery
-                      )
-                    }
+                    disabled={!(this.props.ruleCheck && this.props.smsCheck && this.props.personCheck)}
                     loading={this.props.loadingOrder}
                     onClick={() => this.processOrder()}
                     textColor="white"
@@ -513,8 +569,8 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                 </React.Fragment>
               ) : (
                 <ActionButton
+                  // disabled={!(this.props.ruleCheck && this.props.smsCheck && this.props.personCheck)}
                   onClick={() => this.showPaymentSection()}
-                  loading={this.props.loadingOrder}
                   textColor="white"
                   width="280px"
                   text="Выберите способ оплаты"

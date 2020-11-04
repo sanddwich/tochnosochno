@@ -37,7 +37,7 @@ export default class Order {
     this.device = device
     this.items = orderItems
     this.date = date
-    this.sourceKey = 'myaso.cafe'
+    this.sourceKey = 'sochno30.ru'
     this.status = 'Новый'
     this.id = Date.now()
     this.payment = 'cash'

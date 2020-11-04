@@ -615,9 +615,11 @@ export class ApiController {
       streetId: { type: 'string' },
       house: { type: 'string' },
       deliverySum: { type: 'number' },
+      longitude: { type: 'number' },
+      latitude: { type: 'number' },
       isCourierDelivery: { type: 'boolean' },
     },
-    required: ['streetId', 'deliverySum', 'house', 'isCourierDelivery'],
+    required: ['deliverySum', 'house', 'isCourierDelivery', 'longitude', 'latitude'],
     type: 'object',
   })
   @ApiServer({ url: '/api', description: 'Main API URL' })
@@ -626,9 +628,18 @@ export class ApiController {
     const deliverySum: number = ctx.request.body.deliverySum
     const house: string = ctx.request.body.house
     const isCourierDelivery: boolean = ctx.request.body.isCourierDelivery
+    const latitude: number = ctx.request.body.latitude
+    const longitude: number = ctx.request.body.longitude
     await this.iiko.init()
     console.log({ deliverySum })
-    const deliveryRestriction = await this.iiko.getDeliveryRestirctions(streetId, house, deliverySum, isCourierDelivery)
+    const deliveryRestriction = await this.iiko.getDeliveryRestirctions(
+      streetId,
+      house,
+      deliverySum,
+      isCourierDelivery,
+      latitude,
+      longitude
+    )
     if (deliveryRestriction) {
       return new HttpResponseOK({
         isAllowed: deliveryRestriction.isAllowed,

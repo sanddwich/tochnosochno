@@ -141,9 +141,12 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
           <div className="DeliveryByClient__map mt-4">
             <YMaps>
               <Map
-                onLoad={() => this.setLoading(false)}
+                onLoad={() => {
+                  this.setLoading(false)
+                }}
                 onError={() => this.setLoading(false)}
                 className="DeliveryByClient__map__yandex"
+                // onApiAvaliable={(ymaps: any) => this.geocode(ymaps)}
                 defaultState={{
                   center: [46.347801, 48.037095],
                   zoom: 17,

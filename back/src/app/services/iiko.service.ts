@@ -261,10 +261,19 @@ export class Iiko {
     }
   }
 
-  async getDeliveryRestirctions(streetId: string, house: string, deliverySum: number, isCourierDelivery: boolean) {
+  async getDeliveryRestirctions(
+    streetId: string,
+    house: string,
+    deliverySum: number,
+    isCourierDelivery: boolean,
+    latitude: number,
+    longitude: number
+  ) {
     const organization = await getRepository(Organization).findOne()
+
     this.logger.info(`iiko.service.getDeliveryRestirctions()`)
     const deliveryAddress = { streetId, house }
+    const orderLocation = { latitude, longitude }
     try {
       if (organization) {
         const res = await fetch(this.deliveryResctrictionsUrl, {
@@ -276,6 +285,7 @@ export class Iiko {
           body: JSON.stringify({
             organizationIds: [organization.id],
             deliverySum,
+            orderLocation,
             deliveryAddress,
             isCourierDelivery,
           }),

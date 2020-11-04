@@ -34,4 +34,36 @@
       text-align: left;
     }
   }
+
+  &__error {
+    color: #ff614b;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: left;
+  }
+
+  &__map {
+    display: relative;
+    width: 100%;
+    height: 400px;
+    &__yandex {
+      height: 400px;
+      width: 100%;
+    }
+
+    &__pin {
+      position: relative;
+      top: 52%;
+      left: 48%;
+      z-index: 1000;
+      width: 40px;
+      img {
+        width: 40px;
+      }
+    }
+  }
 }

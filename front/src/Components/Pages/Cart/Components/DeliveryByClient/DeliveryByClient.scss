@@ -52,5 +52,16 @@
       height: 400px;
       width: 100%;
     }
+
+    &__pin {
+      position: relative;
+      top: 52%;
+      left: 48%;
+      z-index: 1000;
+      width: 40px;
+      img {
+        width: 40px;
+      }
+    }
   }
 }
