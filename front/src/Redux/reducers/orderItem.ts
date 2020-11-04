@@ -10,6 +10,7 @@ import {
 } from '../constants/ActionTypes'
 import { OrderItemState } from '../interfaces/interfaces'
 import { OrderItemAction } from '../interfaces/orderItem'
+import { v4 as uuidv4 } from 'uuid'
 
 const product: Product = {
   facets: [],
@@ -42,6 +43,7 @@ const initialOrderItem: OrderItem = {
   amount: 1,
   productVariant: { id: 0, price: 0, product },
   orderItemModifiers: [],
+  id: uuidv4(),
 }
 
 const initialState: OrderItemState = {

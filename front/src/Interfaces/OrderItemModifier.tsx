@@ -4,7 +4,7 @@ export default class OrderItemModifier {
   id?: number
   amount: number
   productModifier: Modifier
-  orderItem?: number
+  orderItem?: string
 
   constructor(amount: number, productModifier: Modifier) {
     this.amount = amount

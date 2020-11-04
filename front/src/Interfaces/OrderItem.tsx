@@ -3,7 +3,7 @@ import OrderItemModifier from './OrderItemModifier'
 import Product from './Product'
 
 export default interface OrderItem {
-  id?: number
+  id?: string
   amount: number
   productVariant?: Variant
   product: Product

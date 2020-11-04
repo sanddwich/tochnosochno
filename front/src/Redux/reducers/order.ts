@@ -54,7 +54,7 @@ const order = (state = initialState, action: OrderActionType) => {
         order: new Order(navigator.appVersion, initialDate, []),
       }
     case ADD_TO_ORDER:
-      if (!action.orderItem.id) action.orderItem.id = Date.now()
+      if (!action.orderItem.id) action.orderItem.id = uuidv4()
       return {
         ...state,
         order: {
