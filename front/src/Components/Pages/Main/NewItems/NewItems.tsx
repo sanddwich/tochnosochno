@@ -76,7 +76,7 @@ class NewItems extends React.Component<NewItemsProps, NewItemsState> {
         <Row className="p-0 m-0 d-flex justify-content-between">
           <BlockName name="Новинки" />
 
-          <div className="NewItems__arrows d-none d-md-flex justify-content-start">
+          <div className="NewItems__arrows d-none d-md-flex justify-content-end align-items-center">
             <div id="prewArrowNewItems" className="NewItems__arrow" style={{ paddingRight: 3 }}>
               <img src="/images/icons/arrowLeftFor45.svg" alt="" />
             </div>
@@ -85,7 +85,7 @@ class NewItems extends React.Component<NewItemsProps, NewItemsState> {
             </div>
           </div>
 
-          <div className="NewItems__arrows d-flex d-md-none justify-content-start">
+          <div className="NewItems__arrows d-flex d-md-none justify-content-end align-items-center">
             <div id="prewArrowNewItems" className="NewItems__arrow" style={{ paddingRight: 3 }}>
               <img src="/images/icons/arrowLeftMobileFor35.svg" alt="" />
             </div>
