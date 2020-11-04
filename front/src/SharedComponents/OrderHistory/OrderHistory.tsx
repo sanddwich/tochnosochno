@@ -122,7 +122,7 @@ class OrderHistory extends React.Component<OrderHistoryProps, OrderHistoryState>
       return this.getCombos(filterComboItems).map((comboItem, index) => {
         const category = this.props.menu.find((cat) => cat.id === comboItem.comboId) as Category
         return (
-          <React.Fragment key={comboItem.comboId}>
+          <React.Fragment key={comboItem.comboId + index}>
             <h1 style={{ fontWeight: 500, paddingTop: 10 }}>Набор комбо:</h1>
             <ComboOrderBlockDescription category={category} comboItem={comboItem} history={true} />
           </React.Fragment>
