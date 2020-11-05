@@ -22,9 +22,9 @@ import { CsrfTokenRequired, getCsrfToken, setCsrfCookie } from '@foal/csrf'
 import { TypeORMStore, fetchUser } from '@foal/typeorm'
 import { getRepository } from 'typeorm'
 
-import { Customer, FavoriteProduct, Product } from '../entities'
+import { Customer, FavoriteProduct, Group, Order, OrderItem, Product } from '../entities'
 import { WalletBalance } from '../entities/wallet-balance.entity'
-import { Iiko, CustomerService, SmsService } from '../services'
+import { Iiko, CustomerService, SmsService, MenuService } from '../services'
 import { v4 as uuidv4 } from 'uuid'
 import * as _ from 'lodash'
 
@@ -53,6 +53,9 @@ export class AuthController {
 
   @dependency
   customerService: CustomerService
+
+  @dependency
+  menuService: MenuService
 
   @Options('*')
   options(ctx: Context) {
@@ -163,6 +166,21 @@ export class AuthController {
     if (customer) {
       customer.orders = _.orderBy(customer.orders, ['id'], ['desc'])
       customer.addresses = _.orderBy(customer.addresses, ['id'], ['desc'])
+
+      const groups = await getRepository(Group).find({
+        where: {
+          isGroupModifier: false,
+          // isSiteDisplay: true,
+        },
+        relations: ['products', 'products.sizePrices', 'products.sizePrices.price', 'products.parentGroup'],
+      })
+
+      customer.orders.map((order: Order) => {
+        order.items.map(async (orderItem: OrderItem) => {
+          orderItem.product.recomended = []
+          orderItem.product.recomended.push(...this.menuService.getRecomendedProducts(orderItem.product, groups, 3))
+        })
+      })
 
       // Если в истории заказов нужны заказы, которые есть точно  в iiko
       // customer.orders = _.filter(customer.orders, 'orderIikoId')

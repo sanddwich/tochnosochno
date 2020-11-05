@@ -9,12 +9,15 @@ import { showProductModal } from '../../Redux/actions/app'
 import { cartAnimation } from '../../utils/animation'
 import './LineProductWithNumberInput.scss'
 import { connect } from 'react-redux'
+import { RootState } from '../../Redux'
+import Order from '../../Interfaces/Order'
 
 interface LineProductWithNumberInputProps {
   orderItem: OrderItem
   deleteOrderItem: (orderItem: OrderItem) => void
   setOrderItemAmount: (orderItem: OrderItem, amount: number) => void
   showProductModal: (product: Product) => void
+  order: Order
 }
 
 interface LineProductWithNumberInputState {}
@@ -24,14 +27,36 @@ class LineProductWithNumberInput extends React.Component<
   LineProductWithNumberInputState
 > {
   setOrderItemAmount = (amount: number) => {
-    this.props.setOrderItemAmount(this.props.orderItem, amount)
-    if (amount === 0) {
-      this.props.deleteOrderItem(this.props.orderItem)
+    const orderItem = this.getOrderItem()
+    if (orderItem) {
+      this.props.setOrderItemAmount(orderItem, amount)
+      if (amount === 0) {
+        this.props.deleteOrderItem(orderItem)
+      }
+      cartAnimation()
     }
-    cartAnimation()
   }
 
+  getOrderItem = (): OrderItem | undefined => {
+    let item: OrderItem | undefined
+    if (this.props.order.items) {
+      this.props.order.items.map((orderItem: OrderItem) => {
+        if (orderItem.product.id === this.props.orderItem.product.id) {
+          item = orderItem
+        }
+      })
+    }
+    return item
+  }
+
+  setNumberInputValue = (amount: number) => {}
+
   render() {
+    const orderItem = this.getOrderItem()
+    let value = 0
+    if (orderItem) {
+      value = orderItem.amount
+    }
     return (
       <div className="LineProductWithNumberInput">
         <div className="LineProductWithNumberInput__product ">
@@ -63,7 +88,7 @@ class LineProductWithNumberInput extends React.Component<
         </div>
         <NumberInput
           minValue={0}
-          value={this.props.orderItem.amount}
+          value={value}
           onChange={(amount: number) => {
             this.setOrderItemAmount(amount)
           }}
@@ -91,4 +116,12 @@ const mapDispatchToProps = {
   showProductModal,
 }
 
-export default connect(null, mapDispatchToProps)(LineProductWithNumberInput)
+const mapStateToProps = (state: RootState) => {
+  const { order } = state.order
+
+  return {
+    order,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LineProductWithNumberInput)

@@ -1,6 +1,9 @@
 import { act } from 'react-dom/test-utils'
+import FavoriteProduct from '../../Interfaces/FavoriteProduct'
 import {
   ADD_CUSTOMER_ADDRESS,
+  ADD_PRODUCT_TO_FAVOURITES,
+  DELETE_PRODUCT_FROM_FAVOURITES,
   GET_SMS,
   HIDE_AUTH_LOADING,
   LOGOUT,
@@ -19,6 +22,7 @@ import {
 } from '../constants/ActionTypes'
 import { AuthActionType } from '../interfaces/auth'
 import { AuthState } from '../interfaces/interfaces'
+import { v4 as uuidv4 } from 'uuid'
 
 const initialState: AuthState = {
   isSms: false,
@@ -158,6 +162,28 @@ const auth = (state: AuthState = initialState, action: AuthActionType) => {
         customer: {
           ...state.customer,
           birthday: action.birthday,
+        },
+      }
+
+    case ADD_PRODUCT_TO_FAVOURITES:
+      return {
+        ...state,
+
+        customer: {
+          ...state.customer,
+          favoriteProducts: [...state.customer?.favoriteProducts, { id: uuidv4(), product: action.product }],
+        },
+      }
+
+    case DELETE_PRODUCT_FROM_FAVOURITES:
+      return {
+        ...state,
+
+        customer: {
+          ...state.customer,
+          favoriteProducts: state.customer?.favoriteProducts.filter((favoriteProduct: FavoriteProduct) => {
+            return favoriteProduct.product.id !== action.product.id
+          }),
         },
       }
 

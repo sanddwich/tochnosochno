@@ -28,13 +28,13 @@ export default class NumberInput extends React.Component<NumberInputProps, Numbe
         value: this.state.value + 1,
       },
       () => {
-        this.props.onChange(this.state.value)
+        this.props.onChange(this.props.value + 1)
       }
     )
   }
 
   decrement = () => {
-    let value = this.state.value - 1
+    let value = this.props.value - 1
     if (value < this.props.minValue) value = this.props.minValue
     this.setState(
       {
@@ -54,7 +54,7 @@ export default class NumberInput extends React.Component<NumberInputProps, Numbe
           <div onClick={this.decrement} className="numberInput__dec">
             -
           </div>
-          <div className="numberInput__number">{this.state.value}</div>
+          <div className="numberInput__number">{this.props.value}</div>
           <div onClick={this.increment} className="numberInput__inc">
             +
           </div>

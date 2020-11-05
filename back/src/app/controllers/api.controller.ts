@@ -19,6 +19,7 @@ import {
   Patch,
   Put,
   HttpResponseBadRequest,
+  HttpResponseInternalServerError,
 } from '@foal/core'
 import { FindManyOptions, getRepository, Like } from 'typeorm'
 import { v4 as uuidv4 } from 'uuid'
@@ -211,10 +212,10 @@ export class ApiController {
     })
 
     products.map((rootGroup) => {
-      rootGroup.products.map((product) => {
+      rootGroup.products.map(async (product) => {
         if (product) {
           product.recomended = []
-          product.recomended.push(...this.menuService.getRecomendedProducts(product, products, 3))
+          product.recomended.push(...(await this.menuService.getRecomendedProducts(product, products, 3)))
         }
       })
 
@@ -315,6 +316,21 @@ export class ApiController {
     if (customer) {
       customer.orders = _.orderBy(customer.orders, ['id'], ['desc'])
       customer.addresses = _.orderBy(customer.addresses, ['id'], ['desc'])
+
+      const groups = await getRepository(Group).find({
+        where: {
+          isGroupModifier: false,
+          // isSiteDisplay: true,
+        },
+        relations: ['products', 'products.sizePrices', 'products.sizePrices.price', 'products.parentGroup'],
+      })
+
+      customer.orders.map((order: Order) => {
+        order.items.map((orderItem: OrderItem) => {
+          orderItem.product.recomended = []
+          orderItem.product.recomended.push(...this.menuService.getRecomendedProducts(orderItem.product, groups, 3))
+        })
+      })
 
       //Если в истории заказов нужны заказы, которые добавились в iiko
       // customer.orders = _.filter(customer.orders, 'orderIikoId')
@@ -423,13 +439,16 @@ export class ApiController {
           order.address.street = { id: '8df16367-fc70-4bfc-016b-a8d0a76ce24b', name: 'Кирова' }
           order.address.house = '27'
         }
+        if (!order.address.id) {
+          order.address.id = uuidv4()
+        }
 
         const orderDb = await repositoryOrder.save(order)
         await this.sender.sendOrderEmail(order)
       }
     } catch (error) {
       console.log(error)
-      return new HttpResponseNotFound({ error: true, message: error.message })
+      return new HttpResponseInternalServerError({ error: true, message: error.message })
     }
 
     return new HttpResponseCreated({ order })
@@ -630,24 +649,28 @@ export class ApiController {
     const isCourierDelivery: boolean = ctx.request.body.isCourierDelivery
     const latitude: number = ctx.request.body.latitude
     const longitude: number = ctx.request.body.longitude
-    await this.iiko.init()
-    console.log({ deliverySum })
-    const deliveryRestriction = await this.iiko.getDeliveryRestirctions(
-      streetId,
-      house,
-      deliverySum,
-      isCourierDelivery,
-      latitude,
-      longitude
-    )
-    if (deliveryRestriction) {
-      return new HttpResponseOK({
-        isAllowed: deliveryRestriction.isAllowed,
-        allowedItems: deliveryRestriction.allowedItems,
-        location: deliveryRestriction.location,
-      })
-    } else {
-      return new HttpResponseNotFound('Не найдена доставка по данному адресу')
+    try {
+      await this.iiko.init()
+      const deliveryRestriction = await this.iiko.getDeliveryRestirctions(
+        streetId,
+        house,
+        deliverySum,
+        isCourierDelivery,
+        latitude,
+        longitude
+      )
+
+      if (deliveryRestriction && !deliveryRestriction.errorDescription) {
+        return new HttpResponseOK({
+          isAllowed: deliveryRestriction.isAllowed,
+          allowedItems: deliveryRestriction.allowedItems,
+          location: deliveryRestriction.location,
+        })
+      } else {
+        return new HttpResponseInternalServerError({ error: true, message: 'Ошибка на сервере. Поробуйте ещё раз.' })
+      }
+    } catch (error) {
+      return new HttpResponseInternalServerError('Iiko error')
     }
   }
 }

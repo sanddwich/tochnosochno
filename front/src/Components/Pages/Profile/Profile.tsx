@@ -235,9 +235,12 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               </Row>
             </div>
           ) : (
-            <div className="row m-0 mt-4 mb-5 profile__text">
-              Сейчас тут ничего нет :( Нужно просто нажать на сердчеко на товаре
-            </div>
+            <React.Fragment>
+              <BlockName name="Избранное" />
+              <div className="row m-0 mt-4 mb-5 profile__text">
+                Сейчас тут ничего нет :( Нужно просто нажать на сердчеко на товаре
+              </div>
+            </React.Fragment>
           )}
         </React.Fragment>
       </div>

@@ -132,8 +132,8 @@ label {
 input[type='text'],
 input[type='date'],
 textarea {
-  border: none; /* Get rid of the browser's styling */
-  border-bottom: 1px solid #c4c4c4; /* Add your own border */
+  border: none;
+  border-bottom: 1px solid #c4c4c4;
   color: #303030;
   font-family: 'Roboto';
   font-size: 18px;
@@ -198,4 +198,24 @@ label {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #ffcf25;
+}
+
+img.flyToCart {
+  animation: flyToCart 0.4s ease-in-out forwards;
+  z-index: 10002222200;
+}
+
+@keyframes flyToCart {
+  25% {
+    transform: translate(100px, -100px);
+  }
+  50% {
+    transform: translate(200px, -200px);
+  }
+  75% {
+    transform: translate(300px, -300px);
+  }
+  100% {
+    transform: translate(400px, -400px);
+  }
 }

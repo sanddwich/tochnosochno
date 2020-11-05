@@ -34,6 +34,7 @@ import { OrderActionType } from '../interfaces/order'
 
 import { showProductDialog, showCartDialog, showCreditCardForm, showSuccessModal, showLoginModal } from './app'
 import { getCustomer } from './auth'
+import { cartAnimation, productAnimation } from '../../utils/animation'
 
 const apiServer = 'http://localhost:3001'
 // const apiServer = 'http://myaso.holod30.ru'
@@ -324,12 +325,14 @@ export const setOrderPayment = (isPayment: boolean, payment: PaymentType): Order
 }
 
 export const addOrderItemToOrder = (orderItem: OrderItem) => {
+  cartAnimation()
   return (dispatch: any) => {
     dispatch(addOrderItem(orderItem))
   }
 }
 
 export const setOrderItemAmount = (orderItem: OrderItem, amount: number): OrderActionType => {
+  cartAnimation()
   return {
     type: CHANGE_ORDER_ITEM_AMOUNT,
     orderItem: orderItem,
@@ -338,6 +341,7 @@ export const setOrderItemAmount = (orderItem: OrderItem, amount: number): OrderA
 }
 
 export const changeOrderItem = (orderItem: OrderItem) => {
+  cartAnimation()
   return (dispatch: any) => {
     dispatch(changeOrderItemAction(orderItem))
     dispatch(calculateOrder())
@@ -346,6 +350,7 @@ export const changeOrderItem = (orderItem: OrderItem) => {
 }
 
 export const deleteOrderItem = (orderItem: OrderItem): OrderActionType => {
+  cartAnimation()
   return {
     type: DELETE_FROM_ORDER,
     orderItem: orderItem,

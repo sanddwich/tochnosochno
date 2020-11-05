@@ -1,7 +1,10 @@
 import Address from '../../Interfaces/Address'
 import Customer from '../../Interfaces/Customer'
+import Product from '../../Interfaces/Product'
 import {
   ADD_CUSTOMER_ADDRESS,
+  ADD_PRODUCT_TO_FAVOURITES,
+  DELETE_PRODUCT_FROM_FAVOURITES,
   GET_AUTH,
   GET_SMS,
   GET_TOKEN,
@@ -107,6 +110,14 @@ interface SetCustomerBithday {
   type: typeof SET_CUSTOMER_BIRTHDAY
   birthday: string
 }
+interface AddProductToFavorites {
+  type: typeof ADD_PRODUCT_TO_FAVOURITES
+  product: Product
+}
+interface DeleteProductFromFavorites {
+  type: typeof DELETE_PRODUCT_FROM_FAVOURITES
+  product: Product
+}
 
 export type AuthActionType =
   | GetIsAuthAction
@@ -129,3 +140,5 @@ export type AuthActionType =
   | SetPhoneAction
   | SetCustomerBithday
   | SetCustomerName
+  | AddProductToFavorites
+  | DeleteProductFromFavorites

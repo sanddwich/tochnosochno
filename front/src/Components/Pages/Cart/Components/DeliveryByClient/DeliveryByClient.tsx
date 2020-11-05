@@ -125,7 +125,6 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
   }
 
   render() {
-    console.log(this.state.loading)
     return (
       <Container className="DeliveryByClient  mt-5">
         <div hidden={this.state.loading}>
@@ -215,7 +214,7 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
                 </div>
               </div>
               <CookingTime />
-              <OrderTotalPrice />
+              <OrderTotalPrice isDelivery={false} />
 
               <PoliticSection />
               <PaymentSection isDelivery={false} />

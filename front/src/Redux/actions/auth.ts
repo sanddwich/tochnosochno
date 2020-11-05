@@ -6,6 +6,8 @@ import Customer from '../../Interfaces/Customer'
 import { withCookies, Cookies } from 'react-cookie'
 import {
   ADD_CUSTOMER_ADDRESS,
+  ADD_PRODUCT_TO_FAVOURITES,
+  DELETE_PRODUCT_FROM_FAVOURITES,
   GET_SMS,
   HIDE_AUTH_LOADING,
   LOGOUT,
@@ -20,6 +22,8 @@ import {
   SET_TOKEN,
 } from '../constants/ActionTypes'
 import { AuthActionType } from '../interfaces/auth'
+import { showLoginModal } from './app'
+import Product from '../../Interfaces/Product'
 
 const apiServer = 'http://localhost:3001'
 // const apiServer = 'http://myaso.holod30.ru'
@@ -220,8 +224,9 @@ export const changeProfile = (name: string, birthday: string): ThunkAction<void,
 
 export const changeFavorite = (
   productId: string,
-  isDelete: boolean
-): ThunkAction<void, RootState, null, AuthActionType> => {
+  isDelete: boolean,
+  product: Product
+): ThunkAction<void, RootState, null, any> => {
   return async (dispatch, getState) => {
     try {
       const method = isDelete ? 'DELETE' : 'POST'
@@ -242,14 +247,23 @@ export const changeFavorite = (
       if (res.status === 429) {
         throw new Error('Слишком много запросов на сервер')
       }
+      if (res.status === 401) {
+        dispatch(logoutAction())
+        dispatch(showLoginModal())
+      }
       if (!res.ok) {
         const resData: Error = await res.json()
         throw new Error(resData.message)
       }
 
-      await dispatch(getCustomer())
+      if (isDelete) {
+        dispatch(deleteProductFromFavorites(product))
+      } else {
+        dispatch(addProductToFavorites(product))
+      }
+      dispatch(hideLoading())
 
-      const resData: ApiResponse = await res.json()
+      // const resData: ApiResponse = await res.json()
     } catch (err) {
       console.log({ err })
       dispatch(setError(err))
@@ -347,5 +361,19 @@ const setAddress = (address: Address): AuthActionType => {
   return {
     type: ADD_CUSTOMER_ADDRESS,
     address: address,
+  }
+}
+
+const deleteProductFromFavorites = (product: Product): AuthActionType => {
+  return {
+    type: DELETE_PRODUCT_FROM_FAVOURITES,
+    product,
+  }
+}
+
+const addProductToFavorites = (product: Product): AuthActionType => {
+  return {
+    type: ADD_PRODUCT_TO_FAVOURITES,
+    product,
   }
 }

@@ -549,7 +549,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                 />
               </div>
               <div className="w-100">
-                <OrderTotalPrice />
+                <OrderTotalPrice isDelivery={false} />
               </div>
 
               <PoliticSection />

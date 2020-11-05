@@ -74,7 +74,6 @@ class Login extends React.Component<LoginProps, LoginState> {
 
   smsSendHandler = () => {
     const phone = this.props.phone.replace(/\D/g, '')
-    console.log(phone)
     if (phone.length < 11) {
       this.setState({ phoneError: true })
     } else {

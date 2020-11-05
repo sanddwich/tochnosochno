@@ -63,8 +63,8 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
         </div>
 
         <div className="lineProductWithCart__product__cartIcon d-flex justify-content-center align-items-center">
-          {/* <AddProductButton hideTextMobile={true} product={this.props.product} /> */}
-          <ActionButton
+          <AddProductButton hideTextMobile={true} product={this.props.product} />
+          {/* <ActionButton
             onClick={() => this.addToCartButton(this.props.product)}
             textColor="white"
             width="180px"
@@ -72,7 +72,7 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
             backgroundColor="#303030"
             icon="cart_dark.svg"
             hideTextMobile={true}
-          />
+          /> */}
         </div>
       </div>
     )

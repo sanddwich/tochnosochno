@@ -20,11 +20,18 @@ interface FavouriteRoundButtonState {
 }
 
 class FavouriteRoundButton extends React.Component<FavouriteRoundButtonProps, FavouriteRoundButtonState> {
+  _isMounted = false
   constructor(props: FavouriteRoundButtonProps) {
     super(props)
     this.state = {
       loading: false,
     }
+  }
+  componentDidMount() {
+    this._isMounted = true
+  }
+  componentWillUnmount() {
+    this._isMounted = false
   }
 
   favoriteClick = async () => {
@@ -33,11 +40,13 @@ class FavouriteRoundButton extends React.Component<FavouriteRoundButtonProps, Fa
       this.props.customer.favoriteProducts?.filter((favProduct) => this.props.product.id === favProduct.product.id)
         .length > 0
     ) {
-      await this.props.changeFavorite(this.props.product.id, true)
+      await this.props.changeFavorite(this.props.product.id, true, this.props.product)
     } else {
-      await this.props.changeFavorite(this.props.product.id, false)
+      await this.props.changeFavorite(this.props.product.id, false, this.props.product)
     }
-    this.setState({ loading: false })
+    if (this._isMounted) {
+      this.setState({ loading: false })
+    }
   }
 
   render() {

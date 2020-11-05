@@ -90,6 +90,7 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
               onClick={() => this.props.showProductModal(this.props.product)}
             >
               <img
+                id={this.props.product.id}
                 className="img-fluid"
                 src={
                   typeof this.props.product.imageLinks[0] !== 'undefined'

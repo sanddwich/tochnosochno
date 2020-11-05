@@ -7,7 +7,6 @@ import { RootState } from '../../Redux'
 import { addOrderItemToOrder, setOrderItemAmount, deleteOrderItem } from '../../Redux/actions/order'
 import ActionButton from '../ActionButton/ActionButton'
 import NumberInput from '../NumberInput/NumberInput'
-import { cartAnimation } from '../../utils/animation'
 
 interface AddProductButtonProps {
   order: Order
@@ -31,28 +30,31 @@ class AddProductButton extends React.Component<AddProductButtonProps, AddProduct
   }
 
   componentDidMount() {
-    this.isProductInOrder()
+    // this.isProductInOrder()
   }
 
   setOrderItemAmount = (amount: number) => {
-    if (this.state.orderItem) {
-      this.props.setOrderItemAmount(this.state.orderItem, amount)
+    const orderItem = this.getOrderItem()
+    if (orderItem) {
+      this.props.setOrderItemAmount(orderItem, amount)
       if (amount === 0) {
-        this.props.deleteOrderItem(this.state.orderItem)
-        this.setState({ orderItem: null })
+        this.props.deleteOrderItem(orderItem)
       }
+      // cartAnimation()
+      // productAnimation(orderItem.product.id)
     }
-    cartAnimation()
   }
 
-  isProductInOrder = () => {
+  getOrderItem = (): OrderItem | undefined => {
+    let item: OrderItem | undefined
     if (this.props.order.items) {
       this.props.order.items.map((orderItem: OrderItem) => {
         if (orderItem.product.id === this.props.product.id) {
-          this.setState({ orderItem })
+          item = orderItem
         }
       })
     }
+    return item
   }
 
   addToCartButton = (product: Product): void => {
@@ -64,16 +66,21 @@ class AddProductButton extends React.Component<AddProductButtonProps, AddProduct
     }
     this.props.addOrderItemToOrder(orderItem)
     this.setState({ orderItem })
-    cartAnimation()
+    // cartAnimation()
   }
 
   render() {
+    const orderItem = this.getOrderItem()
+    let value = 0
+    if (orderItem) {
+      value = orderItem.amount
+    }
     return (
       <React.Fragment>
-        {this.state.orderItem ? (
+        {orderItem ? (
           <NumberInput
             minValue={0}
-            value={this.state.orderItem.amount}
+            value={value}
             label=""
             hideLabel={true}
             onChange={(amount: number) => this.setOrderItemAmount(amount)}

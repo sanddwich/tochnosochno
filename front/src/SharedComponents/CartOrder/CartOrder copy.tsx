@@ -36,7 +36,7 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
   }
 
   setStateCartProducts = (): OrderItem[] => {
-    let cartProducts: any = this.props.order.items?.filter(item => {
+    let cartProducts: any = this.props.order.items?.filter((item) => {
       if (typeof item.comboId === 'undefined') {
         return item
       }
@@ -45,7 +45,7 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
   }
 
   setStateCartCombos = (): OrderItem[] => {
-    let cartCombo: any = this.props.order.items?.filter(item => {
+    let cartCombo: any = this.props.order.items?.filter((item) => {
       if (typeof item.comboId !== 'undefined') {
         return item.product
       }
@@ -84,7 +84,7 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
                   />
                 </div>
 
-                <OrderTotalPrice />
+                <OrderTotalPrice isDelivery={false} />
               </React.Fragment>
             ) : (
               <div className="CartOrder__empty">

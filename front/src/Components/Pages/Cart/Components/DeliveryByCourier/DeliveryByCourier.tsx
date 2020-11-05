@@ -34,6 +34,7 @@ import Loader from '../../../../../SharedComponents/Loader/Loader'
 import { AddressSuggestions, DaDataSuggestion, DaDataAddress } from 'react-dadata'
 
 import 'react-dadata/dist/react-dadata.css'
+import CustomAlert from '../../../../../SharedComponents/CustomAlert/CustomAlert'
 
 interface DeliveryByCourierProps {
   getStreetVariants: any
@@ -53,6 +54,8 @@ interface DeliveryByCourierProps {
   customer: Customer
   processOrder: any
   loadingOrder: boolean
+  errorAuth: string
+  errorOrder: string
 }
 
 interface DeliveryByCourierState {
@@ -129,7 +132,6 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
 
   showPaymentSection = async () => {
     await this.getDeliveryRestrictions()
-    this.setState({ isPaymentShow: true })
   }
 
   setLoading = (loading: boolean) => {
@@ -151,21 +153,22 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
       latitude,
       longitude
     )
-    console.log(deliveryRestriction)
 
-    if (deliveryRestriction.isAllowed) {
+    if (deliveryRestriction && deliveryRestriction.isAllowed) {
       this.setState({ isAllowedDelivery: true })
-    } else {
+      this.setState({ isPaymentShow: true })
+    } else if (deliveryRestriction && !deliveryRestriction.isAllowed) {
       this.setState({ isAllowedDelivery: false })
+      this.setState({ isPaymentShow: true })
     }
 
-    if (deliveryRestriction.location) {
-      this.setState({ coordinates: [deliveryRestriction.location.latitude, deliveryRestriction.location.longitude] })
+    // if (deliveryRestriction.location) {
+    //   this.setState({ coordinates: [deliveryRestriction.location.latitude, deliveryRestriction.location.longitude] })
 
-      if (deliveryRestriction.allowedItems.length > 0) {
-      }
-      // }
-    }
+    //   if (deliveryRestriction.allowedItems.length > 0) {
+    //   }
+
+    // }
   }
 
   processOrder = () => {
@@ -297,8 +300,6 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     if (this.state.ymaps.geocode) {
       this.state.ymaps.geocode(coordinates, { kind: 'house' }).then((result: any) => {
         const house = result.geoObjects.get(0).getPremiseNumber()
-        console.log(result.geoObjects.get(0).getAddressLine())
-
         this.setdaDataAddress(result.geoObjects.get(0).getAddressLine(), house, coordinates)
       })
     }
@@ -337,8 +338,8 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
   render() {
     return (
       <Container className="DeliveryByCourier p-0  mt-5">
-        <Scroll.Element hidden={this.state.loading} name="formElement">
-          <form autoComplete="off" className="DeliveryByCourier__form">
+        <React.Fragment>
+          <form hidden={this.state.loading} autoComplete="off" className="DeliveryByCourier__form">
             <div className="DeliveryByCourier__form__row">
               <div className="DeliveryByCourier__form__group">
                 <label htmlFor="address">Адрес*</label>
@@ -350,6 +351,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                   minChars={5}
                   delay={500}
                   // autoload={true}
+                  inputProps={{ type: 'text' }}
                   count={5}
                   filterLocations={[{ ['region']: 'астраханская' }]}
                   onChange={(value) => this.chooseAddressFromInput(value)}
@@ -357,7 +359,10 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
               </div>
             </div>
 
-            <div className="DeliveryByCourier__map mt-4">
+            <div className="DeliveryByCourier__map mt-2">
+              <div className="DeliveryByCourier__map__info mb-2">
+                Выберите ваш адрес из списка, если Ваш адрес не удалось найти - отметьте его на карте
+              </div>
               <div className="DeliveryByCourier__map__pin">
                 <img src="/images/map-pin.png" alt="map-pin" />
               </div>
@@ -380,6 +385,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                 </Map>
               </YMaps>
             </div>
+
             <div className="DeliveryByCourier__form__row">
               <div className="DeliveryByCourier__form__group">
                 <label htmlFor="name">Ваше имя*</label>
@@ -414,6 +420,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                 ) : null}
               </div>
             </div>
+            <Scroll.Element name="formElement"></Scroll.Element>
             <div className="DeliveryByCourier__form__row">
               <div className="DeliveryByCourier__form__group">
                 <label htmlFor="entrance">Подъезд*</label>
@@ -482,15 +489,22 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
 
               <PoliticSection />
               <div className="w-100">
-                <OrderTotalPrice />
+                <OrderTotalPrice isDelivery={this.state.isAllowedDelivery} delivery={100} />
               </div>
+
+              {this.props.errorOrder ? (
+                <CustomAlert show={true} variant="danger" message={this.props.errorOrder} />
+              ) : null}
+
               {this.state.isPaymentShow ? (
                 <React.Fragment>
-                  {!this.state.isAllowedDelivery ? (
+                  {!this.state.isAllowedDelivery && !this.props.errorOrder ? (
                     <div className="DeliveryByCourier__error">
                       Доставка по данному адресу не осуществляется. Выберите другой адрес доставки.
                     </div>
-                  ) : null}
+                  ) : (
+                    <div className="DeliveryByCourier__error">{this.props.errorOrder}</div>
+                  )}
 
                   <PaymentSection isDelivery={true} />
                   <ActionButton
@@ -524,7 +538,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
               )}
             </div>
           </form>
-        </Scroll.Element>
+        </React.Fragment>
         <div hidden={!this.state.loading} className="DeliveryByClient__loader">
           <Loader />
         </div>
@@ -550,7 +564,8 @@ const mapStateToProps = (state: any) => {
   const { loading: loadingOrder, error: errorOrder, order, smsCheck, ruleCheck, personCheck } = state.order
   return {
     loading: loading,
-    error: error,
+    errorOrder,
+    errorAuth: error,
     loadingOrder: loadingOrder,
     order,
     phone,
