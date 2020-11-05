@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { YMaps, Map, Placemark } from 'react-yandex-maps'
+import { YMaps, Map, Placemark, ZoomControl, GeolocationControl } from 'react-yandex-maps'
 import { RootState } from '../../../../../Redux'
 import ActionButton from '../../../../../SharedComponents/ActionButton/ActionButton'
 import CookingTime from '../../../../../SharedComponents/CookingTime/CookingTime'
@@ -152,6 +152,8 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
                   geometry: { type: 'Point', coordinates: [46.400285, 48.09156] },
                 }}
               >
+                <GeolocationControl options={{ float: 'left' }} />
+                <ZoomControl options={{ float: 'right' }} />
                 <Placemark geometry={[46.347801, 48.037095]} />
                 <Placemark geometry={[46.405095, 48.090833]} />
               </Map>

@@ -1,12 +1,12 @@
 {
   "mail":{
-    "orderEmail": "denristun@gmail.com",
+    "orderEmail": "zakaz@sochno30.ru",
     "host": "mail.hostland.ru",
     "port": 465,
     "secure": true,
     "auth": {
-      "user": "info@myaso.cafe",
-      "pass": "Zxcfdsa654"
+      "user": "zakaz@sochno30.ru",
+      "pass": "VW13PVJy8E"
     }
   },
 
@@ -33,6 +33,12 @@
     "debug": true,
     "loggerFormat": ":method :url :status :res[content-length] - :response-time ms 11",
     "session": {
+
+      "expirationTimeouts":{
+        "absolute": 2592000,
+        "inactivity": 259200
+      },
+
       "cookie": {
         "sameSite": "lax"
       }

@@ -28,7 +28,7 @@ import Order from '../../../../../Interfaces/Order'
 import Address from '../../../../../Interfaces/Address'
 import { DeliveryAddressValidation } from '../../../../../Interfaces/DeliveryAddressValidation'
 import Customer from '../../../../../Interfaces/Customer'
-import { YMaps, Map, Placemark } from 'react-yandex-maps'
+import { YMaps, Map, Placemark, ZoomControl, GeolocationControl } from 'react-yandex-maps'
 import * as Scroll from 'react-scroll'
 import Loader from '../../../../../SharedComponents/Loader/Loader'
 import { AddressSuggestions, DaDataSuggestion, DaDataAddress } from 'react-dadata'
@@ -337,7 +337,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
 
   render() {
     return (
-      <Container className="DeliveryByCourier p-0  mt-5">
+      <Container className="DeliveryByCourier p-0  mt-4">
         <React.Fragment>
           <form hidden={this.state.loading} autoComplete="off" className="DeliveryByCourier__form">
             <div className="DeliveryByCourier__form__row">
@@ -381,12 +381,14 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                     zoom: 17,
                   }}
                 >
+                  <GeolocationControl options={{ float: 'left' }} />
+                  <ZoomControl options={{ float: 'right' }} />
                   {/* <Placemark geometry={this.state.coordinates} /> */}
                 </Map>
               </YMaps>
             </div>
 
-            <div className="DeliveryByCourier__form__row">
+            <div className="DeliveryByCourier__form__row mt-4">
               <div className="DeliveryByCourier__form__group">
                 <label htmlFor="name">Ваше имя*</label>
                 <input
@@ -489,7 +491,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
 
               <PoliticSection />
               <div className="w-100">
-                <OrderTotalPrice isDelivery={this.state.isAllowedDelivery} delivery={100} />
+                <OrderTotalPrice isDelivery={this.state.isAllowedDelivery && this.state.isPaymentShow} delivery={0} />
               </div>
 
               {this.props.errorOrder ? (

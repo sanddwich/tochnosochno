@@ -88,6 +88,9 @@ export const processOrder = (): ThunkAction<void, RootState, null, any> => {
         body: JSON.stringify({ order }),
       })
 
+      if (res.status === 401) {
+        dispatch(showLoginModal())
+      }
       if (!res.ok) {
         const resData: ApiResponse = await res.json()
         throw new Error(resData.message)
@@ -97,9 +100,7 @@ export const processOrder = (): ThunkAction<void, RootState, null, any> => {
         dispatch(getCustomer())
         dispatch(showSuccessModal())
       }
-      if (res.status === 401) {
-        dispatch(showLoginModal())
-      }
+
       if (res.status === 200) {
         dispatch(showCreditCardForm())
         dispatch(getCustomer())

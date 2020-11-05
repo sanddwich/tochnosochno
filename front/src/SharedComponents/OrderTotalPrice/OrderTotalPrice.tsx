@@ -31,7 +31,7 @@ class OrderTotalPrice extends React.Component<OrderTotalPriceProps, OrderTotalPr
               <div className="OrderTotalPrice__label">Доставка</div>
               <div className="OrderTotalPrice__amount">{this.props.delivery || 0} р</div>
             </div>
-            <div className="OrderTotalPrice__row">
+            <div className="OrderTotalPrice__total">
               <div className="OrderTotalPrice__label">Итого</div>
               <div className="OrderTotalPrice__amount">{this.props.order.amount + (this.props.delivery || 0)} р</div>
             </div>

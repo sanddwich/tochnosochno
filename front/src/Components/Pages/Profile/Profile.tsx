@@ -69,6 +69,11 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   }
 
   render() {
+    let birthday = new Date()
+    if (this.props.customer.birthday) {
+      birthday = new Date(this.props.customer.birthday)
+    }
+
     return (
       <div className="profile container mt-5">
         <BlockName name="Личный кабинет" />
@@ -95,7 +100,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               style={{ width: '150px' }}
               type="date"
               onChange={(event) => this.birthdayChangeHandler(event)}
-              value={new Date(this.props.customer.birthday).toISOString().slice(0, 10)}
+              value={new Date(birthday).toISOString().slice(0, 10)}
               placeholder="мм.мм.гггг"
             />
           </div>
