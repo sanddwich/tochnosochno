@@ -281,6 +281,7 @@ export class Iiko {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${this.token}`,
+            // Timeout: 30,
           },
           body: JSON.stringify({
             organizationIds: [organization.id],
