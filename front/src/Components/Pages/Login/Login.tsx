@@ -159,7 +159,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                                 {...inputProps}
                                 id="code"
                                 className={`${this.state.codeError ? 'error' : ''} `}
-                                type="text"
+                                type="tel"
                               />
                             )}
                           </InputMask>
