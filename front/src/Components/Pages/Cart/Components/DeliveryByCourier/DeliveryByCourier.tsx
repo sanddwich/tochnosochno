@@ -112,13 +112,13 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
         //   touched: false,
         //   isValid: false,
         // },
-        // {
-        //   name: 'house',
-        //   minLength: 0,
-        //   required: true,
-        //   touched: false,
-        //   isValid: false,
-        // },
+        {
+          name: 'name',
+          minLength: 2,
+          required: true,
+          touched: false,
+          isValid: false,
+        },
         {
           name: 'phone',
           minLength: 10,
@@ -189,6 +189,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     validationTextfields.map((textfield) => {
       let isValid: boolean = true
       let value = ''
+      textfield.name === 'name' && (value = this.props.customer.name || '')
       textfield.name === 'street' && (value = this.state.deliveryAddress.street.name)
       textfield.name === 'house' && (value = this.state.deliveryAddress.house)
       textfield.name === 'phone' && (value = this.props.phone || this.props.customer?.phone || '')
@@ -402,6 +403,9 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                     this.textFieldInputHandler(e.currentTarget.value, 'name')
                   }}
                 />
+                {this.state.validationTextfields[0].touched && !this.state.validationTextfields[0].isValid ? (
+                  <div className="DeliveryByCourier__form__error">Введите ваше имя</div>
+                ) : null}
               </div>
               <div className="DeliveryByCourier__form__group">
                 <label htmlFor="phone">Телефон*</label>
@@ -417,7 +421,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                     <input {...inputProps} id="phone" type="text" placeholder="8 (999) 123-45-67" />
                   )}
                 </InputMask>
-                {this.state.validationTextfields[0].touched && !this.state.validationTextfields[0].isValid ? (
+                {this.state.validationTextfields[1].touched && !this.state.validationTextfields[1].isValid ? (
                   <div className="DeliveryByCourier__form__error">Введите номер телефона</div>
                 ) : null}
               </div>

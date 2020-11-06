@@ -184,9 +184,9 @@ export class ApiController {
     summary: 'Возвращает действующее меню',
   })
   async getMenu() {
-    // await this.iiko.init()
-    // await this.iiko.getMenu()
-    const products = await getRepository(Group).find({
+    await this.iiko.init()
+    await this.iiko.getMenu()
+    let products = await getRepository(Group).find({
       where: {
         isGroupModifier: false,
         // isSiteDisplay: true,
@@ -227,7 +227,7 @@ export class ApiController {
         })
       }
     })
-    _.orderBy(products, ['order'], ['desc'])
+    products = _.orderBy(products, ['order'], ['desc'])
     const terminals = await getRepository(Terminal).find({ isAlive: true })
 
     return new HttpResponseOK({ products, terminals })

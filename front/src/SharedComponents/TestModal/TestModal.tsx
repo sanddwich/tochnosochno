@@ -13,30 +13,43 @@ interface TestModalProps {
   isShowTestModal: boolean
 }
 
-interface TestModalState {}
+interface TestModalState {
+  show: boolean
+}
 
 class TestModal extends React.Component<TestModalProps, TestModalState> {
+  constructor(props: TestModalProps) {
+    super(props)
+    this.state = {
+      show: this.props.isShowTestModal,
+    }
+  }
+
   componentDidMount() {}
+
+  hideTestModal = () => {
+    this.setState({ show: false })
+  }
 
   render() {
     return (
       <React.Fragment>
-        {this.props.isShowTestModal ? (
+        {this.state.show ? (
           <div className="TestModal">
             <div className="TestModal__content">
               <div className="TestModal__content__close">
-                <RoundButton icon="icon_close.svg" backgroundColor="#F2F2F2" onClick={this.props.hideTestModal} />
+                <RoundButton icon="icon_close.svg" backgroundColor="#F2F2F2" onClick={this.hideTestModal} />
               </div>
               <div className="TestModal__content__body">
                 <div className="TestModal__content__image">
-                  <img src="/images/icons/order_success.svg" alt="" />
+                  <img src="/images/icons/warning.svg" alt="" />
                 </div>
 
                 <div className="TestModal__content__text">
                   <div className="d-flex justify-content-center">
-                    <BlockName fontSize="24px" name="Спасибо за заказ!" />
+                    <BlockName fontSize="24px" name="Внимание!" />
                   </div>
-                  Мы уже начали готовить ваш заказ
+                  Сайт работает в тестовом режиме. При возникновнеии проблем звоните по телефону 46-46-02.
                 </div>
               </div>
             </div>

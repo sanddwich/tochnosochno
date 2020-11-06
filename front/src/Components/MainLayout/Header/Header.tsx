@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
 import SuccessOrderModal from '../../../SharedComponents/SuccessOrderModal/SuccessOrderModal'
+import TestModal from '../../../SharedComponents/TestModal/TestModal'
 import Login from '../../Pages/Login/Login'
 import './Header.scss'
 import HeaderDown from './HeaderDown/HeaderDown'
@@ -18,6 +19,7 @@ export default class Header extends React.Component<HeaderProps, HeaderState> {
         <HeaderDown />
         <Login />
         <SuccessOrderModal />
+        <TestModal />
       </Container>
     )
   }

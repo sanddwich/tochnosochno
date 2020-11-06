@@ -22,12 +22,11 @@ class Main extends React.Component<MainProps, MainState> {
     return (
       <Container fluid className="Main p-0 m-0">
         <SliderContainer />
-        <CategoriesContainer />
-        {this.props.loading ? null : <NewItems />}
 
+        {this.props.loading ? null : <CategoriesContainer />}
+        {this.props.loading ? null : <NewItems />}
         <Banners />
         {this.props.loading ? null : <PopularProducts />}
-
         <FullBanner />
       </Container>
     )
