@@ -2,6 +2,9 @@
   margin-bottom: 20px !important;
 
   .Banners__img {
+    img {
+      border-radius: 15px 0px;
+    }
     &:nth-child(2n-1) {
       padding-right: 10px !important;
     }
