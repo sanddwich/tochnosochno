@@ -184,8 +184,8 @@ export class ApiController {
     summary: 'Возвращает действующее меню',
   })
   async getMenu() {
-    // await this.iiko.init()
-    // await this.iiko.getMenu()
+    await this.iiko.init()
+    await this.iiko.getMenu()
     let products = await getRepository(Group).find({
       where: {
         isGroupModifier: false,
@@ -215,7 +215,7 @@ export class ApiController {
       rootGroup.products.map(async (product) => {
         if (product) {
           product.recomended = []
-          product.recomended.push(...(await this.menuService.getRecomendedProducts(product, products, 3)))
+          product.recomended.push(...this.menuService.getRecomendedProducts(product, products, 3))
         }
       })
 

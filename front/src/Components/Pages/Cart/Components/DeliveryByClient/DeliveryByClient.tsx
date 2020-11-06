@@ -192,7 +192,7 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
                         // className={`${this.state.phoneError && !this.state.phoneValid ? 'error' : ''} ${
                         //   this.state.phoneValid ? 'correct' : ''
                         // }`}
-                        type="text"
+                        type="tel"
                         placeholder="8 (999) 123-45-67"
                       />
                     )}

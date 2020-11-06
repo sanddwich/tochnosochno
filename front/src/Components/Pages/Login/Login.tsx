@@ -135,7 +135,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                             className={`${this.state.phoneError && !this.state.phoneValid ? 'error' : ''} ${
                               this.state.phoneValid ? 'correct' : ''
                             }`}
-                            type="text"
+                            type="tel"
                             placeholder="8 (999) 123-45-67"
                           />
                         )}
