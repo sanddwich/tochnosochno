@@ -128,7 +128,7 @@
   @media screen and (max-width: 768px) {
     .ProductModal__body {
       max-height: none;
-      height: 93%;
+      height: 92%;
       margin-top: 44px;
       width: 96%;
     }
@@ -180,6 +180,14 @@
         
       }
     }
-  }
+    .ProductModal__img {
+      margin-top: -50px;
+      div {
+        img {
+          height: 200px; // =========== Каринки
+        }
+      }
+    }
 
+  }
 }

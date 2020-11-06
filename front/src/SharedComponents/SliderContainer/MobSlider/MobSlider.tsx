@@ -52,7 +52,7 @@ class MobSlider extends React.Component<MobSliderProps, MobSliderState> {
                         src={`/images/slides/mob/${cat.id}.png`}
                         onError={(event) => {
                           const el = event.target as HTMLElement
-                          el.setAttribute('src', '/images/slides/mob/slide1.jpg')
+                          el.setAttribute('src', '/images/slides/mob/no-slide.png')
                         }}
                       />
                     </Container>

@@ -52,7 +52,7 @@ class Banners extends React.Component<BannersProps, BannersState> {
                         el.setAttribute('src', '/images/banners/no-banner.jpg')
                       }}
                     />
-                    <img src="/images/banners/banner1.jpg" className="img-fluid" alt="" />
+                    {/* <img src="/images/banners/banner1.jpg" className="img-fluid" alt="" /> */}
                   </Col>
                 )
               }
@@ -83,7 +83,7 @@ class Banners extends React.Component<BannersProps, BannersState> {
                         src={`/images/banners/${cat.id}.png`}
                         onError={(event) => {
                           const el = event.target as HTMLElement
-                          el.setAttribute('src', '/images/banners/no-banner.jpg')
+                          el.setAttribute('src', '/images/banners/no-banner.png')
                         }}
                       />
                     </Container>
