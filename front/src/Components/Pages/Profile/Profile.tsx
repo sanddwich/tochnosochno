@@ -168,7 +168,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
         <div>{/* <LineProductWithNumberInput product={this.props.menu[0].products[0]} /> */}</div>
 
         <React.Fragment>
-          {this.props.customer.favoriteProducts.length > 0 ? (
+          {this.props.customer.favoriteProducts && this.props.customer.favoriteProducts.length > 0 ? (
             <div>
               <Row className="m-0 p-0 d-flex justify-content-between">
                 <div className="row m-0">

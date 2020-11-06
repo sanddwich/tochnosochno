@@ -24,10 +24,9 @@ import {
 import { AuthActionType } from '../interfaces/auth'
 import { showLoginModal } from './app'
 import Product from '../../Interfaces/Product'
+import { API_URL } from '../../utils/config'
 
-// const apiServer = 'http://api.sochno30.ru'
-// const apiServer = 'http://myaso.holod30.ru'
-const apiServer = 'http://localhost:3001'
+const apiServer = API_URL
 
 export const addCustomerAddress = (address: Address): ThunkAction<void, RootState, null, AuthActionType> => {
   return async (dispatch, getState) => {
