@@ -28,7 +28,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
   }
 
   componentDidMount() {
-    this.scrollTo('menuScroller', 400)
+    this.scrollTo('menuScroller', 250)
   }
 
   checkMenuId = (): boolean => {
@@ -69,7 +69,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
             />
           </Element>
 
-          {this.scrollTo('menuScroller', -120)}
+          {this.scrollTo('menuScroller', -220)}
         </Container>
       )
     } else {
