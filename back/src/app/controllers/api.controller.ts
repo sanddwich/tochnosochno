@@ -184,8 +184,8 @@ export class ApiController {
     summary: 'Возвращает действующее меню',
   })
   async getMenu() {
-    await this.iiko.init()
-    await this.iiko.getMenu()
+    // await this.iiko.init()
+    // await this.iiko.getMenu()
     let products = await getRepository(Group).find({
       where: {
         isGroupModifier: false,
