@@ -23,7 +23,9 @@
 
   .ProductCardMobile__img {
     margin-top: -50px;
-    // height: 280px;       // =========== Каринки
+    img {
+      max-height: 240px;       // =========== Каринки
+    }
   }
 
   .ProductCardMobile__info {
