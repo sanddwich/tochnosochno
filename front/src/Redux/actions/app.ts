@@ -9,6 +9,7 @@ import {
   HIDE_PRODUCT_MODAL,
   HIDE_SIDE_DIALOG,
   HIDE_SUCCESS_MODAL,
+  HIDE_TEST_MODAL,
   SHOW_CART,
   SHOW_COMBO_MODAL,
   SHOW_COOKING_TIME,
@@ -21,6 +22,7 @@ import {
   SHOW_PRODUCT,
   SHOW_PRODUCT_MODAL,
   SHOW_SUCCESS_MODAL,
+  SHOW_TEST_MODAL,
 } from '../constants/ActionTypes'
 
 export const showProductDialog = (isChangeProduct: boolean) => ({
@@ -96,4 +98,12 @@ export const showSuccessModal = () => ({
 
 export const hideSuccessModal = () => ({
   type: HIDE_SUCCESS_MODAL,
+})
+
+export const showTestModal = () => ({
+  type: SHOW_TEST_MODAL,
+})
+
+export const hideTestModal = () => ({
+  type: HIDE_TEST_MODAL,
 })

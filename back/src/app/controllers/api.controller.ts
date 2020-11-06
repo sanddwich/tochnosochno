@@ -227,7 +227,7 @@ export class ApiController {
         })
       }
     })
-
+    _.orderBy(products, ['order'], ['desc'])
     const terminals = await getRepository(Terminal).find({ isAlive: true })
 
     return new HttpResponseOK({ products, terminals })

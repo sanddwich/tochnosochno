@@ -6,6 +6,7 @@ import {
   HIDE_PRODUCT_MODAL,
   HIDE_SIDE_DIALOG,
   HIDE_SUCCESS_MODAL,
+  HIDE_TEST_MODAL,
   SHOW_CART,
   SHOW_COMBO_MODAL,
   SHOW_COOKING_TIME,
@@ -18,6 +19,7 @@ import {
   SHOW_PRODUCT,
   SHOW_PRODUCT_MODAL,
   SHOW_SUCCESS_MODAL,
+  SHOW_TEST_MODAL,
 } from '../constants/ActionTypes'
 import { AppActionType } from '../interfaces/app'
 import { AppState } from '../interfaces/interfaces'
@@ -33,6 +35,7 @@ const initialState: AppState = {
   showComboModal: false,
   isShowSuccessModal: false,
   keyUpdate: Math.random(),
+  isShowTestModal: true,
 }
 const app = (state: AppState = initialState, action: AppActionType) => {
   switch (action.type) {
@@ -143,6 +146,17 @@ const app = (state: AppState = initialState, action: AppActionType) => {
       return {
         ...state,
         isShowSuccessModal: false,
+      }
+
+    case SHOW_TEST_MODAL:
+      return {
+        ...state,
+        isShowTestModal: true,
+      }
+    case HIDE_TEST_MODAL:
+      return {
+        ...state,
+        isShowTestModal: false,
       }
     default:
       return state

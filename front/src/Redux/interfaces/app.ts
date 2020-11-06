@@ -10,6 +10,7 @@ import {
   HIDE_PRODUCT_MODAL,
   HIDE_SIDE_DIALOG,
   HIDE_SUCCESS_MODAL,
+  HIDE_TEST_MODAL,
   SHOW_CART,
   SHOW_COMBO_MODAL,
   SHOW_COOKING_TIME,
@@ -22,6 +23,7 @@ import {
   SHOW_PRODUCT,
   SHOW_PRODUCT_MODAL,
   SHOW_SUCCESS_MODAL,
+  SHOW_TEST_MODAL,
 } from '../constants/ActionTypes'
 
 interface GetAppAction {
@@ -97,6 +99,14 @@ interface HideSuccessModal {
   type: typeof HIDE_SUCCESS_MODAL
 }
 
+interface ShowTestModal {
+  type: typeof SHOW_TEST_MODAL
+}
+
+interface HideTestModal {
+  type: typeof HIDE_TEST_MODAL
+}
+
 export type AppActionType =
   | GetAppAction
   | ShowProductDialogAction
@@ -117,3 +127,5 @@ export type AppActionType =
   | ShowSuccessModal
   | HideSuccessModal
   | AppUpdateKey
+  | ShowTestModal
+  | HideTestModal
