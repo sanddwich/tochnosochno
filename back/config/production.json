@@ -1,20 +1,71 @@
 {
-  "database": {
-    "host": "mysql77.hostland.ru",
-    "port": 3306,
-    "username": "host1819103_myaso",
-    "password": "rb80cuI7",
-    "database": "host1819103_myaso",
-    "synchronize": "true"
+  "mail":{
+    "orderEmail": "zakaz@sochno30.ru",
+    "host": "mail.hostland.ru",
+    "port": 465,
+    "secure": true,
+    "auth": {
+      "user": "zakaz@sochno30.ru",
+      "pass": "VW13PVJy8E"
+    }
   },
+
+  "bank":{
+    "apiUrl": "https://3dsec.sberbank.ru/payment/rest",
+    "userName" : "T300404262810-api",
+    "password": "T300404262810"
+  },
+  "iiko": {
+    "apiUrl": "https://api-ru.iiko.services/api/1",
+    "iikoUser": "website",
+    "iikoPassword": "e999a45c",
+    "iikoPassword2": "d3b2c9bc"
+  },
+  "host": "https://sochno30.ru",
+  "port": 3001,
+  "yandexApiKey": "7e281c05-3c19-476c-a409-21e922596afd",
   "settings": {
-    "csrf": false,
+    "csrf": {
+      "cookie": {
+        "maxAge": 31536000
+      }
+    },
     "debug": true,
-    "loggerFormat": "tiny",
+    "loggerFormat": ":method :url :status :res[content-length] - :response-time ms 11",
     "session": {
+
+      "expirationTimeouts":{
+        "absolute": 2592000,
+        "inactivity": 259200
+      },
+
       "cookie": {
         "sameSite": "lax"
       }
     }
+  },
+  "database": {
+    "host": "mysql20.hostland.ru",
+    "port": 3306,
+    "username": "host1820901_tochnosochno",
+    "password": "Asdfrewq1234!",
+    "database": "host1820901_tochnosochnobackup",
+    "synchronize": "true",
+    "logging": ["error"]
+  },
+
+  "apiLimit": {
+    "max": 10,
+    "windowMs": 1
+  },
+
+  "loginLimit": {
+    "max": 3,
+    "windowMs": 1
+  },
+
+  "authLimit": {
+    "max": 3,
+    "windowMs": 1
   }
 }

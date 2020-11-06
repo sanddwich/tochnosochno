@@ -5,6 +5,9 @@ import Terminal from '../../Interfaces/Terminal'
 import { GET_MENU, SET_ERROR, SET_LOADING, SET_TERMINALS } from '../constants/ActionTypes'
 import { MenuAction } from '../interfaces/menu'
 
+// const { API_SERVER } = process.env
+
+// const apiServer = 'http://api.sochno30.ru'
 const apiServer = 'http://localhost:3001'
 // const apiServer = 'http://myaso.holod30.ru'
 
