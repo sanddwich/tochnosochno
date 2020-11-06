@@ -417,9 +417,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                   }}
                   maskChar=" "
                 >
-                  {(inputProps: any) => (
-                    <input {...inputProps} id="phone" type="text" placeholder="8 (999) 123-45-67" />
-                  )}
+                  {(inputProps: any) => <input {...inputProps} id="phone" type="tel" placeholder="8 (999) 123-45-67" />}
                 </InputMask>
                 {this.state.validationTextfields[0].touched && !this.state.validationTextfields[0].isValid ? (
                   <div className="DeliveryByCourier__form__error">Введите номер телефона</div>

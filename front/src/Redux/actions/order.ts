@@ -36,9 +36,8 @@ import { showProductDialog, showCartDialog, showCreditCardForm, showSuccessModal
 import { getCustomer } from './auth'
 import { cartAnimation, productAnimation } from '../../utils/animation'
 
-// const apiServer = 'http://api.sochno30.ru'
-const apiServer = 'http://localhost:3001'
-// const apiServer = 'http://myaso.holod30.ru'
+import { API_URL } from '../../utils/config'
+const apiServer = API_URL
 
 export const applyBonusOrder = (isClear?: boolean) => {
   return (dispatch: any, getState: any) => {
