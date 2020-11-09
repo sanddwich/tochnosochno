@@ -21,6 +21,9 @@
   }
 
   .ComboElement__title {
+    max-height: 48px;
+    overflow: hidden;
+
     font-family: 'Montserrat';
     font-style: normal;
     font-weight: bold;
@@ -31,6 +34,9 @@
   }
 
   .ComboElement__descr {
+    max-height: 50px;
+    overflow: hidden;
+
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 300;

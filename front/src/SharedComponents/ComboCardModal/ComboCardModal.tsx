@@ -185,25 +185,36 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
               <Row className="ComboCardModalMob__img p-0 d-flex align-items-start">
                 {this.state.comboConsistArrayElement !== -1 ? (
                   <React.Fragment>
-                    <Swiper loop={true} pagination={{ clickable: true, el: '#paginationComboProduct' }}>
+                    <Swiper
+                      loop={true}
+                      pagination={{ clickable: true, el: '#paginationComboProduct' }}
+                      navigation={{
+                        nextEl: '#ComboCardModalMobNext',
+                        prevEl: '#ComboCardModalMobPrev',
+                      }}
+                    >
                       {this.state.comboProductVariants.map((product, index) => {
                         // if (!this.state.comboConsist.find((ccproduct) => product.id === ccproduct.id)) {
                         return (
                           <SwiperSlide key={index} onClick={() => this.addNewProductAtCombo(product.id)}>
                             <Container fluid className="p-0 m-0">
-                              <Row className="p-0 m-0 d-flex flex-column align-items-center">
-                                <Col className="p-0 m-0 d-flex justify-content-center">
-                                  <img
-                                    className="img-fluid"
-                                    src={
-                                      product.imageLinks[0]
-                                        ? `${product.imageLinks[0]}`
-                                        : '/images/products/no-photo.png'
-                                    }
-                                    alt=""
-                                  />
-                                </Col>
-                                <Col className="p-0 m-0 d-flex justify-content-center">{product.name}</Col>
+                              <Row className="p-0 m-0 d-flex align-items-center justify-content-center">
+                                <div>
+                                  <div className="p-0 m-0 d-flex justify-content-center align-items-center">
+                                    <img
+                                      className="img-fluid"
+                                      src={
+                                        product.imageLinks[0]
+                                          ? `${product.imageLinks[0]}`
+                                          : '/images/products/no-photo.png'
+                                      }
+                                      alt=""
+                                    />
+                                  </div>
+                                  <div className="p-0 m-0 d-flex justify-content-center align-items-center">
+                                    {product.name}
+                                  </div>
+                                </div>
                               </Row>
                             </Container>
                           </SwiperSlide>
@@ -211,6 +222,17 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                         // }
                       })}
                     </Swiper>
+
+                    <Row className="Slider__actions m-0 p-0 d-flex">
+                      <div className="Slider__arrows w-100 d-flex justify-content-between">
+                        <div id="ComboCardModalMobPrev" className="Slider__arrow">
+                          <img src="/images/icons/arrow_left.svg" alt="" />
+                        </div>
+                        <div id="ComboCardModalMobNext" className="Slider__arrow">
+                          <img src="/images/icons/arrow_right.svg" alt="" />
+                        </div>
+                      </div>
+                    </Row>
 
                     <Col className="d-flex justify-content-center">
                       <div id="paginationComboProduct" className="Slider__pagination"></div>
@@ -231,7 +253,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
               </Row>
 
               <Row className="ComboCardModalMob__Cont p-0 m-0">
-                <Col className="ComboCardModalMob__leftColumn p-0 d-flex flex-column align-items-start">
+                <Col className="ComboCardModalMob__leftColumn p-0">
                   <Row className="w-100">
                     <Col className="ComboCardModalMob__title">
                       <BlockName name={`${this.props.comboModalElement.name}`} />
