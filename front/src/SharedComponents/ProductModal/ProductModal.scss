@@ -30,7 +30,7 @@
   }
 
   .ProductModal__img {
-    margin-top: -50px;
+    // margin-top: -50px;
     div {
       img {
         height: 280px; // =========== Каринки
@@ -85,9 +85,15 @@
     padding-right: 20px !important;
     .ProductModal__recomend {
       padding-right: 20px !important;
-      height: 300px;
-      overflow-y: scroll;
+      // height: 300px;
+      // overflow-y: scroll;
     }
+  }
+
+  .ProductModal__recomendContAll {
+    max-height: 280px;
+    overflow-y: scroll;
+    margin-right: 0px;
   }
 
   .ProductModal__Content {
@@ -137,6 +143,16 @@
       margin-top: -52px;
       margin-left: -40px;
     }
+    
+    .ProductModal__img {
+      margin-top: -30px;
+      // z-index: 10;
+      div {
+        img {
+          height: 200px; // =========== Каринки
+        }
+      }
+    }
 
     .LineProductWithSizeInput__action {
       .actionButton {
@@ -154,7 +170,11 @@
     }
 
     .ProductModal__recomendCont {
-      height: 200px;
+      // height: 200px;
+    }
+
+    .ProductModal__recomendContAll {
+      max-height: 210px;
     }
 
     .ProductModal__title,
@@ -168,6 +188,7 @@
 
   @media screen and (max-width: 420px) {
     .ProductModal__info {
+      margin-top: -30px !important;
       .ProductModal__title {
         max-height: 80px;
         h1 {
@@ -177,11 +198,27 @@
       }
   
       .ProductModal__descr {
-        
+        max-height: 50px;
+        overflow: hidden;
+      }
+
+      .ProductModal__Content {
+        height: 80px;
+      }
+
+      .ProductModal__recomendContAll {
+        // margin-top: 50px !important;
+        max-height: 220px;
+        overflow-y: scroll;
+
+        .ProductModal__recomend {
+          overflow: hidden;
+        }
       }
     }
     .ProductModal__img {
-      margin-top: -50px;
+      margin-top: -40px;
+      // z-index: 10;
       div {
         img {
           height: 200px; // =========== Каринки

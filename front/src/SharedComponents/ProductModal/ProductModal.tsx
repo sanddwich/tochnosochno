@@ -97,7 +97,7 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
 
                 <Col className="ProductModal__info p-0 m-0 d-flex flex-column" md={7}>
                   <Row>
-                    <Col className="ProductModal__title mt-4">
+                    <Col className="ProductModal__title">
                       <BlockName name={this.props.productModalProduct.name} />
                     </Col>
                   </Row>
@@ -105,13 +105,13 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
                     <Col className="ProductModal__descr">{this.props.productModalProduct.description}</Col>
                   </Row>
 
-                  <Row className="h-100">
+                  <Row className="ProductModal__priceBlock">
                     <Col className="ProductModal__Content d-flex align-items-center">
                       <LineProductWithSizeInput product={this.props.productModalProduct} />
                     </Col>
                   </Row>
 
-                  <Row className="mt-auto mb-2">
+                  <Row className="ProductModal__recomendContAll mt-auto mb-2">
                     <Col className="ProductModal__recomendCont m-0 p-0">
                       <div className="ProductModal__recomend">
                         <RecomendedProducts title="С этим заказывают" product={this.props.productModalProduct} />
