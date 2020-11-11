@@ -61,24 +61,40 @@ export const showCreditCardForm = () => ({
   type: SHOW_CREDIT_CARD_FORM,
 })
 
-export const showProductModal = (product: Product) => ({
-  type: SHOW_PRODUCT_MODAL,
-  product: product,
-})
+export const showProductModal = (product: Product) => {
+  const body = document.body
+  body.classList.add('modal-open')
+  return {
+    type: SHOW_PRODUCT_MODAL,
+    product: product,
+  }
+}
 
-export const hideProductModal = () => ({
-  type: HIDE_PRODUCT_MODAL,
-})
+export const hideProductModal = () => {
+  const body = document.body
+  body.classList.remove('modal-open')
+  return {
+    type: HIDE_PRODUCT_MODAL,
+  }
+}
 
-export const showComboModal = (combo: Category, comboItemOrder?: ComboItemOrder) => ({
-  type: SHOW_COMBO_MODAL,
-  combo: combo,
-  comboItemOrder: comboItemOrder,
-})
+export const showComboModal = (combo: Category, comboItemOrder?: ComboItemOrder) => {
+  const body = document.body
+  body.classList.add('modal-open')
+  return {
+    type: SHOW_COMBO_MODAL,
+    combo: combo,
+    comboItemOrder: comboItemOrder,
+  }
+}
 
-export const hideComboModal = () => ({
-  type: HIDE_COMBO_MODAL,
-})
+export const hideComboModal = () => {
+  const body = document.body
+  body.classList.remove('modal-open')
+  return {
+    type: HIDE_COMBO_MODAL,
+  }
+}
 
 export const appUpdateKey = () => ({
   type: APP_UPDATE_KEY,

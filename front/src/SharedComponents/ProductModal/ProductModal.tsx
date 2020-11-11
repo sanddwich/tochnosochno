@@ -54,7 +54,7 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
     return (
       <React.Fragment>
         {this.props.showProductModal ? (
-          <Container fluid className="ProductModal p-0 m-0 d-flex align-items-center">
+          <Container fluid className="ProductModal p-0 m-0 d-flex align-items-center ">
             <Container className="ProductModal__body pt-2 pb-2">
               <Row className="ProductModal__closeButtonRow d-flex justify-content-end">
                 <div className="ProductModal__closeButtonCont position-relative">
