@@ -15,7 +15,10 @@ export default class SliderContainer extends React.Component<SliderContainerProp
   render() {
     return (
       <React.Fragment>
-        <Container className="SliderContainer d-none d-md-block" style={{marginTop: (typeof this.props.marginTop !== 'undefined' ) ? this.props.marginTop : ''}}>
+        <Container
+          className="SliderContainer d-none d-md-block"
+          style={{ marginTop: typeof this.props.marginTop !== 'undefined' ? this.props.marginTop : '' }}
+        >
           <Row className="sliderBanner p-0 m-0">
             <Col md={8} className="p-0 m-0">
               <Slider />

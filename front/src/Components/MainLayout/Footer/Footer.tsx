@@ -66,10 +66,10 @@ export default class Footer extends React.Component<FooterProps, FooterState> {
             </div>
             <div className="col-md-4">
               <div className="footer__policy">
-                <a href="">
+                <a className="hvr-underline" href="">
                   <div>Политика конфиденциальности</div>
                 </a>
-                <a href="">
+                <a className="hvr-underline" href="">
                   <div>Правила продажи товаров на сайте</div>
                 </a>
               </div>
@@ -78,7 +78,7 @@ export default class Footer extends React.Component<FooterProps, FooterState> {
             <div className="col-md-3 pr-0">
               <div className="footer__copyright">
                 Сайт разработан
-                <a href="https://deedesign.ru">
+                <a className="hvr-underline" href="https://deedesign.ru">
                   <span className="bold"> deedesign</span>
                 </a>
               </div>

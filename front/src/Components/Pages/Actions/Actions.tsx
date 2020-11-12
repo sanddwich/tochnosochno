@@ -5,7 +5,7 @@ import Category from '../../../Interfaces/Category'
 import { RootState } from '../../../Redux'
 import ComboCard from '../../../SharedComponents/ComboCard/ComboCard'
 import SliderContainer from '../../../SharedComponents/SliderContainer/SliderContainer'
-import {animateScroll} from 'react-scroll'
+import { animateScroll } from 'react-scroll'
 
 import './Actions.scss'
 
@@ -134,7 +134,7 @@ class Actions extends React.Component<ActionsProps, ActionsState> {
               )}
             </Row>
           </Container>
-          {animateScroll.scrollToTop()}
+          {/* {animateScroll.scrollToTop()} */}
         </Container>
       )
     } else {

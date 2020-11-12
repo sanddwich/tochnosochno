@@ -203,7 +203,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
               return (
                 <div
                   key={index}
-                  className="ProductList__filterEl"
+                  className="ProductList__filterEl hvr-underline"
                   style={{ fontWeight: filter.active ? 500 : 400, color: filter.active ? '#000000' : '#8E8E8E' }}
                   onClick={() => this.changeFilter(filter.id)}
                 >

@@ -52,10 +52,14 @@ class Slider extends React.Component<SliderProps, SliderState> {
                   onClick={() => this.props.showComboModalFunc(cat)}
                 >
                   <div id={cat.id} className="Slider__slide">
-                    <img className="img-fluid" src={`/images/slides/${cat.id}.png`} onError={(event) => {
-                      const el = event.target as HTMLElement
-                      el.setAttribute('src','/images/slides/no-slide.png')
-                    }} />
+                    <img
+                      className="img-fluid  hvr-shrink"
+                      src={`/images/slides/${cat.id}.png`}
+                      onError={(event) => {
+                        const el = event.target as HTMLElement
+                        el.setAttribute('src', '/images/slides/no-slide.png')
+                      }}
+                    />
                   </div>
                 </SwiperSlide>
               )

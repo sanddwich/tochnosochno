@@ -34,10 +34,13 @@ class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
               {this.props.menu.map((menuItem, index) => {
                 if (menuItem.isSiteDisplay && !menuItem.isCombo) {
                   return (
-                    <NavLink key={menuItem.id + index} to={`/menu/${menuItem.id}`} activeClassName="activatedLink">
-                      <div className="HeaderDown__menuEl h-100 d-flex align-items-center hvr-float">
-                        {menuItem.name}
-                      </div>
+                    <NavLink
+                      className="hvr-float"
+                      key={menuItem.id + index}
+                      to={`/menu/${menuItem.id}`}
+                      activeClassName="activatedLink"
+                    >
+                      <div className="HeaderDown__menuEl h-100 d-flex align-items-center">{menuItem.name}</div>
                     </NavLink>
                   )
                 }

@@ -60,7 +60,7 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
       <React.Fragment>
         <div id="ToTopArrow">
           <div id="ToTopArrow__cont" onClick={() => animateScroll.scrollToTop()}>
-            <FontAwesomeIcon icon={faSortUp} size="2x"/>
+            <FontAwesomeIcon icon={faSortUp} size="2x" />
           </div>
         </div>
 
@@ -69,7 +69,7 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
         <ProductModal />
 
         <Container className="HeaderUp p-0 d-none d-lg-flex justify-content-between align-items-center">
-          <NavLink to="/actions">
+          <NavLink className="hvr-underline" to="/actions" onClick={() => Scroll.animateScroll.scrollToTop()}>
             <div className="HeaderUp__menuItem">Акции</div>
           </NavLink>
           <div className="HeaderUp__menuItem">Соц.сети:</div>
@@ -93,7 +93,7 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
             </Row>
           </div>
 
-          <NavLink to="/contacts">
+          <NavLink className="hvr-underline" to="/contacts">
             <div className="HeaderUp__menuItem">Контакты</div>
           </NavLink>
 

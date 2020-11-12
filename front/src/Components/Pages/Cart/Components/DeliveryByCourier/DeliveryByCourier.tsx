@@ -526,7 +526,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                     width="280px"
                     text="Завершить заказ"
                     backgroundColor="#303030"
-                    icon="cart_dark.svg"
+                    icon="check.svg"
                   />
                 </React.Fragment>
               ) : (
@@ -537,7 +537,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                   width="280px"
                   text="Выберите способ оплаты"
                   backgroundColor="#303030"
-                  icon="cart_dark.svg"
+                  icon="wallet.svg"
                 />
               )}
             </div>

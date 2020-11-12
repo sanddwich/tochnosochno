@@ -29,10 +29,12 @@
     border-bottom-right-radius: 20px;
   }
 
-  &:hover {
-    background-color: #ffd12d !important;
+  &:hover .actionButton__icon__image {
+    // background-color: #ffd12d !important;
     cursor: pointer;
     color: #000000 !important;
+    transform: rotate(-15deg);
+    transition: all 0.4s ease-in-out;
   }
   &:active {
     background-color: #f6c000 !important;

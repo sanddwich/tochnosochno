@@ -23,6 +23,7 @@ import 'swiper/components/pagination/pagination.scss'
 import AddComboButton from '../AddComboButton/AddComboButton'
 import ComboItemOrder from '../../Interfaces/ComboItemOrder'
 import UpdateComboButton from '../UpdateComboButton/UpdateComboButton'
+import LazyLoad from 'react-lazyload'
 
 // install Swiper components
 SwiperCore.use([Navigation, Pagination, Autoplay])
@@ -173,7 +174,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
 
             {/* Mobile Container  ============================================ */}
 
-            <Container fluid className="ComboCardModalMob__body p-0 ml-4 mr-4 d-block d-md-none">
+            <Container fluid className="ComboCardModalMob__body p-0 ml-4 mr-4 d-block d-md-none ">
               <Row className="ComboCardModalMob__closeButtonRow d-flex justify-content-end p-0 m-0">
                 <div className="ComboCardModalMob__closeButtonCont position-relative">
                   <div className="ComboCardModalMob__closeButton">

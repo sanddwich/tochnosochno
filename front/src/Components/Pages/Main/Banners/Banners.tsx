@@ -40,12 +40,12 @@ class Banners extends React.Component<BannersProps, BannersState> {
                   <Col
                     key={index}
                     xs={6}
-                    className="Banners__img m-0 p-0"
+                    className="Banners__img  m-0 p-0"
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.props.showComboModalFunc(cat)}
                   >
                     <img
-                      className="img-fluid"
+                      className="img-fluid hvr-shrink "
                       src={`/images/banners/${cat.id}.png`}
                       onError={(event) => {
                         const el = event.target as HTMLElement
@@ -79,7 +79,7 @@ class Banners extends React.Component<BannersProps, BannersState> {
                   >
                     <Container className="m-0 p-0 ">
                       <img
-                        className="img-fluid"
+                        className="img-fluid hvr-shrink"
                         src={`/images/banners/${cat.id}.png`}
                         onError={(event) => {
                           const el = event.target as HTMLElement

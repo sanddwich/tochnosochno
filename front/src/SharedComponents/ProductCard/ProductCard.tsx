@@ -72,8 +72,8 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
   render() {
     return (
       <React.Fragment>
-        <Container className="ProductCard p-3 m-0">
-          <Container className="ProductCard__container p-0 m-0">
+        <Container className="ProductCard  p-3 m-0 ">
+          <Container className="ProductCard__container p-0 m-0 hvr-glow">
             <Row className="ProductCard__firstLine p-0 m-0 d-flex justify-content-between">
               <div className="ProductCard__favoriteButton">
                 <FavouriteRoundButton product={this.props.product} />

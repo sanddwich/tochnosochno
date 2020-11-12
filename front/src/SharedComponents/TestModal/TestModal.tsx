@@ -35,8 +35,8 @@ class TestModal extends React.Component<TestModalProps, TestModalState> {
     return (
       <React.Fragment>
         {this.state.show ? (
-          <div className="TestModal">
-            <div className="TestModal__content">
+          <div className="TestModal ">
+            <div className="TestModal__content ">
               <div className="TestModal__content__close">
                 <RoundButton icon="icon_close.svg" backgroundColor="#F2F2F2" onClick={this.hideTestModal} />
               </div>

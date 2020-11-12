@@ -30,6 +30,10 @@
     font-size: 36px;
     &:hover {
       cursor: pointer;
+      background-color: #ffc800;
+    }
+    &:active {
+      background-color: #daab00;
     }
   }
   &__number {
@@ -45,6 +49,10 @@
     font-size: 36px;
     &:hover {
       cursor: pointer;
+      background-color: #ffc800;
+    }
+    &:active {
+      background-color: #daab00;
     }
   }
 }

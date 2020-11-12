@@ -228,7 +228,7 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
                 width="280px"
                 text="Завершить заказ"
                 backgroundColor="#303030"
-                icon="cart_dark.svg"
+                icon="check.svg"
               />
             </form>
           </Scroll.Element>

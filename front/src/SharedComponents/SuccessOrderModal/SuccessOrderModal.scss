@@ -20,6 +20,7 @@
     min-height: 260px;
     display: flex;
     justify-content: space-between;
+    animation: popup 0.7s;
 
     &__image {
       display: flex;

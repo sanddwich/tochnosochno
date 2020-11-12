@@ -10,6 +10,8 @@ import PopularProducts from './PopularProducts/PopularProducts'
 import FullBanner from './FullBanner/FullBanner'
 import { RootState } from '../../../Redux'
 import { connect } from 'react-redux'
+import ScrollAnimation from 'react-animate-on-scroll'
+import 'animate.css/animate.min.css'
 
 interface MainProps {
   loading: boolean
@@ -21,13 +23,32 @@ class Main extends React.Component<MainProps, MainState> {
   render() {
     return (
       <Container fluid className="Main p-0 m-0">
-        <SliderContainer />
+        <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__backInLeft">
+          <SliderContainer />
+        </ScrollAnimation>
 
-        {this.props.loading ? null : <CategoriesContainer />}
-        {this.props.loading ? null : <NewItems />}
-        <Banners />
-        {this.props.loading ? null : <PopularProducts />}
-        <FullBanner />
+        {this.props.loading ? null : (
+          <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__backInRight">
+            <CategoriesContainer />
+          </ScrollAnimation>
+        )}
+        {this.props.loading ? null : (
+          <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__bounceInLeft">
+            <NewItems />
+          </ScrollAnimation>
+        )}
+        <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__bounceInRight">
+          <Banners />
+        </ScrollAnimation>
+
+        {this.props.loading ? null : (
+          <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__bounceInLeft">
+            <PopularProducts />
+          </ScrollAnimation>
+        )}
+        <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__fadeInUp">
+          <FullBanner />
+        </ScrollAnimation>
       </Container>
     )
   }

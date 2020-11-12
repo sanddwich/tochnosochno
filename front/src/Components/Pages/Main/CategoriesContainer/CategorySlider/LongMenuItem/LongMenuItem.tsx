@@ -16,13 +16,13 @@ export default class LongMenuItem extends React.Component<LongMenuItemProps, Lon
 
   suffixGen = (num: number): string => {
     // console.log(num % 10)
-    if (num >= 10 && num <=20) {
+    if (num >= 10 && num <= 20) {
       return 'ых'
     }
-    if ((num % 10) === 1) {
+    if (num % 10 === 1) {
       return 'ая'
     }
-    if ((num % 10) >= 2 && (num % 10) <= 4) {
+    if (num % 10 >= 2 && num % 10 <= 4) {
       return 'ые'
     }
     return 'ых'
@@ -46,7 +46,10 @@ export default class LongMenuItem extends React.Component<LongMenuItemProps, Lon
                 <div className="LongMenuItem__title">
                   <h1>{this.props.category.name}</h1>
                 </div>
-                <div className="LongMenuItem__desc">{this.props.category.products.length} сочн{this.suffixGen(this.props.category.products.length)} позиций</div>
+                <div className="LongMenuItem__desc">
+                  {this.props.category.products.length} сочн{this.suffixGen(this.props.category.products.length)}{' '}
+                  позиций
+                </div>
               </div>
             </Col>
             <Col
@@ -54,7 +57,10 @@ export default class LongMenuItem extends React.Component<LongMenuItemProps, Lon
               lg={5}
               md={4}
               style={{
-                background: (this.props.category.images !== null && this.props.category.images !== ''  ) ? `url(${this.props.category.images})` : `url(/images/categories/rolls.png)` ,
+                background:
+                  this.props.category.images !== null && this.props.category.images !== ''
+                    ? `url(${this.props.category.images})`
+                    : `url(/images/categories/rolls.png)`,
                 backgroundRepeat: 'no-repeat',
                 // backgroundAttachment: 'fixed',
                 backgroundPosition: 'right',

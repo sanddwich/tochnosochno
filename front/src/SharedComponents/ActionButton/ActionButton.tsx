@@ -25,14 +25,18 @@ export default class ActionButton extends React.Component<ActionButtonProps, Act
         onClick={() => {
           if (!this.props.disabled) this.props.onClick()
         }}
-        className={`actionButton  noselect ${this.props.hideTextMobile ? 'mobile' : ''} ${
+        className={`actionButton hvr-sweep-to-right  noselect ${this.props.hideTextMobile ? 'mobile' : ''} ${
           this.props.active ? 'active' : ''
         } ${this.props.disabled ? 'disabled' : ''}`}
         style={{ backgroundColor: this.props.backgroundColor, width: this.props.width, color: this.props.textColor }}
       >
         <div className={`actionButton__text`}>{this.props.text}</div>
         <div className="actionButton__icon">
-          {this.props.loading ? <Loader dark={true} /> : <img src={`/images/icons/${this.props.icon}`} alt="icon" />}
+          {this.props.loading ? (
+            <Loader dark={true} />
+          ) : (
+            <img className="actionButton__icon__image" src={`/images/icons/${this.props.icon}`} alt="icon" />
+          )}
         </div>
       </div>
     )

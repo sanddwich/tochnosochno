@@ -52,8 +52,8 @@ class ComboCard extends React.Component<ComboCardProps, ComboCardState> {
       this.props.combo.products[0].sizePrices[0].price.currentPrice * (this.props.combo.comboProductsCount || 1)
     return (
       <React.Fragment>
-        <Container className="ComboCard p-3 m-0">
-          <Container className="ComboCard__container p-0 m-0">
+        <Container className="ComboCard p-3 m-0 ">
+          <Container className="ComboCard__container p-0 m-0 hvr-glow">
             <Row className="ComboCard__firstLine p-0 m-0 d-flex justify-content-between">
               <div className="ComboCard__favoriteButton">
                 {/* <FavouriteRoundButton product={this.props.combo.} /> */}
