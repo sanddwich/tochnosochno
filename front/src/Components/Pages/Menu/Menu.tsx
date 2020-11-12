@@ -11,6 +11,8 @@ import { connect } from 'react-redux'
 import { RootState } from '../../../Redux'
 import Category from '../../../Interfaces/Category'
 // import BreadCrumbs from '../../../SharedComponents/BreadCrumbs/BreadCrumbs'
+import ScrollAnimation from 'react-animate-on-scroll'
+import 'animate.css/animate.min.css'
 
 interface MatchParams {
   id: string
@@ -54,21 +56,23 @@ class Menu extends React.Component<MenuProps, MenuState> {
         <Container fluid className="Menu p-0 m-0">
           {/* <BreadCrumbs  /> */}
           {/* <SliderContainer marginTop={30} /> */}
-          <SliderContainer />
-
-          <NewItemsCategory
-            key={this.props.match.params.id + Math.random().toString()}
-            categoryId={this.props.match.params.id}
-          />
-
-          <Element name="menuScroller">
+          <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__backInLeft">
+            <SliderContainer />
+          </ScrollAnimation>
+          <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__backInRight">
+            <NewItemsCategory
+              key={this.props.match.params.id + Math.random().toString()}
+              categoryId={this.props.match.params.id}
+            />
+          </ScrollAnimation>
+          <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__bounceInLeft">
+            <Element name="menuScroller"></Element>
             <ProductList
               key={this.props.match.params.id + Math.random().toString()}
               productsPerPage={6}
               categoryId={this.props.match.params.id}
             />
-          </Element>
-
+          </ScrollAnimation>
           {this.scrollTo('menuScroller', -220)}
         </Container>
       )
