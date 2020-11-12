@@ -176,7 +176,6 @@
       .Slider__arrows {
         display: flex;
         position: relative;
-        margin-top: -100px;
         z-index: 1000;
         padding-left: 20px;
         padding-right: 20px;
@@ -187,6 +186,7 @@
         width: 28px;
         height: 28px;
         border-radius: 50%;
+        margin-top: -100px;
         cursor: pointer;
   
         display: flex;
