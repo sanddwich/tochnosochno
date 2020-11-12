@@ -34,7 +34,7 @@ class CartRoundButton extends React.Component<CartRoundButtonProps, CartRoundBut
       <div
         onClick={this.props.onClick}
         id="cartRoundButton"
-        className="CartRoundButton  noselect"
+        className="CartRoundButton hvr-pulse-shrink  noselect"
         style={{ backgroundColor: this.props.backgroundColor, width: this.props.width, height: this.props.height }}
       >
         <div>

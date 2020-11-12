@@ -24,7 +24,7 @@ export default class RoundButton extends React.Component<RoundButtonProps, Round
         ) : (
           <div
             onClick={this.props.onClick}
-            className="roundButton noselect"
+            className="roundButton noselect hvr-pulse-shrink"
             style={{ backgroundColor: this.props.backgroundColor, width: this.props.width, height: this.props.height }}
           >
             <img src={`/images/icons/${this.props.icon}`} alt="icon" />
