@@ -240,49 +240,6 @@ export class ApiController {
     store: TypeORMStore,
   })
   // @CsrfTokenRequired()
-  @ApiOperation({
-    servers: [{ url: '/api', description: 'Main API URL' }],
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            schema: {
-              properties: {
-                id: { type: 'string' },
-                phone: { type: 'string' },
-                email: { type: 'string' },
-                bonus: { type: 'number' },
-                name: { type: 'string' },
-              },
-              type: 'object',
-            },
-          },
-        },
-        description: 'Возвращает данные по авторизованному клиенту',
-      },
-      400: {
-        content: {
-          'application/json': {
-            schema: {
-              properties: {
-                code: { type: 'string' },
-                description: { type: 'string' },
-              },
-              type: 'object',
-            },
-          },
-        },
-        description: 'Authorization header not found.',
-      },
-      403: {
-        content: {
-          'text/html': {},
-        },
-        description: 'Bad csrf token.',
-      },
-    },
-    summary: 'Возвращает данные по авторизованному клиенту',
-  })
   async getCustomer(ctx: Context<Customer, Session>) {
     const customer = await getRepository(Customer).findOne(
       { id: ctx.user.id },
@@ -373,27 +330,6 @@ export class ApiController {
     type: 'object',
   })
   // @CsrfTokenRequired()
-  @ApiServer({ url: '/api', description: 'Main API URL' })
-  @ApiRequestBody({
-    required: true,
-    content: {
-      'application/json': {
-        schema: {
-          properties: {
-            order: { type: 'object' },
-          },
-        },
-      },
-    },
-  })
-  @ApiOperation({
-    responses: {
-      200: {
-        description: 'OK',
-      },
-    },
-    summary: 'Добавление нового заказа клиента',
-  })
   async addOrder(ctx: Context<Customer, Session>) {
     const order: Order = ctx.request.body.order
     const repositoryOrder = getRepository(Order)
@@ -471,7 +407,6 @@ export class ApiController {
     type: 'object',
   })
   // @CsrfTokenRequired()
-  @ApiServer({ url: '/api', description: 'Main API URL' })
   async setOrderPayment(ctx: Context<Customer, Session>) {
     const orderId: string = ctx.request.body.orderId
     const order: Order = ctx.request.body.order
@@ -597,7 +532,6 @@ export class ApiController {
   }
 
   @Post('/cities')
-  @ApiServer({ url: '/api', description: 'Main API URL' })
   async getAllCities(ctx: Context<Customer, Session>) {
     const cities = await getRepository(City).find({ where: { isDeleted: false }, order: { classifierId: 'ASC' } })
     return new HttpResponseOK(cities)

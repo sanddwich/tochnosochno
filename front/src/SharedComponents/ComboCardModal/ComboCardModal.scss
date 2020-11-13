@@ -46,6 +46,8 @@
     overflow: hidden;
     z-index: -5;
     animation: popup 0.7s;
+    max-width: 960px;
+    margin: auto;
 
     .ComboCardModal__leftColumn {
       border-right: 1px solid #f2f2f2;
@@ -92,7 +94,7 @@
     }
 
     .ComboCardModal__Cont {
-      height: 480px;
+      // height: 480px;
       overflow: hidden;
       .ComboCardModal__img {
         .ComboCardModal__imgBack {
@@ -103,7 +105,7 @@
     }
 
     .ComboCardModal__productsList {
-      height: 100%;
+      max-height: 350px;
       margin-right: 5px;
       padding-left: 45px !important;
       padding-right: 20px !important;
@@ -159,7 +161,8 @@
 
   .ComboCardModalMob__body {
     background-color: #ffffff;
-    height: 95%;
+    height: 98%;
+    width: 98%;
     overflow: hidden;
     // margin-top: -20px;
     z-index: -5;

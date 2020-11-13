@@ -22,6 +22,7 @@ import {
 } from '../entities'
 import { Organization } from '../entities/organization.entity'
 import DeliveryPoint from '../interfaces/DeliveryPoint'
+import DeliveryRestrictionsAllowed from '../interfaces/Iiko/DeliveryRestrictionsAllowed'
 import IIkoOrder from '../interfaces/IIkoOrder'
 import IIkoOrderItem from '../interfaces/IIkoOrderItem'
 import IIkoOrderItemModifier from '../interfaces/IIkoOrderItemModifier'
@@ -292,9 +293,9 @@ export class Iiko {
           }),
         })
         console.log(deliveryAddress)
-        const response = await res.json()
-        console.log(response)
-        return response
+        const deliveryRestrictionsAllowed: DeliveryRestrictionsAllowed = await res.json()
+        console.log(deliveryRestrictionsAllowed)
+        return deliveryRestrictionsAllowed
       }
     } catch (error) {
       this.logger.iiko('iiko.service.getDeliveryRestirctions()', error)

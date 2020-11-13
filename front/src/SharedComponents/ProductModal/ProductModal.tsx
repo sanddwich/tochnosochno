@@ -110,11 +110,11 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
                       <LineProductWithSizeInput product={this.props.productModalProduct} />
                     </Col>
                   </Row>
-
-                  <Row className="ProductModal__recomendContAll mt-auto mb-2">
+                  <BlockName name="Рекомендуем" />
+                  <Row className="ProductModal__recomendContAll ">
                     <Col className="ProductModal__recomendCont m-0 p-0">
                       <div className="ProductModal__recomend">
-                        <RecomendedProducts title="С этим заказывают" product={this.props.productModalProduct} />
+                        <RecomendedProducts title="" product={this.props.productModalProduct} />
                       </div>
                     </Col>
                   </Row>

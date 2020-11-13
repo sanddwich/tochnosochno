@@ -29,7 +29,7 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
 
   render() {
     return (
-      <div className="lineProductWithCart d-flex justify-content-between ">
+      <div className="lineProductWithCart d-flex justify-content-between pt-4 pb-3 ">
         <div className="lineProductWithCart__product">
           <div className="d-flex justify-content-between ">
             <div

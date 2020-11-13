@@ -54,7 +54,8 @@ class RecomendedProducts extends React.Component<RecomendedProductsProps, Recome
   render() {
     return (
       <div className="RecomendedProducts">
-        <BlockName name={this.props.title} />
+        {this.props.title ? <BlockName name={this.props.title} /> : null}
+
         <div className="RecomendedProducts__products">
           {this.getRecomendedProducts().map((product: Product) => {
             return <LineProductWithCart key={product.id} product={product} />
