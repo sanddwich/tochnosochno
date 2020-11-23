@@ -54,6 +54,9 @@ export class Group {
   @Column({ nullable: true, default: false })
   isCombo: boolean
 
+  @Column({ default: false })
+  isService: boolean
+
   @Column({ nullable: true })
   comboProductsCount: number
 

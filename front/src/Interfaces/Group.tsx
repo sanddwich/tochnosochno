@@ -15,4 +15,5 @@ export default interface Group {
   seoTitle?: string
   isGroupModifier?: boolean
   imageLinks: String[]
+  isService?: boolean
 }

@@ -29,7 +29,6 @@ const product: Product = {
   sizePrices: [],
   imageLinks: [],
   doNotPrintInCheque: false,
-  parentGroup: '',
   order: 0,
   additionalInfo: '',
   tags: [],

@@ -31,6 +31,7 @@ export default class Order {
   longitude?: string
   terminalId?: string
   guests: GuestDetails
+  deliveryServiceProductId?: string
 
   constructor(device: string, date: string, orderItems?: OrderItem[]) {
     this.amount = 0

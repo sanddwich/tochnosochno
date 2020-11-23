@@ -2,6 +2,7 @@ import Address from '../../Interfaces/Address'
 import OrderItem from '../../Interfaces/OrderItem'
 import PaymentType from '../../Interfaces/PaymentType'
 import {
+  ADD_DELIVERY_SERVICE_PRODUCT,
   ADD_TO_ORDER,
   CALCULATE_ORDER,
   CHANGE_ADDRESS,
@@ -9,9 +10,11 @@ import {
   CHANGE_ORDER_ITEM_AMOUNT,
   CLEAR_ORDER_ERROR,
   DEC_ORDER_ITEM_AMOUNT,
+  DELETE_DELIVERY_SERVICE_PRODUCT,
   DELETE_FROM_ORDER,
   GET_ORDER,
   HIDE_ORDER_LOADING,
+  HIDE_PAYMENT_SELECTION,
   INC_ORDER_ITEM_AMOUNT,
   PROCESS_ORDER,
   SET_DELIVERY,
@@ -25,6 +28,7 @@ import {
   SET_ORDER_PHONE,
   SET_ORDER_POLITIC,
   SET_PREPARE_TIME,
+  SHOW_PAYMENT_SELECTION,
 } from '../constants/ActionTypes'
 
 interface GetOrderAction {
@@ -134,6 +138,23 @@ interface SetOrderPoilitic {
   personCheck: boolean
 }
 
+interface ShowPaymentSelection {
+  type: typeof SHOW_PAYMENT_SELECTION
+}
+
+interface HidePaymentSelection {
+  type: typeof HIDE_PAYMENT_SELECTION
+}
+
+interface AddDeliveryToOrderAction {
+  type: typeof ADD_DELIVERY_SERVICE_PRODUCT
+  delivery: any
+}
+
+interface DeleteDeliveryFromOrderAction {
+  type: typeof DELETE_DELIVERY_SERVICE_PRODUCT
+}
+
 export type OrderActionType =
   | AddToOrderAction
   | DeleteFromOrderAction
@@ -157,3 +178,7 @@ export type OrderActionType =
   | SetOrderPhone
   | SetGuestCount
   | SetOrderPoilitic
+  | ShowPaymentSelection
+  | HidePaymentSelection
+  | AddDeliveryToOrderAction
+  | DeleteDeliveryFromOrderAction

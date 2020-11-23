@@ -20,6 +20,11 @@ import {
   setPrepareDate,
   processOrder,
   getDeliveryRestrictions,
+  showPaymentSelection,
+  hidePaymentSelection,
+  addOrderItemToOrder,
+  deleteDeliveryProduct,
+  calculateOrder,
 } from '../../../../../Redux/actions/order'
 
 import './DeliveryByCourier.scss'
@@ -35,6 +40,10 @@ import { AddressSuggestions, DaDataSuggestion, DaDataAddress } from 'react-dadat
 
 import 'react-dadata/dist/react-dadata.css'
 import CustomAlert from '../../../../../SharedComponents/CustomAlert/CustomAlert'
+import Group from '../../../../../Interfaces/Group'
+import Product from '../../../../../Interfaces/Product'
+import Category from '../../../../../Interfaces/Category'
+import OrderItem from '../../../../../Interfaces/OrderItem'
 
 interface DeliveryByCourierProps {
   getStreetVariants: any
@@ -46,6 +55,8 @@ interface DeliveryByCourierProps {
   setPhone: (phone: string) => void
   isAuth: boolean
   showLoginModal: () => void
+  showPaymentSelection: () => void
+  hidePaymentSelection: () => void
   setDelivery: (isDelivery: boolean, address: Address) => void
   getDeliveryRestrictions: any
   smsCheck: boolean
@@ -56,6 +67,11 @@ interface DeliveryByCourierProps {
   loadingOrder: boolean
   errorAuth: string
   errorOrder: string
+  isShowPaymentSelection: boolean
+  menu: Category[]
+  addOrderItemToOrder: (orderItem: OrderItem) => void
+  deleteDeliveryProduct: () => void
+  calculateOrder: () => void
 }
 
 interface DeliveryByCourierState {
@@ -70,11 +86,19 @@ interface DeliveryByCourierState {
   coordinates: number[]
   deliverySum: number
   dadataAddress?: DaDataSuggestion<DaDataAddress> | undefined
-  isPaymentShow: boolean
+  // isPaymentShow: boolean
   mapCenterCoordinates: number[]
   ymaps: any
   isAllowedDelivery: boolean
+  deliveryPrice: number
 }
+
+// const DELIVERIES = [
+//   { id: '49ee0876-74ee-40c4-a656-aca38ed23a50', price: 400 },
+//   { id: 'beba51b3-22a8-4f13-ab1f-b30cf0d4bbee', price: 300 },
+//   { id: '33dbc0fc-8ac5-44e1-8db9-cc42dec979ab', price: 200 },
+//   { id: 'd14d9b42-6954-4f12-a48c-c37c6c0d4749', price: 100 },
+// ]
 
 class DeliveryByCourier extends React.Component<DeliveryByCourierProps, DeliveryByCourierState> {
   daDataInputRef = React.createRef<AddressSuggestions>()
@@ -82,9 +106,9 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
   constructor(props: DeliveryByCourierProps) {
     super(props)
     this.state = {
+      deliveryPrice: 0,
       isAllowedDelivery: false,
       ymaps: {},
-      isPaymentShow: false,
       deliverySum: 0,
       loading: true,
       mapCenterCoordinates: [46.347801, 48.037095],
@@ -155,11 +179,40 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     )
 
     if (deliveryRestriction && deliveryRestriction.isAllowed) {
+      const deliveryServiceProductId = deliveryRestriction.allowedItems[0].deliveryServiceProductId
+
+      if (deliveryServiceProductId) {
+        let deliveryProducts: Product[] = []
+
+        this.props.menu.map((group) => {
+          if (group.isService) {
+            deliveryProducts = group.products
+          }
+        })
+        deliveryProducts.map((product) => {
+          if (product.id === deliveryServiceProductId) {
+            const orderItem = {
+              product: product,
+              amount: 1,
+              orderItemModifiers: [],
+              value: product.sizePrices[0].price.currentPrice,
+            }
+            this.props.addOrderItemToOrder(orderItem)
+
+            this.setState({ deliveryPrice: product.sizePrices[0].price.currentPrice })
+          }
+        })
+      } else {
+        this.setState({ deliveryPrice: 0 })
+      }
+
       this.setState({ isAllowedDelivery: true })
-      this.setState({ isPaymentShow: true })
+      // this.setState({ isPaymentShow: true })
+      this.props.showPaymentSelection()
     } else if (deliveryRestriction && !deliveryRestriction.isAllowed) {
       this.setState({ isAllowedDelivery: false })
-      this.setState({ isPaymentShow: true })
+      // this.setState({ isPaymentShow: true })
+      this.props.showPaymentSelection()
     }
 
     // if (deliveryRestriction.location) {
@@ -294,7 +347,8 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
         this.setState({ deliveryAddress: address })
       }
     }
-    this.setState({ isPaymentShow: false })
+    this.props.deleteDeliveryProduct()
+    this.setState({ deliveryPrice: 0 })
   }
 
   chooseAddressOnMap(coordinates: number[]) {
@@ -304,7 +358,8 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
         this.setdaDataAddress(result.geoObjects.get(0).getAddressLine(), house, coordinates)
       })
     }
-    this.setState({ isPaymentShow: false })
+    this.props.deleteDeliveryProduct()
+    this.setState({ deliveryPrice: 0 })
   }
 
   setdaDataAddress = (address: string, house: string, coordinates: number[]) => {
@@ -493,14 +548,17 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
 
               <PoliticSection />
               <div className="w-100">
-                <OrderTotalPrice isDelivery={this.state.isAllowedDelivery && this.state.isPaymentShow} delivery={0} />
+                <OrderTotalPrice
+                  isDelivery={this.state.isAllowedDelivery && this.props.isShowPaymentSelection}
+                  delivery={this.state.deliveryPrice}
+                />
               </div>
 
               {this.props.errorOrder ? (
                 <CustomAlert show={true} variant="danger" message={this.props.errorOrder} />
               ) : null}
 
-              {this.state.isPaymentShow ? (
+              {this.props.isShowPaymentSelection ? (
                 <React.Fragment>
                   {!this.state.isAllowedDelivery && !this.props.errorOrder ? (
                     <div className="DeliveryByCourier__error">
@@ -561,11 +619,25 @@ const mapDispatchToProps = {
   setDelivery,
   processOrder,
   getDeliveryRestrictions,
+  showPaymentSelection,
+  hidePaymentSelection,
+  addOrderItemToOrder,
+  deleteDeliveryProduct,
+  calculateOrder,
 }
 
 const mapStateToProps = (state: any) => {
   const { loading, error, phone, isAuth, customer } = state.auth
-  const { loading: loadingOrder, error: errorOrder, order, smsCheck, ruleCheck, personCheck } = state.order
+  const {
+    loading: loadingOrder,
+    error: errorOrder,
+    order,
+    smsCheck,
+    ruleCheck,
+    personCheck,
+    isShowPaymentSelection,
+  } = state.order
+  const { menu } = state.menu
   return {
     loading: loading,
     errorOrder,
@@ -578,6 +650,8 @@ const mapStateToProps = (state: any) => {
     ruleCheck,
     personCheck,
     customer,
+    isShowPaymentSelection,
+    menu,
   }
 }
 

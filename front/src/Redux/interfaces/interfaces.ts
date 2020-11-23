@@ -22,6 +22,7 @@ export interface OrderState {
   ruleCheck: boolean
   personCheck: boolean
   smsCheck: boolean
+  isShowPaymentSelection: boolean
 }
 
 export interface OrderItemState {

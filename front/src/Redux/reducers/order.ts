@@ -6,8 +6,10 @@ import {
   CHANGE_ITEM_ORDER,
   CHANGE_ORDER_ITEM_AMOUNT,
   CLEAR_ORDER_ERROR,
+  DELETE_DELIVERY_SERVICE_PRODUCT,
   DELETE_FROM_ORDER,
   HIDE_ORDER_LOADING,
+  HIDE_PAYMENT_SELECTION,
   PROCESS_ORDER,
   SET_DELIVERY,
   SET_GUEST_COUNT,
@@ -20,6 +22,7 @@ import {
   SET_ORDER_PHONE,
   SET_ORDER_POLITIC,
   SET_PREPARE_TIME,
+  SHOW_PAYMENT_SELECTION,
 } from '../constants/ActionTypes'
 import { OrderState } from '../interfaces/interfaces'
 import { OrderActionType } from '../interfaces/order'
@@ -37,6 +40,7 @@ const initialState: OrderState = {
   ruleCheck: false,
   smsCheck: false,
   personCheck: false,
+  isShowPaymentSelection: false,
 }
 
 const order = (state = initialState, action: OrderActionType) => {
@@ -49,6 +53,7 @@ const order = (state = initialState, action: OrderActionType) => {
     case SET_INIT_ORDER:
       return {
         ...state,
+        isShowPaymentSelection: false,
         loading: false,
         error: '',
         order: new Order(navigator.appVersion, initialDate, []),
@@ -57,25 +62,36 @@ const order = (state = initialState, action: OrderActionType) => {
       if (!action.orderItem.id) action.orderItem.id = uuidv4()
       return {
         ...state,
+        isShowPaymentSelection: false,
         order: {
           bonus: 0,
           ...state.order,
 
           amount: state.order.amount + action.orderItem.value * action.orderItem.amount,
-          items: [...(state.order.items || []), action.orderItem],
+          items: [
+            ...(state.order.items?.filter((orderItem) => {
+              return !orderItem.product.parentGroup?.isService
+            }) || []),
+            action.orderItem,
+          ],
           date: new Date().toLocaleDateString('ru-RU') + ' ' + new Date().toLocaleTimeString('ru-RU'),
         },
       }
     case DELETE_FROM_ORDER:
       return {
         ...state,
+        isShowPaymentSelection: false,
         order: {
           ...state.order,
 
           amount: state.order.amount + (state.order.bonus || 0) - action.orderItem.value * action.orderItem.amount,
-          items: state.order.items?.filter((orderItem) => {
-            return orderItem !== action.orderItem
-          }),
+          items: state.order.items
+            ?.filter((orderItem) => {
+              return !orderItem.product.parentGroup?.isService
+            })
+            .filter((orderItem) => {
+              return orderItem !== action.orderItem
+            }),
           bonus: 0,
         },
       }
@@ -83,19 +99,28 @@ const order = (state = initialState, action: OrderActionType) => {
     case CHANGE_ORDER_ITEM_AMOUNT:
       return {
         ...state,
+        isShowPaymentSelection: false,
         order: {
           ...state.order,
           bonus: 0,
-          items: state.order.items?.map((orderItem) => {
-            if (orderItem.id === action.orderItem.id) {
-              orderItem.amount = action.amount
-            }
-            return orderItem
-          }),
+          items: state.order.items
+            ?.filter((orderItem) => {
+              return !orderItem.product.parentGroup?.isService
+            })
+            .map((orderItem) => {
+              if (orderItem.id === action.orderItem.id) {
+                orderItem.amount = action.amount
+              }
+              return orderItem
+            }),
 
-          amount: state.order.items?.reduce((acc, currentOrderItem) => {
-            return acc + currentOrderItem.value * currentOrderItem.amount
-          }, 0),
+          amount: state.order.items
+            ?.filter((orderItem) => {
+              return !orderItem.product.parentGroup?.isService
+            })
+            .reduce((acc, currentOrderItem) => {
+              return acc + currentOrderItem.value * currentOrderItem.amount
+            }, 0),
         },
       }
 
@@ -114,6 +139,7 @@ const order = (state = initialState, action: OrderActionType) => {
     case CHANGE_ITEM_ORDER:
       return {
         ...state,
+        isShowPaymentSelection: false,
         order: {
           ...state.order,
           items: state.order.items?.map((orderItem) => {
@@ -128,6 +154,7 @@ const order = (state = initialState, action: OrderActionType) => {
     case CALCULATE_ORDER:
       return {
         ...state,
+
         order: {
           ...state.order,
           amount: state.order.items?.reduce((acc, currentOrderItem) => {
@@ -225,6 +252,33 @@ const order = (state = initialState, action: OrderActionType) => {
             ...state.order.guests,
             count: action.count,
           },
+        },
+      }
+
+    case SHOW_PAYMENT_SELECTION:
+      return {
+        ...state,
+        isShowPaymentSelection: true,
+      }
+
+    case HIDE_PAYMENT_SELECTION:
+      return {
+        ...state,
+        isShowPaymentSelection: false,
+      }
+
+    case DELETE_DELIVERY_SERVICE_PRODUCT:
+      return {
+        ...state,
+        isShowPaymentSelection: false,
+        order: {
+          ...state.order,
+
+          // amount: state.order.amount + (state.order.bonus || 0) - action.orderItem.value * action.orderItem.amount,
+          items: state.order.items?.filter((orderItem) => {
+            return !orderItem.product.parentGroup?.isService
+          }),
+          bonus: 0,
         },
       }
 

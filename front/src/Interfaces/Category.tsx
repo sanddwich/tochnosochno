@@ -21,4 +21,5 @@ export default interface Category {
   tags: string
   active?: boolean
   parentGroup: string
+  isService?: boolean
 }

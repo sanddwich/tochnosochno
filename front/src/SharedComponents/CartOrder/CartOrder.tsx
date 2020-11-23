@@ -141,7 +141,7 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
                   <div className="CartOrder__products mb-3">
                     <h1>Блюда:</h1>
                     {this.props.order.items.map((orderItem: OrderItem) => {
-                      if (!orderItem.comboId) {
+                      if (!orderItem.comboId && !orderItem.product.parentGroup?.isService) {
                         return <LineProductWithNumberInput key={orderItem.id} orderItem={orderItem} />
                       }
                     })}

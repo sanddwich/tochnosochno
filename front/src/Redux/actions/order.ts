@@ -14,8 +14,10 @@ import {
   CHANGE_ORDER_ITEM_AMOUNT,
   CLEAR_ORDER_ERROR,
   DEC_ORDER_ITEM_AMOUNT,
+  DELETE_DELIVERY_SERVICE_PRODUCT,
   DELETE_FROM_ORDER,
   HIDE_ORDER_LOADING,
+  HIDE_PAYMENT_SELECTION,
   INC_ORDER_ITEM_AMOUNT,
   SET_DELIVERY,
   SET_GUEST_COUNT,
@@ -28,6 +30,7 @@ import {
   SET_ORDER_PHONE,
   SET_ORDER_POLITIC,
   SET_PREPARE_TIME,
+  SHOW_PAYMENT_SELECTION,
 } from '../constants/ActionTypes'
 import { AuthState } from '../interfaces/interfaces'
 import { OrderActionType } from '../interfaces/order'
@@ -329,6 +332,7 @@ export const addOrderItemToOrder = (orderItem: OrderItem) => {
   cartAnimation()
   return (dispatch: any) => {
     dispatch(addOrderItem(orderItem))
+    dispatch(calculateOrder())
   }
 }
 
@@ -344,6 +348,7 @@ export const setOrderItemAmount = (orderItem: OrderItem, amount: number): OrderA
 export const changeOrderItem = (orderItem: OrderItem) => {
   cartAnimation()
   return (dispatch: any) => {
+    dispatch(deleteDeliveryProduct())
     dispatch(changeOrderItemAction(orderItem))
     dispatch(calculateOrder())
     dispatch(showCartDialog())
@@ -369,6 +374,32 @@ export const setGuestCount = (count: number): OrderActionType => {
   return {
     type: SET_GUEST_COUNT,
     count: count,
+  }
+}
+
+export const showPaymentSelection = (): OrderActionType => {
+  return {
+    type: SHOW_PAYMENT_SELECTION,
+  }
+}
+
+export const hidePaymentSelection = (): OrderActionType => {
+  return {
+    type: HIDE_PAYMENT_SELECTION,
+  }
+}
+
+export const deleteDeliveryProduct = () => {
+  return (dispatch: any) => {
+    dispatch(clearDeliveryProduct())
+    dispatch(calculateOrder())
+    dispatch(hidePaymentSelection())
+  }
+}
+
+const clearDeliveryProduct = (): OrderActionType => {
+  return {
+    type: DELETE_DELIVERY_SERVICE_PRODUCT,
   }
 }
 
@@ -418,7 +449,7 @@ const addOrderItem = (orderItem: OrderItem): OrderActionType => {
   }
 }
 
-const calculateOrder = (): OrderActionType => {
+export const calculateOrder = (): OrderActionType => {
   return {
     type: CALCULATE_ORDER,
   }
