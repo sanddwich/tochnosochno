@@ -10,7 +10,7 @@ import OrderTotalPrice from '../../../../../SharedComponents/OrderTotalPrice/Ord
 import PaymentSection from '../../../../../SharedComponents/PaymentSection/PaymentSection'
 import PoliticSection from '../../../../../SharedComponents/PoliticSection/PoliticSection'
 import { showLoginModal } from '../../../../../Redux/actions/app'
-import { processOrder } from '../../../../../Redux/actions/order'
+import { processOrder, deleteDeliveryProduct } from '../../../../../Redux/actions/order'
 import { setPhone } from '../../../../../Redux/actions/auth'
 import InputMask from 'react-input-mask'
 import * as Scroll from 'react-scroll'
@@ -29,6 +29,7 @@ interface DeliveryByClientProps {
   customer: Customer
   processOrder: any
   loading: boolean
+  deleteDeliveryProduct: () => void
 }
 
 interface DeliveryByClientState {
@@ -53,6 +54,9 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
         },
       ],
     }
+  }
+  componentDidMount() {
+    this.props.deleteDeliveryProduct()
   }
 
   processOrder = () => {
@@ -246,6 +250,7 @@ const mapDispatchToProps = {
   showLoginModal,
   setPhone,
   processOrder,
+  deleteDeliveryProduct,
 }
 
 const mapStateToProps = (state: RootState) => {

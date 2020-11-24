@@ -93,13 +93,6 @@ interface DeliveryByCourierState {
   deliveryPrice: number
 }
 
-// const DELIVERIES = [
-//   { id: '49ee0876-74ee-40c4-a656-aca38ed23a50', price: 400 },
-//   { id: 'beba51b3-22a8-4f13-ab1f-b30cf0d4bbee', price: 300 },
-//   { id: '33dbc0fc-8ac5-44e1-8db9-cc42dec979ab', price: 200 },
-//   { id: 'd14d9b42-6954-4f12-a48c-c37c6c0d4749', price: 100 },
-// ]
-
 class DeliveryByCourier extends React.Component<DeliveryByCourierProps, DeliveryByCourierState> {
   daDataInputRef = React.createRef<AddressSuggestions>()
 
@@ -214,14 +207,6 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
       // this.setState({ isPaymentShow: true })
       this.props.showPaymentSelection()
     }
-
-    // if (deliveryRestriction.location) {
-    //   this.setState({ coordinates: [deliveryRestriction.location.latitude, deliveryRestriction.location.longitude] })
-
-    //   if (deliveryRestriction.allowedItems.length > 0) {
-    //   }
-
-    // }
   }
 
   processOrder = () => {
