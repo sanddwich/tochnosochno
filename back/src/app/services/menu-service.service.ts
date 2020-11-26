@@ -14,6 +14,7 @@ export class MenuService {
         randomProduct.id != product.id &&
         randomProduct.type === 'Dish' &&
         !randomGroup.isCombo &&
+        !randomGroup.isService &&
         randomProduct.sizePrices[0].price.currentPrice > 200
       ) {
         recomendedProducts.push(randomProduct.id)

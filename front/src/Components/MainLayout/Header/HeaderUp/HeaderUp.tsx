@@ -79,14 +79,14 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
                 <RoundButton
                   backgroundColor="#303030"
                   icon="insta_white.svg"
-                  onClick={() => window.open('http://instagram.com')}
+                  onClick={() => window.open('https://www.instagram.com/30dostavka/')}
                 />
               </Col>
               <Col className="">
                 <RoundButton
                   backgroundColor="#303030"
                   icon="vk_white.svg"
-                  onClick={() => window.open('http://vk.com')}
+                  onClick={() => window.open('https://vk.com/sochno30')}
                   // onClick={this.props.showComboModal}
                 />
               </Col>
@@ -293,7 +293,7 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
                   backgroundColor="white"
                   onClick={() => {
                     this.burgerButtonClick()
-                    window.open('http://instagram.com')
+                    window.open('https://www.instagram.com/30dostavka/')
                   }}
                 />
               </div>
@@ -303,7 +303,7 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
                   backgroundColor="white"
                   onClick={() => {
                     this.burgerButtonClick()
-                    window.open('http://vk.com')
+                    window.open('https://vk.com/sochno30')
                   }}
                 />
               </div>
