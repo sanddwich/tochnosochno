@@ -25,7 +25,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export type RootState = ReturnType<typeof rootReducer>
 
-// let store = createStore(persistedReducer, composeWithDevTools(applyMiddleware(thunk)))
-let store = createStore(persistedReducer, applyMiddleware(thunk))
+let store = createStore(persistedReducer, composeWithDevTools(applyMiddleware(thunk)))
+// let store = createStore(persistedReducer, applyMiddleware(thunk))
 
 export default store

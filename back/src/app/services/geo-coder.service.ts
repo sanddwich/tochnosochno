@@ -25,7 +25,7 @@ export class GeoCoder {
       const coorinates = { latitude, longitude }
       return coorinates
     } catch (error) {
-      this.logger.error(error)
+      this.logger.error('getCoordinates', error)
     }
   }
 }

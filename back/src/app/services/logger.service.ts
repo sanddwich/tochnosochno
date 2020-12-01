@@ -1,18 +1,20 @@
 import * as winston from 'winston'
-import { Logger } from 'winston'
+import { Logger, format } from 'winston'
 
 const customLevels = {
   levels: {
     error: 0,
-    info: 2,
-    iiko: 1,
+    info: 1,
   },
   colors: {
     error: 'bold red whiteBG',
     info: 'blue',
-    iiko: 'bold magenta whiteBG',
   },
 }
+const { combine, timestamp, printf } = format
+const logFormat = printf(({ level, message, timestamp }) => {
+  return `${timestamp} [${level}]: ${message}`
+})
 
 export class LoggerService {
   private logger: Logger
@@ -21,57 +23,26 @@ export class LoggerService {
     this.logger = winston.createLogger({
       levels: customLevels.levels,
       transports: [
-        new winston.transports.Console({
-          level: 'iiko',
-          format: winston.format.combine(
-            winston.format.timestamp({ format: 'DD-MM-YYYY HH:mm:ss' }),
-            winston.format.colorize(),
-            winston.format.splat(),
-            winston.format.simple()
-          ),
-        }),
         new winston.transports.File({
-          filename: 'logs/infoLog.txt',
+          filename: `logs/${new Date().toJSON().slice(0, 10)}.txt`,
           level: 'info',
-          format: winston.format.combine(
-            winston.format.timestamp({ format: 'DD-MM-YYYY HH:mm:ss' }),
-            winston.format.simple()
-          ),
+          format: winston.format.combine(winston.format.timestamp({ format: 'DD-MM-YYYY HH:mm:ss' }), logFormat),
         }),
         new winston.transports.File({
-          filename: 'logs/errorLog.txt',
+          filename: `logs/${new Date().toJSON().slice(0, 10)}.txt`,
           level: 'error',
-          format: winston.format.combine(
-            winston.format.timestamp({ format: 'DD-MM-YYYY HH:mm:ss' }),
-            winston.format.simple()
-          ),
-        }),
-        new winston.transports.File({
-          filename: 'logs/iikoLog.txt',
-          level: 'iiko',
-          format: winston.format.combine(
-            winston.format.timestamp({ format: 'DD-MM-YYYY HH:mm:ss' }),
-            winston.format.splat(),
-            winston.format.simple()
-          ),
+          format: winston.format.combine(winston.format.timestamp({ format: 'DD-MM-YYYY HH:mm:ss' }), logFormat),
         }),
       ],
     })
     winston.addColors(customLevels.colors)
   }
 
-  info(msg: string) {
-    this.logger.info(msg)
+  info(msg: string, object?: any) {
+    this.logger.log('info', `${msg}${object ? `\n${JSON.stringify(object, null, 4)}` : ''}`)
   }
-
-  warn(msg: string) {
-    this.logger.warn(msg)
-  }
-
-  error(msg: string) {
-    this.logger.error(msg)
-  }
-  iiko(msg: string, object: any) {
-    this.logger.log('iiko', msg + '%s', object)
+  error(msg: string, error: any) {
+    console.log(error)
+    this.logger.log('error', `${msg} \n${JSON.stringify(error.message, null, 4)}`)
   }
 }

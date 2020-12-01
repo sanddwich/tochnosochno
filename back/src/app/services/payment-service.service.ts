@@ -29,7 +29,7 @@ export class PaymentService {
       const json = await res.json()
       return json
     } catch (error) {
-      this.logger.error(`paymnet.service.sendOrderToBank() ${error}`)
+      this.logger.error(`paymnet.service.sendOrderToBank() `, error)
     }
   }
 
@@ -54,7 +54,7 @@ export class PaymentService {
       const json = await res.json()
       return json
     } catch (error) {
-      this.logger.error(`paymnet.service.checkOrderPayment() ${error}`)
+      this.logger.error(`paymnet.service.checkOrderPayment()`, error)
     }
   }
 }

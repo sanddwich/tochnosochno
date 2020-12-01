@@ -23,6 +23,8 @@ import {
 import { Organization } from '../entities/organization.entity'
 import DeliveryPoint from '../interfaces/DeliveryPoint'
 import DeliveryRestrictionsAllowed from '../interfaces/Iiko/DeliveryRestrictionsAllowed'
+import IIkoErrorResponse from '../interfaces/Iiko/IIkoErrorResponse'
+import OrderResponse from '../interfaces/Iiko/OrderResponse'
 import IIkoOrder from '../interfaces/IIkoOrder'
 import IIkoOrderItem from '../interfaces/IIkoOrderItem'
 import IIkoOrderItemModifier from '../interfaces/IIkoOrderItemModifier'
@@ -33,44 +35,46 @@ import { LoggerService } from './logger.service'
 
 const fetch = require('node-fetch')
 
-interface Menu {
-  groups: Group[]
-  products: Product[]
-  revision: number
-  correlationId: string
-  sizes: Size[]
-  productCategories: ProductCategory[]
-}
+const API_SERVER = Config.get('iiko.apiUrl')
+const IIKO_PASSWORD = Config.get('iiko.iikoPassword')
+
+const TOKEN_URL = `${API_SERVER}/access_token`
+const ORGANIZATION_URL = `${API_SERVER}/organizations`
+const TERMINALS_URL = `${API_SERVER}/terminal_groups`
+const PAYMENT_TYPE_URL = `${API_SERVER}/payment_types`
+const STREET_URL = `${API_SERVER}/streets/by_city`
+const CREATE_ORDER_URL = `${API_SERVER}/deliveries/create`
+const CUSTOMER_URL = `${API_SERVER}/loyalty/iiko/get_customer`
+const MENU_URL = `${API_SERVER}/nomenclature`
+const CHECK_ORDER_URL = `${API_SERVER}/deliveries/check_create`
+const ORDER_STATUS_URL = `${API_SERVER}/deliveries/by_id`
+const CITIES_URL = `${API_SERVER}/cities`
+const DELIVERY_RESTRICTIONS_URL = `${API_SERVER}/delivery_restrictions/allowed`
 
 export class Iiko {
-  @dependency
-  logger: LoggerService
+  // private readonly apiServer = Config.get('iiko.apiUrl')
+  // private readonly iikoUser = Config.get('iiko.iikoUser')
+  // private readonly iikoPassword = Config.get('iiko.iikoPassword')
 
-  @dependency
-  geo: GeoCoder
-
-  private readonly apiServer = Config.get('iiko.apiUrl')
-  private readonly iikoUser = Config.get('iiko.iikoUser')
-  private readonly iikoPassword = Config.get('iiko.iikoPassword')
-
+  private static instance: Iiko
   private token = ''
   private tokenTimeStamp: number
   private organizations: Organization[]
 
-  private tokenUrl = `${this.apiServer}/access_token`
-  private organizationUrl = `${this.apiServer}/organizations`
-  private terminalsUrl = `${this.apiServer}/terminal_groups`
-  private paymnetTypeUrl = `${this.apiServer}/payment_types`
-  private cityUrl = `${this.apiServer}/cities`
-  private streetUrl = `${this.apiServer}/streets/by_city`
-  private createOrderUrl = `${this.apiServer}/deliveries/create`
-  private customerUrl = `${this.apiServer}/loyalty/iiko/get_customer`
-  private menuUrl = `${this.apiServer}/nomenclature`
-  private checkOrderUrl = `${this.apiServer}/deliveries/check_create`
-  private orderStatusUrl = `${this.apiServer}/deliveries/by_id`
-  private deliveryResctrictionsUrl = `${this.apiServer}/delivery_restrictions/allowed`
+  // private tokenUrl = `${this.apiServer}/access_token`
+  // private organizationUrl = `${this.apiServer}/organizations`
+  // private terminalsUrl = `${this.apiServer}/terminal_groups`
+  // private paymnetTypeUrl = `${this.apiServer}/payment_types`
+  // private cityUrl = `${this.apiServer}/cities`
+  // private streetUrl = `${this.apiServer}/streets/by_city`
+  // private createOrderUrl = `${this.apiServer}/deliveries/create`
+  // private customerUrl = `${this.apiServer}/loyalty/iiko/get_customer`
+  // private menuUrl = `${this.apiServer}/nomenclature`
+  // private checkOrderUrl = `${this.apiServer}/deliveries/check_create`
+  // private orderStatusUrl = `${this.apiServer}/deliveries/by_id`
+  // private deliveryResctrictionsUrl = `${this.apiServer}/delivery_restrictions/allowed`
 
-  public async init() {
+  private async init() {
     const tokenAge = (Date.now() - this.tokenTimeStamp) / 60000
     if (!this.token || tokenAge > 20) {
       await this.getToken()
@@ -78,12 +82,21 @@ export class Iiko {
     }
   }
 
+  async getInstance(): Promise<Iiko> {
+    if (!Iiko.instance) {
+      Iiko.instance = new Iiko()
+    }
+    await Iiko.instance.init()
+
+    return Iiko.instance
+  }
+
   async checkOrderIiko(order: Order) {
     const organization = await getRepository(Organization).findOne()
     const iikoOrder = this.formatOrderForIiko(order)
     try {
       if (organization) {
-        const res = await fetch(this.checkOrderUrl, {
+        const res = await fetch(CHECK_ORDER_URL, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -106,14 +119,14 @@ export class Iiko {
   async sendOrderToIiko(order: Order, terminalGroupId?: Terminal | null) {
     // const terminalId = terminalGroupId ? terminalGroupId.toString() : null
     const terminalId = '121b5392-d62c-7611-0165-959330ae00c9'
-    const coordinates = await this.geo.getCoordinates(order.address)
 
     const organization = await getRepository(Organization).findOne()
     const iikoOrder = this.formatOrderForIiko(order)
 
-    if (iikoOrder.deliveryPoint) {
-      iikoOrder.deliveryPoint.coordinates = coordinates
-    }
+    // const coordinates = await this.geo.getCoordinates(order.address)
+    // if (iikoOrder.deliveryPoint) {
+    //   iikoOrder.deliveryPoint.coordinates = coordinates
+    // }
 
     try {
       if (organization) {
@@ -175,10 +188,7 @@ export class Iiko {
       } else {
         return new HttpResponseBadRequest({ error: true, message: 'Организация не найдена.' })
       }
-    } catch (error) {
-      this.logger.iiko('iiko.service.setCities()', error)
-      this.logger.error(`iiko.service.setCities() ${error}`)
-    }
+    } catch (error) {}
   }
 
   async setStreets() {
@@ -209,10 +219,7 @@ export class Iiko {
       } else {
         return new HttpResponseBadRequest({ error: true, message: 'Организация не найдена.' })
       }
-    } catch (error) {
-      this.logger.iiko('iiko.service.setStreets()', error)
-      this.logger.error(`iiko.service.setStreets() ${error}`)
-    }
+    } catch (error) {}
   }
 
   async setTerminals() {
@@ -235,10 +242,7 @@ export class Iiko {
         })
       })
       return resJson
-    } catch (error) {
-      this.logger.iiko('iiko.service.setTerminals()', error)
-      this.logger.error(`iiko.service.setTerminals() ${error}`)
-    }
+    } catch (error) {}
   }
 
   async getPaymentTypes() {
@@ -256,11 +260,12 @@ export class Iiko {
       const { paymentTypes } = await res.json()
       await getRepository(PaymentType).save(paymentTypes)
       return paymentTypes
-    } catch (error) {
-      this.logger.iiko('iiko.service.getPaymentTypes()', error)
-      this.logger.error(`iiko.service.getPaymentTypes() ${error}`)
-    }
+    } catch (error) {}
   }
+
+  /*
+   *Получение ограничений доставки из IIKO.
+   */
 
   async getDeliveryRestirctions(
     streetId: string,
@@ -269,116 +274,77 @@ export class Iiko {
     isCourierDelivery: boolean,
     latitude: number,
     longitude: number
-  ) {
-    const organization = await getRepository(Organization).findOne()
-
-    this.logger.info(`iiko.service.getDeliveryRestirctions()`)
+  ): Promise<DeliveryRestrictionsAllowed | undefined> {
     const deliveryAddress = { streetId, house }
     const orderLocation = { latitude, longitude }
-    try {
-      if (organization) {
-        const res = await fetch(this.deliveryResctrictionsUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.token}`,
-            // Timeout: 30,
-          },
-          body: JSON.stringify({
-            organizationIds: [organization.id],
-            deliverySum,
-            orderLocation,
-            deliveryAddress,
-            isCourierDelivery,
-          }),
-        })
-        console.log(deliveryAddress)
-        const deliveryRestrictionsAllowed: DeliveryRestrictionsAllowed = await res.json()
-        console.log(deliveryRestrictionsAllowed)
-        return deliveryRestrictionsAllowed
-      }
-    } catch (error) {
-      this.logger.iiko('iiko.service.getDeliveryRestirctions()', error)
-      this.logger.error(`iiko.service.getDeliveryRestirctions() ${error}`)
-    }
+
+    const body = JSON.stringify({
+      organizationIds: [this.organizations[0].id],
+      deliverySum,
+      orderLocation,
+      deliveryAddress,
+      isCourierDelivery,
+    })
+    const deliveryRestrictions: DeliveryRestrictionsAllowed = await this.fetchApi(
+      DELIVERY_RESTRICTIONS_URL,
+      body,
+      true,
+      'POST'
+    )
+    return deliveryRestrictions
   }
 
-  async getCustomer(phone: string) {
-    this.logger.info(`iiko.service.getCustomer()`)
-    try {
-      const res = await fetch(this.customerUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.token}`,
-        },
-        body: JSON.stringify({ organizationId: this.organizations[0].id, type: 'phone', phone: phone }),
-      })
-      console.log(
-        'body JSON ',
-        JSON.stringify({ organizationId: this.organizations[0].id, type: 'phone', phone: phone })
-      )
-      if (!res.ok) {
-        const error = await res.json()
-        throw new Error(`${res.status} ${res.statusText}. ${typeof error}. Ошибка на сервере IIKO.`)
-      }
-      const customer: Customer = await res.json()
-      return customer
-    } catch (error) {
-      this.logger.iiko('iiko.service.getCustomer()', error)
-      this.logger.error(`iiko.service.getCustomer() ${error}`)
-    }
+  /*
+   *Получение клиента из IIKO.
+   */
+
+  async getCustomer(phone: string): Promise<Customer> {
+    const body = JSON.stringify({ organizationId: this.organizations[0].id, type: 'phone', phone })
+    const customer: Customer = await this.fetchApi(CUSTOMER_URL, body, true, 'POST')
+
+    return customer
   }
 
-  async getOrders(orderIds: string[]) {
-    this.logger.info(`iiko.service.getOrders()`)
-    try {
-      const res = await fetch(this.orderStatusUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.token}`,
-        },
-        body: JSON.stringify({ organizationId: this.organizations[0].id, orderIds }),
-      })
+  /*
+   *Получение статусов заказов из IIKO.
+   */
 
-      if (!res.ok) {
-        const error = await res.json()
-        throw new Error(`${res.status} ${res.statusText}. ${error.errorDescription}. Ошибка на сервере IIKO.`)
-      }
-      const orders = await res.json()
-      return orders
-    } catch (error) {
-      this.logger.iiko('iiko.service.getOrders()', error)
-      this.logger.error(`iiko.service.getOrders() ${error}`)
-    }
+  async getOrders(orderIds: string[]): Promise<OrderResponse[]> {
+    const body = JSON.stringify({ organizationId: this.organizations[0].id, orderIds })
+
+    const { correlationId, orders } = await this.fetchApi<{
+      correlationId: string
+      orders: OrderResponse[]
+    }>(ORDER_STATUS_URL, body, true, 'POST')
+    return orders
   }
 
+  /*
+   *Методы для администрирования
+   */
+
+  /*
+   * Выгрузка меню из IIKO в базу данных сайта.
+   */
   async getMenu() {
-    this.logger.info(`iiko.service.getMenu()`)
+    const body = JSON.stringify({ organizationId: this.organizations[0].id })
+    const { correlationId, groups, productCategories, products, sizes, revision } = await this.fetchApi<{
+      correlationId: string
+      groups: Group[]
+      productCategories: ProductCategory[]
+      products: Product[]
+      sizes: Size[]
+      revision: number
+    }>(MENU_URL, body, true, 'POST')
 
     try {
-      const res = await fetch(this.menuUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.token}`,
-        },
-        body: JSON.stringify({ organizationId: this.organizations[0].id }),
-      })
-
-      if (!res.ok) {
-        throw new Error(`${res.status} ошибка на сервере IIKO.`)
-      }
       const connection = getConnection()
       const productRepository = getRepository(Product)
-      const sizeRepository = getRepository(Size)
-      const menu: Menu = await res.json()
-      const groups = await getRepository(Group).save(menu.groups)
-      const productCategories = await getRepository(ProductCategory).save(menu.productCategories)
-      const sizes = await sizeRepository.save(menu.sizes)
 
-      menu.products.map(async (prod: Product) => {
+      await getRepository(Group).save(groups)
+      await getRepository(ProductCategory).save(productCategories)
+
+      products.map(async (prod: Product) => {
         const productModifiers = prod.modifiers
         const productGroupModifiers = prod.groupModifiers
 
@@ -460,88 +426,50 @@ export class Iiko {
 
       return true
     } catch (error) {
-      this.logger.iiko('iiko.service.getMenu()', error)
-      this.logger.error(`iiko.service.getMenu() ${error}`)
+      throw new Error(error)
     }
   }
 
-  private async getDeliveryTerminalGroups() {
-    this.logger.info(`iiko.service.getOrganization()`)
-    const organizations = await getRepository(Organization).find()
-    if (organizations) {
-      this.organizations = organizations
-    } else {
-      try {
-        const res = await fetch(this.organizationUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.token}`,
-          },
-          body: JSON.stringify({ organizationIds: null, returnAdditionalInfo: false, includeDisabled: false }),
-        })
-        if (!res.ok) {
-          throw new Error(`${res.status} ошибка на сервере IIKO.`)
-        }
-        const json = await res.json()
-        this.logger.iiko('iiko.service.getToken()', json)
-        this.organizations = json.organizations
-      } catch (error) {
-        this.logger.iiko('iiko.service.getOrganization()', error)
-        this.logger.error(`iiko.service.getOrganization() ${error}`)
-      }
-    }
-  }
+  /*
+   *Получаем список организаций API IIKO.
+   */
 
   private async getOrganization() {
-    this.logger.info(`iiko.service.getOrganization()`)
+    /*
+     *Получаем список организаций из базы данных.
+     *Если в БД нет органзиаций, получаем список от API.
+     */
     const organizations = await getRepository(Organization).find()
-    if (organizations) {
+    if (organizations.length > 0) {
       this.organizations = organizations
     } else {
-      try {
-        const res = await fetch(this.organizationUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.token}`,
-          },
-          body: JSON.stringify({ organizationIds: null, returnAdditionalInfo: false, includeDisabled: false }),
-        })
-        if (!res.ok) {
-          throw new Error(`${res.status} ошибка на сервере IIKO.`)
-        }
-        const json = await res.json()
-        this.logger.iiko('iiko.service.getToken()', json)
-        this.organizations = json.organizations
-      } catch (error) {
-        this.logger.iiko('iiko.service.getOrganization()', error)
-        this.logger.error(`iiko.service.getOrganization() ${error}`)
-      }
+      const body = JSON.stringify({ returnAdditionalInfo: true })
+
+      const { correlationId, organizations } = await this.fetchApi<{
+        correlationId: string
+        organizations: Organization[]
+      }>(ORGANIZATION_URL, body, true, 'POST')
+
+      this.organizations = organizations
     }
   }
+
+  /*
+   *Получаем токен API IIKO.
+   */
 
   private async getToken() {
     this.tokenTimeStamp = Date.now()
-    this.logger.info(`iiko.service.getToken()`)
-    try {
-      const res = await fetch(this.tokenUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ apiLogin: this.iikoPassword }),
-      })
-      if (!res.ok) {
-        throw new Error(`${res.status} ошибка на сервере IIKO.`)
-      }
-      const json = await res.json()
-      this.logger.iiko('iiko.service.getToken()', json)
-      this.token = json.token
-    } catch (error) {
-      this.logger.iiko('iiko.service.getToken()', error)
-      this.logger.error(`iiko.service.getToken() ${error}`)
-    }
+    const body = JSON.stringify({ apiLogin: IIKO_PASSWORD })
+
+    const { correlationId, token } = await this.fetchApi<{ correlationId: string; token: string }>(
+      TOKEN_URL,
+      body,
+      false,
+      'POST'
+    )
+
+    this.token = token
   }
 
   private formatOrderForIiko(order: Order): IIkoOrder {
@@ -555,14 +483,7 @@ export class Iiko {
     if (order.payment === 'online') comment = 'Оплата онлайн'
 
     order.items.map((item: OrderItem) => {
-      const iikoOrderItemModifers: IIkoOrderItemModifier[] = [
-        //БЕЗ ДОПОЛНЕНИЙ ДОЛЖНО БЫТЬ
-        // {
-        //   productId: '51c9c4b8-2235-480c-ada2-84fed3df300f',
-        //   productGroupId: 'a062ac01-a16e-4b11-9398-c873d2b80215',
-        //   amount: 1,
-        // },
-      ]
+      const iikoOrderItemModifers: IIkoOrderItemModifier[] = []
 
       item.orderItemModifiers.map((orderItemModifier: OrderItemModifier) => {
         iikoOrderItemModifers.push({
@@ -609,6 +530,27 @@ export class Iiko {
     }
     console.log(iikoOrder)
     return iikoOrder
+  }
+
+  private async fetchApi<T>(url: string, body: string, auth: boolean, method: string): Promise<T> {
+    const res: Response = await fetch(url, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${auth ? `Bearer ${this.token}` : ''}`,
+      },
+      body,
+    })
+    if (!res.ok && (res.status === 400 || res.status === 401 || res.status === 500 || res.status === 504)) {
+      const error: IIkoErrorResponse = await res.json()
+      throw new Error(
+        `Error ${res.status}. ${res.statusText}. ${error.errorDescription}. Ошибка на сервере IIKO. ${url} `
+      )
+    } else if (!res.ok) {
+      throw new Error(`Error ${res.status}. ${res.statusText} ${url}`)
+    }
+
+    return await res.json()
   }
 
   fetch_retry = async (url, options, n) => {

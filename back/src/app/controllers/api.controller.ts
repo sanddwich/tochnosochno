@@ -37,19 +37,9 @@ import {
 } from '../entities'
 import { fetchUser, TypeORMStore } from '@foal/typeorm'
 import * as _ from 'lodash'
-import { GeoCoder, Iiko, MenuService, OrderService, PaymentService, SmsService } from '../services'
-import { CsrfTokenRequired } from '@foal/csrf'
-import { ApiInfo } from '@foal/core'
-import { get } from 'https'
-@ApiInfo({
-  title: 'Food Delivery Site API',
-  version: '1.0.0',
-  contact: {
-    name: 'Denis Mehtahudinov',
-    url: 'https://deedesign.ru',
-    email: 'denristun@gmail.com',
-  },
-})
+import { GeoCoder, Iiko, LoggerService, MenuService, OrderService, PaymentService, SmsService } from '../services'
+import getClientIp from '../utils/utils'
+
 @Hook(() => (response) => {
   response.setHeader('Access-Control-Allow-Credentials', 'true')
   response.setHeader('Access-Control-Allow-Origin', Config.get('host'))
@@ -73,6 +63,9 @@ export class ApiController {
   @dependency
   sender: SmsService
 
+  @dependency
+  logger: LoggerService
+
   @Options('*')
   options(ctx: Context) {
     const response = new HttpResponseNoContent()
@@ -83,154 +76,74 @@ export class ApiController {
   }
 
   @Get('/menu')
-  @ApiServer({ url: '/api', description: 'Main API URL' })
-  @ApiOperation({
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            schema: {
-              items: {
-                properties: {
-                  name: { type: 'string' },
-                  id: { type: 'string' },
-                  additionalInfo: { type: 'string' },
-                  description: { type: 'string' },
-                  isDeleted: { type: 'boolean' },
-                  seoDescription: { type: 'string' },
-                  seoKeywords: { type: 'string' },
-                  seoText: { type: 'string' },
-                  seoTitle: { type: 'string' },
-                  tags: { type: 'string' },
-                  images: { type: 'string' },
-                  isIcludedInMenu: { type: 'boolean' },
-                  order: { type: 'number' },
-                  parentGroup: { type: 'string' },
-                  products: {
-                    items: {
-                      properties: {
-                        id: { type: 'string' },
-                        name: { type: 'string' },
-                        code: { type: 'string' },
-                        seoDescription: { type: 'string' },
-                        seoKeywords: { type: 'string' },
-                        seoText: { type: 'string' },
-                        seoTitle: { type: 'string' },
-                        isDeleted: { type: 'boolean' },
-                        image: { type: 'string' },
-                        ingredients: { type: 'string' },
-                        weight: { type: 'string' },
-                        modifiers: {
-                          items: {
-                            properties: {
-                              id: { type: 'string' },
-                              maxAmount: { type: 'number' },
-                              minAmount: { type: 'number' },
-                              required: { type: 'boolean' },
-                              defaultAmount: { type: 'number' },
-                              modifier: {
-                                properties: {
-                                  id: { type: 'string' },
-                                  name: { type: 'string' },
-                                  price: { type: 'number' },
-                                  image: { type: 'string' },
-                                },
-                                type: 'object',
-                              },
-                            },
-                            type: 'object',
-                          },
-                          type: 'array',
-                        },
-                        variants: {
-                          items: {
-                            properties: {
-                              id: { type: 'string' },
-                              name: { type: 'string' },
-                              size: { type: 'string' },
-                              weight: { type: 'string' },
-                              price: { type: 'number' },
-                            },
-                            type: 'object',
-                          },
-                          type: 'array',
-                        },
-                        facets: {
-                          items: {
-                            properties: {
-                              id: { type: 'string' },
-                              name: { type: 'string' },
-                              iamge: { type: 'string' },
-                            },
-                            type: 'object',
-                          },
-                          type: 'array',
-                        },
-                      },
-                      type: 'object',
-                    },
-                    type: 'array',
-                  },
-                },
-                type: 'object',
-              },
-              type: 'array',
-            },
-          },
+  async getMenu(ctx: Context) {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
+    try {
+      let products = await getRepository(Group).find({
+        where: {
+          isGroupModifier: false,
         },
-        description: 'Возвращает действующее меню',
-      },
-    },
-    summary: 'Возвращает действующее меню',
-  })
-  async getMenu() {
-    // await this.iiko.init()
-    // await this.iiko.getMenu()
-    let products = await getRepository(Group).find({
-      where: {
-        isGroupModifier: false,
-        // isSiteDisplay: true,
-      },
 
-      relations: [
-        'products',
-        'products.sizePrices',
-        'products.sizePrices.price',
-        'products.parentGroup',
-        // 'products.groupModifiers',
-        // 'products.groupModifiers.group',
-        // 'products.groupModifiers.childModifiers',
-        // 'products.groupModifiers.childModifiers.product',
-        // 'products.groupModifiers.childModifiers.product.sizePrices',
-        // 'products.groupModifiers.childModifiers.product.sizePrices.price',
-        // 'products.modifiers',
-        // 'products.modifiers.product',
-        // 'products.modifiers.modifier',
-        // 'products.variants',
-        // 'products.facets',
-      ],
-    })
-
-    products.map((rootGroup) => {
-      rootGroup.products.map(async (product) => {
-        if (product) {
-          product.recomended = []
-          product.recomended.push(...this.menuService.getRecomendedProducts(product, products, 3))
-        }
+        relations: [
+          'products',
+          'products.sizePrices',
+          'products.sizePrices.price',
+          'products.parentGroup',
+          // 'products.groupModifiers',
+          // 'products.groupModifiers.group',
+          // 'products.groupModifiers.childModifiers',
+          // 'products.groupModifiers.childModifiers.product',
+          // 'products.groupModifiers.childModifiers.product.sizePrices',
+          // 'products.groupModifiers.childModifiers.product.sizePrices.price',
+          // 'products.modifiers',
+          // 'products.modifiers.product',
+          // 'products.modifiers.modifier',
+          // 'products.variants',
+          // 'products.facets',
+        ],
       })
 
-      if (!rootGroup.parentGroup) {
-        products.map((group) => {
-          if (group.parentGroup === rootGroup.id && !group.isCombo) {
-            rootGroup.products.push(...group.products)
+      /*
+       * Формирование массива рекомендованных товаров для каждого товара
+       */
+
+      products.map((rootGroup) => {
+        rootGroup.products.map(async (product) => {
+          if (product) {
+            product.recomended = []
+            product.recomended.push(...this.menuService.getRecomendedProducts(product, products, 3))
           }
         })
-      }
-    })
-    products = _.orderBy(products, ['order'], ['asc'])
-    const terminals = await getRepository(Terminal).find({ isAlive: true })
 
-    return new HttpResponseOK({ products, terminals })
+        if (!rootGroup.parentGroup) {
+          products.map((group) => {
+            if (group.parentGroup === rootGroup.id && !group.isCombo) {
+              rootGroup.products.push(...group.products)
+            }
+          })
+        }
+      })
+      products = _.orderBy(products, ['order'], ['asc'])
+
+      /*
+       * Вывод терминалов доставки
+       */
+
+      const terminals = await getRepository(Terminal).find({ isAlive: true })
+
+      this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
+
+      return new HttpResponseOK({ products, terminals })
+    } catch (error) {
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        error
+      )
+      return new HttpResponseBadRequest(error)
+    }
   }
 
   @Post('/customer')
@@ -241,79 +154,96 @@ export class ApiController {
   })
   // @CsrfTokenRequired()
   async getCustomer(ctx: Context<Customer, Session>) {
-    const customer = await getRepository(Customer).findOne(
-      { id: ctx.user.id },
-      {
-        relations: [
-          'orders',
-          'addresses',
-          'favoriteProducts',
-          'favoriteProducts.product',
-          'favoriteProducts.product.sizePrices',
-          'favoriteProducts.product.sizePrices.price',
-          'addresses.street',
-          'orders.terminalId',
-          'orders.address',
-          'orders.address.street',
-          'orders.items',
-          'orders.items.productVariant.product',
-          'orders.items.productVariant',
-          'orders.items.product',
-          'orders.items.product.sizePrices',
-          'orders.items.product.sizePrices.price',
-          'orders.items.orderItemModifiers',
-          'orders.items.orderItemModifiers.productModifier',
-          'orders.items.orderItemModifiers.productModifier.product',
-          'orders.items.orderItemModifiers.productModifier.product.sizePrices',
-          'orders.items.orderItemModifiers.productModifier.product.sizePrices.price',
-          'orders.items.orderItemModifiers.productModifier.modifier',
-        ],
-      }
-    )
-    if (customer) {
-      customer.orders = _.orderBy(customer.orders, ['id'], ['desc'])
-      customer.addresses = _.orderBy(customer.addresses, ['id'], ['desc'])
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
 
-      const groups = await getRepository(Group).find({
-        where: {
-          isGroupModifier: false,
-          // isSiteDisplay: true,
-        },
-        relations: ['products', 'products.sizePrices', 'products.sizePrices.price', 'products.parentGroup'],
-      })
+    try {
+      const customer = await getRepository(Customer).findOne(
+        { id: ctx.user.id },
+        {
+          relations: [
+            'orders',
+            'addresses',
+            'favoriteProducts',
+            'favoriteProducts.product',
+            'favoriteProducts.product.sizePrices',
+            'favoriteProducts.product.sizePrices.price',
+            'addresses.street',
+            'orders.terminalId',
+            'orders.address',
+            'orders.address.street',
+            'orders.items',
+            'orders.items.productVariant.product',
+            'orders.items.productVariant',
+            'orders.items.product',
+            'orders.items.product.sizePrices',
+            'orders.items.product.sizePrices.price',
+            'orders.items.orderItemModifiers',
+            'orders.items.orderItemModifiers.productModifier',
+            'orders.items.orderItemModifiers.productModifier.product',
+            'orders.items.orderItemModifiers.productModifier.product.sizePrices',
+            'orders.items.orderItemModifiers.productModifier.product.sizePrices.price',
+            'orders.items.orderItemModifiers.productModifier.modifier',
+          ],
+        }
+      )
+      if (customer) {
+        customer.orders = _.orderBy(customer.orders, ['id'], ['desc'])
+        customer.addresses = _.orderBy(customer.addresses, ['id'], ['desc'])
 
-      customer.orders.map((order: Order) => {
-        order.items.map((orderItem: OrderItem) => {
-          orderItem.product.recomended = []
-          orderItem.product.recomended.push(...this.menuService.getRecomendedProducts(orderItem.product, groups, 3))
+        const groups = await getRepository(Group).find({
+          where: {
+            isGroupModifier: false,
+            // isSiteDisplay: true,
+          },
+          relations: ['products', 'products.sizePrices', 'products.sizePrices.price', 'products.parentGroup'],
         })
-      })
 
-      //Если в истории заказов нужны заказы, которые добавились в iiko
-      // customer.orders = _.filter(customer.orders, 'orderIikoId')
+        customer.orders.map((order: Order) => {
+          order.items.map((orderItem: OrderItem) => {
+            orderItem.product.recomended = []
+            orderItem.product.recomended.push(...this.menuService.getRecomendedProducts(orderItem.product, groups, 3))
+          })
+        })
 
-      await this.iiko.init()
-      const orderIds: string[] = []
-      customer.orders.map((order: Order) => {
-        if (order.orderIikoId) orderIds.push(order.orderIikoId)
-      })
-      const iikoOrders = await this.iiko.getOrders(orderIds)
+        //Если в истории заказов нужны заказы, которые добавились в iiko
+        // customer.orders = _.filter(customer.orders, 'orderIikoId')
 
-      iikoOrders.orders.map((iikoOrder) => {
-        customer.orders.map((customerOrder) => {
-          if (customerOrder.orderIikoId === iikoOrder.id) {
-            if (iikoOrder.order) {
-              customerOrder.status = iikoOrder.order.status
-            } else {
-              customerOrder.status = iikoOrder.creationStatus
+        await this.iiko.init()
+        const orderIds: string[] = []
+        customer.orders.map((order: Order) => {
+          if (order.orderIikoId) orderIds.push(order.orderIikoId)
+        })
+        const iikoOrders = await this.iiko.getOrders(orderIds)
+
+        iikoOrders.orders.map((iikoOrder) => {
+          customer.orders.map((customerOrder) => {
+            if (customerOrder.orderIikoId === iikoOrder.id) {
+              if (iikoOrder.order) {
+                customerOrder.status = iikoOrder.order.status
+              } else {
+                customerOrder.status = iikoOrder.creationStatus
+              }
             }
-          }
+          })
         })
-      })
+      }
+      this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
+      return new HttpResponseOK(customer)
+    } catch (error) {
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        error
+      )
+      return new HttpResponseBadRequest(error)
     }
-
-    return new HttpResponseOK(customer)
   }
+
+  /*
+   * Обработка нового заказа
+   */
 
   @Post('/order')
   @TokenRequired({
@@ -331,44 +261,70 @@ export class ApiController {
   })
   // @CsrfTokenRequired()
   async addOrder(ctx: Context<Customer, Session>) {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
+
     const order: Order = ctx.request.body.order
     const repositoryOrder = getRepository(Order)
 
-    if (!order.isDelivery && order.terminalId) {
-    }
-
-    // const repositoryOrderItem = getRepository(OrderItem)
-    // const repositoryOrderItemModifier = getRepository(OrderItemModifier)
-
-    // Проверка корректности заказа.
-    // Отключил, т.к Iiko сама проверяет заказ на коректность.
-    // const checkOrder = await this.orderService.checkOrder(order, ctx.user.id)
+    /*
+     * Проверка корректности заказа.
+     * Отключил, т.к Iiko сама проверяет заказ на коректность.
+     * const checkOrder = await this.orderService.checkOrder(order, ctx.user.id)
+     */
     const customer = await getRepository(Customer).findOne({ id: ctx.user.id })
 
     if (customer) {
       order.customer = customer
     } else {
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        'Customer not found'
+      )
       return new HttpResponseNotFound({ error: true, message: `Customer with id=${ctx.user.id} not found.` })
     }
 
     try {
-      //Если оплата через сбербанк
+      /*
+      Онлайн-оплата
+      */
       if (order.payment === 'online') {
+        /*
+        Банку требуется сумма в копейках
+        */
         const orderAmount = (order.amount * 100).toString()
+        /*
+         * Отправляем заказ в банк.
+         * Получаем id заказа в банке и ссылку на форму оплаты.
+         * Сохраняем заказ в БД.
+         * Возращаеи ответ банка с id и ссылкой на оплату.
+         */
         const bankResponse = await this.bank.sendOrderToBank(order.phone, order.id, orderAmount)
         order.bankOrderId = bankResponse.orderId
-
         const orderDb = await repositoryOrder.save(order)
-        // Отправка в iiko ответ от iiko и отправка заказа в банк
-        console.log(bankResponse)
+        this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
         return new HttpResponseOK(bankResponse)
+
+        /*
+         * Оплата курьеру
+         */
       } else if (order.payment === 'cash' || order.payment === 'credit') {
+        /*
+         * Отправляем заказ в Iiko.
+         * Сохраняем заказ в БД.
+         */
         // await this.iiko.init()
         // const iikoOrder = await this.iiko.sendOrderToIiko(order, order.terminalId)
         // if (iikoOrder.error) {
         //   throw new Error(iikoOrder.message)
         // }
         // order.orderIikoId = iikoOrder.orderInfo.id
+        // this.logger.info(
+        //   `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        //   await iiko.formatOrderForIiko(order)
+        // )
 
         if (!order.isDelivery) {
           order.address.id = '1df16367-fc70-4bfc-016b-a8d0a76ce24b'
@@ -381,13 +337,15 @@ export class ApiController {
 
         const orderDb = await repositoryOrder.save(order)
         await this.sender.sendOrderEmail(order)
+        return new HttpResponseCreated({ order })
       }
     } catch (error) {
-      console.log(error)
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        error
+      )
       return new HttpResponseInternalServerError({ error: true, message: error.message })
     }
-
-    return new HttpResponseCreated({ order })
   }
 
   @Patch('/order')
@@ -408,6 +366,11 @@ export class ApiController {
   })
   // @CsrfTokenRequired()
   async setOrderPayment(ctx: Context<Customer, Session>) {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
+
     const orderId: string = ctx.request.body.orderId
     const order: Order = ctx.request.body.order
     const orderRepository = getRepository(Order)
@@ -422,9 +385,31 @@ export class ApiController {
     try {
       if (orderDb && order.id === orderDb.id) {
         const orderStatus = await this.bank.checkOrderPayment(order.id)
-        order.isPayment = true
+
+        /*
+        Проверка статуса оплаты заказа
+         * 0 - заказ зарегистрирован, но не оплачен;
+         * 1 - предавторизованная сумма удержана (для двухстадийных платежей);
+         * 2 - проведена полная авторизация суммы заказа;
+         * 3 - авторизация отменена;
+         * 4 - по транзакции была проведена операция возврата;
+         * 5 - инициирована авторизация через сервер контроля доступа банка-эмитента;
+         * 6 - авторизация отклонена
+         */
+
+        if (orderStatus.orderStatus === 2) {
+          order.isPayment = true
+        }
+
+        /*
+         * Отправляем заказ в Iiko,
+         */
         await this.iiko.init()
         const iikoOrder = await this.iiko.sendOrderToIiko(order, order.terminalId)
+
+        /*
+         * Произошла ошибка в Iiko при создании заказа
+         */
         if (iikoOrder.error) {
           throw new Error(iikoOrder.message)
         }
@@ -440,6 +425,10 @@ export class ApiController {
 
     return new HttpResponseOK(orderId)
   }
+
+  /*
+   *Добавление нового адреса клиента
+   */
 
   @Post('/address')
   @TokenRequired({
@@ -458,26 +447,40 @@ export class ApiController {
   // @CsrfTokenRequired()
   @ApiServer({ url: '/api', description: 'Main API URL' })
   async addAddress(ctx: Context<Customer, Session>) {
-    const addressData: Address = ctx.request.body.address
-    const street = await getRepository(Street).findOne({ name: addressData.street.name })
-    const repositoryAddress = getRepository(Address)
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
 
-    const customer = await getRepository(Customer).findOne({ id: ctx.user.id })
-    if (customer) {
-      addressData.customer = customer
-    }
+    try {
+      const addressData: Address = ctx.request.body.address
+      const street = await getRepository(Street).findOne({ name: addressData.street.name })
+      const repositoryAddress = getRepository(Address)
 
-    if (street) {
-      const geoData = await this.geoCoder.getCoordinates(addressData)
-      addressData.street = street
-      if (geoData) {
-        addressData.longitude = geoData.longitude
-        addressData.latitude = geoData.latitude
+      const customer = await getRepository(Customer).findOne({ id: ctx.user.id })
+      if (customer) {
+        addressData.customer = customer
       }
-    }
 
-    const address = await repositoryAddress.save(addressData)
-    return new HttpResponseCreated(address)
+      if (street) {
+        const geoData = await this.geoCoder.getCoordinates(addressData)
+        addressData.street = street
+        if (geoData) {
+          addressData.longitude = geoData.longitude
+          addressData.latitude = geoData.latitude
+        }
+      }
+
+      const address = await repositoryAddress.save(addressData)
+      this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
+      return new HttpResponseCreated(address)
+    } catch (error) {
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        error
+      )
+      return new HttpResponseBadRequest(error)
+    }
   }
 
   @Post('/street')
@@ -561,6 +564,10 @@ export class ApiController {
     return new HttpResponseOK(streets)
   }
 
+  /*
+Получение ограничений доставки
+*/
+
   @Post('/delivery')
   @ValidateBody({
     additionalProperties: false,
@@ -577,6 +584,11 @@ export class ApiController {
   })
   @ApiServer({ url: '/api', description: 'Main API URL' })
   async getDeliveryRestirctions(ctx: Context<Customer, Session>) {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
+
     const streetId: string = ctx.request.body.streetId
     const deliverySum: number = ctx.request.body.deliverySum
     const house: string = ctx.request.body.house
@@ -604,6 +616,10 @@ export class ApiController {
         return new HttpResponseInternalServerError({ error: true, message: 'Ошибка на сервере. Поробуйте ещё раз.' })
       }
     } catch (error) {
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        error
+      )
       return new HttpResponseInternalServerError('Iiko error')
     }
   }
