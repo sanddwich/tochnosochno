@@ -705,6 +705,8 @@ export class ApiController {
           'products.modifiers',
           'products.modifiers.modifier',
           'products.modifiers.product',
+          'products.modifiers.product.sizePrices',
+          'products.modifiers.product.sizePrices.price',
         ],
       })
 

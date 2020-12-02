@@ -34,7 +34,7 @@ export const getMenu = (): ThunkAction<void, RootState, null, MenuAction> => {
       */
       //  dispatch(getGroupProducts('6dcc8ec8-9287-4567-b12d-8a5573963631'))
       resData.products.map((category: Category) => {
-        if (category.isCombo) {
+        if (category.isCombo || category.isService) {
           dispatch(getGroupProducts(category.id))
         }
       })
@@ -48,6 +48,7 @@ export const getMenu = (): ThunkAction<void, RootState, null, MenuAction> => {
 }
 
 export const getGroupProducts = (groupId: string): ThunkAction<void, RootState, null, MenuAction> => {
+  console.log(groupId)
   return async (dispatch) => {
     try {
       dispatch(setProductsLoading())
@@ -64,7 +65,7 @@ export const getGroupProducts = (groupId: string): ThunkAction<void, RootState, 
       }
 
       const resData = await res.json()
-
+      console.log(resData.products)
       dispatch(addGroupProducts(resData.products))
     } catch (err) {
       dispatch(setError(err))

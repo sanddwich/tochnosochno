@@ -38,7 +38,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
   componentDidMount() {
     this.scrollTo('menuScroller', 250)
     this.props.getGroupProducts(this.props.match.params.id)
-    console.log(123213123)
+    console.log(this.props.match.params.id)
   }
 
   checkMenuId = (): boolean => {
