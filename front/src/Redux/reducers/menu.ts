@@ -1,4 +1,11 @@
-import { GET_MENU, SET_ERROR, SET_LOADING, SET_TERMINALS } from '../constants/ActionTypes'
+import {
+  ADD_GROUP_PRODUCTS,
+  GET_MENU,
+  SET_ERROR,
+  SET_LOADING,
+  SET_PRODUCTS_LOADING,
+  SET_TERMINALS,
+} from '../constants/ActionTypes'
 import { MenuState } from '../interfaces/interfaces'
 import { MenuAction } from '../interfaces/menu'
 
@@ -8,6 +15,7 @@ const initialState: MenuState = {
   loading: false,
   error: '',
   date: new Date(),
+  productsLoading: false,
 }
 
 export default (state: MenuState = initialState, action: MenuAction): MenuState => {
@@ -37,6 +45,24 @@ export default (state: MenuState = initialState, action: MenuAction): MenuState 
         ...state,
         loading: false,
         terminals: action.terminals,
+      }
+    case ADD_GROUP_PRODUCTS:
+      return {
+        ...state,
+        productsLoading: false,
+        menu: [
+          ...state.menu.map((group) => {
+            if (group.id === action.group.id) {
+              group = action.group
+            }
+            return group
+          }),
+        ],
+      }
+    case SET_PRODUCTS_LOADING:
+      return {
+        ...state,
+        productsLoading: true,
       }
     default:
       return state

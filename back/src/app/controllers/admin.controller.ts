@@ -22,49 +22,54 @@ export class AdminController {
   @dependency
   senderService: SmsService
 
-  // @Get('/signin')
-  // signin(ctx: Context) {
-  //   return render('public/templates/signin.html')
-  // }
+  @Get('/signin')
+  signin(ctx: Context) {
+    return render('public/templates/signin.html')
+  }
 
-  // @Get('/')
-  // @TokenRequired({
-  //   user: fetchUser(User),
-  //   store: TypeORMStore,
-  //   redirectTo: 'admin/signin',
-  // })
-  // index() {
-  //   return render('public/templates/admin.html')
-  // }
+  @Get('/')
+  @TokenRequired({
+    user: fetchUser(User),
+    store: TypeORMStore,
+    redirectTo: 'admin/signin',
+  })
+  index() {
+    return render('public/templates/admin.html')
+  }
 
-  // @Put('/streets')
-  // async setStreets() {
-  //   await this.iiko.init()
-  //   const streets = await this.iiko.setStreets()
-  //   if (streets) {
-  //     return new HttpResponseCreated(streets)
-  //   } else {
-  //     return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления улиц' })
-  //   }
-  // }
+  @Put('/streets')
+  async setStreets() {
+    const iiko = await this.iiko.getInstance()
+    const streets = await iiko.setStreets()
+    if (streets) {
+      return new HttpResponseCreated(streets)
+    } else {
+      return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления улиц' })
+    }
+  }
 
-  // @Put('/terminals')
-  // async setTerminals() {
-  //   await this.iiko.init()
-  //   const terminals = await this.iiko.setTerminals()
-  //   if (terminals) {
-  //     return new HttpResponseCreated(terminals)
-  //   } else {
-  //     return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления терминалов' })
-  //   }
-  // }
+  @Put('/terminals')
+  async setTerminals() {
+    const iiko = await this.iiko.getInstance()
+    const terminals = await iiko.setTerminals()
+    if (terminals) {
+      return new HttpResponseCreated(terminals)
+    } else {
+      return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления терминалов' })
+    }
+  }
 
   @Put('/menu')
   async setMenu() {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
     let menu
-    await this.iiko.init()
+
     try {
-      menu = await this.iiko.getMenu()
+      const iiko = await this.iiko.getInstance()
+      menu = await iiko.getMenu()
     } catch (error) {
       console.log(error)
     }
@@ -76,37 +81,26 @@ export class AdminController {
     }
   }
 
-  // @Put('/payment')
-  // async setPayment() {
-  //   await this.iiko.init()
-  //   const payment = await this.iiko.getPaymentTypes()
-  //   if (payment) {
-  //     return new HttpResponseCreated(payment)
-  //   } else {
-  //     return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления типов оплат' })
-  //   }
-  // }
+  @Put('/payment')
+  async setPayment() {
+    const iiko = await this.iiko.getInstance()
+    const payment = iiko.setPaymentTypes()
+    if (payment) {
+      return new HttpResponseCreated(payment)
+    } else {
+      return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления типов оплат' })
+    }
+  }
 
-  // @Put('/bank')
-  // async testBank() {
-  //   const payment = await this.bank.sendOrderToBank('+79608618274', 'fssdf23432dsfs', '20000')
+  @Put('/cities')
+  async setCities() {
+    const iiko = await this.iiko.getInstance()
+    const cities = await iiko.setCities()
 
-  //   if (payment) {
-  //     return new HttpResponseCreated(payment)
-  //   } else {
-  //     return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления типов оплат' })
-  //   }
-  // }
-
-  // @Put('/cities')
-  // async setCities() {
-  //   await this.iiko.init()
-  //   const cities = await this.iiko.setCities()
-
-  //   if (cities) {
-  //     return new HttpResponseCreated(cities)
-  //   } else {
-  //     return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления городов' })
-  //   }
-  // }
+    if (cities) {
+      return new HttpResponseCreated(cities)
+    } else {
+      return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления городов' })
+    }
+  }
 }

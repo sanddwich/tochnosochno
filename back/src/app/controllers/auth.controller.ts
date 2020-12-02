@@ -98,6 +98,11 @@ export class AuthController {
     type: 'object',
   })
   async auth(ctx: Context) {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
+
     let customer: Customer | undefined
     let { code, phone } = ctx.request.body
 
@@ -112,12 +117,12 @@ export class AuthController {
     }
 
     phone = phone.replace(/^\8/, '+7')
-    await this.iiko.init()
-    let aiikoCustomer = await this.iiko.getCustomer(phone)
+    const iiko = await this.iiko.getInstance()
+    let iikoCustomer = await iiko.getCustomer(phone)
 
-    if (aiikoCustomer) aiikoCustomer = this.customerService.setBonuses(aiikoCustomer)
-    if (aiikoCustomer && aiikoCustomer.id) {
-      await repositoryCustomer.save(aiikoCustomer)
+    if (iikoCustomer) iikoCustomer = this.customerService.setBonuses(iikoCustomer)
+    if (iikoCustomer && iikoCustomer.id) {
+      await repositoryCustomer.save(iikoCustomer)
     } else {
       const customerDb = await repositoryCustomer.findOne({ phone: phone })
       console.log(phone)
@@ -137,26 +142,28 @@ export class AuthController {
         {
           relations: [
             'orders',
-            'addresses',
+            // 'addresses',
             'favoriteProducts',
             'favoriteProducts.product',
             'favoriteProducts.product.sizePrices',
             'favoriteProducts.product.sizePrices.price',
             'orders.terminalId',
-            'addresses.street',
-            'orders.address',
-            'orders.address.street',
             'orders.items',
-            'orders.items.productVariant.product',
-            'orders.items.productVariant',
             'orders.items.product',
             'orders.items.product.sizePrices',
             'orders.items.product.sizePrices.price',
-            'orders.items.orderItemModifiers',
-            'orders.items.orderItemModifiers.productModifier',
-            'orders.items.orderItemModifiers.productModifier.product',
-            'orders.items.orderItemModifiers.productModifier.product.sizePrices',
-            'orders.items.orderItemModifiers.productModifier.product.sizePrices.price',
+            // 'addresses.street',
+            // 'orders.address',
+            // 'orders.address.street',
+
+            // 'orders.items.productVariant.product',
+            // 'orders.items.productVariant',
+
+            // 'orders.items.orderItemModifiers',
+            // 'orders.items.orderItemModifiers.productModifier',
+            // 'orders.items.orderItemModifiers.productModifier.product',
+            // 'orders.items.orderItemModifiers.productModifier.product.sizePrices',
+            // 'orders.items.orderItemModifiers.productModifier.product.sizePrices.price',
           ],
         }
       )
@@ -233,7 +240,6 @@ export class AuthController {
   async setCustomerInfo(ctx: Context<Customer, Session>) {
     const name = ctx.request.body.name
     const birthday = ctx.request.body.birthday
-    console.log(111)
     try {
       const customer = await getRepository(Customer).findOne({ id: ctx.user.id })
       if (customer) {

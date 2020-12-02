@@ -1,6 +1,13 @@
 import Category from '../../Interfaces/Category'
 import Terminal from '../../Interfaces/Terminal'
-import { GET_MENU, SET_ERROR, SET_LOADING, SET_TERMINALS } from '../constants/ActionTypes'
+import {
+  ADD_GROUP_PRODUCTS,
+  GET_MENU,
+  SET_ERROR,
+  SET_LOADING,
+  SET_PRODUCTS_LOADING,
+  SET_TERMINALS,
+} from '../constants/ActionTypes'
 
 interface GetMenuAction {
   type: typeof GET_MENU
@@ -9,6 +16,10 @@ interface GetMenuAction {
 
 interface SetLoadingAction {
   type: typeof SET_LOADING
+}
+
+interface SetProductsLoadingAction {
+  type: typeof SET_PRODUCTS_LOADING
 }
 
 interface SetErrorAction {
@@ -21,4 +32,15 @@ interface SetTerminalsAction {
   terminals: Terminal[]
 }
 
-export type MenuAction = GetMenuAction | SetLoadingAction | SetErrorAction | SetTerminalsAction
+interface AddGroupProductsAction {
+  type: typeof ADD_GROUP_PRODUCTS
+  group: Category
+}
+
+export type MenuAction =
+  | GetMenuAction
+  | SetLoadingAction
+  | SetErrorAction
+  | SetTerminalsAction
+  | AddGroupProductsAction
+  | SetProductsLoadingAction

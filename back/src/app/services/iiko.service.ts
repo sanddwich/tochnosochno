@@ -22,8 +22,13 @@ import {
 } from '../entities'
 import { Organization } from '../entities/organization.entity'
 import DeliveryPoint from '../interfaces/DeliveryPoint'
+import CardPayment from '../interfaces/Iiko/CardPayment'
+import CashPayment from '../interfaces/Iiko/CashPayment'
 import DeliveryRestrictionsAllowed from '../interfaces/Iiko/DeliveryRestrictionsAllowed'
+import IikoCardPayment from '../interfaces/Iiko/IikoCardPayment'
+import IikoCity from '../interfaces/Iiko/IikoCity'
 import IIkoErrorResponse from '../interfaces/Iiko/IIkoErrorResponse'
+import IikoTerminalGroup from '../interfaces/Iiko/IikoTerminalGroup'
 import OrderResponse from '../interfaces/Iiko/OrderResponse'
 import IIkoOrder from '../interfaces/IIkoOrder'
 import IIkoOrderItem from '../interfaces/IIkoOrderItem'
@@ -91,176 +96,107 @@ export class Iiko {
     return Iiko.instance
   }
 
-  async checkOrderIiko(order: Order) {
-    const organization = await getRepository(Organization).findOne()
-    const iikoOrder = this.formatOrderForIiko(order)
-    try {
-      if (organization) {
-        const res = await fetch(CHECK_ORDER_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.token}`,
-          },
-          body: JSON.stringify({ organizationId: organization.id, order: iikoOrder }),
-        })
-        if (!res.ok) {
-          const error = await res.json()
-          throw new Error(`${res.status} ${res.statusText}. ${error.errorDescription}. Ошибка на сервере IIKO.`)
-        }
-        const iOrder = await res.json()
-        return iOrder
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   async sendOrderToIiko(order: Order, terminalGroupId?: Terminal | null) {
     // const terminalId = terminalGroupId ? terminalGroupId.toString() : null
     const terminalId = '121b5392-d62c-7611-0165-959330ae00c9'
 
     const organization = await getRepository(Organization).findOne()
-    const iikoOrder = this.formatOrderForIiko(order)
+    const iikoOrder = await this.formatOrderForIiko(order)
 
     // const coordinates = await this.geo.getCoordinates(order.address)
     // if (iikoOrder.deliveryPoint) {
     //   iikoOrder.deliveryPoint.coordinates = coordinates
     // }
 
-    try {
-      if (organization) {
-        const res = await this.fetch_retry(
-          this.createOrderUrl,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${this.token}`,
-              Timeout: 30,
-            },
-            body: JSON.stringify({
-              organizationId: organization.id,
-              order: iikoOrder,
-              terminalGroupId: terminalId,
-              createOrderSettings: {
-                transportToFrontTimeout: 30,
-              },
-            }),
-          },
-          5
-        )
-        if (!res.ok) {
-          const error = await res.json()
-          throw new Error(`${res.status} ${res.statusText}. ${error.errorDescription}. Ошибка на сервере IIKO.`)
-        }
-        const iOrder = await res.json()
-        console.log(iOrder.orderInfo)
-        return iOrder
-      }
-    } catch (error) {
-      return { error: true, message: error }
-    }
+    const body = JSON.stringify({
+      organizationId: this.organizations[0].id,
+      order: iikoOrder,
+      terminalGroupId: terminalId,
+      createOrderSettings: {
+        transportToFrontTimeout: 30,
+      },
+    })
+
+    const { correlationId, orderInfo } = await this.fetchApi<{ correlationId: string; orderInfo: OrderResponse }>(
+      CREATE_ORDER_URL,
+      body,
+      true,
+      'POST'
+    )
+
+    return orderInfo
   }
 
+  /*
+   * Выгрузка городов из IIKO в БД сайта.
+   */
   async setCities() {
-    this.logger.info(`iiko.service.setCities()`)
-    const organization = await getRepository(Organization).findOne()
-    // const city = await getRepository(City).findOne({ name: 'Астрахань' })
+    const body = JSON.stringify({ organizationIds: [this.organizations[0].id] })
+    const { correlationId, cities } = await this.fetchApi<{ correlationId: string; cities: IikoCity[] }>(
+      CITIES_URL,
+      body,
+      true,
+      'POST'
+    )
 
-    try {
-      if (organization) {
-        const res = await fetch(this.cityUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.token}`,
-          },
-          body: JSON.stringify({ organizationIds: [organization.id] }),
-        })
+    cities.map(async (city) => {
+      await getRepository(City).save(city.items)
+    })
 
-        const { cities } = await res.json()
-        cities[0].items.map(async (city: City) => {
-          await getRepository(City).save(city)
-        })
-
-        return true
-      } else {
-        return new HttpResponseBadRequest({ error: true, message: 'Организация не найдена.' })
-      }
-    } catch (error) {}
+    return cities
   }
 
+  /*
+   * Выгрузка улиц из IIKO в БД сайта.
+   */
   async setStreets() {
-    this.logger.info(`iiko.service.setStreets()`)
-    const organization = await getRepository(Organization).findOne()
-    const cities = await getRepository(City).find({ isDeleted: false })
+    const cities = await getRepository(City).find()
 
-    try {
-      if (cities && organization) {
-        cities.map(async (city) => {
-          const res = await fetch(this.streetUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${this.token}`,
-            },
-            body: JSON.stringify({ organizationId: organization.id, cityId: city.id }),
-          })
+    cities.map(async (city) => {
+      const body = JSON.stringify({ organizationId: this.organizations[0].id, cityId: city.id })
+      const { correlationId, streets } = await this.fetchApi<{
+        correlationId: string
+        streets: Street[]
+      }>(STREET_URL, body, true, 'POST')
+      await getRepository(Street).save(streets)
+    })
 
-          const { streets } = await res.json()
-          streets.map(async (street: Street) => {
-            street.city = city
-            await getRepository(Street).save(street)
-          })
-        })
-
-        return true
-      } else {
-        return new HttpResponseBadRequest({ error: true, message: 'Организация не найдена.' })
-      }
-    } catch (error) {}
+    return true
   }
+
+  /*
+   * Выгрузка терминалов доставки из IIKO в БД сайта.
+   */
 
   async setTerminals() {
-    this.logger.info(`iiko.service.setTerminals()`)
-    try {
-      const res = await fetch(this.terminalsUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.token}`,
-        },
-        body: JSON.stringify({ organizationIds: [this.organizations[0].id] }),
-      })
-      const resJson = await res.json()
-      // await getRepository(Terminal).save(terminals)
-      resJson.terminalGroups.map((terminalGroup) => {
-        terminalGroup.items.map(async (terminal: Terminal) => {
-          terminal.organization = terminalGroup.organizationId
-          await getRepository(Terminal).save(terminal)
-        })
-      })
-      return resJson
-    } catch (error) {}
+    const body = JSON.stringify({ organizationIds: [this.organizations[0].id] })
+    const { correlationId, terminalGroups } = await this.fetchApi<{
+      correlationId: string
+      terminalGroups: IikoTerminalGroup[]
+    }>(TERMINALS_URL, body, true, 'POST')
+
+    terminalGroups.map(async (terminalGroup) => {
+      await getRepository(Terminal).save(terminalGroup.items)
+    })
+
+    return terminalGroups
   }
 
-  async getPaymentTypes() {
-    this.logger.info(`iiko.service.getPaymentTypes()`)
-    try {
-      const res = await fetch(this.paymnetTypeUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.token}`,
-        },
-        body: JSON.stringify({ organizationIds: [this.organizations[0].id] }),
-      })
+  /*
+   * Выгрузка типов оплат из IIKO в БД сайта.
+   */
 
-      const { paymentTypes } = await res.json()
-      await getRepository(PaymentType).save(paymentTypes)
-      return paymentTypes
-    } catch (error) {}
+  async setPaymentTypes() {
+    const body = JSON.stringify({ organizationIds: [this.organizations[0].id] })
+    const { correlationId, paymentTypes } = await this.fetchApi<{ correlationId: string; paymentTypes: PaymentType[] }>(
+      PAYMENT_TYPE_URL,
+      body,
+      true,
+      'POST'
+    )
+
+    await getRepository(PaymentType).save(paymentTypes)
+    return paymentTypes
   }
 
   /*
@@ -472,15 +408,62 @@ export class Iiko {
     this.token = token
   }
 
-  private formatOrderForIiko(order: Order): IIkoOrder {
+  async formatOrderForIiko(order: Order): Promise<IIkoOrder> {
     const iikoOrderItems: IIkoOrderItem[] = []
     let comment = ''
     let deliveryPoint: DeliveryPoint | undefined = undefined
     let orderServiceType: OrderServiceType = 'DeliveryByClient'
+    let payments: CashPayment[] | CardPayment[] | IikoCardPayment[] = []
 
-    if (order.payment === 'cash') comment = 'Оплата наличными курьеру'
-    if (order.payment === 'credit') comment = 'Оплата кредитной картой курьеру'
-    if (order.payment === 'online') comment = 'Оплата онлайн'
+    /*
+     * Формируем объекты оплаты для iiko
+     */
+
+    if (order.payment === 'cash') {
+      comment = 'Оплата наличными курьеру'
+      const cashPayment = await getRepository(PaymentType).findOne({ paymentTypeKind: 'Cash' })
+      if (cashPayment) {
+        payments.push({
+          paymentTypeKind: 'Cash',
+          sum: order.amount - (order.bonus || 0),
+          isProcessedExternally: false,
+          paymentTypeId: cashPayment.id,
+          number: '',
+        })
+      }
+    }
+
+    if (order.payment === 'credit') {
+      comment = 'Оплата кредитной картой курьеру'
+      const onlinePayment = await getRepository(PaymentType).findOne({ paymentTypeKind: 'Card' })
+      if (onlinePayment) {
+        payments.push({
+          paymentTypeKind: 'Card',
+          sum: order.amount - (order.bonus || 0),
+          isProcessedExternally: false,
+          paymentTypeId: onlinePayment.id,
+          number: '',
+        })
+      }
+    }
+
+    if (order.payment === 'online') {
+      comment = 'Оплата онлайн'
+      const onlinePayment = await getRepository(PaymentType).findOne({ paymentTypeKind: 'Card' })
+      if (onlinePayment) {
+        payments.push({
+          paymentTypeKind: 'Card',
+          sum: order.amount - (order.bonus || 0),
+          isProcessedExternally: true,
+          paymentTypeId: onlinePayment.id,
+          number: '',
+        })
+      }
+    }
+
+    /*
+     * Формируем массив товаров и дополнений к ним
+     */
 
     order.items.map((item: OrderItem) => {
       const iikoOrderItemModifers: IIkoOrderItemModifier[] = []
@@ -488,7 +471,6 @@ export class Iiko {
       item.orderItemModifiers.map((orderItemModifier: OrderItemModifier) => {
         iikoOrderItemModifers.push({
           productId: orderItemModifier.productModifier.id,
-          // productGroupId: orderItemModifier.productModifier.product.groupId,
           productGroupId: orderItemModifier.product.groupId,
           amount: orderItemModifier.amount,
         })
@@ -502,6 +484,10 @@ export class Iiko {
       })
     })
 
+    /*
+     *Формируем объект доставки, если нужна доствка курьера
+     */
+
     if (order.isDelivery) {
       const street: Street = {
         id: order.address.street.id,
@@ -511,24 +497,27 @@ export class Iiko {
 
       deliveryPoint = {
         address: order.address,
-        // coordinates: { latitude: order.address.latitude, longitude: order.address.longitude },
+        coordinates: { latitude: order.address.latitude, longitude: order.address.longitude },
         comment: order.address.comment,
       }
       orderServiceType = 'DeliveryByCourier'
     }
 
+    /*
+     *Формируем объект заказа, который отправится в iiko
+     */
+
     const iikoOrder: IIkoOrder = {
       phone: order.phone,
       completeBefore: order.completeBefore,
       customer: order.customer,
-
-      comment: comment,
+      comment: `${comment}.  ${order.address.comment}`,
       deliveryPoint,
-      orderServiceType: orderServiceType,
-      sourceKey: 'site',
+      orderServiceType,
+      sourceKey: 'sochno30.ru',
       items: iikoOrderItems,
+      payments,
     }
-    console.log(iikoOrder)
     return iikoOrder
   }
 

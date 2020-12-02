@@ -108,7 +108,7 @@ class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductC
                 <Row className="ProductCardMobile__priceLine d-flex justify-content-between align-items-end">
                   <div className="ProductCardMobile__prices m-0">
                     <div className="ProductCardMobile__price d-inline-block">
-                      {this.props.product.sizePrices.length > 0
+                      {this.props.product.sizePrices && this.props.product.sizePrices.length > 0
                         ? this.props.product.sizePrices[0].price.currentPrice.toFixed(0).toString()
                         : newPrice.toFixed(0).toString()}{' '}
                       <span>руб</span>

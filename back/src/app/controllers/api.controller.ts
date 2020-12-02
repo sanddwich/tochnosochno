@@ -81,6 +81,7 @@ export class ApiController {
     Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
     */
     const startTime = Date.now()
+
     try {
       let products = await getRepository(Group).find({
         where: {
@@ -89,9 +90,10 @@ export class ApiController {
 
         relations: [
           'products',
-          'products.sizePrices',
-          'products.sizePrices.price',
           'products.parentGroup',
+          // 'products.sizePrices',
+          // 'products.sizePrices.price',
+
           // 'products.groupModifiers',
           // 'products.groupModifiers.group',
           // 'products.groupModifiers.childModifiers',
@@ -106,18 +108,20 @@ export class ApiController {
         ],
       })
 
-      /*
-       * Формирование массива рекомендованных товаров для каждого товара
-       */
-
       products.map((rootGroup) => {
-        rootGroup.products.map(async (product) => {
-          if (product) {
-            product.recomended = []
-            product.recomended.push(...this.menuService.getRecomendedProducts(product, products, 3))
-          }
-        })
+        /*
+         * Формирование массива рекомендованных товаров для каждого товара
+         */
+        // rootGroup.products.map(async (product) => {
+        //   if (product) {
+        //     product.recomended = []
+        //     product.recomended.push(...this.menuService.getRecomendedProducts(product, products, 3))
+        //   }
+        // })
 
+        /*
+         * Добавление товаров из подкатегорий в корневую категорию
+         */
         if (!rootGroup.parentGroup) {
           products.map((group) => {
             if (group.parentGroup === rootGroup.id && !group.isCombo) {
@@ -134,9 +138,37 @@ export class ApiController {
 
       const terminals = await getRepository(Terminal).find({ isAlive: true })
 
+      let recentProducts = await getRepository(Product).find({
+        where: {
+          type: 'Dish',
+          parentGroup: { id: !' ', isService: false },
+        },
+
+        order: {
+          createdAt: 'DESC',
+        },
+        take: 5,
+        relations: [
+          'sizePrices',
+          'sizePrices.price',
+          'parentGroup',
+          'groupModifiers',
+          'groupModifiers.group',
+          'groupModifiers.childModifiers',
+          'groupModifiers.childModifiers.product',
+          'groupModifiers.childModifiers.product.sizePrices',
+          'groupModifiers.childModifiers.product.sizePrices.price',
+          'modifiers',
+          'modifiers.product',
+          'modifiers.modifier',
+          // 'products.variants',
+          // 'products.facets',
+        ],
+      })
+
       this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
 
-      return new HttpResponseOK({ products, terminals })
+      return new HttpResponseOK({ products, terminals, recentProducts })
     } catch (error) {
       this.logger.error(
         `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
@@ -211,14 +243,14 @@ export class ApiController {
         //Если в истории заказов нужны заказы, которые добавились в iiko
         // customer.orders = _.filter(customer.orders, 'orderIikoId')
 
-        await this.iiko.init()
         const orderIds: string[] = []
         customer.orders.map((order: Order) => {
           if (order.orderIikoId) orderIds.push(order.orderIikoId)
         })
-        const iikoOrders = await this.iiko.getOrders(orderIds)
+        const iiko = await this.iiko.getInstance()
+        const iikoOrders = await iiko.getOrders(orderIds)
 
-        iikoOrders.orders.map((iikoOrder) => {
+        iikoOrders.map((iikoOrder) => {
           customer.orders.map((customerOrder) => {
             if (customerOrder.orderIikoId === iikoOrder.id) {
               if (iikoOrder.order) {
@@ -312,19 +344,20 @@ export class ApiController {
          */
       } else if (order.payment === 'cash' || order.payment === 'credit') {
         /*
-         * Отправляем заказ в Iiko.
-         * Сохраняем заказ в БД.
+         * Отправляем заказ в Iiko,
          */
-        // await this.iiko.init()
-        // const iikoOrder = await this.iiko.sendOrderToIiko(order, order.terminalId)
-        // if (iikoOrder.error) {
-        //   throw new Error(iikoOrder.message)
+        // const iiko = await this.iiko.getInstance()
+        // const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
+
+        /*
+         * Произошла ошибка в Iiko при создании заказа
+         */
+
+        // if (iikoOrder.errorInfo) {
+        //   const { code, message, description } = iikoOrder.errorInfo
+        //   throw new Error(`${code}. ${message}. ${description}`)
         // }
-        // order.orderIikoId = iikoOrder.orderInfo.id
-        // this.logger.info(
-        //   `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
-        //   await iiko.formatOrderForIiko(order)
-        // )
+        // order.orderIikoId = iikoOrder.id
 
         if (!order.isDelivery) {
           order.address.id = '1df16367-fc70-4bfc-016b-a8d0a76ce24b'
@@ -335,7 +368,12 @@ export class ApiController {
           order.address.id = uuidv4()
         }
 
+        const iiko = await this.iiko.getInstance()
+        const orderIiko = await iiko.formatOrderForIiko(order)
+        console.log(orderIiko)
+
         const orderDb = await repositoryOrder.save(order)
+
         await this.sender.sendOrderEmail(order)
         return new HttpResponseCreated({ order })
       }
@@ -404,25 +442,31 @@ export class ApiController {
         /*
          * Отправляем заказ в Iiko,
          */
-        await this.iiko.init()
-        const iikoOrder = await this.iiko.sendOrderToIiko(order, order.terminalId)
+        const iiko = await this.iiko.getInstance()
+        const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
 
         /*
          * Произошла ошибка в Iiko при создании заказа
          */
-        if (iikoOrder.error) {
-          throw new Error(iikoOrder.message)
+
+        if (iikoOrder.errorInfo) {
+          const { code, message, description } = iikoOrder.errorInfo
+          throw new Error(`${code}. ${message}. ${description}`)
         }
-        order.orderIikoId = iikoOrder.orderInfo.id
+        order.orderIikoId = iikoOrder.id
         const orderDb = await orderRepository.save(order)
       } else {
         return new HttpResponseNotFound({ error: true, message: 'Заказ не найден.' })
       }
     } catch (error) {
-      console.log(error)
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        error
+      )
       return new HttpResponseBadRequest({ error: true, message: error.message })
     }
 
+    this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
     return new HttpResponseOK(orderId)
   }
 
@@ -596,8 +640,8 @@ export class ApiController {
     const latitude: number = ctx.request.body.latitude
     const longitude: number = ctx.request.body.longitude
     try {
-      await this.iiko.init()
-      const deliveryRestriction = await this.iiko.getDeliveryRestirctions(
+      const iiko = await this.iiko.getInstance()
+      const deliveryRestriction = await iiko.getDeliveryRestirctions(
         streetId,
         house,
         deliverySum,
@@ -621,6 +665,98 @@ export class ApiController {
         error
       )
       return new HttpResponseInternalServerError('Iiko error')
+    }
+  }
+  @Post('/group')
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      groupId: { type: 'string' },
+    },
+    required: ['groupId'],
+    type: 'object',
+  })
+  async getGroupProducts(ctx: Context) {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
+
+    const groupId = ctx.request.body.groupId
+
+    try {
+      let group = await getRepository(Group).findOne({
+        where: {
+          isGroupModifier: false,
+          id: groupId,
+          // parentGroup: groupId,
+        },
+        relations: [
+          'products',
+          'products.sizePrices',
+          'products.sizePrices.price',
+          'products.parentGroup',
+          'products.groupModifiers',
+          'products.groupModifiers.group',
+          'products.groupModifiers.childModifiers',
+          'products.groupModifiers.childModifiers.product',
+          'products.groupModifiers.childModifiers.product.sizePrices',
+          'products.groupModifiers.childModifiers.product.sizePrices.price',
+          'products.modifiers',
+          'products.modifiers.modifier',
+          'products.modifiers.product',
+        ],
+      })
+
+      if (group && group.products && group.products.length === 0) {
+        let childGroups = await getRepository(Group).find({
+          where: {
+            isGroupModifier: false,
+            parentGroup: groupId,
+          },
+          relations: [
+            'products',
+            'products.sizePrices',
+            'products.sizePrices.price',
+            'products.parentGroup',
+            'products.groupModifiers',
+            'products.groupModifiers.group',
+            'products.groupModifiers.childModifiers',
+            'products.groupModifiers.childModifiers.product',
+            'products.groupModifiers.childModifiers.product.sizePrices',
+            'products.groupModifiers.childModifiers.product.sizePrices.price',
+            'products.modifiers',
+            'products.modifiers.modifier',
+            'products.modifiers.product',
+          ],
+        })
+
+        childGroups.map((childGroup) => {
+          if (group && !childGroup.isCombo) {
+            group.products.push(...childGroup.products)
+          }
+        })
+      }
+
+      /*
+       * Добавление товаров из подкатегорий в корневую категорию
+       */
+      // if (products && !products.parentGroup) {
+      //   products.map((group) => {
+      //     if (group.parentGroup === rootGroup.id && !group.isCombo) {
+      //       rootGroup.products.push(...group.products)
+      //     }
+      //   })
+      // }
+
+      this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
+      return new HttpResponseOK({ products: group })
+    } catch (error) {
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        error
+      )
+      return new HttpResponseBadRequest(error)
     }
   }
 }

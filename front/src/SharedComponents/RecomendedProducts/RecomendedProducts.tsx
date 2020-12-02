@@ -30,20 +30,21 @@ class RecomendedProducts extends React.Component<RecomendedProductsProps, Recome
   getRecomendedProducts = (): Product[] => {
     const recomendedProducts: Product[] = []
     this.props.menu.map((group: Category) => {
-      group.products.map((product) => {
-        if (this.props.product.recomended) {
-          this.props.product.recomended.map((productId) => {
-            if (product.id === productId) {
-              const recProduct = recomendedProducts.filter((product) => {
-                return product.id === productId
-              })
-              if (recProduct.length === 0) {
-                recomendedProducts.push(product)
+      group.products &&
+        group.products.map((product) => {
+          if (this.props.product.recomended) {
+            this.props.product.recomended.map((productId) => {
+              if (product.id === productId) {
+                const recProduct = recomendedProducts.filter((product) => {
+                  return product.id === productId
+                })
+                if (recProduct.length === 0) {
+                  recomendedProducts.push(product)
+                }
               }
-            }
-          })
-        }
-      })
+            })
+          }
+        })
     })
 
     return recomendedProducts

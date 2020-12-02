@@ -16,13 +16,13 @@ export default class LongMenuItemMob extends React.Component<LongMenuItemMobProp
 
   suffixGen = (num: number): string => {
     // console.log(num % 10)
-    if (num >= 10 && num <=20) {
+    if (num >= 10 && num <= 20) {
       return 'ых'
     }
-    if ((num % 10) === 1) {
+    if (num % 10 === 1) {
       return 'ая'
     }
-    if ((num % 10) >= 2 && (num % 10) <= 4) {
+    if (num % 10 >= 2 && num % 10 <= 4) {
       return 'ые'
     }
     return 'ых'

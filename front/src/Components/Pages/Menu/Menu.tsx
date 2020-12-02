@@ -10,9 +10,12 @@ import ProductList from './ProductList/ProductList'
 import { connect } from 'react-redux'
 import { RootState } from '../../../Redux'
 import Category from '../../../Interfaces/Category'
+import { getGroupProducts } from '../../../Redux/actions/menu'
 // import BreadCrumbs from '../../../SharedComponents/BreadCrumbs/BreadCrumbs'
 import ScrollAnimation from 'react-animate-on-scroll'
 import 'animate.css/animate.min.css'
+import Loader from '../../../SharedComponents/Loader/Loader'
+import OverlayLoader from '../../../SharedComponents/OverlayLoader/OverlayLoader'
 
 interface MatchParams {
   id: string
@@ -20,6 +23,9 @@ interface MatchParams {
 
 interface MenuProps extends RouteComponentProps<MatchParams> {
   menu: Category[]
+  getGroupProducts: any
+  productsLoading: boolean
+  loading: boolean
 }
 
 interface MenuState {}
@@ -31,6 +37,8 @@ class Menu extends React.Component<MenuProps, MenuState> {
 
   componentDidMount() {
     this.scrollTo('menuScroller', 250)
+    this.props.getGroupProducts(this.props.match.params.id)
+    console.log(123213123)
   }
 
   checkMenuId = (): boolean => {
@@ -38,6 +46,21 @@ class Menu extends React.Component<MenuProps, MenuState> {
       return true
     } else {
       return false
+    }
+  }
+
+  componentDidUpdate(prevProps: MenuProps) {
+    if (this.props.location !== prevProps.location) {
+      this.checkGroupProduct(this.props.match.params.id)
+    }
+  }
+
+  checkGroupProduct = (groupId: string) => {
+    const group = this.props.menu.filter((group) => {
+      if (group.id === groupId) return group
+    })
+    if (group && group[0].products && group[0].products[0] && !group[0].products[0].sizePrices) {
+      this.props.getGroupProducts(groupId)
     }
   }
 
@@ -53,28 +76,38 @@ class Menu extends React.Component<MenuProps, MenuState> {
   render() {
     if (this.checkMenuId()) {
       return (
-        <Container fluid className="Menu p-0 m-0">
-          {/* <BreadCrumbs  /> */}
-          {/* <SliderContainer marginTop={30} /> */}
-          <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__backInLeft">
-            <SliderContainer />
-          </ScrollAnimation>
-          <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__backInRight">
-            <NewItemsCategory
-              key={this.props.match.params.id + Math.random().toString()}
-              categoryId={this.props.match.params.id}
-            />
-          </ScrollAnimation>
-          <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__bounceInLeft">
-            <Element name="menuScroller"></Element>
-            <ProductList
-              key={this.props.match.params.id + Math.random().toString()}
-              productsPerPage={6}
-              categoryId={this.props.match.params.id}
-            />
-          </ScrollAnimation>
-          {this.scrollTo('menuScroller', -220)}
-        </Container>
+        <React.Fragment>
+          <Container fluid className="Menu p-0 m-0">
+            <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__backInLeft">
+              <SliderContainer />
+            </ScrollAnimation>
+
+            <React.Fragment>
+              {this.props.productsLoading || this.props.loading ? (
+                <OverlayLoader />
+              ) : (
+                <React.Fragment>
+                  <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__backInRight">
+                    <NewItemsCategory
+                      key={this.props.match.params.id + Math.random().toString()}
+                      categoryId={this.props.match.params.id}
+                    />
+                  </ScrollAnimation>
+                  <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__bounceInLeft">
+                    <Element name="menuScroller"></Element>
+                    <ProductList
+                      key={this.props.match.params.id + Math.random().toString()}
+                      productsPerPage={6}
+                      categoryId={this.props.match.params.id}
+                    />
+                  </ScrollAnimation>
+                </React.Fragment>
+              )}
+            </React.Fragment>
+            {this.scrollTo('menuScroller', -220)}
+          </Container>
+          )
+        </React.Fragment>
       )
     } else {
       this.props.history.push('/')
@@ -83,11 +116,14 @@ class Menu extends React.Component<MenuProps, MenuState> {
   }
 }
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  getGroupProducts,
+}
 
 const mapStateToProps = (state: RootState) => {
-  const { menu } = state.menu
+  const { menu, productsLoading, loading } = state.menu
   return {
+    productsLoading,
     menu: menu,
   }
 }

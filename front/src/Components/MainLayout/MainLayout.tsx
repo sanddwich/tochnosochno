@@ -17,6 +17,7 @@ import Product from '../Pages/Product/Product'
 import { RootState } from '../../Redux'
 import Loader from '../../SharedComponents/Loader/Loader'
 import ScreenLoader from '../../SharedComponents/ScreenLoader/ScreenLoader'
+import OverlayLoader from '../../SharedComponents/OverlayLoader/OverlayLoader'
 
 interface MainLayoutProps {
   getMenu: any
@@ -40,6 +41,7 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
           <PageContent>
             <Switch>
               <Route path="/menu/:id" exact component={Menu} />
+
               <Route path="/actions" exact component={Actions} />
               <Route path="/product/:id" exact component={Product} />
               <Route path="/cart" exact component={Cart} />
@@ -65,7 +67,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: RootState) => {
   const { isAuth } = state.auth
-  const { loading } = state.menu
+  const { loading, productsLoading } = state.menu
   return {
     isAuth,
     loading,

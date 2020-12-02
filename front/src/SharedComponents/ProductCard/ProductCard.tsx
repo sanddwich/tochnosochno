@@ -112,7 +112,7 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
             <Row className="ProductCard__priceLine d-flex justify-content-between">
               <div className="ProductCard__prices">
                 <div className="ProductCard__price d-inline-block">
-                  {this.props.product.sizePrices.length > 0
+                  {this.props.product.sizePrices && this.props.product.sizePrices.length > 0
                     ? this.props.product.sizePrices[0].price.currentPrice.toFixed(0).toString()
                     : newPrice.toFixed(0).toString()}{' '}
                   <span>руб</span>

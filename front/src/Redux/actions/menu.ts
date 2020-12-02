@@ -2,7 +2,14 @@ import { ThunkAction } from 'redux-thunk'
 import { RootState } from '..'
 import Category from '../../Interfaces/Category'
 import Terminal from '../../Interfaces/Terminal'
-import { GET_MENU, SET_ERROR, SET_LOADING, SET_TERMINALS } from '../constants/ActionTypes'
+import {
+  ADD_GROUP_PRODUCTS,
+  GET_MENU,
+  SET_ERROR,
+  SET_LOADING,
+  SET_PRODUCTS_LOADING,
+  SET_TERMINALS,
+} from '../constants/ActionTypes'
 import { MenuAction } from '../interfaces/menu'
 
 import { API_URL } from '../../utils/config'
@@ -13,6 +20,7 @@ export const getMenu = (): ThunkAction<void, RootState, null, MenuAction> => {
   return async (dispatch) => {
     try {
       dispatch(setLoading())
+
       const res = await fetch(`${apiServer}/api/menu`)
       if (!res.ok) {
         const resData: Error = await res.json()
@@ -21,11 +29,59 @@ export const getMenu = (): ThunkAction<void, RootState, null, MenuAction> => {
 
       const resData = await res.json()
 
+      /*
+        Получаем комбо
+      */
+      //  dispatch(getGroupProducts('6dcc8ec8-9287-4567-b12d-8a5573963631'))
+      resData.products.map((category: Category) => {
+        if (category.isCombo) {
+          dispatch(getGroupProducts(category.id))
+        }
+      })
+
       dispatch(fetchMenu(resData.products))
       dispatch(setTerminals(resData.terminals))
     } catch (err) {
       dispatch(setError(err))
     }
+  }
+}
+
+export const getGroupProducts = (groupId: string): ThunkAction<void, RootState, null, MenuAction> => {
+  return async (dispatch) => {
+    try {
+      dispatch(setProductsLoading())
+      const res = await fetch(`${apiServer}/api/group`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ groupId }),
+      })
+      if (!res.ok) {
+        const resData: Error = await res.json()
+        throw new Error(resData.message)
+      }
+
+      const resData = await res.json()
+
+      dispatch(addGroupProducts(resData.products))
+    } catch (err) {
+      dispatch(setError(err))
+    }
+  }
+}
+
+export const addGroupProducts = (group: Category): MenuAction => {
+  return {
+    type: ADD_GROUP_PRODUCTS,
+    group,
+  }
+}
+
+export const setProductsLoading = (): MenuAction => {
+  return {
+    type: SET_PRODUCTS_LOADING,
   }
 }
 

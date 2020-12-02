@@ -41,13 +41,13 @@ class PopularProducts extends React.Component<PopularProductsProps, PopularProdu
   }
 
   componentDidMount() {
-    let lastProducts: Product[] = []
-    this.props.menu.map((category) => {
-      if (!category.isCombo && category.isSiteDisplay) {
-        lastProducts.push(category.products[category.products.length - 1])
-      }
-    })
-    this.setState({ lastProducts })
+    // let lastProducts: Product[] = []
+    // this.props.menu.map((category) => {
+    //   if (!category.isCombo && category.isSiteDisplay) {
+    //     lastProducts.push(category.products[category.products.length - 1])
+    //   }
+    // })
+    // this.setState({ lastProducts })
     // console.log(lastProducts)
   }
 

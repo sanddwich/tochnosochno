@@ -13,6 +13,7 @@ export interface MenuState {
   loading: boolean
   error: string
   date: Date
+  productsLoading: boolean
 }
 
 export interface OrderState {
