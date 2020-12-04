@@ -98,7 +98,7 @@ class ComboOrderBlockDescription extends React.Component<
               src={`${
                 typeof this.props.comboItem.image !== 'undefined' && this.props.comboItem.image.length > 0
                   ? this.props.comboItem.image[0]
-                  : '/images/products/no-photo.png'
+                  : '/images/products/burger.png'
               }`}
               className="img-fluid"
               alt={`${this.props.comboItem.name}`}

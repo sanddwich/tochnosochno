@@ -74,21 +74,17 @@ class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductC
                   </div>
                 </Row>
 
-                <Row
-                  className="ProductCardMobile__img"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => this.props.showProductModal(this.props.product)}
-                >
+                <div className="ProductCardMobile__img" onClick={() => this.props.showProductModal(this.props.product)}>
                   <img
-                    className="img-fluid"
+                    id={this.props.product.id}
                     src={
                       typeof this.props.product.imageLinks[0] !== 'undefined'
                         ? `${this.props.product.imageLinks[0]}`
-                        : '/images/products/no-photo.png'
+                        : '/images/products/burger.png'
                     }
                     alt={this.props.product.name}
                   />
-                </Row>
+                </div>
               </Col>
 
               <Col className="ProductCardMobile__info p-0 m-0" xs={6}>

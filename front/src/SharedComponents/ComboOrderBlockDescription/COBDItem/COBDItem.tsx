@@ -25,7 +25,7 @@ export default class COBDItem extends React.Component<COBDItemProps, COBDItemSta
                   src={`${
                     this.props.product.imageLinks && this.props.product.imageLinks.length > 0
                       ? this.props.product.imageLinks[0]
-                      : '/images/products/no-photo.png'
+                      : '/images/products/burger.png'
                   }`}
                   alt={`${this.props.product.name}`}
                 />

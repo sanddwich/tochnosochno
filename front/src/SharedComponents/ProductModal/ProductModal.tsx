@@ -55,7 +55,7 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
       <React.Fragment>
         {this.props.showProductModal ? (
           <Container fluid className="ProductModal p-0 m-0 d-flex align-items-center ">
-            <Container className="ProductModal__body pt-2 pb-2">
+            <Container className="ProductModal__body p-0">
               <Row className="ProductModal__closeButtonRow d-flex justify-content-end">
                 <div className="ProductModal__closeButtonCont position-relative">
                   <div className="ProductModal__closeButton">
@@ -70,7 +70,7 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
 
               <Row className="ProductModal__bodyCont p-0 m-0 h-100">
                 <Col className="p-0 m-0" md={5}>
-                  <Row className="ProductModal__firstLine p-0 m-0 d-flex justify-content-between">
+                  <Row className="ProductModal__firstLine pr-5 m-0 d-flex justify-content-between">
                     <div className="ProductModal__favoriteButton">
                       <FavouriteRoundButton product={this.props.productModalProduct} />
                     </div>
@@ -80,24 +80,22 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
                     </div>
                   </Row>
 
-                  <Row className="ProductModal__img h-100 d-flex justify-content-center align-items-center">
-                    <div>
-                      <img
-                        className="img-fluid"
-                        src={
-                          typeof this.props.productModalProduct.imageLinks[0] !== 'undefined'
-                            ? `${this.props.productModalProduct.imageLinks[0]}`
-                            : '/images/products/no-photo.png'
-                        }
-                        alt={this.props.productModalProduct.name}
-                      />
-                    </div>
-                  </Row>
+                  <div className="ProductModal__img d-flex justify-content-center">
+                    <img
+                      // className="img-fluid"
+                      src={
+                        typeof this.props.productModalProduct.imageLinks[0] !== 'undefined'
+                          ? `${this.props.productModalProduct.imageLinks[0]}`
+                          : '/images/products/burger.png'
+                      }
+                      alt={this.props.productModalProduct.name}
+                    />
+                  </div>
                 </Col>
 
                 <Col className="ProductModal__info p-0 m-0 d-flex flex-column" md={7}>
                   <Row>
-                    <Col className="ProductModal__title">
+                    <Col className="ProductModal__title ml-4 ml-md-0">
                       <BlockName name={this.props.productModalProduct.name} />
                     </Col>
                   </Row>
@@ -110,7 +108,10 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
                       <LineProductWithSizeInput product={this.props.productModalProduct} />
                     </Col>
                   </Row>
-                  <BlockName name="Рекомендуем" />
+                  <div className="ml-4">
+                    <BlockName name="Рекомендуем" />
+                  </div>
+
                   <Row className="ProductModal__recomendContAll ">
                     <Col className="ProductModal__recomendCont m-0 p-0">
                       <div className="ProductModal__recomend">

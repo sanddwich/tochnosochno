@@ -33,20 +33,21 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
         <div className="lineProductWithCart__product">
           <div className="d-flex justify-content-between ">
             <div
-              className="lineProductWithCart__product__image d-flex justify-content-center align-items-center"
+              className="lineProductWithCart__product__image  d-flex justify-content-center align-items-center"
               onClick={() => this.props.showProductModal(this.props.product)}
             >
               <img
                 src={
                   typeof this.props.product.imageLinks[0] !== 'undefined'
                     ? `${this.props.product.imageLinks[0]}`
-                    : '/images/products/no-photo.png'
+                    : '/images/products/burger.png'
                 }
+                alt={this.props.product.name}
               />
             </div>
 
             <div
-              className="lineProductWithCart__product__name  d-flex  align-items-center"
+              className="lineProductWithCart__product__name pl-2  d-flex  align-items-center"
               onClick={() => this.props.showProductModal(this.props.product)}
               style={{ cursor: 'pointer' }}
             >

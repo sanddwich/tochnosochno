@@ -91,15 +91,21 @@ export class ApiController {
         relations: [
           'products',
           'products.parentGroup',
+          /*
+           *Когда потребуется отправка в Iiko требуется включить
+           */
 
-          'products.groupModifiers',
-          'products.groupModifiers.group',
-          'products.groupModifiers.childModifiers',
-          'products.groupModifiers.childModifiers.product',
-          'products.modifiers',
-          'products.modifiers.product',
-          'products.modifiers.modifier',
+          // 'products.groupModifiers',
+          // 'products.groupModifiers.group',
+          // 'products.groupModifiers.childModifiers',
+          // 'products.groupModifiers.childModifiers.product',
+          // 'products.modifiers',
+          // 'products.modifiers.product',
+          // 'products.modifiers.modifier',
 
+          /*
+           *Переделал фронт на работу с полем price у продукта
+           */
           // 'products.sizePrices',
           // 'products.sizePrices.price',
           // 'products.groupModifiers.childModifiers.product.sizePrices',

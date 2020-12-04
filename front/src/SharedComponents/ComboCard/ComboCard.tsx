@@ -66,21 +66,20 @@ class ComboCard extends React.Component<ComboCardProps, ComboCardState> {
               </div>
             </Row>
 
-            <Row
+            <div
               className="ComboCard__img d-flex justify-content-center"
               onClick={() => this.props.showComboModal(this.props.combo)}
             >
               <img
-                className="img-fluid"
                 src={
                   typeof this.props.combo.imageLinks[0] !== 'undefined'
                     ? `${this.props.combo.imageLinks[0]}`
-                    : '/images/products/no-photo.png'
+                    : '/images/products/burger.png'
                 }
                 alt={this.props.combo.name}
                 style={{ cursor: 'pointer' }}
               />
-            </Row>
+            </div>
 
             <Row className="ComboCard__textContent">
               <div className="ComboCard__title w-100" onClick={() => this.props.showComboModal(this.props.combo)}>

@@ -23,11 +23,17 @@
 
   .ProductCard__img {
     margin-top: -80px;
+
+    margin-bottom: 20px;
     &:hover {
       cursor: pointer;
     }
     img {
-      height: 250px; // =========== Картинки
+      width: 100%;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      max-height: 380px;
+      // height: 250px; // =========== Картинки
     }
   }
 

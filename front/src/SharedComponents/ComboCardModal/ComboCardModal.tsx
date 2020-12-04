@@ -149,7 +149,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                   </Row>
                 </Col>
 
-                <Col md={6} className="ComboCardModal__img p-0 h-100 d-flex align-items-start">
+                <Col md={6} className="ComboCardModal__img p-0  d-flex align-items-start">
                   {this.state.comboConsistArrayElement !== -1 ? (
                     <ComboElementChangeList
                       products={this.state.comboProductVariants}
@@ -205,11 +205,11 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                                 <div>
                                   <div className="p-0 m-0 d-flex justify-content-center align-items-center">
                                     <img
-                                      className="img-fluid"
+                                      // className="img-fluid"
                                       src={
                                         product.imageLinks[0]
                                           ? `${product.imageLinks[0]}`
-                                          : '/images/products/no-photo.png'
+                                          : '/images/products/burger.png'
                                       }
                                       alt=""
                                     />

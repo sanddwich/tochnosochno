@@ -85,7 +85,7 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
               </div>
             </Row>
 
-            <Row
+            {/* <Row
               className="ProductCard__img d-flex justify-content-center"
               onClick={() => this.props.showProductModal(this.props.product)}
             >
@@ -95,11 +95,26 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
                 src={
                   typeof this.props.product.imageLinks[0] !== 'undefined'
                     ? `${this.props.product.imageLinks[0]}`
-                    : '/images/products/no-photo.png'
+                    : '/images/products/burger.png'
                 }
                 alt={this.props.product.name}
               />
-            </Row>
+            </Row> */}
+            <div
+              // style={{ background: 'url("/images/products/burger.png")', backgroundSize: 'contain', height: '292px' }}
+              className="ProductCard__img d-flex justify-content-center"
+              onClick={() => this.props.showProductModal(this.props.product)}
+            >
+              <img
+                id={this.props.product.id}
+                src={
+                  typeof this.props.product.imageLinks[0] !== 'undefined'
+                    ? `${this.props.product.imageLinks[0]}`
+                    : '/images/products/burger.png'
+                }
+                alt={this.props.product.name}
+              />
+            </div>
 
             <Row className="ProductCard__textContent">
               <div className="ProductCard__title w-100" onClick={() => this.props.showProductModal(this.props.product)}>

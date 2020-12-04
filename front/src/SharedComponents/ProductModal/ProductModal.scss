@@ -29,12 +29,15 @@
   }
 
   .ProductModal__firstLine {
+    width: 100%;
+    padding: 10px 20px;
     position: absolute;
     z-index: 100;
   }
 
   .ProductModal__img {
     // margin-top: -50px;
+    overflow: hidden;
     div {
       img {
         height: 280px; // =========== Каринки
@@ -143,6 +146,7 @@
     .ProductModal__body {
       max-height: 98%;
       width: 98%;
+      max-width: 420px;
     }
 
     .ProductModal__closeButton {
@@ -151,12 +155,14 @@
     }
 
     .ProductModal__img {
-      // margin-top: -30px;
+      // margin-top: -40px;
       // z-index: 10;
-      div {
-        img {
-          height: 200px; // =========== Каринки
-        }
+      height: 40vh;
+      overflow: hidden;
+      img {
+        margin-top: -40px;
+        width: 100%;
+        height: 60vh;
       }
     }
 
@@ -200,7 +206,7 @@
       }
 
       .ProductModal__descr {
-        max-height: 35px;
+        max-height: 32px;
 
         overflow: hidden;
       }
@@ -223,15 +229,6 @@
 
         .ProductModal__recomend {
           overflow: hidden;
-        }
-      }
-    }
-    .ProductModal__img {
-      // margin-top: -40px;
-      // z-index: 10;
-      div {
-        img {
-          height: 200px; // =========== Каринки
         }
       }
     }
