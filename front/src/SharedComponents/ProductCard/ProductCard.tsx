@@ -124,7 +124,7 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
               <div className="ProductCard__desc w-100">{this.props.product.description}</div>
             </Row>
 
-            <Row className="ProductCard__priceLine d-flex justify-content-between">
+            <div className="ProductCard__priceLine d-flex justify-content-between">
               <div className="ProductCard__prices">
                 <div className="ProductCard__price d-inline-block">
                   {this.props.product.sizePrices && this.props.product.sizePrices.length > 0
@@ -138,7 +138,7 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
               <div className="ProductCard__button d-flex justify-content-end">
                 <AddProductButton hideTextMobile={false} product={this.props.product} />
               </div>
-            </Row>
+            </div>
           </Container>
         </Container>
       </React.Fragment>

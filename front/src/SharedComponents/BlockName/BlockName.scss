@@ -2,9 +2,20 @@
   display: flex;
   z-index: 24;
   max-width: 90%;
-
+  position: relative;
   &__cont {
     z-index: 5;
+  }
+  &::before {
+    content: '';
+    width: 15rem;
+    height: 1em;
+    top: 1em;
+    background-color: #ffd74b !important;
+    border-radius: 15px 0px;
+
+    position: absolute;
+    z-index: -1;
   }
 
   .BlockName__title {

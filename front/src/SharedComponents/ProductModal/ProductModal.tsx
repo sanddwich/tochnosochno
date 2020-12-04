@@ -108,17 +108,17 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
                       <LineProductWithSizeInput product={this.props.productModalProduct} />
                     </Col>
                   </Row>
-                  <div className="ml-4">
-                    <BlockName name="Рекомендуем" />
-                  </div>
 
-                  <Row className="ProductModal__recomendContAll ">
+                  <div className="ProductModal__recomendContAll ">
+                    <div className="ml-4 ">
+                      <BlockName name="Рекомендуем" />
+                    </div>
                     <Col className="ProductModal__recomendCont m-0 p-0">
                       <div className="ProductModal__recomend">
                         <RecomendedProducts title="" product={this.props.productModalProduct} />
                       </div>
                     </Col>
-                  </Row>
+                  </div>
                 </Col>
               </Row>
             </Container>
