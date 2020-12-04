@@ -286,7 +286,7 @@ export class Iiko {
 
         prod.groupModifiers = []
         prod.modifiers = []
-
+        prod.price = prod.sizePrices[0].price.currentPrice
         const product = await productRepository.save(prod)
         if (productModifiers.length > 0) {
           productModifiers.map(async (modifier) => {

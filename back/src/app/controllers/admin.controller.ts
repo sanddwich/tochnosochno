@@ -1,16 +1,20 @@
 import {
+  Config,
   Context,
   dependency,
   Get,
   HttpResponseBadRequest,
   HttpResponseCreated,
+  HttpResponseForbidden,
   Put,
   render,
   TokenRequired,
+  ValidateBody,
 } from '@foal/core'
 import { fetchUser, TypeORMStore } from '@foal/typeorm'
 import { User } from '../entities'
-import { Iiko, PaymentService, SmsService } from '../services'
+import { Iiko, LoggerService, PaymentService, SmsService } from '../services'
+import getClientIp from '../utils/utils'
 
 export class AdminController {
   @dependency
@@ -21,6 +25,9 @@ export class AdminController {
 
   @dependency
   senderService: SmsService
+
+  @dependency
+  logger: LoggerService
 
   @Get('/signin')
   signin(ctx: Context) {
@@ -38,69 +45,178 @@ export class AdminController {
   }
 
   @Put('/streets')
-  async setStreets() {
-    const iiko = await this.iiko.getInstance()
-    const streets = await iiko.setStreets()
-    if (streets) {
-      return new HttpResponseCreated(streets)
-    } else {
-      return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления улиц' })
-    }
-  }
-
-  @Put('/terminals')
-  async setTerminals() {
-    const iiko = await this.iiko.getInstance()
-    const terminals = await iiko.setTerminals()
-    if (terminals) {
-      return new HttpResponseCreated(terminals)
-    } else {
-      return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления терминалов' })
-    }
-  }
-
-  @Put('/menu')
-  async setMenu() {
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      token: { type: 'string' },
+    },
+    required: ['token'],
+    type: 'object',
+  })
+  async setStreets(ctx: Context) {
     /*
     Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
     */
     const startTime = Date.now()
-    let menu
 
-    try {
+    const token = ctx.request.body.token
+    if (token === Config.get('adminToken')) {
+      const iiko = await this.iiko.getInstance()
+      const streets = await iiko.setStreets()
+      this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
+      if (streets) {
+        return new HttpResponseCreated(streets)
+      } else {
+        return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления улиц' })
+      }
+    } else {
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        `Wrong token: ${token}`
+      )
+      return new HttpResponseForbidden('Wrong token')
+    }
+  }
+
+  @Put('/terminals')
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      token: { type: 'string' },
+    },
+    required: ['token'],
+    type: 'object',
+  })
+  async setTerminals(ctx: Context) {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
+
+    const token = ctx.request.body.token
+    if (token === Config.get('adminToken')) {
+      const iiko = await this.iiko.getInstance()
+      const terminals = await iiko.setTerminals()
+
+      this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
+
+      if (terminals) {
+        return new HttpResponseCreated(terminals)
+      } else {
+        return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления терминалов' })
+      }
+    } else {
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        `Wrong token: ${token}`
+      )
+      return new HttpResponseForbidden('Wrong token')
+    }
+  }
+
+  @Put('/menu')
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      token: { type: 'string' },
+    },
+    required: ['token'],
+    type: 'object',
+  })
+  async setMenu(ctx: Context) {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
+    const token = ctx.request.body.token
+    if (token === Config.get('adminToken')) {
+      let menu
+
       const iiko = await this.iiko.getInstance()
       menu = await iiko.getMenu()
-    } catch (error) {
-      console.log(error)
-    }
 
-    if (menu) {
-      return new HttpResponseCreated(menu)
+      this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
+      if (menu) {
+        return new HttpResponseCreated(menu)
+      } else {
+        return new HttpResponseBadRequest({ error: true, message: 'Ошибка меню не обновлено' })
+      }
     } else {
-      return new HttpResponseBadRequest({ error: true, message: 'Ошибка меню не обновлено' })
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        `Wrong token: ${token}`
+      )
+      return new HttpResponseForbidden('Wrong token')
     }
   }
 
   @Put('/payment')
-  async setPayment() {
-    const iiko = await this.iiko.getInstance()
-    const payment = iiko.setPaymentTypes()
-    if (payment) {
-      return new HttpResponseCreated(payment)
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      token: { type: 'string' },
+    },
+    required: ['token'],
+    type: 'object',
+  })
+  async setPayment(ctx: Context) {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
+
+    const token = ctx.request.body.token
+    if (token === Config.get('adminToken')) {
+      const iiko = await this.iiko.getInstance()
+
+      const payment = await iiko.setPaymentTypes()
+      this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
+
+      if (payment) {
+        return new HttpResponseCreated(payment)
+      } else {
+        return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления типов оплат' })
+      }
     } else {
-      return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления типов оплат' })
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        `Wrong token: ${token}`
+      )
+      return new HttpResponseForbidden('Wrong token')
     }
   }
 
   @Put('/cities')
-  async setCities() {
-    const iiko = await this.iiko.getInstance()
-    const cities = await iiko.setCities()
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      token: { type: 'string' },
+    },
+    required: ['token'],
+    type: 'object',
+  })
+  async setCities(ctx: Context) {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
 
-    if (cities) {
-      return new HttpResponseCreated(cities)
+    const token = ctx.request.body.token
+    if (token === Config.get('adminToken')) {
+      const iiko = await this.iiko.getInstance()
+      const cities = await iiko.setCities()
+      this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
+      if (cities) {
+        return new HttpResponseCreated(cities)
+      } else {
+        return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления городов' })
+      }
     } else {
-      return new HttpResponseBadRequest({ error: true, message: 'Ошибка добавления городов' })
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        `Wrong token: ${token}`
+      )
+      return new HttpResponseForbidden('Wrong token')
     }
   }
 }

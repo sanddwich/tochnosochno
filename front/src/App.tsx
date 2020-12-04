@@ -25,7 +25,7 @@ class App extends React.Component<AppProps, AppState> {
     }
   }
   componentDidMount() {
-    this.props.getCustomer()
+    // this.props.getCustomer()
   }
 
   setShow = () => {

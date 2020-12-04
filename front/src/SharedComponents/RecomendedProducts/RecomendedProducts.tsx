@@ -53,6 +53,7 @@ class RecomendedProducts extends React.Component<RecomendedProductsProps, Recome
   componentDidMount() {}
 
   render() {
+    console.log(this.getRecomendedProducts())
     return (
       <div className="RecomendedProducts">
         {this.props.title ? <BlockName name={this.props.title} /> : null}

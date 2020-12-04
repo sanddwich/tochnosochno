@@ -23,9 +23,9 @@ class Main extends React.Component<MainProps, MainState> {
   render() {
     return (
       <Container fluid className="Main p-0 m-0">
-        <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__backInLeft">
-          <SliderContainer />
-        </ScrollAnimation>
+        {/* <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__backInLeft"> */}
+        <SliderContainer />
+        {/* </ScrollAnimation> */}
 
         {this.props.loading ? null : (
           <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__backInRight">

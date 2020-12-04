@@ -2,10 +2,10 @@
   max-width: 620px;
   &__date {
     padding: 10px;
-    background-color: #f2f2f2;
+    // background-color: #f2f2f2;
     margin-top: 40px;
     font-family: 'Roboto';
-    font-size: 18px;
+    font-size: 24px;
     font-style: normal;
     font-weight: 700;
     line-height: 21px;
@@ -68,8 +68,8 @@
     }
   }
 
-  @media screen and (max-width:576px) {
-    &__date{
+  @media screen and (max-width: 576px) {
+    &__date {
       .OrderHistory__orderDate {
         font-size: 16px;
         line-height: 18px;

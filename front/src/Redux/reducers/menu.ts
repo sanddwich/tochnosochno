@@ -23,7 +23,7 @@ export default (state: MenuState = initialState, action: MenuAction): MenuState 
     case GET_MENU:
       return {
         ...state,
-        menu: action.menu,
+        menu: [...action.menu],
         loading: false,
         error: '',
         date: new Date(),

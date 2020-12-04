@@ -123,7 +123,7 @@ class OrderHistory extends React.Component<OrderHistoryProps, OrderHistoryState>
         const category = this.props.menu.find((cat) => cat.id === comboItem.comboId) as Category
         return (
           <React.Fragment key={comboItem.comboId + index}>
-            <h1 style={{ fontWeight: 500, paddingTop: 10 }}>Набор комбо:</h1>
+            {/* <h1 style={{ fontWeight: 500, paddingTop: 10 }}>Набор комбо:</h1> */}
             <ComboOrderBlockDescription category={category} comboItem={comboItem} history={true} />
           </React.Fragment>
         )
@@ -178,16 +178,7 @@ class OrderHistory extends React.Component<OrderHistoryProps, OrderHistoryState>
                   <React.Fragment key={order.id}>
                     <div className="OrderHistory__date">
                       <div className="OrderHistory__orderDate">
-                        <span>Заказ оформлен: </span>
-                        {order.date
-                          ? format(new Date(this.transformDate(order.date)), 'DD MMMM YYYY HH:mm:ss', i18)
-                          : null}
-                      </div>
-                      <div className="OrderHistory__orderToDate">
-                        <span>Доставка: </span>
-                        {order.completeBefore
-                          ? format(new Date(order.completeBefore), 'DD MMMM YYYY HH:mm:ss', i18)
-                          : null}
+                        {order.date ? format(new Date(this.transformDate(order.date)), 'DD MMMM YYYY', i18) : null}
                       </div>
                     </div>
 
@@ -197,7 +188,7 @@ class OrderHistory extends React.Component<OrderHistoryProps, OrderHistoryState>
                       if (!orderItem.comboId) {
                         return (
                           <React.Fragment key={orderItem.id}>
-                            <h1 style={{ fontWeight: 500, paddingTop: 10, marginBottom: 0 }}>Блюдо: </h1>
+                            {/* <h1 style={{ fontWeight: 500, paddingTop: 10, marginBottom: 0 }}>Блюдо: </h1> */}
                             <LineProductWithCart product={orderItem.product} />
                           </React.Fragment>
                         )
@@ -210,13 +201,10 @@ class OrderHistory extends React.Component<OrderHistoryProps, OrderHistoryState>
 
             <Container className="p-0">
               <Row className="OrderHistory__pagesCont p-0 m-0 mt-5 mb-5">
-                <Col className="OrderHistory__pagesTitle p-0 m-0" md={4} lg={3}>
-                  <h1>Страница</h1>
-                </Col>
                 <Col
                   className="OrderHistory__pagesStickers p-0 m-0 pl-4 pr-4 d-flex justify-content-start"
-                  md={8}
-                  lg={9}
+                  md={12}
+                  lg={12}
                 >
                   {pagesStringArray.map((pageNumber, index) => {
                     return (

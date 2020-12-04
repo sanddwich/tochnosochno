@@ -93,7 +93,7 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
   renderComboListBlock = (): any => {
     return (
       <div className="CartOrder__products mt-3 mb-3">
-        <h1>Наборы Комбо:</h1>
+        {/* <h1>Наборы Комбо:</h1> */}
         {this.state.cartCombos.map((comboItem: ComboItemOrder, index) => {
           const category = this.props.menu.find((cat) => cat.id === comboItem.comboId) as Category
           return (
@@ -139,7 +139,7 @@ class CartOrder extends React.Component<CartOrderProps, CartOrderState> {
 
                 {this.props.order.items.length > 0 ? (
                   <div className="CartOrder__products mb-3">
-                    <h1>Блюда:</h1>
+                    {/* <h1>Блюда:</h1> */}
                     {this.props.order.items.map((orderItem: OrderItem) => {
                       if (!orderItem.comboId && !orderItem.product.parentGroup?.isService) {
                         return <LineProductWithNumberInput key={orderItem.id} orderItem={orderItem} />

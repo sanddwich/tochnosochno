@@ -37,8 +37,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
 
   componentDidMount() {
     this.scrollTo('menuScroller', 250)
-    this.props.getGroupProducts(this.props.match.params.id)
-    console.log(this.props.match.params.id)
+    // this.props.getGroupProducts(this.props.match.params.id)
   }
 
   checkMenuId = (): boolean => {
@@ -50,16 +49,16 @@ class Menu extends React.Component<MenuProps, MenuState> {
   }
 
   componentDidUpdate(prevProps: MenuProps) {
-    if (this.props.location !== prevProps.location) {
-      this.checkGroupProduct(this.props.match.params.id)
-    }
+    // if (this.props.location !== prevProps.location) {
+    //   this.checkGroupProduct(this.props.match.params.id)
+    // }
   }
 
   checkGroupProduct = (groupId: string) => {
     const group = this.props.menu.filter((group) => {
       if (group.id === groupId) return group
     })
-    if (group && group[0].products && group[0].products[0] && !group[0].products[0].sizePrices) {
+    if (group && group[0].products && group[0].products[0] && !group[0].products[0].modifiers) {
       this.props.getGroupProducts(groupId)
     }
   }
@@ -78,13 +77,16 @@ class Menu extends React.Component<MenuProps, MenuState> {
       return (
         <React.Fragment>
           <Container fluid className="Menu p-0 m-0">
-            <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__backInLeft">
-              <SliderContainer />
-            </ScrollAnimation>
+            {/* <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__backInLeft"> */}
+            <SliderContainer />
+            {/* </ScrollAnimation> */}
 
             <React.Fragment>
               {this.props.productsLoading || this.props.loading ? (
-                <OverlayLoader />
+                <React.Fragment>
+                  <OverlayLoader />
+                  {/* <div style={{ minHeight: '100vh' }}></div> */}
+                </React.Fragment>
               ) : (
                 <React.Fragment>
                   <ScrollAnimation duration={1} animateOnce={true} animateIn="animate__backInRight">

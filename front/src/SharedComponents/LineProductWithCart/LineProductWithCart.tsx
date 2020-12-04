@@ -55,7 +55,12 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
 
             <div className="lineProductWithCart__product__price d-flex flex-column justify-content-center align-items-center">
               <div className="lineProductWithCart__product__newPrice col-sm-6 m-0 p-0">
-                <span className="bold">{this.props.product.sizePrices[0].price.currentPrice}</span>руб
+                <span className="bold">
+                  {this.props.product.sizePrices
+                    ? this.props.product.sizePrices[0].price.currentPrice
+                    : this.props.product.price}
+                </span>
+                руб
               </div>
               {/* <div className="lineProductWithCart__product__oldPrice col-sm-6 m-0 p-0"> 300р</div> */}
             </div>
@@ -63,7 +68,7 @@ class LineProductWithCart extends React.Component<LineProductWithCartProps, Line
         </div>
 
         <div className="lineProductWithCart__product__cartIcon d-flex justify-content-center align-items-center">
-          <AddProductButton hideTextMobile={true} product={this.props.product} />
+          <AddProductButton hideInputMobile={true} hideTextMobile={true} product={this.props.product} />
           {/* <ActionButton
             onClick={() => this.addToCartButton(this.props.product)}
             textColor="white"

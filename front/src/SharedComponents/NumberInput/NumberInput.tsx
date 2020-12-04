@@ -8,6 +8,7 @@ interface NumberInputProps {
   onChange: any
   value: number
   minValue: number
+  mobileHide?: boolean
 }
 
 interface NumberInputState {
@@ -48,7 +49,11 @@ export default class NumberInput extends React.Component<NumberInputProps, Numbe
 
   render() {
     return (
-      <div className={`numberInput noselect ${this.props.hideLabel ? '' : 'fullWidth'}`}>
+      <div
+        className={`numberInput  noselect ${this.props.hideLabel ? '' : 'fullWidth'} ${
+          this.props.mobileHide ? 'mobileHide' : ''
+        }`}
+      >
         <div className={`numberInput__label ${this.props.hideLabel ? 'hidden' : ''}`}>{this.props.label}</div>
         <div className="numberInput__input">
           <div onClick={this.decrement} className="numberInput__dec">

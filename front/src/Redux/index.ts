@@ -18,6 +18,7 @@ const encryptor = createEncryptor({
 const persistConfig: any = {
   key: 'tochnosochno',
   storage,
+  blacklist: ['menu'],
   transforms: [encryptor],
 }
 

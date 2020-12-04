@@ -185,7 +185,9 @@ export class AuthController {
       customer.orders.map((order: Order) => {
         order.items.map(async (orderItem: OrderItem) => {
           orderItem.product.recomended = []
-          orderItem.product.recomended.push(...this.menuService.getRecomendedProducts(orderItem.product, groups, 3))
+          orderItem.product.recomended.push(
+            ...(await this.menuService.getRecomendedProducts(orderItem.product, 3, groups))
+          )
         })
       })
 

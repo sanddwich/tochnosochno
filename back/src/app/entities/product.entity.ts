@@ -32,6 +32,9 @@ export class Product {
   name: string
 
   @Column()
+  price: number
+
+  @Column()
   code: string
 
   @Column({ nullable: true })

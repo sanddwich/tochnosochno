@@ -15,6 +15,7 @@ interface AddProductButtonProps {
   setOrderItemAmount: (orderItem: OrderItem, amount: number) => void
   deleteOrderItem: (orderItem: OrderItem) => void
   hideTextMobile: boolean
+  hideInputMobile?: boolean
 }
 
 interface AddProductButtonState {
@@ -79,6 +80,7 @@ class AddProductButton extends React.Component<AddProductButtonProps, AddProduct
       <React.Fragment>
         {orderItem ? (
           <NumberInput
+            mobileHide={this.props.hideInputMobile}
             minValue={0}
             value={value}
             label=""

@@ -21,7 +21,7 @@ import {
   HttpResponseBadRequest,
   HttpResponseInternalServerError,
 } from '@foal/core'
-import { FindManyOptions, getRepository, Like } from 'typeorm'
+import { FindManyOptions, getConnection, getRepository, Like } from 'typeorm'
 import { v4 as uuidv4 } from 'uuid'
 import {
   Product,
@@ -91,20 +91,19 @@ export class ApiController {
         relations: [
           'products',
           'products.parentGroup',
-          // 'products.sizePrices',
-          // 'products.sizePrices.price',
-
-          // 'products.groupModifiers',
-          // 'products.groupModifiers.group',
-          // 'products.groupModifiers.childModifiers',
-          // 'products.groupModifiers.childModifiers.product',
-          // 'products.groupModifiers.childModifiers.product.sizePrices',
-          // 'products.groupModifiers.childModifiers.product.sizePrices.price',
-          // 'products.modifiers',
-          // 'products.modifiers.product',
-          // 'products.modifiers.modifier',
-          // 'products.variants',
-          // 'products.facets',
+          'products.sizePrices',
+          'products.sizePrices.price',
+          'products.groupModifiers',
+          'products.groupModifiers.group',
+          'products.groupModifiers.childModifiers',
+          'products.groupModifiers.childModifiers.product',
+          'products.groupModifiers.childModifiers.product.sizePrices',
+          'products.groupModifiers.childModifiers.product.sizePrices.price',
+          'products.modifiers',
+          'products.modifiers.product',
+          'products.modifiers.modifier',
+          'products.variants',
+          'products.facets',
         ],
       })
 
@@ -112,12 +111,12 @@ export class ApiController {
         /*
          * Формирование массива рекомендованных товаров для каждого товара
          */
-        // rootGroup.products.map(async (product) => {
-        //   if (product) {
-        //     product.recomended = []
-        //     product.recomended.push(...this.menuService.getRecomendedProducts(product, products, 3))
-        //   }
-        // })
+        rootGroup.products.map(async (product) => {
+          if (product) {
+            product.recomended = []
+            product.recomended.push(...(await this.menuService.getRecomendedProducts(product, 3, products)))
+          }
+        })
 
         /*
          * Добавление товаров из подкатегорий в корневую категорию
@@ -197,27 +196,28 @@ export class ApiController {
         {
           relations: [
             'orders',
-            'addresses',
+            // 'addresses',
             'favoriteProducts',
             'favoriteProducts.product',
             'favoriteProducts.product.sizePrices',
             'favoriteProducts.product.sizePrices.price',
-            'addresses.street',
             'orders.terminalId',
-            'orders.address',
-            'orders.address.street',
             'orders.items',
-            'orders.items.productVariant.product',
-            'orders.items.productVariant',
             'orders.items.product',
             'orders.items.product.sizePrices',
             'orders.items.product.sizePrices.price',
-            'orders.items.orderItemModifiers',
-            'orders.items.orderItemModifiers.productModifier',
-            'orders.items.orderItemModifiers.productModifier.product',
-            'orders.items.orderItemModifiers.productModifier.product.sizePrices',
-            'orders.items.orderItemModifiers.productModifier.product.sizePrices.price',
-            'orders.items.orderItemModifiers.productModifier.modifier',
+            // 'addresses.street',
+            // 'orders.address',
+            // 'orders.address.street',
+
+            // 'orders.items.productVariant.product',
+            // 'orders.items.productVariant',
+
+            // 'orders.items.orderItemModifiers',
+            // 'orders.items.orderItemModifiers.productModifier',
+            // 'orders.items.orderItemModifiers.productModifier.product',
+            // 'orders.items.orderItemModifiers.productModifier.product.sizePrices',
+            // 'orders.items.orderItemModifiers.productModifier.product.sizePrices.price',
           ],
         }
       )
@@ -234,9 +234,11 @@ export class ApiController {
         })
 
         customer.orders.map((order: Order) => {
-          order.items.map((orderItem: OrderItem) => {
+          order.items.map(async (orderItem: OrderItem) => {
             orderItem.product.recomended = []
-            orderItem.product.recomended.push(...this.menuService.getRecomendedProducts(orderItem.product, groups, 3))
+            orderItem.product.recomended.push(
+              ...(await this.menuService.getRecomendedProducts(orderItem.product, 3, groups))
+            )
           })
         })
 
@@ -689,7 +691,6 @@ export class ApiController {
         where: {
           isGroupModifier: false,
           id: groupId,
-          // parentGroup: groupId,
         },
         relations: [
           'products',
@@ -709,7 +710,9 @@ export class ApiController {
           'products.modifiers.product.sizePrices.price',
         ],
       })
-
+      /*
+       * Добавление товаров из подкатегорий в корневую категорию
+       */
       if (group && group.products && group.products.length === 0) {
         let childGroups = await getRepository(Group).find({
           where: {
@@ -738,18 +741,30 @@ export class ApiController {
             group.products.push(...childGroup.products)
           }
         })
-      }
 
-      /*
-       * Добавление товаров из подкатегорий в корневую категорию
-       */
-      // if (products && !products.parentGroup) {
-      //   products.map((group) => {
-      //     if (group.parentGroup === rootGroup.id && !group.isCombo) {
-      //       rootGroup.products.push(...group.products)
-      //     }
-      //   })
-      // }
+        /*
+         * Формирование массива рекомендованных товаров для каждого товара
+         */
+      }
+      const recomendedProducts: string[] = []
+      const randomProducts = await getConnection()
+        .getRepository(Product)
+        .createQueryBuilder('product')
+        .orderBy('RAND()')
+        .limit(3)
+        .where('`price` > 200')
+        .getMany()
+
+      randomProducts.map((product) => {
+        recomendedProducts.push(product.id)
+      })
+      group &&
+        group.products.map(async (product) => {
+          if (product) {
+            product.recomended = []
+            product.recomended.push(...recomendedProducts)
+          }
+        })
 
       this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
       return new HttpResponseOK({ products: group })
