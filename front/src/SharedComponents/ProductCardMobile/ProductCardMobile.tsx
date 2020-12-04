@@ -110,7 +110,7 @@ class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductC
                     <div className="ProductCardMobile__price d-inline-block">
                       {this.props.product.sizePrices && this.props.product.sizePrices.length > 0
                         ? this.props.product.sizePrices[0].price.currentPrice.toFixed(0).toString()
-                        : newPrice.toFixed(0).toString()}{' '}
+                        : this.props.product.price?.toFixed(0).toString()}{' '}
                       <span>руб</span>
                     </div>
                     {/* <div className="ProductCardMobile__oldPrice d-inline-block">{oldPrice.toFixed(0).toString()}р</div> */}

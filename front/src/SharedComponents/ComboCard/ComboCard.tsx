@@ -49,7 +49,8 @@ class ComboCard extends React.Component<ComboCardProps, ComboCardState> {
   render() {
     // const comboPrice: number = 0
     const comboPrice: number =
-      this.props.combo.products[0].sizePrices[0].price.currentPrice * (this.props.combo.comboProductsCount || 1)
+      (this.props.combo.products[0].sizePrices && this.props.combo.products[0].sizePrices[0].price.currentPrice) ||
+      this.props.combo.products[0].price * (this.props.combo.comboProductsCount || 1)
     return (
       <React.Fragment>
         <Container className="ComboCard p-3 m-0 ">

@@ -91,19 +91,22 @@ export class ApiController {
         relations: [
           'products',
           'products.parentGroup',
-          // 'products.sizePrices',
-          // 'products.sizePrices.price',
+
           'products.groupModifiers',
           'products.groupModifiers.group',
           'products.groupModifiers.childModifiers',
           'products.groupModifiers.childModifiers.product',
-          // 'products.groupModifiers.childModifiers.product.sizePrices',
-          // 'products.groupModifiers.childModifiers.product.sizePrices.price',
           'products.modifiers',
           'products.modifiers.product',
           'products.modifiers.modifier',
-          'products.variants',
-          'products.facets',
+
+          // 'products.sizePrices',
+          // 'products.sizePrices.price',
+          // 'products.groupModifiers.childModifiers.product.sizePrices',
+          // 'products.groupModifiers.childModifiers.product.sizePrices.price',
+
+          // 'products.variants',
+          // 'products.facets',
         ],
       })
 
@@ -193,6 +196,7 @@ export class ApiController {
     try {
       const customer = await getRepository(Customer).findOne(
         { id: ctx.user.id },
+
         {
           relations: [
             'orders',
@@ -373,7 +377,6 @@ export class ApiController {
 
         const iiko = await this.iiko.getInstance()
         const orderIiko = await iiko.formatOrderForIiko(order)
-        console.log(orderIiko)
 
         await this.sender.sendOrderEmail(order)
         const orderDb = await repositoryOrder.save(order)

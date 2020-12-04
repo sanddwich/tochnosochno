@@ -76,13 +76,13 @@ class ComboOrderBlockDescription extends React.Component<
 
   errorMessage = (): void => {
     const alertShow = true
-    this.setState({alertShow, alertRenderKey: Math.random()})
+    this.setState({ alertShow, alertRenderKey: Math.random() })
   }
 
   render() {
     let price = 0
     this.props.comboItem.products.map((product) => {
-      price = price + product.sizePrices[0].price.currentPrice
+      price = price + ((product.sizePrices && product.sizePrices[0].price.currentPrice) || product.price)
     })
     return (
       <Container fluid className="ComboOrderBlockDescription m-0 p-0">
@@ -165,7 +165,7 @@ class ComboOrderBlockDescription extends React.Component<
 
         <Row key={this.state.alertRenderKey} className="ComboOrderBlockDescription__Alert p-0 m-0">
           <Col className="p-0 m-0">
-            <CustomAlert              
+            <CustomAlert
               message={`Данный товар в настоящее время отсутствует в текущем меню`}
               variant="danger"
               show={this.state.alertShow}

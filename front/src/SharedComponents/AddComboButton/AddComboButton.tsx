@@ -53,7 +53,7 @@ class AddComboButton extends React.Component<AddComboButtonProps, AddComboButton
         product: product,
         amount: 1,
         orderItemModifiers: [],
-        value: product.sizePrices[0].price.currentPrice,
+        value: (product.sizePrices && product.sizePrices[0].price.currentPrice) || product.price,
         comboId: this.props.comboId,
         pickDate: pickDate,
       }
