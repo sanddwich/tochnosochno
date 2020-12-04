@@ -114,7 +114,7 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
                 <div className="ProductCard__price d-inline-block">
                   {this.props.product.sizePrices && this.props.product.sizePrices.length > 0
                     ? this.props.product.sizePrices[0].price.currentPrice.toFixed(0).toString()
-                    : newPrice.toFixed(0).toString()}{' '}
+                    : this.props.product.price?.toFixed(0).toString()}{' '}
                   <span>руб</span>
                 </div>
                 {/* <div className="ProductCard__oldPrice d-inline-block">{oldPrice.toFixed(0).toString()}р</div> */}

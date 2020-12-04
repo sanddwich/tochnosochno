@@ -91,14 +91,14 @@ export class ApiController {
         relations: [
           'products',
           'products.parentGroup',
-          'products.sizePrices',
-          'products.sizePrices.price',
+          // 'products.sizePrices',
+          // 'products.sizePrices.price',
           'products.groupModifiers',
           'products.groupModifiers.group',
           'products.groupModifiers.childModifiers',
           'products.groupModifiers.childModifiers.product',
-          'products.groupModifiers.childModifiers.product.sizePrices',
-          'products.groupModifiers.childModifiers.product.sizePrices.price',
+          // 'products.groupModifiers.childModifiers.product.sizePrices',
+          // 'products.groupModifiers.childModifiers.product.sizePrices.price',
           'products.modifiers',
           'products.modifiers.product',
           'products.modifiers.modifier',
@@ -148,15 +148,15 @@ export class ApiController {
         },
         take: 5,
         relations: [
-          'sizePrices',
-          'sizePrices.price',
+          // 'sizePrices',
+          // 'sizePrices.price',
           'parentGroup',
           'groupModifiers',
           'groupModifiers.group',
           'groupModifiers.childModifiers',
           'groupModifiers.childModifiers.product',
-          'groupModifiers.childModifiers.product.sizePrices',
-          'groupModifiers.childModifiers.product.sizePrices.price',
+          // 'groupModifiers.childModifiers.product.sizePrices',
+          // 'groupModifiers.childModifiers.product.sizePrices.price',
           'modifiers',
           'modifiers.product',
           'modifiers.modifier',
@@ -199,13 +199,13 @@ export class ApiController {
             // 'addresses',
             'favoriteProducts',
             'favoriteProducts.product',
-            'favoriteProducts.product.sizePrices',
-            'favoriteProducts.product.sizePrices.price',
+            // 'favoriteProducts.product.sizePrices',
+            // 'favoriteProducts.product.sizePrices.price',
             'orders.terminalId',
             'orders.items',
             'orders.items.product',
-            'orders.items.product.sizePrices',
-            'orders.items.product.sizePrices.price',
+            // 'orders.items.product.sizePrices',
+            // 'orders.items.product.sizePrices.price',
             // 'addresses.street',
             // 'orders.address',
             // 'orders.address.street',
@@ -230,7 +230,8 @@ export class ApiController {
             isGroupModifier: false,
             // isSiteDisplay: true,
           },
-          relations: ['products', 'products.sizePrices', 'products.sizePrices.price', 'products.parentGroup'],
+          // relations: ['products', 'products.sizePrices', 'products.sizePrices.price', 'products.parentGroup'],
+          relations: ['products', 'products.parentGroup'],
         })
 
         customer.orders.map((order: Order) => {
@@ -374,9 +375,8 @@ export class ApiController {
         const orderIiko = await iiko.formatOrderForIiko(order)
         console.log(orderIiko)
 
-        const orderDb = await repositoryOrder.save(order)
-
         await this.sender.sendOrderEmail(order)
+        const orderDb = await repositoryOrder.save(order)
         return new HttpResponseCreated({ order })
       }
     } catch (error) {
@@ -694,20 +694,20 @@ export class ApiController {
         },
         relations: [
           'products',
-          'products.sizePrices',
-          'products.sizePrices.price',
+          // 'products.sizePrices',
+          // 'products.sizePrices.price',
           'products.parentGroup',
           'products.groupModifiers',
           'products.groupModifiers.group',
           'products.groupModifiers.childModifiers',
           'products.groupModifiers.childModifiers.product',
-          'products.groupModifiers.childModifiers.product.sizePrices',
-          'products.groupModifiers.childModifiers.product.sizePrices.price',
+          // 'products.groupModifiers.childModifiers.product.sizePrices',
+          // 'products.groupModifiers.childModifiers.product.sizePrices.price',
           'products.modifiers',
           'products.modifiers.modifier',
           'products.modifiers.product',
-          'products.modifiers.product.sizePrices',
-          'products.modifiers.product.sizePrices.price',
+          // 'products.modifiers.product.sizePrices',
+          // 'products.modifiers.product.sizePrices.price',
         ],
       })
       /*
@@ -721,15 +721,15 @@ export class ApiController {
           },
           relations: [
             'products',
-            'products.sizePrices',
-            'products.sizePrices.price',
+            // 'products.sizePrices',
+            // 'products.sizePrices.price',
             'products.parentGroup',
             'products.groupModifiers',
             'products.groupModifiers.group',
             'products.groupModifiers.childModifiers',
             'products.groupModifiers.childModifiers.product',
-            'products.groupModifiers.childModifiers.product.sizePrices',
-            'products.groupModifiers.childModifiers.product.sizePrices.price',
+            // 'products.groupModifiers.childModifiers.product.sizePrices',
+            // 'products.groupModifiers.childModifiers.product.sizePrices.price',
             'products.modifiers',
             'products.modifiers.modifier',
             'products.modifiers.product',

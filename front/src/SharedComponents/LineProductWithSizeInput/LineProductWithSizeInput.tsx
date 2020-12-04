@@ -31,7 +31,8 @@ export default class LineProductWithSizeInput extends React.Component<
           <Col className="p-1" xs={6} md={4}>
             <Row className="d-flex justify-content-start">
               <div className="LineProductWithSizeInput__price">
-                {this.props.product.sizePrices[0].price.currentPrice}
+                {(this.props.product.sizePrices && this.props.product.sizePrices[0].price.currentPrice) ||
+                  this.props.product.price}
                 <span>руб</span>
               </div>
               {/* <div className="LineProductWithSizeInput__priceOld">200р</div> */}

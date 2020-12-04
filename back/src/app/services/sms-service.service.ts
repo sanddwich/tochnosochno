@@ -55,6 +55,7 @@ export class SmsService {
     let orderItemsHtml = ''
     let deliveryAddress = ''
     if (order.isDelivery) {
+      console.log(order.address.street)
       deliveryAddress = ` ${order.address.street.name ? `ул. ${order.address.street.name},` : ''} 
        ${order.address.house ? `д. ${order.address.house},` : ''} 
       ${order.address.flat ? `кв. ${order.address.flat}, ` : ''} 
@@ -69,13 +70,19 @@ export class SmsService {
          <div style="text-align: center;">${orderItem.product.name}</div>
      </td>
      <td style="width: 20.0000%;">
-         <div style="text-align: center;">${orderItem.product.sizePrices[0].price.currentPrice}</div>
+         <div style="text-align: center;">${
+           (orderItem.product.sizePrices && orderItem.product.sizePrices[0].price.currentPrice) ||
+           orderItem.product.price
+         }</div>
      </td>
      <td style="width: 20.0000%;">
          <div style="text-align: center;">${orderItem.amount}</div>
      </td>
      <td style="width: 20.0000%;">
-         <div style="text-align: center;">${orderItem.product.sizePrices[0].price.currentPrice * orderItem.amount}</div>
+         <div style="text-align: center;">${
+           (orderItem.product.sizePrices && orderItem.product.sizePrices[0].price.currentPrice * orderItem.amount) ||
+           orderItem.product.price * orderItem.amount
+         }</div>
      </td>
  </tr>`
       orderItemsHtml = orderItemsHtml + html

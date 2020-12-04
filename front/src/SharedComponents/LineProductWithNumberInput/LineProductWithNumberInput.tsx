@@ -80,7 +80,12 @@ class LineProductWithNumberInput extends React.Component<
 
           <div className="LineProductWithNumberInput__product__price">
             <div className="LineProductWithNumberInput__product__newPrice ">
-              <span className="bold">{this.props.orderItem.product.sizePrices[0].price.currentPrice}</span>руб
+              <span className="bold">
+                {(this.props.orderItem.product.sizePrices &&
+                  this.props.orderItem.product.sizePrices[0].price.currentPrice) ||
+                  this.props.orderItem.product.price}
+              </span>
+              руб
             </div>
 
             {/* <div className="LineProductWithNumberInput__product__oldPrice "> 200р</div> */}
