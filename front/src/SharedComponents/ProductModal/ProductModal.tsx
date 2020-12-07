@@ -13,6 +13,7 @@ import { hideProductModal } from '../../Redux/actions/app'
 import './ProductModal.scss'
 import FavouriteRoundButton from '../FavouriteRoundButton/FavouriteRoundButton'
 import Category from '../../Interfaces/Category'
+import AddProductButton from '../AddProductButton/AddProductButton'
 
 interface ProductModalProps {
   menu: Category[]
@@ -95,7 +96,7 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
 
                 <Col className="ProductModal__info p-0 m-0 d-flex flex-column" md={7}>
                   <Row>
-                    <Col className="ProductModal__title ml-4 ml-md-0">
+                    <Col className="ProductModal__title mt-md-5 ml-4 ml-md-0">
                       <BlockName name={this.props.productModalProduct.name} />
                     </Col>
                   </Row>
@@ -106,6 +107,7 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
                   <Row className="ProductModal__priceBlock">
                     <Col className="ProductModal__Content d-flex align-items-center">
                       <LineProductWithSizeInput product={this.props.productModalProduct} />
+                      {/* <AddProductButton product={this.props.productModalProduct} hideTextMobile={false} /> */}
                     </Col>
                   </Row>
 

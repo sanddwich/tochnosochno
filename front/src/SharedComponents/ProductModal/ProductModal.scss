@@ -38,6 +38,8 @@
   .ProductModal__img {
     // margin-top: -50px;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
     div {
       img {
         height: 280px; // =========== Каринки

@@ -182,6 +182,13 @@ export class AuthController {
         relations: ['products', 'products.sizePrices', 'products.sizePrices.price', 'products.parentGroup'],
       })
 
+      customer.favoriteProducts.map(async (favouriteProduct) => {
+        favouriteProduct.product.recomended = []
+        favouriteProduct.product.recomended.push(
+          ...(await this.menuService.getRecomendedProducts(favouriteProduct.product, 3, groups))
+        )
+      })
+
       customer.orders.map((order: Order) => {
         order.items.map(async (orderItem: OrderItem) => {
           orderItem.product.recomended = []

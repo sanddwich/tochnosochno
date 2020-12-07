@@ -39,12 +39,14 @@ interface ComboCardModalState {
   comboConsist: Product[]
   comboProductVariants: Product[]
   comboConsistArrayElement: number
+  sliderProductIndex: number
 }
 
 class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModalState> {
   constructor(props: ComboCardModalProps) {
     super(props)
     this.state = {
+      sliderProductIndex: 0,
       comboConsist:
         typeof this.props.comboItemOrder !== 'undefined'
           ? this.props.comboItemOrder.products
@@ -57,13 +59,9 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
     }
   }
 
-  componentDidMount() {
-    // console.log(this.state)
-    // console.log(this.props.comboItemOrder)
-  }
+  componentDidMount() {}
 
   changeProductAtCombo = (comboConsistArrayElement: number) => {
-    // console.log(comboConsistArrayElement)
     this.setState({ comboConsistArrayElement })
   }
 
@@ -72,9 +70,6 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
     const comboConsist = this.state.comboConsist
     const insertProduct = this.state.comboProductVariants.find((product) => product.id === newProductId) as Product
     comboConsist[comboConsistArrayElement] = insertProduct
-
-    // console.log(insertProduct)
-    // console.log(comboConsist)
 
     comboConsistArrayElement = -1
     this.setState({ comboConsistArrayElement, comboConsist })
@@ -143,8 +138,6 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                       ) : (
                         <AddComboButton products={this.state.comboConsist} comboId={this.props.comboModalElement.id} />
                       )}
-
-                      {/* <AddComboButton products={this.state.comboConsist} comboId={this.props.comboModalElement.id} /> */}
                     </div>
                   </Row>
                 </Col>
@@ -157,16 +150,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                       comboConsist={this.state.comboConsist}
                     />
                   ) : (
-                    <div
-                      className="ComboCardModal__imgBack"
-                      // style={{
-                      //   background: 'url(/images/combo.jpg)',
-                      //   backgroundRepeat: 'no-repeat',
-                      //   // backgroundAttachment: 'fixed',
-                      //   backgroundPosition: 'center',
-                      //   backgroundSize: 'cover',
-                      // }}
-                    >
+                    <div className="ComboCardModal__imgBack">
                       <img src="/images/combo.jpg" alt="" />
                     </div>
                   )}
@@ -195,11 +179,14 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                         nextEl: '#ComboCardModalMobNext',
                         prevEl: '#ComboCardModalMobPrev',
                       }}
+                      onSlideChange={(swiper) => {
+                        this.setState({ sliderProductIndex: swiper.realIndex })
+                      }}
                     >
                       {this.state.comboProductVariants.map((product, index) => {
                         // if (!this.state.comboConsist.find((ccproduct) => product.id === ccproduct.id)) {
                         return (
-                          <SwiperSlide key={index} onClick={() => this.addNewProductAtCombo(product.id)}>
+                          <SwiperSlide key={product.id}>
                             <Container fluid className="p-0 m-0">
                               <Row className="p-0 m-0 d-flex align-items-center justify-content-center">
                                 <div>
@@ -214,7 +201,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                                       alt=""
                                     />
                                   </div>
-                                  <div className="p-0 m-0 d-flex justify-content-center align-items-center">
+                                  <div className="p-0 m-2 d-flex justify-content-center align-items-center">
                                     {product.name}
                                   </div>
                                 </div>
@@ -227,7 +214,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                     </Swiper>
 
                     <Row className="Slider__actions m-0 p-0 d-flex">
-                      <div className="Slider__arrows w-100 d-flex justify-content-between">
+                      <div className="Slider__arrows w-100 pl-2 d-flex justify-content-around">
                         <div id="ComboCardModalMobPrev" className="Slider__arrow">
                           <img src="/images/icons/arrow_left.svg" alt="" />
                         </div>
@@ -237,7 +224,7 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                       </div>
                     </Row>
 
-                    <Col className="d-flex justify-content-center">
+                    <Col className="d-flex m-2 justify-content-center">
                       <div id="paginationComboProduct" className="Slider__pagination"></div>
                     </Col>
                   </React.Fragment>
@@ -254,52 +241,69 @@ class ComboCardModal extends React.Component<ComboCardModalProps, ComboCardModal
                   ></div>
                 )}
               </Row>
+              {this.state.comboConsistArrayElement !== -1 && (
+                <div className="d-flex justify-content-center m-2">
+                  <ActionButton
+                    hideTextMobile={false}
+                    backgroundColor="#303030"
+                    icon="cart_dark.svg"
+                    text="Выбрать"
+                    width="180px"
+                    textColor="#ffffff"
+                    onClick={() => {
+                      this.addNewProductAtCombo(this.state.comboProductVariants[this.state.sliderProductIndex].id)
+                    }}
+                  />
+                </div>
+              )}
+              {this.state.comboConsistArrayElement === -1 && (
+                <Row className="ComboCardModalMob__Cont p-0 m-0">
+                  <Col className="ComboCardModalMob__leftColumn p-0">
+                    <Row className="w-100">
+                      <Col className="ComboCardModalMob__title">
+                        <BlockName name={`${this.props.comboModalElement.name}`} />
+                      </Col>
+                    </Row>
+                    <Row></Row>
+                    <Row className="ComboCardModalMob__productsList d-flex p-0 m-0">
+                      <Col className="p-0">
+                        {this.state.comboConsist.map((product, index) => {
+                          return (
+                            <ComboElement
+                              key={product.id + index}
+                              product={product}
+                              comboConsistArrayElement={index}
+                              changeProductAtCombo={this.changeProductAtCombo}
+                            />
+                          )
+                        })}
+                      </Col>
+                    </Row>
 
-              <Row className="ComboCardModalMob__Cont p-0 m-0">
-                <Col className="ComboCardModalMob__leftColumn p-0">
-                  <Row className="w-100">
-                    <Col className="ComboCardModalMob__title">
-                      <BlockName name={`${this.props.comboModalElement.name}`} />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col className="ComboCardModalMob__descr">{this.props.comboModalElement.description}</Col>
-                  </Row>
-                  <Row className="ComboCardModalMob__productsList d-flex p-0 m-0">
-                    <Col className="p-0">
-                      {this.state.comboConsist.map((product, index) => {
-                        return (
-                          <ComboElement
-                            key={product.id + index}
-                            product={product}
-                            comboConsistArrayElement={index}
-                            changeProductAtCombo={this.changeProductAtCombo}
+                    <Row className="ComboCardModalMob__result p-0 m-0 mt-auto d-flex justify-content-around align-items-center">
+                      <div className="ComboCardModalMob__resultTitle">Итого:</div>
+                      <div className="ComboCardModalMob__resultPrice">
+                        {comboPrice}
+                        <span>руб</span>
+                      </div>
+                      <div className="ComboCardModalMob__resultActionButton">
+                        {typeof this.props.comboItemOrder !== 'undefined' ? (
+                          <UpdateComboButton
+                            products={this.state.comboConsist}
+                            comboId={this.props.comboItemOrder.comboId}
+                            pickDate={this.props.comboItemOrder.pickDate}
                           />
-                        )
-                      })}
-                    </Col>
-                  </Row>
-
-                  <Row className="ComboCardModalMob__result p-0 m-0 mt-auto d-flex justify-content-around align-items-center">
-                    <div className="ComboCardModalMob__resultTitle">Итого:</div>
-                    <div className="ComboCardModalMob__resultPrice">
-                      {comboPrice}
-                      <span>руб</span>
-                    </div>
-                    <div className="ComboCardModalMob__resultActionButton">
-                      {typeof this.props.comboItemOrder !== 'undefined' ? (
-                        <UpdateComboButton
-                          products={this.state.comboConsist}
-                          comboId={this.props.comboItemOrder.comboId}
-                          pickDate={this.props.comboItemOrder.pickDate}
-                        />
-                      ) : (
-                        <AddComboButton products={this.state.comboConsist} comboId={this.props.comboModalElement.id} />
-                      )}
-                    </div>
-                  </Row>
-                </Col>
-              </Row>
+                        ) : (
+                          <AddComboButton
+                            products={this.state.comboConsist}
+                            comboId={this.props.comboModalElement.id}
+                          />
+                        )}
+                      </div>
+                    </Row>
+                  </Col>
+                </Row>
+              )}
             </Container>
           </Container>
         ) : null}

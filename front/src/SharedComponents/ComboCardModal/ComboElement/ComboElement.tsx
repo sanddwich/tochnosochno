@@ -21,12 +21,20 @@ export default class ComboElement extends React.Component<ComboElementProps, Com
         onClick={() => this.props.changeProductAtCombo(this.props.comboConsistArrayElement)}
       >
         <Row className="ComboElement__img p-0 m-0 pb-2">
-          <Col className="p-0 m-0 mr-3 d-flex align-items-center justify-content-center" xs={3}>
+          <Col
+            className="p-0 m-0 mr-3 d-flex align-items-start justify-content-center"
+            xs={3}
+            style={{
+              overflow: 'hidden',
+              borderTopLeftRadius: '15px',
+            }}
+          >
             <img
               src={
                 this.props.product.imageLinks[0] ? `${this.props.product.imageLinks[0]}` : '/images/products/burger.png'
               }
-              className="img-fluid"
+              // className="img-fluid"
+              className="ComboElement__product-img"
               alt=""
             />
           </Col>
