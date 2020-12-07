@@ -38,7 +38,9 @@ import OrderServiceType from '../interfaces/OrderServiceType'
 import { GeoCoder } from './geo-coder.service'
 import { LoggerService } from './logger.service'
 
-const fetch = require('node-fetch')
+import fetch = require('node-fetch')
+
+import downloadImage = require('image-downloader')
 
 const API_SERVER = Config.get('iiko.apiUrl')
 const IIKO_PASSWORD = Config.get('iiko.iikoPassword')
@@ -57,27 +59,10 @@ const CITIES_URL = `${API_SERVER}/cities`
 const DELIVERY_RESTRICTIONS_URL = `${API_SERVER}/delivery_restrictions/allowed`
 
 export class Iiko {
-  // private readonly apiServer = Config.get('iiko.apiUrl')
-  // private readonly iikoUser = Config.get('iiko.iikoUser')
-  // private readonly iikoPassword = Config.get('iiko.iikoPassword')
-
   private static instance: Iiko
   private token = ''
   private tokenTimeStamp: number
   private organizations: Organization[]
-
-  // private tokenUrl = `${this.apiServer}/access_token`
-  // private organizationUrl = `${this.apiServer}/organizations`
-  // private terminalsUrl = `${this.apiServer}/terminal_groups`
-  // private paymnetTypeUrl = `${this.apiServer}/payment_types`
-  // private cityUrl = `${this.apiServer}/cities`
-  // private streetUrl = `${this.apiServer}/streets/by_city`
-  // private createOrderUrl = `${this.apiServer}/deliveries/create`
-  // private customerUrl = `${this.apiServer}/loyalty/iiko/get_customer`
-  // private menuUrl = `${this.apiServer}/nomenclature`
-  // private checkOrderUrl = `${this.apiServer}/deliveries/check_create`
-  // private orderStatusUrl = `${this.apiServer}/deliveries/by_id`
-  // private deliveryResctrictionsUrl = `${this.apiServer}/delivery_restrictions/allowed`
 
   private async init() {
     const tokenAge = (Date.now() - this.tokenTimeStamp) / 60000
@@ -287,6 +272,19 @@ export class Iiko {
         prod.groupModifiers = []
         prod.modifiers = []
         prod.price = prod.sizePrices[0].price.currentPrice
+
+        await (prod.imageLinks.length > 0 &&
+          prod.imageLinks[0] !== 'IMAGE_UPLOAD_ERROR' &&
+          downloadImage
+            .image({ url: prod.imageLinks[0], dest: `E:/dev/node/tochnosochno/back/public/images/${prod.id}.png` })
+            .then(({ filename }) => {
+              console.log('Saved to', filename) // saved to /path/to/dest/image.jpg
+            })
+            .catch((err) => {
+              console.log(prod.imageLinks)
+              console.error(err)
+            }))
+
         const product = await productRepository.save(prod)
         if (productModifiers.length > 0) {
           productModifiers.map(async (modifier) => {

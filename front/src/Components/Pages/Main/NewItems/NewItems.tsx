@@ -48,7 +48,6 @@ class NewItems extends React.Component<NewItemsProps, NewItemsState> {
       }
     })
     this.setState({ lastProducts })
-    console.log(lastProducts)
   }
 
   generateMobileSlides = (separator: number): any => {

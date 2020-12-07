@@ -3,6 +3,7 @@ import Terminal from '../../Interfaces/Terminal'
 import {
   ADD_GROUP_PRODUCTS,
   GET_MENU,
+  HIDE_PRODUCTS_LOADING,
   SET_ERROR,
   SET_LOADING,
   SET_PRODUCTS_LOADING,
@@ -20,6 +21,10 @@ interface SetLoadingAction {
 
 interface SetProductsLoadingAction {
   type: typeof SET_PRODUCTS_LOADING
+}
+
+interface HideProductsLoadingAction {
+  type: typeof HIDE_PRODUCTS_LOADING
 }
 
 interface SetErrorAction {
@@ -44,3 +49,4 @@ export type MenuAction =
   | SetTerminalsAction
   | AddGroupProductsAction
   | SetProductsLoadingAction
+  | HideProductsLoadingAction

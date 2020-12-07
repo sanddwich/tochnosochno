@@ -85,23 +85,7 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
               </div>
             </Row>
 
-            {/* <Row
-              className="ProductCard__img d-flex justify-content-center"
-              onClick={() => this.props.showProductModal(this.props.product)}
-            >
-              <img
-                id={this.props.product.id}
-                className="img-fluid"
-                src={
-                  typeof this.props.product.imageLinks[0] !== 'undefined'
-                    ? `${this.props.product.imageLinks[0]}`
-                    : '/images/products/burger.png'
-                }
-                alt={this.props.product.name}
-              />
-            </Row> */}
             <div
-              // style={{ background: 'url("/images/products/burger.png")', backgroundSize: 'contain', height: '292px' }}
               className="ProductCard__img d-flex justify-content-center"
               onClick={() => this.props.showProductModal(this.props.product)}
             >
@@ -112,6 +96,12 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
                     ? `${this.props.product.imageLinks[0]}`
                     : '/images/products/burger.png'
                 }
+                // src={
+                //   typeof this.props.product.imageLinks[0] !== 'undefined'
+                //     ? `/images/products/${this.props.product.id}.png`
+                //     : '/images/products/burger.png'
+                // }
+                // src={`/images/products/${this.props.product.id}.png`}
                 alt={this.props.product.name}
               />
             </div>

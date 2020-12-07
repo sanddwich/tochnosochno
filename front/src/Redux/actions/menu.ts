@@ -5,6 +5,7 @@ import Terminal from '../../Interfaces/Terminal'
 import {
   ADD_GROUP_PRODUCTS,
   GET_MENU,
+  HIDE_PRODUCTS_LOADING,
   SET_ERROR,
   SET_LOADING,
   SET_PRODUCTS_LOADING,
@@ -13,6 +14,7 @@ import {
 import { MenuAction } from '../interfaces/menu'
 
 import { API_URL } from '../../utils/config'
+import { precacheImages } from '../../utils/utils'
 
 const apiServer = API_URL
 
@@ -38,8 +40,29 @@ export const getMenu = (): ThunkAction<void, RootState, null, MenuAction> => {
       //   }
       // })
 
+      // const urls: string[] = []
+      // resData.products.map((group: Category) => {
+      //   group.products.map((product) => {
+      //     product.imageLinks && product.imageLinks.length > 0 && urls.push(product.imageLinks[0].toString())
+      //   })
+      // })
+
+      // await precacheImages(urls)
+
       dispatch(fetchMenu(resData.products))
       dispatch(setTerminals(resData.terminals))
+    } catch (err) {
+      dispatch(setError(err))
+    }
+  }
+}
+
+export const loadImages = (urls: string[]): ThunkAction<void, RootState, null, MenuAction> => {
+  return async (dispatch) => {
+    try {
+      dispatch(setProductsLoading())
+      await precacheImages(urls)
+      dispatch(hideProductsLoading())
     } catch (err) {
       dispatch(setError(err))
     }
@@ -80,6 +103,12 @@ export const addGroupProducts = (group: Category): MenuAction => {
 export const setProductsLoading = (): MenuAction => {
   return {
     type: SET_PRODUCTS_LOADING,
+  }
+}
+
+export const hideProductsLoading = (): MenuAction => {
+  return {
+    type: HIDE_PRODUCTS_LOADING,
   }
 }
 

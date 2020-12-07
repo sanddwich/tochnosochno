@@ -9,6 +9,7 @@ import * as rateLimit from 'express-rate-limit'
 import { Config, createApp } from '@foal/core'
 import { createConnection } from 'typeorm'
 import { AppController } from './app/app.controller'
+var path = require('path')
 
 async function main() {
   await createConnection()
@@ -39,7 +40,6 @@ async function main() {
   expressApp.use('/auth/login', rateLimiter(20, 1 * 60 * 1000))
   expressApp.use('/auth/auth', rateLimiter(20, 1 * 60 * 1000))
   expressApp.use('/api', rateLimiter(60, 1 * 60 * 1000))
-
   const app = createApp(AppController, expressApp)
 
   const httpServer = http.createServer(app)

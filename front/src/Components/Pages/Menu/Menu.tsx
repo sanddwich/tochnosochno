@@ -10,12 +10,13 @@ import ProductList from './ProductList/ProductList'
 import { connect } from 'react-redux'
 import { RootState } from '../../../Redux'
 import Category from '../../../Interfaces/Category'
-import { getGroupProducts } from '../../../Redux/actions/menu'
+import { getGroupProducts, loadImages } from '../../../Redux/actions/menu'
 // import BreadCrumbs from '../../../SharedComponents/BreadCrumbs/BreadCrumbs'
 import ScrollAnimation from 'react-animate-on-scroll'
 import 'animate.css/animate.min.css'
 import Loader from '../../../SharedComponents/Loader/Loader'
 import OverlayLoader from '../../../SharedComponents/OverlayLoader/OverlayLoader'
+import { precacheImages } from '../../../utils/utils'
 
 interface MatchParams {
   id: string
@@ -26,6 +27,7 @@ interface MenuProps extends RouteComponentProps<MatchParams> {
   getGroupProducts: any
   productsLoading: boolean
   loading: boolean
+  loadImages: any
 }
 
 interface MenuState {}
@@ -49,9 +51,20 @@ class Menu extends React.Component<MenuProps, MenuState> {
   }
 
   componentDidUpdate(prevProps: MenuProps) {
-    // if (this.props.location !== prevProps.location) {
-    //   this.checkGroupProduct(this.props.match.params.id)
-    // }
+    if (this.props.location !== prevProps.location) {
+      // this.checkGroupProduct(this.props.match.params.id)
+
+      const urls: string[] = []
+      this.props.menu.map((group: Category) => {
+        group.products.map((product) => {
+          product.imageLinks &&
+            product.imageLinks.length > 0 &&
+            group.id === this.props.match.params.id &&
+            urls.push(product.imageLinks[0].toString())
+        })
+      })
+      this.props.loadImages(urls)
+    }
   }
 
   checkGroupProduct = (groupId: string) => {
@@ -120,6 +133,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
 
 const mapDispatchToProps = {
   getGroupProducts,
+  loadImages,
 }
 
 const mapStateToProps = (state: RootState) => {

@@ -126,11 +126,6 @@
     overflow: hidden;
   }
 
-  .actionButton {
-    // padding-left: 10px;
-    // width: 140px !important;
-  }
-
   @media screen and (max-width: 992px) {
     .actionButton {
       width: 140px !important;
@@ -170,11 +165,11 @@
     }
 
     .LineProductWithSizeInput__action {
-      .actionButton {
-        &:hover {
-          background-color: #ffd12d !important;
-        }
-      }
+      // .actionButton {
+      //   &:hover {
+      //     background-color: #ffd12d !important;
+      //   }
+      // }
     }
 
     .BlockName__title {

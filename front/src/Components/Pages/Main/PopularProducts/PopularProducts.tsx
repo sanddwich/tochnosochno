@@ -48,7 +48,6 @@ class PopularProducts extends React.Component<PopularProductsProps, PopularProdu
       }
     })
     this.setState({ lastProducts })
-    console.log(lastProducts)
   }
 
   generateMobileSlides = (separator: number): any => {

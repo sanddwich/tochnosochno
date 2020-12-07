@@ -1,6 +1,7 @@
 import {
   ADD_GROUP_PRODUCTS,
   GET_MENU,
+  HIDE_PRODUCTS_LOADING,
   SET_ERROR,
   SET_LOADING,
   SET_PRODUCTS_LOADING,
@@ -63,6 +64,11 @@ export default (state: MenuState = initialState, action: MenuAction): MenuState 
       return {
         ...state,
         productsLoading: true,
+      }
+    case HIDE_PRODUCTS_LOADING:
+      return {
+        ...state,
+        productsLoading: false,
       }
     default:
       return state

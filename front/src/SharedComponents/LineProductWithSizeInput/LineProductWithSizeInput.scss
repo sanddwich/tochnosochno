@@ -82,21 +82,21 @@
         color: #ffffff;
       }
       .actionButton__icon {
-        width: 61px;
-        height: 62px;
+        // width: 61px;
+        // height: 62px;
       }
     }
   }
 
   @media screen and (max-width: 360px) {
-    .LineProductWithSizeInput__action {
-      .actionButton {
-        width: auto !important;
-        background-color: #ffffff !important;
-      }
-      .actionButton__text {
-        display: none !important;
-      }
-    }
+    // .LineProductWithSizeInput__action {
+    //   .actionButton {
+    //     width: auto !important;
+    //     background-color: #ffffff !important;
+    //   }
+    //   .actionButton__text {
+    //     display: none !important;
+    //   }
+    // }
   }
 }
