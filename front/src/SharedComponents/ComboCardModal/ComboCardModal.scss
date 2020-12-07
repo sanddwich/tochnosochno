@@ -10,14 +10,17 @@
   .swiper-slide {
     cursor: pointer;
     img {
-      max-height: 170px;
+      // max-height: 170px;
+      position: relative;
+      // top: -50px;
+      width: 100%;
     }
   }
 
   #paginationComboProduct {
-    margin-top: -15px;
     text-align: center;
     position: relative;
+    // top: -30vh;
     z-index: 1000;
     line-height: 16px;
 
@@ -111,7 +114,7 @@
       padding-right: 20px !important;
       padding-top: 5px !important;
       padding-bottom: 10px !important;
-      overflow-y: scroll;
+      overflow-y: auto;
     }
 
     .ComboCardModal__result {
@@ -161,11 +164,12 @@
 
   .ComboCardModalMob__body {
     background-color: #ffffff;
-    height: 98%;
+    max-height: 98%;
     width: 98%;
     overflow: hidden;
     // margin-top: -20px;
     z-index: -5;
+    border-radius: 40px 0;
 
     .ComboCardModalMob__leftColumn {
       // display: flex;
@@ -179,10 +183,9 @@
       width: 100% !important;
       .Slider__arrows {
         display: flex;
-        position: relative;
+
+        position: absolute;
         z-index: 1000;
-        padding-left: 20px;
-        padding-right: 20px;
       }
 
       .Slider__arrow {
@@ -190,9 +193,8 @@
         width: 28px;
         height: 28px;
         border-radius: 50%;
-        margin-top: -100px;
+        margin-top: 0;
         cursor: pointer;
-
         display: flex;
         justify-content: center;
         align-items: center;
@@ -202,7 +204,7 @@
     .ComboCardModalMob__title {
       padding-left: 30px !important;
       padding-right: 10px !important;
-      padding-top: 7px !important;
+      padding-top: 17px !important;
       max-height: 105px;
       overflow: hidden;
       h1 {
@@ -243,7 +245,7 @@
     }
 
     .ComboCardModalMob__img {
-      height: 40%;
+      // height: 40%;
       overflow-y: hidden;
       .ComboCardModalMob__imgBack {
         width: 100% !important;
@@ -261,7 +263,7 @@
       margin-left: 0;
       padding-left: 20px !important;
       padding-right: 20px !important;
-      overflow-y: scroll;
+      overflow-y: auto;
     }
 
     .ComboCardModalMob__result {
@@ -307,14 +309,6 @@
     }
 
     @media screen and (max-width: 620px) {
-      .actionButton {
-        background-color: #f2f2f2 !important;
-        width: 60px !important;
-        .actionButton__text {
-          display: none;
-        }
-      }
-
       .ComboCardModalMob__productsList {
         padding-left: 0px !important;
         padding-right: 0px !important;
@@ -322,14 +316,6 @@
     }
 
     @media screen and (max-width: 620px) {
-      .actionButton {
-        background-color: #f2f2f2 !important;
-        width: 60px !important;
-        .actionButton__text {
-          display: none;
-        }
-      }
-
       .ComboCardModalMob__productsList {
         padding-left: 0px !important;
         padding-right: 0px !important;
@@ -341,7 +327,7 @@
 
     @media screen and (max-width: 768px) {
       .ComboCardModalMob__productsList {
-        height: 300px;
+        height: 80vh;
       }
 
       .BlockName__underLine {
@@ -353,6 +339,7 @@
     @media screen and (max-width: 420px) {
       .ComboCardModalMob__title {
         max-height: 66px;
+        margin-top: 40px;
         h1 {
           font-size: 20px;
           line-height: 22px;

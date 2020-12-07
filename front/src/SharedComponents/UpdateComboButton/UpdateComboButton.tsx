@@ -54,7 +54,7 @@ class UpdateComboButton extends React.Component<UpdateComboButtonProps, UpdateCo
           product: product,
           amount: 1,
           orderItemModifiers: [],
-          value: product.sizePrices[0].price.currentPrice,
+          value: (product.sizePrices && product.sizePrices[0].price.currentPrice) || product.price,
           comboId: this.props.comboId,
           pickDate: pickDate,
         }

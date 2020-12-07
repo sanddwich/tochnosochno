@@ -62,12 +62,13 @@ class LineProductWithNumberInput extends React.Component<
         <div className="LineProductWithNumberInput__product ">
           <div className="LineProductWithNumberInput__product__image  ">
             <img
-              src={`${
-                this.props.orderItem.product.imageLinks.length > 0
-                  ? this.props.orderItem.product.imageLinks[0]
-                  : '/images/products/no-photo.png'
-              }`}
-              alt=""
+              className="mr-2"
+              src={
+                typeof this.props.orderItem.product.imageLinks[0] !== 'undefined'
+                  ? `${this.props.orderItem.product.imageLinks[0]}`
+                  : '/images/products/burger.png'
+              }
+              alt={this.props.orderItem.product.name}
             />
           </div>
 
@@ -80,7 +81,12 @@ class LineProductWithNumberInput extends React.Component<
 
           <div className="LineProductWithNumberInput__product__price">
             <div className="LineProductWithNumberInput__product__newPrice ">
-              <span className="bold">{this.props.orderItem.product.sizePrices[0].price.currentPrice}</span>руб
+              <span className="bold">
+                {(this.props.orderItem.product.sizePrices &&
+                  this.props.orderItem.product.sizePrices[0].price.currentPrice) ||
+                  this.props.orderItem.product.price}
+              </span>
+              руб
             </div>
 
             {/* <div className="LineProductWithNumberInput__product__oldPrice "> 200р</div> */}

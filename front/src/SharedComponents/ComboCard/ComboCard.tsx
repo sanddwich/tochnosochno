@@ -49,7 +49,8 @@ class ComboCard extends React.Component<ComboCardProps, ComboCardState> {
   render() {
     // const comboPrice: number = 0
     const comboPrice: number =
-      this.props.combo.products[0].sizePrices[0].price.currentPrice * (this.props.combo.comboProductsCount || 1)
+      (this.props.combo.products[0].sizePrices && this.props.combo.products[0].sizePrices[0].price.currentPrice) ||
+      this.props.combo.products[0].price * (this.props.combo.comboProductsCount || 1)
     return (
       <React.Fragment>
         <Container className="ComboCard p-3 m-0 ">
@@ -65,21 +66,20 @@ class ComboCard extends React.Component<ComboCardProps, ComboCardState> {
               </div>
             </Row>
 
-            <Row
+            <div
               className="ComboCard__img d-flex justify-content-center"
               onClick={() => this.props.showComboModal(this.props.combo)}
             >
               <img
-                className="img-fluid"
                 src={
                   typeof this.props.combo.imageLinks[0] !== 'undefined'
                     ? `${this.props.combo.imageLinks[0]}`
-                    : '/images/products/no-photo.png'
+                    : '/images/products/burger.png'
                 }
                 alt={this.props.combo.name}
                 style={{ cursor: 'pointer' }}
               />
-            </Row>
+            </div>
 
             <Row className="ComboCard__textContent">
               <div className="ComboCard__title w-100" onClick={() => this.props.showComboModal(this.props.combo)}>

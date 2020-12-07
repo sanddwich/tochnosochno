@@ -85,7 +85,7 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
               </div>
             </Row>
 
-            <Row
+            {/* <Row
               className="ProductCard__img d-flex justify-content-center"
               onClick={() => this.props.showProductModal(this.props.product)}
             >
@@ -95,11 +95,26 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
                 src={
                   typeof this.props.product.imageLinks[0] !== 'undefined'
                     ? `${this.props.product.imageLinks[0]}`
-                    : '/images/products/no-photo.png'
+                    : '/images/products/burger.png'
                 }
                 alt={this.props.product.name}
               />
-            </Row>
+            </Row> */}
+            <div
+              // style={{ background: 'url("/images/products/burger.png")', backgroundSize: 'contain', height: '292px' }}
+              className="ProductCard__img d-flex justify-content-center"
+              onClick={() => this.props.showProductModal(this.props.product)}
+            >
+              <img
+                id={this.props.product.id}
+                src={
+                  typeof this.props.product.imageLinks[0] !== 'undefined'
+                    ? `${this.props.product.imageLinks[0]}`
+                    : '/images/products/burger.png'
+                }
+                alt={this.props.product.name}
+              />
+            </div>
 
             <Row className="ProductCard__textContent">
               <div className="ProductCard__title w-100" onClick={() => this.props.showProductModal(this.props.product)}>
@@ -109,12 +124,12 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
               <div className="ProductCard__desc w-100">{this.props.product.description}</div>
             </Row>
 
-            <Row className="ProductCard__priceLine d-flex justify-content-between">
+            <div className="ProductCard__priceLine d-flex justify-content-between">
               <div className="ProductCard__prices">
                 <div className="ProductCard__price d-inline-block">
                   {this.props.product.sizePrices && this.props.product.sizePrices.length > 0
                     ? this.props.product.sizePrices[0].price.currentPrice.toFixed(0).toString()
-                    : newPrice.toFixed(0).toString()}{' '}
+                    : this.props.product.price?.toFixed(0).toString()}{' '}
                   <span>руб</span>
                 </div>
                 {/* <div className="ProductCard__oldPrice d-inline-block">{oldPrice.toFixed(0).toString()}р</div> */}
@@ -123,7 +138,7 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
               <div className="ProductCard__button d-flex justify-content-end">
                 <AddProductButton hideTextMobile={false} product={this.props.product} />
               </div>
-            </Row>
+            </div>
           </Container>
         </Container>
       </React.Fragment>

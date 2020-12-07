@@ -1,4 +1,6 @@
 .ComboCard {
+  max-width: 380px;
+
   .ComboCard__container {
     // height: 430px !important;
     background: #ffffff;
@@ -21,8 +23,12 @@
 
   .ComboCard__img {
     margin-top: -80px;
+    margin-bottom: 15px;
     img {
-      height: 250px; // =========== Картинки
+      width: 100%;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      max-height: 380px;
     }
   }
 

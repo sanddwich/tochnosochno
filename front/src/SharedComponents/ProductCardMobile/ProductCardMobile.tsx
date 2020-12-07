@@ -74,21 +74,17 @@ class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductC
                   </div>
                 </Row>
 
-                <Row
-                  className="ProductCardMobile__img"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => this.props.showProductModal(this.props.product)}
-                >
+                <div className="ProductCardMobile__img" onClick={() => this.props.showProductModal(this.props.product)}>
                   <img
-                    className="img-fluid"
+                    id={this.props.product.id}
                     src={
                       typeof this.props.product.imageLinks[0] !== 'undefined'
                         ? `${this.props.product.imageLinks[0]}`
-                        : '/images/products/no-photo.png'
+                        : '/images/products/burger.png'
                     }
                     alt={this.props.product.name}
                   />
-                </Row>
+                </div>
               </Col>
 
               <Col className="ProductCardMobile__info p-0 m-0" xs={6}>
@@ -110,7 +106,7 @@ class ProductCardMobile extends React.Component<ProductCardMobileProps, ProductC
                     <div className="ProductCardMobile__price d-inline-block">
                       {this.props.product.sizePrices && this.props.product.sizePrices.length > 0
                         ? this.props.product.sizePrices[0].price.currentPrice.toFixed(0).toString()
-                        : newPrice.toFixed(0).toString()}{' '}
+                        : this.props.product.price?.toFixed(0).toString()}{' '}
                       <span>руб</span>
                     </div>
                     {/* <div className="ProductCardMobile__oldPrice d-inline-block">{oldPrice.toFixed(0).toString()}р</div> */}

@@ -23,8 +23,11 @@
 
   .ProductCardMobile__img {
     margin-top: -50px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
     img {
-      max-height: 240px;       // =========== Каринки
+      max-height: 200px; // =========== Каринки
     }
   }
 
@@ -34,13 +37,13 @@
   }
 
   .ProductCardMobile__textContent {
-    height: 100px;
-    margin-top: 15px;
+    height: 87px;
+    margin-top: 5px;
     padding-left: 20px !important;
     padding-right: 20px !important;
 
     .ProductCardMobile__title {
-      margin-top: 5px;
+      // margin-top: 5px;
       cursor: pointer;
       h1 {
         font-family: 'Roboto';
@@ -51,7 +54,7 @@
 
         color: #000000;
 
-        height: 30px;
+        // height: 30px;
         overflow: hidden;
       }
     }

@@ -2,9 +2,7 @@
   box-sizing: border-box;
 
   .ComboElementChangeList__cont {
-    height:84%;
-    margin-top: 35px !important;
-    overflow-y: scroll;
+    overflow-y: auto;
 
     .ComboElementChangeList_element {
       // margin-top: 50px !important;

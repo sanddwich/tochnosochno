@@ -123,7 +123,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
         let sortPriceUp: Product[] = _.orderBy(
           this.state.sortProducts,
           (product) => {
-            return product.sizePrices[0].price.currentPrice
+            return (product.sizePrices && product.sizePrices[0].price.currentPrice) || product.price
           },
           ['asc']
         )
@@ -136,7 +136,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
         let sortPriceDown: Product[] = _.orderBy(
           this.state.sortProducts,
           (product) => {
-            return product.sizePrices[0].price.currentPrice
+            return (product.sizePrices && product.sizePrices[0].price.currentPrice) || product.price
           },
           ['desc']
         )

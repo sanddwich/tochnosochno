@@ -34,6 +34,7 @@ const product: Product = {
   tags: [],
   fullNameEnglish: '',
   recomended: [],
+  price: 0,
 }
 
 const initialOrderItem: OrderItem = {

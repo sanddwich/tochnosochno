@@ -491,6 +491,7 @@ export class Iiko {
     if (order.isDelivery) {
       const street: Street = {
         id: order.address.street.id,
+        name: order.address.street.name,
       }
 
       order.address.street = street

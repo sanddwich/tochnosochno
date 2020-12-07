@@ -23,19 +23,23 @@ export default class ComboElementChangeList extends React.Component<
           <Row className="p-0 m-0 d-flex justify-content-center">
             {this.props.products.map((product, index) => {
               // if (!this.props.comboConsist.find((ccproduct) => product.id === ccproduct.id)) {
-                return (
-                  <Col
-                    xs={4}
-                    key={product.id + index}
-                    className="ComboElementChangeList_element p-0 m-0"
-                    onClick={() => this.props.addNewProductAtCombo(product.id)}
-                  >
-                    <div className="ComboElementChangeList_elementImg p-0 m-0">
-                      <img src={product.imageLinks[0] ? `${product.imageLinks[0]}` : '/images/products/no-photo.png'} className="img-fluid" alt="" />
-                    </div>
-                    <div className="ComboElementChangeList_elementTitle p-0 m-0">{product.name}</div>
-                  </Col>
-                )
+              return (
+                <Col
+                  xs={4}
+                  key={product.id + index}
+                  className="ComboElementChangeList_element p-1 m-0"
+                  onClick={() => this.props.addNewProductAtCombo(product.id)}
+                >
+                  <div className="ComboElementChangeList_elementImg p-0 m-0">
+                    <img
+                      src={product.imageLinks[0] ? `${product.imageLinks[0]}` : '/images/products/burger.png'}
+                      className="img-fluid"
+                      alt=""
+                    />
+                  </div>
+                  <div className="ComboElementChangeList_elementTitle p-0 m-0">{product.name}</div>
+                </Col>
+              )
               // }
             })}
           </Row>

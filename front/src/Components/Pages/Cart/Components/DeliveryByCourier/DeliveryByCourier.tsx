@@ -188,11 +188,13 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
               product: product,
               amount: 1,
               orderItemModifiers: [],
-              value: product.sizePrices[0].price.currentPrice,
+              value: (product.sizePrices && product.sizePrices[0].price.currentPrice) || product.price,
             }
             this.props.addOrderItemToOrder(orderItem)
 
-            this.setState({ deliveryPrice: product.sizePrices[0].price.currentPrice })
+            this.setState({
+              deliveryPrice: (product.sizePrices && product.sizePrices[0].price.currentPrice) || product.price,
+            })
           }
         })
       } else {
