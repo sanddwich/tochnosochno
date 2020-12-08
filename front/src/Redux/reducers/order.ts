@@ -28,6 +28,8 @@ import { OrderState } from '../interfaces/interfaces'
 import { OrderActionType } from '../interfaces/order'
 import { v4 as uuidv4 } from 'uuid'
 import { act } from '@testing-library/react'
+import OrderItemModifier from '../../Interfaces/OrderItemModifier'
+import { getRequiredModifiers } from '../../utils/utils'
 
 const initialDate = new Date().toLocaleDateString('ru-RU') + ' ' + new Date().toLocaleTimeString('ru-RU')
 
@@ -60,6 +62,15 @@ const order = (state = initialState, action: OrderActionType) => {
       }
     case ADD_TO_ORDER:
       if (!action.orderItem.id) action.orderItem.id = uuidv4()
+      const orderItemRequiredModifiers = [] as OrderItemModifier[]
+      const requiredModifiers = getRequiredModifiers(action.orderItem.product)
+      requiredModifiers.map((modifier) => {
+        orderItemRequiredModifiers.push(new OrderItemModifier(1, modifier))
+      })
+
+      const orderItem = action.orderItem
+      orderItem.orderItemModifiers = ([] as OrderItemModifier[]).concat(orderItemRequiredModifiers)
+
       return {
         ...state,
         isShowPaymentSelection: false,
@@ -72,8 +83,9 @@ const order = (state = initialState, action: OrderActionType) => {
             ...(state.order.items?.filter((orderItem) => {
               return !orderItem.product.parentGroup?.isService
             }) || []),
-            action.orderItem,
+            orderItem,
           ],
+
           date: new Date().toLocaleDateString('ru-RU') + ' ' + new Date().toLocaleTimeString('ru-RU'),
         },
       }

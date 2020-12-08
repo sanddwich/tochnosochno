@@ -95,13 +95,13 @@ export class ApiController {
            *Когда потребуется отправка в Iiko требуется включить
            */
 
-          // 'products.groupModifiers',
-          // 'products.groupModifiers.group',
-          // 'products.groupModifiers.childModifiers',
-          // 'products.groupModifiers.childModifiers.product',
-          // 'products.modifiers',
-          // 'products.modifiers.product',
-          // 'products.modifiers.modifier',
+          'products.groupModifiers',
+          'products.groupModifiers.group',
+          'products.groupModifiers.childModifiers',
+          'products.groupModifiers.childModifiers.product',
+          'products.modifiers',
+          'products.modifiers.product',
+          'products.modifiers.modifier',
 
           /*
            *Переделал фронт на работу с полем price у продукта
@@ -359,18 +359,18 @@ export class ApiController {
         /*
          * Отправляем заказ в Iiko,
          */
-        // const iiko = await this.iiko.getInstance()
-        // const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
+        const iiko = await this.iiko.getInstance()
+        const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
 
         /*
          * Произошла ошибка в Iiko при создании заказа
          */
 
-        // if (iikoOrder.errorInfo) {
-        //   const { code, message, description } = iikoOrder.errorInfo
-        //   throw new Error(`${code}. ${message}. ${description}`)
-        // }
-        // order.orderIikoId = iikoOrder.id
+        if (iikoOrder.errorInfo) {
+          const { code, message, description } = iikoOrder.errorInfo
+          throw new Error(`${code}. ${message}. ${description}`)
+        }
+        order.orderIikoId = iikoOrder.id
 
         if (!order.isDelivery) {
           order.address.id = '1df16367-fc70-4bfc-016b-a8d0a76ce24b'
@@ -381,8 +381,8 @@ export class ApiController {
           order.address.id = uuidv4()
         }
 
-        const iiko = await this.iiko.getInstance()
-        const orderIiko = await iiko.formatOrderForIiko(order)
+        // const iiko = await this.iiko.getInstance()
+        // const orderIiko = await iiko.formatOrderForIiko(order)
 
         await this.sender.sendOrderEmail(order)
         const orderDb = await repositoryOrder.save(order)

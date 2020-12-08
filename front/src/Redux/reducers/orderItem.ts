@@ -35,6 +35,7 @@ const product: Product = {
   fullNameEnglish: '',
   recomended: [],
   price: 0,
+  groupModifiers: [],
 }
 
 const initialOrderItem: OrderItem = {

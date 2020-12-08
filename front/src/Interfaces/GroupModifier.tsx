@@ -1,3 +1,4 @@
+import Group from './Group'
 import Modifier from './Modifier'
 
 export default interface GroupModifier {
@@ -11,4 +12,5 @@ export default interface GroupModifier {
   freeOfChargeAmount: number
   childModifiersHaveMinMaxRestrictions: boolean
   childModifiers: Modifier[]
+  group: Group
 }

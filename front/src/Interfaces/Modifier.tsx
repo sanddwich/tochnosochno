@@ -1,4 +1,5 @@
 import ModifierDetail from './ModifierDetail'
+import Product from './Product'
 
 export default interface Modifier {
   id: string
@@ -10,4 +11,5 @@ export default interface Modifier {
   hideIfDefaultAmount: boolean
   splittable: boolean
   freeOfChargeAmount: number
+  product: Product
 }

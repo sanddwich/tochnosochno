@@ -273,17 +273,17 @@ export class Iiko {
         prod.modifiers = []
         prod.price = prod.sizePrices[0].price.currentPrice
 
-        await (prod.imageLinks.length > 0 &&
-          prod.imageLinks[0] !== 'IMAGE_UPLOAD_ERROR' &&
-          downloadImage
-            .image({ url: prod.imageLinks[0], dest: `E:/dev/node/tochnosochno/back/public/images/${prod.id}.png` })
-            .then(({ filename }) => {
-              console.log('Saved to', filename) // saved to /path/to/dest/image.jpg
-            })
-            .catch((err) => {
-              console.log(prod.imageLinks)
-              console.error(err)
-            }))
+        // await (prod.imageLinks.length > 0 &&
+        //   prod.imageLinks[0] !== 'IMAGE_UPLOAD_ERROR' &&
+        //   downloadImage
+        //     .image({ url: prod.imageLinks[0], dest: `E:/dev/node/tochnosochno/back/public/images/${prod.id}.png` })
+        //     .then(({ filename }) => {
+        //       console.log('Saved to', filename) // saved to /path/to/dest/image.jpg
+        //     })
+        //     .catch((err) => {
+        //       console.log(prod.imageLinks)
+        //       console.error(err)
+        //     }))
 
         const product = await productRepository.save(prod)
         if (productModifiers.length > 0) {
@@ -469,7 +469,7 @@ export class Iiko {
       item.orderItemModifiers.map((orderItemModifier: OrderItemModifier) => {
         iikoOrderItemModifers.push({
           productId: orderItemModifier.productModifier.id,
-          productGroupId: orderItemModifier.product.groupId,
+          productGroupId: orderItemModifier.productModifier.product.groupId,
           amount: orderItemModifier.amount,
         })
       })
@@ -517,6 +517,7 @@ export class Iiko {
       items: iikoOrderItems,
       payments,
     }
+    console.log(iikoOrder)
     return iikoOrder
   }
 

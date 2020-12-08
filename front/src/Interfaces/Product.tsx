@@ -1,5 +1,6 @@
 import Category from './Category'
 import Facet from './Facet'
+import GroupModifier from './GroupModifier'
 import Modifier from './Modifier'
 import SizePrice from './SizePrice'
 import Variant from './Variant'
@@ -38,6 +39,7 @@ export default interface Product {
 
   sizePrices: SizePrice[]
   modifiers: Modifier[]
+  groupModifiers: GroupModifier[]
   imageLinks: String[]
   doNotPrintInCheque: boolean
   parentGroup?: Category
