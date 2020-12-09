@@ -6,5 +6,5 @@ export default interface Street {
   externalRevision?: number
   isDeleted?: boolean
   classifierId?: string
-  city?: City
+  city?: string
 }

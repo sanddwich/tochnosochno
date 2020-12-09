@@ -41,6 +41,8 @@ import { LoggerService } from './logger.service'
 import fetch = require('node-fetch')
 
 import downloadImage = require('image-downloader')
+import IikoErrorInfo from '../interfaces/Iiko/IikoErrorInfo'
+import IikoStreet from '../interfaces/Iiko/IikoStreet'
 
 const API_SERVER = Config.get('iiko.apiUrl')
 const IIKO_PASSWORD = Config.get('iiko.iikoPassword')
@@ -81,17 +83,32 @@ export class Iiko {
     return Iiko.instance
   }
 
+  async checkOrderToIiko(order: Order, terminalGroupId?: Terminal | null) {
+    // const terminalId = terminalGroupId ? terminalGroupId.toString() : null
+    const terminalId = '121b5392-d62c-7611-0165-959330ae00c9'
+
+    const iikoOrder = await this.formatOrderForIiko(order)
+
+    const body = JSON.stringify({
+      organizationId: this.organizations[0].id,
+      order: iikoOrder,
+      terminalGroupId: terminalId,
+      createOrderSettings: {
+        transportToFrontTimeout: 30,
+      },
+    })
+
+    const { errorInfo } = await this.fetchApi<{ errorInfo: IikoErrorInfo }>(CHECK_ORDER_URL, body, true, 'POST')
+
+    return errorInfo
+  }
+
   async sendOrderToIiko(order: Order, terminalGroupId?: Terminal | null) {
     // const terminalId = terminalGroupId ? terminalGroupId.toString() : null
     const terminalId = '121b5392-d62c-7611-0165-959330ae00c9'
 
     const organization = await getRepository(Organization).findOne()
     const iikoOrder = await this.formatOrderForIiko(order)
-
-    // const coordinates = await this.geo.getCoordinates(order.address)
-    // if (iikoOrder.deliveryPoint) {
-    //   iikoOrder.deliveryPoint.coordinates = coordinates
-    // }
 
     const body = JSON.stringify({
       organizationId: this.organizations[0].id,
@@ -194,9 +211,11 @@ export class Iiko {
     deliverySum: number,
     isCourierDelivery: boolean,
     latitude: number,
-    longitude: number
+    longitude: number,
+    classifierId: string,
+    deliveryDate: string
   ): Promise<DeliveryRestrictionsAllowed | undefined> {
-    const deliveryAddress = { streetId, house }
+    const deliveryAddress = { streetId, house, classifierId }
     const orderLocation = { latitude, longitude }
 
     const body = JSON.stringify({
@@ -205,6 +224,7 @@ export class Iiko {
       orderLocation,
       deliveryAddress,
       isCourierDelivery,
+      deliveryDate,
     })
     const deliveryRestrictions: DeliveryRestrictionsAllowed = await this.fetchApi(
       DELIVERY_RESTRICTIONS_URL,
@@ -358,7 +378,7 @@ export class Iiko {
         }
       })
 
-      return true
+      return [{ groups }, { products }, revision]
     } catch (error) {
       throw new Error(error)
     }
@@ -487,17 +507,30 @@ export class Iiko {
      */
 
     if (order.isDelivery) {
-      const street: Street = {
-        id: order.address.street.id,
-        name: order.address.street.name,
+      const street: IikoStreet = {}
+      if (order.address.street.classifierId) {
+        street.classifierId = order.address.street.classifierId
+      } else {
+        const city =
+          order.address.street.city &&
+          order.address.street.city
+            .replace('село ', '')
+            .replace('посёлок ', '')
+            .replace('поселок ', '')
+            .replace('хутор ', '')
+            .replace('рабочий посёлок ', '')
+            .replace('рабочий поселок ', '')
+            .replace('населённый пункт ', '')
+        street.city = city
+        street.name = order.address.street.name
       }
 
-      order.address.street = street
+      const { flat, house, floor, building, entrance } = order.address
 
       deliveryPoint = {
-        address: order.address,
+        address: { street, flat, house, floor, building, entrance },
         coordinates: { latitude: order.address.latitude, longitude: order.address.longitude },
-        comment: order.address.comment,
+        comment: order.address.comment + order.address,
       }
       orderServiceType = 'DeliveryByCourier'
     }
@@ -517,7 +550,6 @@ export class Iiko {
       items: iikoOrderItems,
       payments,
     }
-    console.log(iikoOrder)
     return iikoOrder
   }
 

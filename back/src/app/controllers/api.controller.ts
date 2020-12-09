@@ -360,17 +360,19 @@ export class ApiController {
          * Отправляем заказ в Iiko,
          */
         const iiko = await this.iiko.getInstance()
-        const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
-
+        // const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
+        const iikoOrder = await iiko.checkOrderToIiko(order, order.terminalId)
+        console.log(iikoOrder)
+        return
         /*
          * Произошла ошибка в Iiko при создании заказа
          */
 
-        if (iikoOrder.errorInfo) {
-          const { code, message, description } = iikoOrder.errorInfo
-          throw new Error(`${code}. ${message}. ${description}`)
-        }
-        order.orderIikoId = iikoOrder.id
+        // if (iikoOrder.errorInfo) {
+        //   const { code, message, description } = iikoOrder.errorInfo
+        //   throw new Error(`${code}. ${message}. ${description}`)
+        // }
+        // order.orderIikoId = iikoOrder.id
 
         if (!order.isDelivery) {
           order.address.id = '1df16367-fc70-4bfc-016b-a8d0a76ce24b'
@@ -633,8 +635,10 @@ export class ApiController {
       longitude: { type: 'number' },
       latitude: { type: 'number' },
       isCourierDelivery: { type: 'boolean' },
+      deliveryDate: { type: 'string' },
+      classifierId: { type: 'string' },
     },
-    required: ['deliverySum', 'house', 'isCourierDelivery', 'longitude', 'latitude'],
+    required: ['deliverySum', 'house', 'isCourierDelivery', 'longitude', 'latitude', 'deliveryDate', 'classifierId'],
     type: 'object',
   })
   @ApiServer({ url: '/api', description: 'Main API URL' })
@@ -650,6 +654,8 @@ export class ApiController {
     const isCourierDelivery: boolean = ctx.request.body.isCourierDelivery
     const latitude: number = ctx.request.body.latitude
     const longitude: number = ctx.request.body.longitude
+    const classifierId: string = ctx.request.body.classifierId
+    const deliveryDate: string = ctx.request.body.deliveryDate
     try {
       const iiko = await this.iiko.getInstance()
       const deliveryRestriction = await iiko.getDeliveryRestirctions(
@@ -658,10 +664,13 @@ export class ApiController {
         deliverySum,
         isCourierDelivery,
         latitude,
-        longitude
+        longitude,
+        classifierId,
+        deliveryDate
       )
 
       if (deliveryRestriction && !deliveryRestriction.errorDescription) {
+        console.log(deliveryRestriction)
         return new HttpResponseOK({
           isAllowed: deliveryRestriction.isAllowed,
           allowedItems: deliveryRestriction.allowedItems,

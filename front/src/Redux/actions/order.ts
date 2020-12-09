@@ -249,7 +249,9 @@ export const getDeliveryRestrictions = (
   house: string,
   isCourierDelivery: boolean,
   latitude: number,
-  longitude: number
+  longitude: number,
+  classifierId: string,
+  deliveryDate: string
 ): ThunkAction<void, RootState, null, any> => {
   return async (dispatch, getState) => {
     try {
@@ -266,7 +268,16 @@ export const getDeliveryRestrictions = (
           Authorization: `Bearer ${token}`,
           'CSRF-Token': csrfToken,
         },
-        body: JSON.stringify({ streetId, deliverySum, house, isCourierDelivery, latitude, longitude }),
+        body: JSON.stringify({
+          streetId,
+          deliverySum,
+          house,
+          isCourierDelivery,
+          latitude,
+          longitude,
+          classifierId,
+          deliveryDate,
+        }),
       })
 
       if (!res.ok) {

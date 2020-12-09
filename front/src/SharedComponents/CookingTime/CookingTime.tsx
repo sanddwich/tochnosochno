@@ -143,8 +143,8 @@ class CookingTime extends React.Component<CookingTimeProps, CookingTimeState> {
                 timeCaption="Время"
                 dateFormat="HH:mm"
                 excludeTimes={this.excludeTimes(8, 15)}
-                minTime={this.setTime(8, 0)}
-                maxTime={this.setTime(20, 0)}
+                minTime={this.setTime(9, 0)}
+                maxTime={this.setTime(23, 0)}
                 placeholderText="Время"
               />
             </div>
@@ -158,18 +158,5 @@ class CookingTime extends React.Component<CookingTimeProps, CookingTimeState> {
 const mapDispatchToProps = {
   setPrepareDate,
 }
-
-// const mapStateToProps = (state: any) => {
-//   const { loading, error, phone, isAuth } = state.auth
-//   const { loading: loadingOrder, error: errorOrder, order } = state.order
-//   return {
-//     loading: loading,
-//     error: error,
-//     loadingOrder: loadingOrder,
-//     order,
-//     phone,
-//     isAuth,
-//   }
-// }
 
 export default connect(null, mapDispatchToProps)(CookingTime)

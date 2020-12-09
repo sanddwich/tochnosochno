@@ -157,18 +157,22 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
 
   getDeliveryRestrictions = async () => {
     const streetId = this.props.order.address?.street.id
+    const classifierId = this.props.order.address?.street.classifierId
     const house = this.props.order.address?.house
     const deliverySum = this.props.order.amount
     const latitude = parseFloat(this.props.order.address?.latitude || '')
     const longitude = parseFloat(this.props.order.address?.longitude || '')
     const isCourierDelivery = true
+    const deliveryDate = this.props.order.completeBefore
     const deliveryRestriction = await this.props.getDeliveryRestrictions(
       streetId,
       deliverySum,
       house,
       isCourierDelivery,
       latitude,
-      longitude
+      longitude,
+      classifierId,
+      deliveryDate
     )
 
     if (deliveryRestriction && deliveryRestriction.isAllowed) {
@@ -297,6 +301,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     })
 
     this.setState({ ...state })
+    console.log('textFieldInputHandler')
     this.props.setDelivery(this.state.isDelivery, state.deliveryAddress)
     if (textFieldName === 'street' || textFieldName === 'house') {
       this.getDeliveryRestrictions()
@@ -320,18 +325,16 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
       const house = (dadataAddress.data.house || '').concat(
         dadataAddress.data.block ? `/${dadataAddress.data.block}` : ''
       )
-
-      const address = this.props.order.address
-      if (address) {
-        address.street = {
+      const addressData = this.props.order.address
+      if (addressData) {
+        addressData.latitude = dadataAddress.data.geo_lat || ''
+        addressData.longitude = dadataAddress.data.geo_lon || ''
+        addressData.street = {
           name: dadataAddress.data.street || '',
           classifierId: dadataAddress.data.street_kladr_id || '',
         }
-        address.house = house
-        address.latitude = dadataAddress.data.geo_lat || ''
-        address.longitude = dadataAddress.data.geo_lon || ''
-        this.props.setDelivery(this.state.isDelivery, address)
-        this.setState({ deliveryAddress: address })
+        this.setState({ deliveryAddress: addressData })
+        this.props.setDelivery(this.state.isDelivery, addressData)
       }
     }
     this.props.deleteDeliveryProduct()
@@ -340,16 +343,23 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
 
   chooseAddressOnMap(coordinates: number[]) {
     if (this.state.ymaps.geocode) {
-      this.state.ymaps.geocode(coordinates, { kind: 'house' }).then((result: any) => {
+      this.state.ymaps.geocode(coordinates, { kind: 'house' }).then(async (result: any) => {
         const house = result.geoObjects.get(0).getPremiseNumber()
-        this.setdaDataAddress(result.geoObjects.get(0).getAddressLine(), house, coordinates)
+        const address = result.geoObjects.get(0).getAddressLine()
+        const city = result.geoObjects.get(0).getLocalities()[0]
+        if (this.daDataInputRef.current) {
+          this.daDataInputRef.current.setInputValue(address)
+        }
+        const daData = await this.getClassifierId(coordinates)
+        this.setState({ dadataAddress: daData })
+        this.setdaDataAddress(address, house, coordinates, city)
       })
     }
     this.props.deleteDeliveryProduct()
     this.setState({ deliveryPrice: 0 })
   }
 
-  setdaDataAddress = (address: string, house: string, coordinates: number[]) => {
+  setdaDataAddress = (address: string, house: string, coordinates: number[], city: string) => {
     if (this.state.dadataAddress) {
       const daAddress: DaDataSuggestion<DaDataAddress> | undefined = {
         value: address,
@@ -359,9 +369,6 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
 
       this.setState({ dadataAddress: daAddress })
     }
-    if (this.daDataInputRef.current) {
-      this.daDataInputRef.current.setInputValue(address)
-    }
 
     const orderAddress = this.props.order.address
     if (orderAddress) {
@@ -370,12 +377,34 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
       orderAddress.house = house
       orderAddress.latitude = coordinates[0].toString()
       orderAddress.longitude = coordinates[1].toString()
+
       orderAddress.street = {
         name: streetName,
+        classifierId: this.state.dadataAddress?.data.street_kladr_id || '',
+        city,
       }
       this.props.setDelivery(this.state.isDelivery, orderAddress)
       this.setState({ deliveryAddress: orderAddress })
     }
+  }
+
+  getClassifierId = async (coordinates: number[]): Promise<DaDataSuggestion<DaDataAddress>> => {
+    const url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address'
+    const token = '2a4f6368b9d756c95e4092292d7c2f53ccefa7bf'
+    const query = { lat: coordinates[0], lon: coordinates[1], count: 1, radius_meters: 50 }
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Token ' + token,
+      },
+      body: JSON.stringify(query),
+    }
+    const res = await fetch(url, options)
+    const { suggestions } = await res.json()
+    return suggestions[0]
   }
 
   render() {
@@ -390,7 +419,6 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                   ref={this.daDataInputRef}
                   token="2a4f6368b9d756c95e4092292d7c2f53ccefa7bf"
                   value={this.state.dadataAddress}
-                  // defaultQuery="Астраханская обл, "
                   minChars={5}
                   delay={500}
                   // autoload={true}
@@ -409,6 +437,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
               <div className="DeliveryByCourier__map__pin">
                 <img src="/images/map-pin.png" alt="map-pin" />
               </div>
+              {/* <div style={{ border: `2px solid  ${this.props.order.address?.street.classifierId ? 'green' : 'red'}` }}> */}
               <YMaps query={{ lang: 'ru_RU', apikey: '7e281c05-3c19-476c-a409-21e922596afd' }}>
                 <Map
                   modules={['geolocation', 'geocode']}
@@ -429,6 +458,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                   {/* <Placemark geometry={this.state.coordinates} /> */}
                 </Map>
               </YMaps>
+              {/* </div> */}
             </div>
 
             <div className="DeliveryByCourier__form__row mt-4">

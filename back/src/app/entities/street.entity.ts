@@ -23,6 +23,8 @@ export class Street {
   @OneToMany((type) => Address, (address) => address.street)
   addresses?: Address[]
 
-  @ManyToOne((type) => City, (city) => city.streets)
-  city?: City
+  // @ManyToOne((type) => City, (city) => city.streets)
+  // city?: City
+  @Column({ nullable: true })
+  city?: string
 }
