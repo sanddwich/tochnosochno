@@ -360,10 +360,10 @@ export class ApiController {
          * Отправляем заказ в Iiko,
          */
         const iiko = await this.iiko.getInstance()
-        // const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
-        const iikoOrder = await iiko.checkOrderToIiko(order, order.terminalId)
-        console.log(iikoOrder)
-        return
+        const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
+        // const iikoOrder = await iiko.checkOrderToIiko(order, order.terminalId)
+        // console.log(iikoOrder)
+        // return
         /*
          * Произошла ошибка в Iiko при создании заказа
          */
@@ -622,6 +622,28 @@ export class ApiController {
   }
 
   /*
+Геокодирование
+*/
+
+  @Post('/geo')
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      coordinates: { type: 'array' },
+    },
+    required: ['coordinates'],
+    type: 'object',
+  })
+  @ApiServer({ url: '/api', description: 'Main API URL' })
+  async getGeoLocation(ctx: Context<Customer, Session>) {
+    const coordinates: number[] = ctx.request.body.coordinates
+
+    const address = await this.geoCoder.getDaDataGeo(coordinates)
+
+    return new HttpResponseOK(address)
+  }
+
+  /*
 Получение ограничений доставки
 */
 
@@ -670,7 +692,6 @@ export class ApiController {
       )
 
       if (deliveryRestriction && !deliveryRestriction.errorDescription) {
-        console.log(deliveryRestriction)
         return new HttpResponseOK({
           isAllowed: deliveryRestriction.isAllowed,
           allowedItems: deliveryRestriction.allowedItems,

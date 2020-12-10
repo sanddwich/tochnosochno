@@ -25,6 +25,7 @@
   "host": "http://localhost:3000",
   "port": 3001,
   "yandexApiKey": "7e281c05-3c19-476c-a409-21e922596afd",
+  "dadataApiKey": "2a4f6368b9d756c95e4092292d7c2f53ccefa7bf",
   "settings": {
     "csrf": {
       "cookie": {

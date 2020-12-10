@@ -70,17 +70,15 @@ class ProductModal extends React.Component<ProductModalProps, ProductModalState>
               </Row>
 
               <Row className="ProductModal__bodyCont p-0 m-0 h-100">
-                <Col className="p-0 m-0" md={5}>
-                  <Row className="ProductModal__firstLine pr-5 m-0 d-flex justify-content-between">
-                    <div className="ProductModal__favoriteButton">
-                      <FavouriteRoundButton product={this.props.productModalProduct} />
-                    </div>
-                    <div className="ProductModal__stickerCont">
-                      {this.newItemDefine() ? <Sticker title="Новинка" backgroundColor="#FFD74B" /> : null}
-                      {/* <Sticker title="Акция" backgroundColor="#FF371C" /> */}
-                    </div>
-                  </Row>
-
+                <Row className="ProductModal__firstLine pr-5 m-0 d-flex justify-content-between">
+                  <div className="ProductModal__favoriteButton">
+                    <FavouriteRoundButton product={this.props.productModalProduct} />
+                  </div>
+                  <div className="ProductModal__stickerCont">
+                    {this.newItemDefine() ? <Sticker title="Новинка" backgroundColor="#FFD74B" /> : null}
+                  </div>
+                </Row>
+                <Col className="p-0 m-0 d-flex align-items-center justify-content-center" md={5}>
                   <div className="ProductModal__img d-flex justify-content-center">
                     <img
                       // className="img-fluid"

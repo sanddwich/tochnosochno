@@ -193,7 +193,7 @@ class ProductList extends React.Component<ProductListProps, ProductListState> {
       <Container key={activeFilter} className="ProductList p-0">
         <Row className="p-0 m-0 mb-4 d-flex justify-content-between">
           <Element name="productListBegin">
-            <Col xs={12} md={4} className="ProductList__blockName">
+            <Col xs={12} md={12} className="ProductList__blockName">
               <BlockName name={this.props.menu.find((cat) => cat.id === this.props.categoryId)?.name || ''} />
             </Col>
           </Element>

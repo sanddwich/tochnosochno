@@ -57,13 +57,25 @@
 
     &__pin {
       position: absolute;
-      top: calc(50% - 45px);
-      left: calc(50% - 12px);
+      top: calc(50% - 25px);
+      left: calc(50% - 15px);
+      // top: calc(50% - 15px);
+      // left: calc(50% - 12px);
       z-index: 1000;
       width: 40px;
       img {
         width: 40px;
       }
+    }
+    &__address {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 1;
+      max-width: 360px;
+      background-color: #ffffff;
+
+      font-size: 14px;
     }
     &__info {
       font-size: 14px;

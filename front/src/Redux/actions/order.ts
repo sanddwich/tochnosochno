@@ -211,6 +211,33 @@ export const getAllCities = (): ThunkAction<void, RootState, null, any> => {
   }
 }
 
+export const getGeoLocation = (coordinates: number[]): ThunkAction<void, RootState, null, any> => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(setLoading())
+      const res = await fetch(`${apiServer}/api/geo`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ coordinates }),
+      })
+
+      if (!res.ok) {
+        const resData: ApiResponse = await res.json()
+        throw new Error(resData.message)
+      }
+      if (res.status === 200) {
+        dispatch(hideLoading())
+      }
+      const resData: [] = await res.json()
+      return resData
+    } catch (err) {
+      dispatch(setError(err.message))
+    }
+  }
+}
+
 export const getStreetsByCity = (street: string, cityId: string): ThunkAction<void, RootState, null, any> => {
   return async (dispatch, getState) => {
     try {
