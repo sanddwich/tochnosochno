@@ -370,6 +370,7 @@ export const addOrderItemToOrder = (orderItem: OrderItem) => {
   cartAnimation()
   return (dispatch: any) => {
     dispatch(addOrderItem(orderItem))
+
     dispatch(calculateOrder())
   }
 }

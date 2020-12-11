@@ -40,6 +40,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
   componentDidMount() {
     this.scrollTo('menuScroller', 250)
     // this.props.getGroupProducts(this.props.match.params.id)
+    this.loadImages()
   }
 
   checkMenuId = (): boolean => {
@@ -52,19 +53,19 @@ class Menu extends React.Component<MenuProps, MenuState> {
 
   componentDidUpdate(prevProps: MenuProps) {
     if (this.props.location !== prevProps.location) {
-      // this.checkGroupProduct(this.props.match.params.id)
-
-      const urls: string[] = []
-      this.props.menu.map((group: Category) => {
-        group.products.map((product) => {
-          product.imageLinks &&
-            product.imageLinks.length > 0 &&
-            group.id === this.props.match.params.id &&
-            urls.push(product.imageLinks[0].toString())
-        })
-      })
-      this.props.loadImages(urls)
+      this.loadImages()
     }
+  }
+
+  loadImages = () => {
+    const urls: string[] = []
+    this.props.menu.map((group: Category, id) => {
+      group.products.map((product) => {
+        if (product.imageLinks && product.imageLinks.length > 0 && group.id === this.props.match.params.id)
+          urls.push(product.imageLinks[0].toString())
+      })
+    })
+    this.props.loadImages(urls)
   }
 
   checkGroupProduct = (groupId: string) => {
