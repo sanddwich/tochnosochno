@@ -35,7 +35,7 @@ class CategoriesContainer extends React.Component<CategoriesContainerProps, Cate
 
   componentDidMount() {
     const sortMenu: Category[] = _.sortBy(this.props.menu, (obj) => {
-      return parseInt(obj.id)
+      return obj.menuOrder
     })
     let longMenu: Category[] = []
     let shortMenu: Category[] = []

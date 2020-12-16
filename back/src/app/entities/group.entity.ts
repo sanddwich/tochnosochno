@@ -48,6 +48,9 @@ export class Group {
   @Column({ nullable: true })
   order: number
 
+  @Column({ nullable: true })
+  menuOrder: number
+
   @Column({ nullable: true, default: false })
   isSiteDisplay: boolean
 

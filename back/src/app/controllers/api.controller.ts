@@ -138,7 +138,7 @@ export class ApiController {
           })
         }
       })
-      products = _.orderBy(products, ['order'], ['asc'])
+      products = _.orderBy(products, ['menuOrder'], ['asc'])
 
       /*
        * Вывод терминалов доставки

@@ -22,4 +22,5 @@ export default interface Category {
   active?: boolean
   parentGroup: string
   isService?: boolean
+  menuOrder: number
 }

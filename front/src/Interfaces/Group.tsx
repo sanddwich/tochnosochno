@@ -16,4 +16,5 @@ export default interface Group {
   isGroupModifier?: boolean
   imageLinks: String[]
   isService?: boolean
+  menuOrder: number
 }
