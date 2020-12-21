@@ -26,6 +26,8 @@ import {
   deleteDeliveryProduct,
   calculateOrder,
   getGeoLocation,
+  setComment,
+  setTerminal,
 } from '../../../../../Redux/actions/order'
 
 import './DeliveryByCourier.scss'
@@ -74,6 +76,8 @@ interface DeliveryByCourierProps {
   addOrderItemToOrder: (orderItem: OrderItem) => void
   deleteDeliveryProduct: () => void
   calculateOrder: () => void
+  setComment: (comment: string) => void
+  setTerminal: (terminalId: string) => void
 }
 
 interface DeliveryByCourierState {
@@ -150,6 +154,9 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
       ],
     }
   }
+  componentDidMount() {
+    this.props.setComment('')
+  }
 
   showPaymentSection = async () => {
     await this.getDeliveryRestrictions()
@@ -181,7 +188,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
 
     if (deliveryRestriction && deliveryRestriction.isAllowed) {
       const deliveryServiceProductId = deliveryRestriction.allowedItems[0].deliveryServiceProductId
-
+      this.props.setTerminal(deliveryRestriction.allowedItems[0].terminalGroupId)
       if (deliveryServiceProductId) {
         let deliveryProducts: Product[] = []
 
@@ -624,6 +631,8 @@ const mapDispatchToProps = {
   deleteDeliveryProduct,
   calculateOrder,
   getGeoLocation,
+  setComment,
+  setTerminal,
 }
 
 const mapStateToProps = (state: any) => {

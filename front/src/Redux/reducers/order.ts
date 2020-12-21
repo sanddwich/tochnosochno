@@ -11,6 +11,7 @@ import {
   HIDE_ORDER_LOADING,
   HIDE_PAYMENT_SELECTION,
   PROCESS_ORDER,
+  SET_COMMENT,
   SET_DELIVERY,
   SET_GUEST_COUNT,
   SET_INIT_ORDER,
@@ -22,6 +23,8 @@ import {
   SET_ORDER_PHONE,
   SET_ORDER_POLITIC,
   SET_PREPARE_TIME,
+  SET_TERMINAL,
+  SET_TERMINALS,
   SHOW_PAYMENT_SELECTION,
 } from '../constants/ActionTypes'
 import { OrderState } from '../interfaces/interfaces'
@@ -212,6 +215,23 @@ const order = (state = initialState, action: OrderActionType) => {
           orderServiceType: action.isDelivery ? 'DeliveryByCourier' : 'DeliveryByClient',
           address: action.address,
           terminalId: action.isDelivery ? null : action.address.id,
+        },
+      }
+    case SET_TERMINAL:
+      return {
+        ...state,
+        order: {
+          ...state.order,
+          terminalId: action.terminalId,
+        },
+      }
+
+    case SET_COMMENT:
+      return {
+        ...state,
+        order: {
+          ...state.order,
+          comment: action.comment,
         },
       }
 

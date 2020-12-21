@@ -59,6 +59,7 @@ const auth = (state: AuthState = initialState, action: AuthActionType) => {
         customer: action.customer,
         isAuth: true,
         loading: false,
+        code: '',
         error: '',
       }
 

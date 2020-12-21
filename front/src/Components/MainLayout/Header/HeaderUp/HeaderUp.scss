@@ -74,7 +74,11 @@ a {
 
   .HeaderUp__toggleMenuCont {
     color: #ffffff;
-    padding-top: 100px;
+    // padding-top: 100px;
+    // padding-top: 5px;
+
+    display: flex;
+    justify-content: center;
 
     a {
       color: #ffffff;

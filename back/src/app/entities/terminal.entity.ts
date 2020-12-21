@@ -14,6 +14,12 @@ export class Terminal {
   @Column()
   address: string
 
+  @Column({ nullable: true })
+  latitude: string
+
+  @Column({ nullable: true })
+  longitude: string
+
   @Column()
   isAlive: boolean
 

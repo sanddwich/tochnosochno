@@ -84,8 +84,7 @@ export class Iiko {
   }
 
   async checkOrderToIiko(order: Order, terminalGroupId?: Terminal | null) {
-    // const terminalId = terminalGroupId ? terminalGroupId.toString() : null
-    const terminalId = '121b5392-d62c-7611-0165-959330ae00c9'
+    const terminalId = terminalGroupId ? terminalGroupId.toString() : null
 
     const iikoOrder = await this.formatOrderForIiko(order)
 
@@ -104,8 +103,8 @@ export class Iiko {
   }
 
   async sendOrderToIiko(order: Order, terminalGroupId?: Terminal | null) {
-    // const terminalId = terminalGroupId ? terminalGroupId.toString() : null
-    const terminalId = '121b5392-d62c-7611-0165-959330ae00c9'
+    const terminalId = terminalGroupId ? terminalGroupId.toString() : null
+    // const terminalId = '121b5392-d62c-7611-0165-959330ae00c9'
 
     const organization = await getRepository(Organization).findOne()
     const iikoOrder = await this.formatOrderForIiko(order)
@@ -213,7 +212,7 @@ export class Iiko {
     latitude: number,
     longitude: number,
     classifierId: string,
-    deliveryDate: string
+    deliveryDate?: string
   ): Promise<DeliveryRestrictionsAllowed | undefined> {
     const deliveryAddress = { streetId, house, classifierId }
     const orderLocation = { latitude, longitude }
@@ -292,18 +291,6 @@ export class Iiko {
         prod.groupModifiers = []
         prod.modifiers = []
         prod.price = prod.sizePrices[0].price.currentPrice
-
-        // await (prod.imageLinks.length > 0 &&
-        //   prod.imageLinks[0] !== 'IMAGE_UPLOAD_ERROR' &&
-        //   downloadImage
-        //     .image({ url: prod.imageLinks[0], dest: `E:/dev/node/tochnosochno/back/public/images/${prod.id}.png` })
-        //     .then(({ filename }) => {
-        //       console.log('Saved to', filename) // saved to /path/to/dest/image.jpg
-        //     })
-        //     .catch((err) => {
-        //       console.log(prod.imageLinks)
-        //       console.error(err)
-        //     }))
 
         const product = await productRepository.save(prod)
         if (productModifiers.length > 0) {
@@ -438,7 +425,7 @@ export class Iiko {
      */
 
     if (order.payment === 'cash') {
-      comment = 'Оплата наличными курьеру'
+      comment = 'Оплата наличными'
       const cashPayment = await getRepository(PaymentType).findOne({ paymentTypeKind: 'Cash' })
       if (cashPayment) {
         payments.push({
@@ -452,7 +439,7 @@ export class Iiko {
     }
 
     if (order.payment === 'credit') {
-      comment = 'Оплата кредитной картой курьеру'
+      comment = 'Оплата кредитной картой'
       const onlinePayment = await getRepository(PaymentType).findOne({ paymentTypeKind: 'Card' })
       if (onlinePayment) {
         payments.push({
@@ -506,31 +493,17 @@ export class Iiko {
      *Формируем объект доставки, если нужна доствка курьера
      */
 
-    if (order.isDelivery) {
+    if (order.isDelivery && order.address) {
       const street: IikoStreet = {}
-      if (order.address.street.classifierId) {
-        street.classifierId = order.address.street.classifierId
-      } else {
-        const city =
-          order.address.street.city &&
-          order.address.street.city
-            .replace('село ', '')
-            .replace('посёлок ', '')
-            .replace('поселок ', '')
-            .replace('хутор ', '')
-            .replace('рабочий посёлок ', '')
-            .replace('рабочий поселок ', '')
-            .replace('населённый пункт ', '')
-        street.city = city
-        street.name = order.address.street.name
-      }
+
+      street.classifierId = order.address.street.classifierId
 
       const { flat, house, floor, building, entrance } = order.address
 
       deliveryPoint = {
         address: { street, flat, house, floor, building, entrance },
         coordinates: { latitude: order.address.latitude, longitude: order.address.longitude },
-        comment: order.address.comment + order.address,
+        comment: order.address.comment,
       }
       orderServiceType = 'DeliveryByCourier'
     }
@@ -543,13 +516,14 @@ export class Iiko {
       phone: order.phone,
       completeBefore: order.completeBefore,
       customer: order.customer,
-      comment: `${comment}.  ${order.address.comment}`,
+      comment: `${order.comment}. ${comment}.  ${order.address ? order.address.comment : ''}`,
       deliveryPoint,
       orderServiceType,
       sourceKey: 'sochno30.ru',
       items: iikoOrderItems,
       payments,
     }
+
     return iikoOrder
   }
 
@@ -564,6 +538,7 @@ export class Iiko {
     })
     if (!res.ok && (res.status === 400 || res.status === 401 || res.status === 500 || res.status === 504)) {
       const error: IIkoErrorResponse = await res.json()
+
       throw new Error(
         `Error ${res.status}. ${res.statusText}. ${error.errorDescription}. Ошибка на сервере IIKO. ${url} `
       )

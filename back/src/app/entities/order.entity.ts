@@ -61,8 +61,8 @@ export class Order {
   customer: Customer
 
   //Чтобы добавлялся новый адрес нужно поставить cascade: true
-  @ManyToOne((type) => Address, (address) => address.orders, { cascade: true })
-  address: Address
+  @ManyToOne((type) => Address, (address) => address.orders, { cascade: true, nullable: true })
+  address?: Address
 
   @OneToMany((type) => OrderItem, (orderItem) => orderItem.order, { cascade: true })
   items: OrderItem[]

@@ -107,13 +107,13 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
           <div className="HeaderUp__menuItem d-flex justify-content-between">
             <Row className="HeaderUp__container p-0 m-0 d-flex align-items-center">
               <div className="HeaderUp__containerImg">
-                <a href="tel:88512464607">
+                <a href="tel:88512464600">
                   <RoundButton backgroundColor="#303030" icon="nyamnyan_white.svg" onClick={() => this.noAction()} />
                 </a>
               </div>
               <div className="HeaderUp__containerDescr pl-2">
-                <a href="tel:88512464607">
-                  <div className="HeaderUp__containerDescrPhone">46-46-07</div>
+                <a href="tel:88512464600">
+                  <div className="HeaderUp__containerDescrPhone">46-46-00</div>
                   <div className="HeaderUp__containerDescrTitle">номер ресторана</div>
                 </a>
               </div>
@@ -129,8 +129,11 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
               <div className="HeaderUp__containerDescr pl-2">
                 <a href="tel:88512464602">
                   <div className="HeaderUp__containerDescrPhone">46-46-02</div>
-                  <div className="HeaderUp__containerDescrTitle">служба доставки</div>
                 </a>
+                <a href="tel:88512464607">
+                  <div className="HeaderUp__containerDescrPhone">46-46-07</div>
+                </a>
+                <div className="HeaderUp__containerDescrTitle">служба доставки</div>
               </div>
             </Row>
           </div>
@@ -252,88 +255,99 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
           </Container>
 
           <Container fluid className="HeaderUp__toggleMenuCont">
-            <NavLink to="/actions" onClick={() => this.burgerButtonClick()}>
-              <Row className="pl-3 pr-3 mt-3">
-                <Col xs={8} className="HeaderUp__toggleMenuItem p-0 m-0">
-                  <h1>Акции</h1>
-                </Col>
-              </Row>
-            </NavLink>
-            <NavLink to="/contacts" onClick={() => this.burgerButtonClick()}>
-              <Row className="pl-3 pr-3 mt-3">
-                <Col xs={8} className="HeaderUp__toggleMenuItem p-0 m-0">
-                  <h1>Контакты</h1>
-                </Col>
-              </Row>
-            </NavLink>
+            <div>
+              <NavLink to="/actions" onClick={() => this.burgerButtonClick()}>
+                <Row className="pl-3 pr-3 mt-3">
+                  <Col xs={8} className="HeaderUp__toggleMenuItem p-0 m-0">
+                    <h1>Акции</h1>
+                  </Col>
+                </Row>
+              </NavLink>
+              <NavLink to="/contacts" onClick={() => this.burgerButtonClick()}>
+                <Row className="pl-3 pr-3 mt-3">
+                  <Col xs={8} className="HeaderUp__toggleMenuItem p-0 m-0">
+                    <h1>Контакты</h1>
+                  </Col>
+                </Row>
+              </NavLink>
 
-            <a href="tel:88512464602" onClick={() => this.burgerButtonClick()}>
+              {/* <a href="tel:88512464602" onClick={() => this.burgerButtonClick()}> */}
               <Row className="pl-3 pr-3">
                 <Container fluid className="HeaderUp__toggleMenuItem2 p-0 m-0 mt-5 d-flex justify-content-between">
-                  <div className="HeaderUp__toggleMenuItemTitle">Телефон доставки</div>
-                  <div className="HeaderUp__toggleMenuItemPhone">46-46-02</div>
+                  <div className="HeaderUp__toggleMenuItemTitle">Телефоны доставки</div>
+                  <div>
+                    <a href="tel:88512464602">
+                      <div className="HeaderUp__toggleMenuItemPhone">46-46-02</div>
+                    </a>
+                    <a href="tel:88512464607">
+                      <div className="HeaderUp__toggleMenuItemPhone">46-46-07</div>
+                    </a>
+                  </div>
                 </Container>
               </Row>
-            </a>
-            <a href="tel:88512464607" onClick={() => this.burgerButtonClick()}>
+              {/* </a> */}
+              {/* <a href="tel:88512464600" onClick={() => this.burgerButtonClick()}> */}
               <Row className="pl-3 pr-3">
                 <Container fluid className="HeaderUp__toggleMenuItem2 p-0 m-0 mt-3 d-flex justify-content-between">
                   <div className="HeaderUp__toggleMenuItemTitle">Телефон ресторана</div>
-                  <div className="HeaderUp__toggleMenuItemPhone">46-46-07</div>
+                  <a href="tel:88512464600">
+                    <div className="HeaderUp__toggleMenuItemPhone">46-46-00</div>
+                  </a>
                 </Container>
               </Row>
-            </a>
+              {/* </a> */}
 
-            <Row className="HeaderUp__toggleMenuItemTitle2 pl-3 pr-3">Социальные сети</Row>
+              <Row className="HeaderUp__toggleMenuItemTitle2 pl-3 pr-3">Социальные сети</Row>
 
-            <Row className="pl-3 pr-3 mb-5 d-flex">
-              <div className="mr-4">
-                <RoundButton
-                  icon="instagram.svg"
-                  backgroundColor="white"
-                  onClick={() => {
-                    this.burgerButtonClick()
-                    window.open('https://www.instagram.com/30dostavka/')
-                  }}
-                />
-              </div>
-              <div>
-                <RoundButton
-                  icon="vk.svg"
-                  backgroundColor="white"
-                  onClick={() => {
-                    this.burgerButtonClick()
-                    window.open('https://vk.com/sochno30')
-                  }}
-                />
-              </div>
-            </Row>
+              <Row className="pl-3 pr-3 mb-5 d-flex">
+                <div className="mr-4">
+                  <RoundButton
+                    icon="instagram.svg"
+                    backgroundColor="white"
+                    onClick={() => {
+                      this.burgerButtonClick()
+                      window.open('https://www.instagram.com/30dostavka/')
+                    }}
+                  />
+                </div>
+                <div>
+                  <RoundButton
+                    icon="vk.svg"
+                    backgroundColor="white"
+                    onClick={() => {
+                      this.burgerButtonClick()
+                      window.open('https://vk.com/sochno30')
+                    }}
+                  />
+                </div>
+              </Row>
 
-            <Row className="pl-3 pr-3 d-flex justify-content-center">
-              {this.props.isAuth ? (
-                <NavLink to="/profile" onClick={() => this.burgerButtonClick()}>
-                  <div className="HeaderUp__toggleMenuButton d-flex">
+              <Row className="pl-3 pr-3 d-flex justify-content-center">
+                {this.props.isAuth ? (
+                  <NavLink to="/profile" onClick={() => this.burgerButtonClick()}>
+                    <div className="HeaderUp__toggleMenuButton d-flex">
+                      <div className="HeaderUp__toggleMenuButtonText">Войти в личный кабинет</div>
+                      <div className="HeaderUp__toggleMenuButtonIcon">
+                        <img src="/images/icons/profile.svg" alt="" />
+                      </div>
+                    </div>
+                  </NavLink>
+                ) : (
+                  <div
+                    className="HeaderUp__toggleMenuButton d-flex"
+                    onClick={() => {
+                      this.burgerButtonClick()
+                      this.props.showLoginModal()
+                    }}
+                  >
                     <div className="HeaderUp__toggleMenuButtonText">Войти в личный кабинет</div>
                     <div className="HeaderUp__toggleMenuButtonIcon">
                       <img src="/images/icons/profile.svg" alt="" />
                     </div>
                   </div>
-                </NavLink>
-              ) : (
-                <div
-                  className="HeaderUp__toggleMenuButton d-flex"
-                  onClick={() => {
-                    this.burgerButtonClick()
-                    this.props.showLoginModal()
-                  }}
-                >
-                  <div className="HeaderUp__toggleMenuButtonText">Войти в личный кабинет</div>
-                  <div className="HeaderUp__toggleMenuButtonIcon">
-                    <img src="/images/icons/profile.svg" alt="" />
-                  </div>
-                </div>
-              )}
-            </Row>
+                )}
+              </Row>
+            </div>
           </Container>
         </Container>
       </React.Fragment>

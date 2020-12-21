@@ -19,6 +19,7 @@ import {
   HIDE_ORDER_LOADING,
   HIDE_PAYMENT_SELECTION,
   INC_ORDER_ITEM_AMOUNT,
+  SET_COMMENT,
   SET_DELIVERY,
   SET_GUEST_COUNT,
   SET_INIT_ORDER,
@@ -30,6 +31,7 @@ import {
   SET_ORDER_PHONE,
   SET_ORDER_POLITIC,
   SET_PREPARE_TIME,
+  SET_TERMINAL,
   SHOW_PAYMENT_SELECTION,
 } from '../constants/ActionTypes'
 import { AuthState } from '../interfaces/interfaces'
@@ -340,6 +342,20 @@ export const setPrepareDate = (prepareDate: string) => {
   return {
     type: SET_PREPARE_TIME,
     date: prepareDate,
+  }
+}
+
+export const setTerminal = (terminalId: string) => {
+  return {
+    type: SET_TERMINAL,
+    terminalId,
+  }
+}
+
+export const setComment = (comment: string) => {
+  return {
+    type: SET_COMMENT,
+    comment,
   }
 }
 

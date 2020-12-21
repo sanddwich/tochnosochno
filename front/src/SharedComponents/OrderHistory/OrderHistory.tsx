@@ -185,7 +185,7 @@ class OrderHistory extends React.Component<OrderHistoryProps, OrderHistoryState>
                     {this.renderCombos(order)}
 
                     {order.items?.map((orderItem: OrderItem) => {
-                      if (!orderItem.comboId) {
+                      if (!orderItem.comboId && !orderItem.product.parentGroup?.isService) {
                         return (
                           <React.Fragment key={orderItem.id}>
                             {/* <h1 style={{ fontWeight: 500, paddingTop: 10, marginBottom: 0 }}>Блюдо: </h1> */}

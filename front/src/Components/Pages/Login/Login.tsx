@@ -67,7 +67,7 @@ class Login extends React.Component<LoginProps, LoginState> {
     if (code.length < 4) {
       this.setState({ codeError: true })
     } else {
-      this.setState({ codeError: false })
+      this.setState({ codeError: false, smsCode: '' })
       this.props.sendSmsCode(code)
     }
   }

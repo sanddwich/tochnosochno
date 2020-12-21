@@ -8,7 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 interface RadioButtonProps {
   label: string
   selected: boolean
-  onClick: () => void
+  onClick: (event: React.ChangeEvent<HTMLInputElement>) => void
   name: string
   id: string
 }
@@ -26,11 +26,12 @@ export default class RadioButton extends React.Component<RadioButtonProps, Radio
         <label htmlFor={this.props.id} className="RadioButton">
           {this.props.label}
           <input
-            onClick={this.props.onClick}
+            onChange={(event) => this.props.onClick(event)}
             type="radio"
-            defaultChecked={this.props.selected}
+            // defaultChecked={this.props.selected}
             name={this.props.name}
             id={this.props.id}
+            checked={this.props.selected}
           />
           <span className="RadioButton__checkmark"></span>
         </label>

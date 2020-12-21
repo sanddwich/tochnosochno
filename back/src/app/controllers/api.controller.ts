@@ -91,10 +91,6 @@ export class ApiController {
         relations: [
           'products',
           'products.parentGroup',
-          /*
-           *Когда потребуется отправка в Iiko требуется включить
-           */
-
           'products.groupModifiers',
           'products.groupModifiers.group',
           'products.groupModifiers.childModifiers',
@@ -102,17 +98,6 @@ export class ApiController {
           'products.modifiers',
           'products.modifiers.product',
           'products.modifiers.modifier',
-
-          /*
-           *Переделал фронт на работу с полем price у продукта
-           */
-          // 'products.sizePrices',
-          // 'products.sizePrices.price',
-          // 'products.groupModifiers.childModifiers.product.sizePrices',
-          // 'products.groupModifiers.childModifiers.product.sizePrices.price',
-
-          // 'products.variants',
-          // 'products.facets',
         ],
       })
 
@@ -157,20 +142,14 @@ export class ApiController {
         },
         take: 5,
         relations: [
-          // 'sizePrices',
-          // 'sizePrices.price',
           'parentGroup',
           'groupModifiers',
           'groupModifiers.group',
           'groupModifiers.childModifiers',
           'groupModifiers.childModifiers.product',
-          // 'groupModifiers.childModifiers.product.sizePrices',
-          // 'groupModifiers.childModifiers.product.sizePrices.price',
           'modifiers',
           'modifiers.product',
           'modifiers.modifier',
-          // 'products.variants',
-          // 'products.facets',
         ],
       })
 
@@ -206,28 +185,19 @@ export class ApiController {
         {
           relations: [
             'orders',
-            // 'addresses',
             'favoriteProducts',
             'favoriteProducts.product',
-            // 'favoriteProducts.product.sizePrices',
-            // 'favoriteProducts.product.sizePrices.price',
             'orders.terminalId',
             'orders.items',
             'orders.items.product',
-            // 'orders.items.product.sizePrices',
-            // 'orders.items.product.sizePrices.price',
-            // 'addresses.street',
-            // 'orders.address',
-            // 'orders.address.street',
-
-            // 'orders.items.productVariant.product',
-            // 'orders.items.productVariant',
-
-            // 'orders.items.orderItemModifiers',
-            // 'orders.items.orderItemModifiers.productModifier',
-            // 'orders.items.orderItemModifiers.productModifier.product',
-            // 'orders.items.orderItemModifiers.productModifier.product.sizePrices',
-            // 'orders.items.orderItemModifiers.productModifier.product.sizePrices.price',
+            'orders.items.product.parentGroup',
+            'orders.items.product.groupModifiers',
+            'orders.items.product.groupModifiers.group',
+            'orders.items.product.groupModifiers.childModifiers',
+            'orders.items.product.groupModifiers.childModifiers.product',
+            'orders.items.product.modifiers',
+            'orders.items.product.modifiers.product',
+            'orders.items.product.modifiers.modifier',
           ],
         }
       )
@@ -362,32 +332,29 @@ export class ApiController {
         const iiko = await this.iiko.getInstance()
         const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
         // const iikoOrder = await iiko.checkOrderToIiko(order, order.terminalId)
-        // console.log(iikoOrder)
-        // return
+
         /*
          * Произошла ошибка в Iiko при создании заказа
          */
 
-        // if (iikoOrder.errorInfo) {
-        //   const { code, message, description } = iikoOrder.errorInfo
-        //   throw new Error(`${code}. ${message}. ${description}`)
-        // }
-        // order.orderIikoId = iikoOrder.id
-
-        if (!order.isDelivery) {
-          order.address.id = '1df16367-fc70-4bfc-016b-a8d0a76ce24b'
-          order.address.street = { id: '8df16367-fc70-4bfc-016b-a8d0a76ce24b', name: 'Кирова' }
-          order.address.house = '27'
+        if (iikoOrder.errorInfo) {
+          const { code, message, description } = iikoOrder.errorInfo
+          throw new Error(`${code}. ${message}. ${description}`)
         }
-        if (!order.address.id) {
+        order.orderIikoId = iikoOrder.id
+
+        if (order.address && !order.address.id) {
           order.address.id = uuidv4()
         }
+        if (!order.isDelivery) {
+          delete order.address
+        }
 
-        // const iiko = await this.iiko.getInstance()
-        // const orderIiko = await iiko.formatOrderForIiko(order)
-
+        //Отправка заказа на email
         await this.sender.sendOrderEmail(order)
-        const orderDb = await repositoryOrder.save(order)
+
+        await repositoryOrder.save(order)
+        this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
         return new HttpResponseCreated({ order })
       }
     } catch (error) {
@@ -687,10 +654,10 @@ export class ApiController {
         isCourierDelivery,
         latitude,
         longitude,
-        classifierId,
-        deliveryDate
+        classifierId
+        // deliveryDate
       )
-
+      this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
       if (deliveryRestriction && !deliveryRestriction.errorDescription) {
         return new HttpResponseOK({
           isAllowed: deliveryRestriction.isAllowed,
@@ -733,20 +700,15 @@ export class ApiController {
         },
         relations: [
           'products',
-          // 'products.sizePrices',
-          // 'products.sizePrices.price',
+
           'products.parentGroup',
           'products.groupModifiers',
           'products.groupModifiers.group',
           'products.groupModifiers.childModifiers',
           'products.groupModifiers.childModifiers.product',
-          // 'products.groupModifiers.childModifiers.product.sizePrices',
-          // 'products.groupModifiers.childModifiers.product.sizePrices.price',
           'products.modifiers',
           'products.modifiers.modifier',
           'products.modifiers.product',
-          // 'products.modifiers.product.sizePrices',
-          // 'products.modifiers.product.sizePrices.price',
         ],
       })
       /*
@@ -760,15 +722,12 @@ export class ApiController {
           },
           relations: [
             'products',
-            // 'products.sizePrices',
-            // 'products.sizePrices.price',
+
             'products.parentGroup',
             'products.groupModifiers',
             'products.groupModifiers.group',
             'products.groupModifiers.childModifiers',
             'products.groupModifiers.childModifiers.product',
-            // 'products.groupModifiers.childModifiers.product.sizePrices',
-            // 'products.groupModifiers.childModifiers.product.sizePrices.price',
             'products.modifiers',
             'products.modifiers.modifier',
             'products.modifiers.product',

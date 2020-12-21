@@ -29,7 +29,7 @@ export default class Contacts extends React.Component<ContactsProps, ContactsSta
             <BlockName name="Доставка" />
 
             <div className="row contacts__delivery__row">
-              <div className="col-sm-6 pt-3">Работаем с 8:00 до 00:00</div>
+              <div className="col-sm-6 pt-3">Работаем КРУГЛОСУТОЧНО</div>
               <div className="col-sm-6 pt-3">
                 Минимальный заказ от <span className="bold">500</span> руб
               </div>
@@ -40,7 +40,7 @@ export default class Contacts extends React.Component<ContactsProps, ContactsSta
                 <div className="footnote">*или бесплатная пицца</div>
               </div>
 
-              <div className="col-sm-6 pt-3">Доставка от 0 до 300 руб</div>
+              <div className="col-sm-6 pt-3">Доставка от 0 до 400 руб</div>
             </div>
           </div>
         </div>

@@ -7,17 +7,6 @@
   &__cont {
     z-index: 5;
   }
-  &::before {
-    content: '';
-    width: 105%;
-    height: 1rem;
-    top: 40%;
-    background-color: #ffd74b !important;
-    border-radius: 15px 0px;
-
-    position: absolute;
-    z-index: -1;
-  }
 
   .BlockName__title {
     h1 {
@@ -26,21 +15,17 @@
       font-weight: 700;
       font-size: 36px;
       line-height: 44px;
+      &::first-line {
+        border-bottom: 0.65em #ffd74b solid;
+        border-bottom-right-radius: 15px;
+      }
+      // &::first-line {
+      //   background-image: url(/images/icons/underline.svg);
+      //   background-position: bottom;
+      //   background-repeat: no-repeat;
+      //   background-size: contain;
+      // }
     }
-  }
-
-  .BlockName__underLineCont {
-    position: relative;
-  }
-
-  .BlockName__underLine {
-    position: relative;
-    width: 105%;
-    height: 19px;
-    background-color: #ffd74b !important;
-    border-radius: 15px 0px;
-    z-index: -1;
-    top: 60%;
   }
 }
 

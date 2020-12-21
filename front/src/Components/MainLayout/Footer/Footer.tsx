@@ -46,7 +46,7 @@ export default class Footer extends React.Component<FooterProps, FooterState> {
             </div>
 
             <div className="col-md-5 ">
-              <div className="footer__worktime">Часы работы ресторана с 10:00 - 00:00</div>
+              <div className="footer__worktime">Работаем КРУГЛОСУТОЧНО</div>
             </div>
           </div>
           <div className="row">
@@ -55,11 +55,12 @@ export default class Footer extends React.Component<FooterProps, FooterState> {
                 <div className="row mt-3">
                   <div className="col-6 pr-0">
                     <div className="footer__contacts__title">Телефон ресторана</div>
-                    <div className="footer__contacts__phone"> 46-46-07</div>
+                    <div className="footer__contacts__phone"> 46-46-00</div>
                   </div>
                   <div className="col-6 pr-0">
                     <div className="footer__contacts__title">Телефон доставки</div>
                     <div className="footer__contacts__phone"> 46-46-02</div>
+                    <div className="footer__contacts__phone"> 46-46-07</div>
                   </div>
                 </div>
               </div>

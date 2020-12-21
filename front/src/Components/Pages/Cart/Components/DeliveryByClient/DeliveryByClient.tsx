@@ -10,13 +10,16 @@ import OrderTotalPrice from '../../../../../SharedComponents/OrderTotalPrice/Ord
 import PaymentSection from '../../../../../SharedComponents/PaymentSection/PaymentSection'
 import PoliticSection from '../../../../../SharedComponents/PoliticSection/PoliticSection'
 import { showLoginModal } from '../../../../../Redux/actions/app'
-import { processOrder, deleteDeliveryProduct } from '../../../../../Redux/actions/order'
+import { processOrder, deleteDeliveryProduct, setTerminal, setComment } from '../../../../../Redux/actions/order'
 import { setPhone } from '../../../../../Redux/actions/auth'
 import InputMask from 'react-input-mask'
 import * as Scroll from 'react-scroll'
 import './DeliveryByClient.scss'
 import { DeliveryAddressValidation } from '../../../../../Interfaces/DeliveryAddressValidation'
 import Customer from '../../../../../Interfaces/Customer'
+import Terminal from '../../../../../Interfaces/Terminal'
+import RadioButton from '../../../../../SharedComponents/RadioButton/RadioButton'
+import Order from '../../../../../Interfaces/Order'
 
 interface DeliveryByClientProps {
   ruleCheck: boolean
@@ -30,6 +33,10 @@ interface DeliveryByClientProps {
   processOrder: any
   loading: boolean
   deleteDeliveryProduct: () => void
+  terminals: Terminal[]
+  setTerminal: (terminalId: string) => void
+  setComment: (comment: string) => void
+  order: Order
 }
 
 interface DeliveryByClientState {
@@ -57,6 +64,7 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
   }
   componentDidMount() {
     this.props.deleteDeliveryProduct()
+    this.props.setTerminal(this.props.terminals[0].id)
   }
 
   processOrder = () => {
@@ -108,6 +116,7 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
     let phone = ''
 
     textFieldName === 'phone' && this.props.setPhone(value)
+    textFieldName === 'comment' && this.props.setComment(value)
 
     state.validationTextfields.map((textfield) => {
       if (textfield.name === textFieldName) {
@@ -128,16 +137,45 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
     this.setState({ ...state })
   }
 
+  selectDeliveryTerminal = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.currentTarget.id)
+    const selectedTerminal = this.getTerminalById(event.currentTarget.id)
+    console.log(selectedTerminal)
+    if (selectedTerminal) {
+      this.props.setTerminal(selectedTerminal.id)
+    }
+  }
+
+  getTerminalById = (terminalId?: string): Terminal => {
+    let selectedTerminal: Terminal = this.props.terminals[0]
+    this.props.terminals.map((terminal) => {
+      if (terminal.id === terminalId) {
+        selectedTerminal = terminal
+      }
+    })
+
+    return selectedTerminal
+  }
+
   render() {
     return (
       <Container className="DeliveryByClient  mt-5">
         <div hidden={this.state.loading}>
           <div className="DeliveryByClient__address mt-4">
-            <div className="DeliveryByClient__address__label">Адрес самовывоза</div>
-
-            <div className="DeliveryByClient__address__street">
-              <img src="/images/icons/map-pin.svg" alt="MapPin" />
-              Кирова 27
+            <div className="DeliveryByClient__select">
+              <div className="DeliveryByClient__address__label">Выберите адрес самовывоза</div>
+              {this.props.terminals.map((terminal: Terminal) => {
+                return (
+                  <RadioButton
+                    key={terminal.id}
+                    id={terminal.id}
+                    name={terminal.name}
+                    onClick={(event) => this.selectDeliveryTerminal(event)}
+                    selected={this.props.order.terminalId === terminal.id}
+                    label={terminal.name}
+                  />
+                )
+              })}
             </div>
           </div>
 
@@ -150,16 +188,30 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
                 onError={() => this.setLoading(false)}
                 className="DeliveryByClient__map__yandex"
                 // onApiAvaliable={(ymaps: any) => this.geocode(ymaps)}
-                defaultState={{
-                  center: [46.347801, 48.037095],
-                  zoom: 17,
+                state={{
+                  center: [
+                    this.getTerminalById(this.props.order.terminalId)
+                      ? parseFloat(this.getTerminalById(this.props.order.terminalId).latitude)
+                      : parseFloat(this.props.terminals[0].latitude),
+                    this.getTerminalById(this.props.order.terminalId)
+                      ? parseFloat(this.getTerminalById(this.props.order.terminalId).longitude)
+                      : parseFloat(this.props.terminals[0].longitude),
+                  ],
+                  zoom: 16,
                   geometry: { type: 'Point', coordinates: [46.400285, 48.09156] },
                 }}
               >
                 <GeolocationControl options={{ float: 'left' }} />
                 <ZoomControl options={{ float: 'right' }} />
-                <Placemark geometry={[46.347801, 48.037095]} />
-                <Placemark geometry={[46.405095, 48.090833]} />
+
+                {this.props.terminals.map((terminal) => {
+                  return (
+                    <Placemark
+                      key={terminal.id}
+                      geometry={[parseFloat(terminal.latitude), parseFloat(terminal.longitude)]}
+                    />
+                  )
+                })}
               </Map>
             </YMaps>
           </div>
@@ -190,15 +242,7 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
                     maskChar=" "
                   >
                     {(inputProps: any) => (
-                      <input
-                        {...inputProps}
-                        id="phone"
-                        // className={`${this.state.phoneError && !this.state.phoneValid ? 'error' : ''} ${
-                        //   this.state.phoneValid ? 'correct' : ''
-                        // }`}
-                        type="tel"
-                        placeholder="8 (999) 123-45-67"
-                      />
+                      <input {...inputProps} id="phone" type="tel" placeholder="8 (999) 123-45-67" />
                     )}
                   </InputMask>
                   {this.state.validationTextfields[0].touched && !this.state.validationTextfields[0].isValid ? (
@@ -218,6 +262,19 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
                     placeholder="tochno-sochno@mail.ru"
                   />
                 </div>
+              </div>
+
+              <div className="DeliveryByClient__form__group w-100">
+                <label htmlFor="comment">Комментарий к заказу</label>
+                <textarea
+                  onInput={(e: React.FormEvent<HTMLTextAreaElement>) => {
+                    this.textFieldInputHandler(e.currentTarget.value, 'comment')
+                  }}
+                  defaultValue={this.props.order.comment}
+                  className="w-100"
+                  id="comment"
+                  placeholder="Пожалуйста, укажите здесь любую информацию, которая поможет сделать ваш заказ лучше"
+                />
               </div>
               <CookingTime />
               <OrderTotalPrice isDelivery={false} />
@@ -251,11 +308,14 @@ const mapDispatchToProps = {
   setPhone,
   processOrder,
   deleteDeliveryProduct,
+  setTerminal,
+  setComment,
 }
 
 const mapStateToProps = (state: RootState) => {
   const { isAuth, phone, customer } = state.auth
-  const { smsCheck, ruleCheck, personCheck, loading } = state.order
+  const { terminals } = state.menu
+  const { smsCheck, ruleCheck, personCheck, loading, order } = state.order
   return {
     isAuth,
     smsCheck,
@@ -264,6 +324,8 @@ const mapStateToProps = (state: RootState) => {
     phone,
     customer,
     loading,
+    terminals,
+    order,
   }
 }
 

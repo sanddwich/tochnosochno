@@ -24,9 +24,10 @@ import { getRepository } from 'typeorm'
 
 import { Customer, FavoriteProduct, Group, Order, OrderItem, Product } from '../entities'
 import { WalletBalance } from '../entities/wallet-balance.entity'
-import { Iiko, CustomerService, SmsService, MenuService } from '../services'
+import { Iiko, CustomerService, SmsService, MenuService, LoggerService } from '../services'
 import { v4 as uuidv4 } from 'uuid'
 import * as _ from 'lodash'
+import getClientIp from '../utils/utils'
 
 @ApiInfo({
   title: 'Food Delivery Site API',
@@ -47,6 +48,9 @@ export class AuthController {
 
   @dependency
   iiko: Iiko
+
+  @dependency
+  logger: LoggerService
 
   @dependency
   sms: SmsService
@@ -76,15 +80,28 @@ export class AuthController {
     type: 'object',
   })
   async login(ctx: Context) {
-    const phone = ctx.request.body.phone
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
 
-    const pinCode = await this.sms.createCode(phone)
+    try {
+      const phone = ctx.request.body.phone
 
-    if (pinCode.error) {
-      return new HttpResponseNotFound(pinCode)
+      const pinCode = await this.sms.createCode(phone)
+
+      if (pinCode.error) {
+        return new HttpResponseNotFound(pinCode)
+      }
+
+      return new HttpResponseOK(pinCode)
+    } catch (error) {
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        error
+      )
+      return new HttpResponseBadRequest(error)
     }
-
-    return new HttpResponseOK(pinCode)
   }
 
   @Post('/auth')
@@ -103,117 +120,123 @@ export class AuthController {
     */
     const startTime = Date.now()
 
-    let customer: Customer | undefined
-    let { code, phone } = ctx.request.body
+    try {
+      let customer: Customer | undefined
+      let { code, phone } = ctx.request.body
 
-    const repositoryCustomer = getRepository(Customer)
-    const repositoryWalletBalance = getRepository(WalletBalance)
+      const repositoryCustomer = getRepository(Customer)
+      const repositoryWalletBalance = getRepository(WalletBalance)
 
-    const isCodeCorrect = await this.sms.verifyCode(phone, code)
+      const isCodeCorrect = await this.sms.verifyCode(phone, code)
+      // const isCodeCorrect = true
 
-    //Если код неправильный
-    if (!isCodeCorrect) {
-      return new HttpResponseNotFound({ error: true, message: 'Введите коректный код' })
-    }
+      if (!isCodeCorrect) {
+        return new HttpResponseNotFound({ error: true, message: 'Введите коректный код' })
+      }
 
-    phone = phone.replace(/^\8/, '+7')
-    const iiko = await this.iiko.getInstance()
-    let iikoCustomer = await iiko.getCustomer(phone)
+      phone = phone.replace(/^\8/, '+7')
 
-    if (iikoCustomer) iikoCustomer = this.customerService.setBonuses(iikoCustomer)
-    if (iikoCustomer && iikoCustomer.id) {
-      await repositoryCustomer.save(iikoCustomer)
-    } else {
-      const customerDb = await repositoryCustomer.findOne({ phone: phone })
-      console.log(phone)
-      if (!customerDb) {
+      // const iiko = await this.iiko.getInstance()
+      // let iikoCustomer = await iiko.getCustomer(phone)
+
+      // if (iikoCustomer) iikoCustomer = this.customerService.setBonuses(iikoCustomer)
+      // if (iikoCustomer && iikoCustomer.id) {
+      //   await repositoryCustomer.save(iikoCustomer)
+      // } else {
+
+      customer = await repositoryCustomer.findOne(
+        { phone: phone },
+        {
+          relations: [
+            'orders',
+            'favoriteProducts',
+            'favoriteProducts.product',
+            'orders.items.product.parentGroup',
+            'favoriteProducts.product.groupModifiers',
+            'favoriteProducts.product.groupModifiers.group',
+            'favoriteProducts.product.groupModifiers.childModifiers',
+            'favoriteProducts.product.groupModifiers.childModifiers.product',
+            'favoriteProducts.product.modifiers',
+            'favoriteProducts.product.modifiers.product',
+            'favoriteProducts.product.modifiers.modifier',
+            'orders.terminalId',
+            'orders.items',
+            'orders.items.product',
+            'orders.items.product.groupModifiers',
+            'orders.items.product.groupModifiers.group',
+            'orders.items.product.groupModifiers.childModifiers',
+            'orders.items.product.groupModifiers.childModifiers.product',
+            'orders.items.product.modifiers',
+            'orders.items.product.modifiers.product',
+            'orders.items.product.modifiers.modifier',
+          ],
+        }
+      )
+
+      if (!customer) {
         customer = new Customer()
         customer.phone = phone
         customer.id = uuidv4()
         customer.addresses = []
         customer.orders = []
-        customer.name = 'Клиент с сайта'
+        customer.favoriteProducts = []
+        customer.name = 'Ваше имя'
         customer = await repositoryCustomer.save(customer)
       }
-    }
-    if (!customer) {
-      customer = await repositoryCustomer.findOne(
-        { phone },
-        {
-          relations: [
-            'orders',
-            // 'addresses',
-            'favoriteProducts',
-            'favoriteProducts.product',
-            'favoriteProducts.product.sizePrices',
-            'favoriteProducts.product.sizePrices.price',
-            'orders.terminalId',
-            'orders.items',
-            'orders.items.product',
-            'orders.items.product.sizePrices',
-            'orders.items.product.sizePrices.price',
-            // 'addresses.street',
-            // 'orders.address',
-            // 'orders.address.street',
 
-            // 'orders.items.productVariant.product',
-            // 'orders.items.productVariant',
+      //Создаём сессию для пользователя и отправляем ему токен сессии
+      if (customer) {
+        customer.orders = _.orderBy(customer.orders, ['id'], ['desc'])
 
-            // 'orders.items.orderItemModifiers',
-            // 'orders.items.orderItemModifiers.productModifier',
-            // 'orders.items.orderItemModifiers.productModifier.product',
-            // 'orders.items.orderItemModifiers.productModifier.product.sizePrices',
-            // 'orders.items.orderItemModifiers.productModifier.product.sizePrices.price',
-          ],
-        }
-      )
-    }
+        const groups = await getRepository(Group).find({
+          where: {
+            isGroupModifier: false,
+          },
+          relations: ['products', 'products.parentGroup'],
+        })
 
-    //Создаём сессию для пользователя и отправляем ему токен сессии
-    if (customer) {
-      customer.orders = _.orderBy(customer.orders, ['id'], ['desc'])
-      customer.addresses = _.orderBy(customer.addresses, ['id'], ['desc'])
-
-      const groups = await getRepository(Group).find({
-        where: {
-          isGroupModifier: false,
-          // isSiteDisplay: true,
-        },
-        relations: ['products', 'products.sizePrices', 'products.sizePrices.price', 'products.parentGroup'],
-      })
-
-      customer.favoriteProducts.map(async (favouriteProduct) => {
-        favouriteProduct.product.recomended = []
-        favouriteProduct.product.recomended.push(
-          ...(await this.menuService.getRecomendedProducts(favouriteProduct.product, 3, groups))
-        )
-      })
-
-      customer.orders.map((order: Order) => {
-        order.items.map(async (orderItem: OrderItem) => {
-          orderItem.product.recomended = []
-          orderItem.product.recomended.push(
-            ...(await this.menuService.getRecomendedProducts(orderItem.product, 3, groups))
+        customer.favoriteProducts.map(async (favouriteProduct) => {
+          favouriteProduct.product.recomended = []
+          favouriteProduct.product.recomended.push(
+            ...(await this.menuService.getRecomendedProducts(favouriteProduct.product, 3, groups))
           )
         })
-      })
 
-      // Если в истории заказов нужны заказы, которые есть точно  в iiko
-      // customer.orders = _.filter(customer.orders, 'orderIikoId')
+        customer.orders.map((order: Order) => {
+          order.items.map(async (orderItem: OrderItem) => {
+            orderItem.product.recomended = []
+            orderItem.product.recomended.push(
+              ...(await this.menuService.getRecomendedProducts(orderItem.product, 3, groups))
+            )
+          })
+        })
 
-      const session = await this.store.createAndSaveSessionFromUser(customer, { csrfToken: true })
-      const token = session.getToken()
-      const response = new HttpResponseOK({
-        error: false,
-        message: 'Успешная авторизация',
-        token: token,
-        customer: customer,
-      })
-      setSessionCookie(response, session.getToken())
-      setCsrfCookie(response, await getCsrfToken(session))
-      return response
-    } else {
-      return new HttpResponseBadRequest(customer)
+        // Если в истории заказов нужны заказы, которые есть точно  в iiko
+        // customer.orders = _.filter(customer.orders, 'orderIikoId')
+
+        const session = await this.store.createAndSaveSessionFromUser(customer, { csrfToken: true })
+        const token = session.getToken()
+        const response = new HttpResponseOK({
+          error: false,
+          message: 'Успешная авторизация',
+          token: token,
+          customer: customer,
+        })
+        setSessionCookie(response, session.getToken())
+        setCsrfCookie(response, await getCsrfToken(session))
+
+        this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
+
+        return response
+      } else {
+        return new HttpResponseBadRequest(customer)
+      }
+    } catch (error) {
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        error
+      )
+      return new HttpResponseBadRequest(error)
     }
   }
 
@@ -225,10 +248,22 @@ export class AuthController {
   // @CsrfTokenRequired()
   async logout(ctx: Context<Customer, Session>) {
     //Удаление сессии
-    await this.store.destroy(ctx.session.sessionID)
-    const response = new HttpResponseOK()
-    removeSessionCookie(response)
-    return new HttpResponseOK({ error: false, message: 'Logged out...' })
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
+    try {
+      await this.store.destroy(ctx.session.sessionID)
+      const response = new HttpResponseOK()
+      removeSessionCookie(response)
+      this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
+      return new HttpResponseOK({ error: false, message: 'Logged out...' })
+    } catch (error) {
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        error
+      )
+    }
   }
 
   @Patch('/customer')
@@ -247,19 +282,30 @@ export class AuthController {
   })
   // @CsrfTokenRequired()
   async setCustomerInfo(ctx: Context<Customer, Session>) {
-    const name = ctx.request.body.name
-    const birthday = ctx.request.body.birthday
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
+
     try {
+      const name = ctx.request.body.name
+      const birthday = ctx.request.body.birthday
+
       const customer = await getRepository(Customer).findOne({ id: ctx.user.id })
       if (customer) {
         customer.name = name
         customer.birthday = birthday
-        await getRepository(Customer).save(customer)
+        const customerDb = await getRepository(Customer).save(customer)
+        this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
         return new HttpResponseOK({ error: false, message: 'Данные обновлены...' })
       } else {
         return new HttpResponseBadRequest('Клиент не найден')
       }
     } catch (error) {
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        error
+      )
       return new HttpResponseBadRequest(error)
     }
   }
@@ -279,18 +325,27 @@ export class AuthController {
   })
   // @CsrfTokenRequired()
   async setFavoriteProduct(ctx: Context<Customer, Session>) {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
+
     const productId = ctx.request.body.productId
     try {
       const product = await getRepository(Product).findOne({ id: productId })
       const customer = await getRepository(Customer).findOne({ id: ctx.user.id })
       if (customer && product) {
         await getRepository(FavoriteProduct).save({ product, customer })
+        this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
         return new HttpResponseOK({ error: false, message: 'Данные обновлены...' })
       } else {
         return new HttpResponseBadRequest('Клиент не найден')
       }
     } catch (error) {
-      console.log(error)
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        error
+      )
       return new HttpResponseBadRequest(error)
     }
   }
@@ -310,6 +365,11 @@ export class AuthController {
   })
   // @CsrfTokenRequired()
   async deleteFavoriteProduct(ctx: Context<Customer, Session>) {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
+
     const productId = ctx.request.body.productId
     try {
       const product = await getRepository(Product).findOne({ id: productId })
@@ -317,12 +377,16 @@ export class AuthController {
       const favoriteProduct = await getRepository(FavoriteProduct).findOne({ product, customer })
       if (favoriteProduct) {
         await getRepository(FavoriteProduct).delete(favoriteProduct)
+        this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
         return new HttpResponseOK({ error: false, message: 'Данные обновлены...' })
       } else {
         return new HttpResponseBadRequest('Избранный продукт не найден')
       }
     } catch (error) {
-      console.log(error)
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        error
+      )
       return new HttpResponseBadRequest(error)
     }
   }

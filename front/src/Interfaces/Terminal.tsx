@@ -3,4 +3,6 @@ export default interface Terminal {
   name: string
   address: string
   isAlive: boolean
+  latitude: string
+  longitude: string
 }

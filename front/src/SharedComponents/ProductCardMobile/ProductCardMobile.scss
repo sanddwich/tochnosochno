@@ -34,17 +34,20 @@
   .ProductCardMobile__info {
     display: flex !important;
     flex-direction: column;
+    height: 200px;
   }
 
   .ProductCardMobile__textContent {
-    height: 87px;
+    height: 100%;
     margin-top: 5px;
     padding-left: 20px !important;
     padding-right: 20px !important;
+    overflow: hidden;
 
     .ProductCardMobile__title {
       // margin-top: 5px;
       cursor: pointer;
+      height: 35px;
       h1 {
         font-family: 'Roboto';
         font-style: normal;
@@ -73,7 +76,7 @@
   }
 
   .ProductCardMobile__priceLine {
-    margin-top: 5px;
+    // margin-top: 5px;
     padding-left: 19px !important;
     padding-right: 19px !important;
 
@@ -152,8 +155,8 @@
     }
 
     .ProductCardMobile__prices {
-      padding-top: 10px;
-      padding-bottom: 10px;
+      // padding-top: 5px;
+      // padding-bottom: 5px;
     }
   }
 }

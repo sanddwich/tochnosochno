@@ -17,6 +17,7 @@ import {
   HIDE_PAYMENT_SELECTION,
   INC_ORDER_ITEM_AMOUNT,
   PROCESS_ORDER,
+  SET_COMMENT,
   SET_DELIVERY,
   SET_GUEST_COUNT,
   SET_INIT_ORDER,
@@ -28,6 +29,7 @@ import {
   SET_ORDER_PHONE,
   SET_ORDER_POLITIC,
   SET_PREPARE_TIME,
+  SET_TERMINAL,
   SHOW_PAYMENT_SELECTION,
 } from '../constants/ActionTypes'
 
@@ -155,6 +157,16 @@ interface DeleteDeliveryFromOrderAction {
   type: typeof DELETE_DELIVERY_SERVICE_PRODUCT
 }
 
+interface SetTerminalAction {
+  type: typeof SET_TERMINAL
+  terminalId: string
+}
+
+interface SetCommentAction {
+  type: typeof SET_COMMENT
+  comment: string
+}
+
 export type OrderActionType =
   | AddToOrderAction
   | DeleteFromOrderAction
@@ -182,3 +194,5 @@ export type OrderActionType =
   | HidePaymentSelection
   | AddDeliveryToOrderAction
   | DeleteDeliveryFromOrderAction
+  | SetTerminalAction
+  | SetCommentAction

@@ -1,13 +1,13 @@
-import { Order, PinCode } from '../entities'
+import { Order, PinCode, Terminal } from '../entities'
 import { getRepository } from 'typeorm'
 import * as nodemailer from 'nodemailer'
 import axios from 'axios'
 import { Config } from '@foal/core'
 const quaryString = require('query-string')
 
-const API_EMAIL = 'denristun@gmail.com'
-const API_KEY = 'LwJbfWxYbACKB64gwaSenxSXLeKk'
-const API_SIGN = 'SMS Aero'
+const API_EMAIL = 'tochno.sochno.sms@gmail.com'
+const API_KEY = 'IJZpZkEJuqv1hwuUwOAkmghJeHh1'
+const API_SIGN = 'Sochno30'
 const API_CHANNEL = 'DIRECT'
 
 export class SmsService {
@@ -27,9 +27,8 @@ export class SmsService {
 
       await repository.save(pinCode)
 
-      const smsStatus = await this.sendSms(phone, code)
-
       //Connect to sms service to send sms with pinCode
+      const smsStatus = await this.sendSms(phone, code)
 
       return { error: false, message: 'Вам на телефон отправлен код' }
     } else {
@@ -44,8 +43,6 @@ export class SmsService {
       .where('pincode.phone = :phone', { phone: phone })
       .andWhere('pincode.pinCode = :code', { code: code })
       .andWhere('TIMESTAMPDIFF(SECOND, pincode.expiresIn, CURRENT_TIMESTAMP ) < 60')
-
-      // .andWhere('TIMESTAMPDIFF(SECOND, pincode.expiresIn, CURRENT_TIMESTAMP + INTERVAL 1 HOUR) < 60')
       .getOne()
 
     return pinCode
@@ -54,13 +51,16 @@ export class SmsService {
   async sendOrderEmail(order: Order) {
     let orderItemsHtml = ''
     let deliveryAddress = ''
-    if (order.isDelivery) {
-      console.log(order.address.street)
+    if (order.isDelivery && order.address) {
       deliveryAddress = ` ${order.address.street.name ? `ул. ${order.address.street.name},` : ''} 
        ${order.address.house ? `д. ${order.address.house},` : ''} 
       ${order.address.flat ? `кв. ${order.address.flat}, ` : ''} 
       ${order.address.entrance ? `${order.address.entrance} подъезд, ` : ''}  
       ${order.address.floor ? `${order.address.floor} этаж` : ''}`
+    }
+    if (!order.isDelivery) {
+      const terminal = await getRepository(Terminal).findOne({ id: order.terminalId.toString() })
+      deliveryAddress = terminal ? terminal.name : ''
     }
 
     order.items.map((orderItem, index) => {
@@ -117,7 +117,11 @@ export class SmsService {
     <p><span style="font-size: 17px;">Имя: ${order.customer.name}</span></p>
     <p><span style="font-size: 17px;">Телефон: ${order.customer.phone || order.phone}</span></p>
     <p><span style="font-size: 17px;">Доставка: ${order.isDelivery ? '<b>курьером</b>' : '<b>самовывоз </b>'}</span></p>
-    ${order.isDelivery ? ` <p><span style="font-size: 17px;">Адрес доставки: ${deliveryAddress}</span></p>` : ''}
+    ${
+      order.isDelivery
+        ? ` <p><span style="font-size: 17px;">Адрес доставки: ${deliveryAddress}</span></p>`
+        : `<p><span style="font-size: 17px;">Адрес самовывоза: ${deliveryAddress}</span></p>`
+    }
    
     <p><span style="font-size: 17px;">Количество персон: ${order.guests.count}</span></p>
     <p><span style="font-size: 17px;">Оплата: ${
@@ -167,7 +171,15 @@ export class SmsService {
     const url = `https://${API_EMAIL}:${API_KEY}@gate.smsaero.ru/v2/sms/send`
 
     return await axios
-      .post(url, quaryString.stringify({ number: phone, text: pinCode, sign: API_SIGN, channel: API_CHANNEL }))
+      .post(
+        url,
+        quaryString.stringify({
+          number: phone,
+          text: `Ваш код авторизации на сайте sochno30.ru: ${pinCode}`,
+          sign: API_SIGN,
+          channel: API_CHANNEL,
+        })
+      )
       .then((response) => {
         return { error: false, message: 'СМС сообщение отправлено' }
       })
