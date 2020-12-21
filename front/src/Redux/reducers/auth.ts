@@ -17,6 +17,7 @@ import {
   SET_CUSTOMER_BIRTHDAY,
   SET_CUSTOMER_BONUS,
   SET_CUSTOMER_NAME,
+  SET_PROCESS_ORDER_AUTH,
   SET_TOKEN,
   SIGN_IN,
 } from '../constants/ActionTypes'
@@ -33,6 +34,7 @@ const initialState: AuthState = {
   smsCodeTime: new Date(),
   phone: '',
   code: '',
+  isProcessOrder: false,
 }
 const auth = (state: AuthState = initialState, action: AuthActionType) => {
   switch (action.type) {
@@ -186,6 +188,12 @@ const auth = (state: AuthState = initialState, action: AuthActionType) => {
             return favoriteProduct.product.id !== action.product.id
           }),
         },
+      }
+
+    case SET_PROCESS_ORDER_AUTH:
+      return {
+        ...state,
+        isProcessOrder: action.isProcessOrder,
       }
 
     default:

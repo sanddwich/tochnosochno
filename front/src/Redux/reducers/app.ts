@@ -7,6 +7,7 @@ import {
   HIDE_SIDE_DIALOG,
   HIDE_SUCCESS_MODAL,
   HIDE_TEST_MODAL,
+  SET_PROCESS_ORDER_AUTH,
   SHOW_CART,
   SHOW_COMBO_MODAL,
   SHOW_COOKING_TIME,
@@ -158,6 +159,7 @@ const app = (state: AppState = initialState, action: AppActionType) => {
         ...state,
         isShowTestModal: false,
       }
+
     default:
       return state
   }

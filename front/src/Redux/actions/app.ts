@@ -10,6 +10,7 @@ import {
   HIDE_SIDE_DIALOG,
   HIDE_SUCCESS_MODAL,
   HIDE_TEST_MODAL,
+  SET_PROCESS_ORDER_AUTH,
   SHOW_CART,
   SHOW_COMBO_MODAL,
   SHOW_COOKING_TIME,
@@ -122,4 +123,8 @@ export const showTestModal = () => ({
 
 export const hideTestModal = () => ({
   type: HIDE_TEST_MODAL,
+})
+
+export const setProccessOrderOnAuth = () => ({
+  type: SET_PROCESS_ORDER_AUTH,
 })

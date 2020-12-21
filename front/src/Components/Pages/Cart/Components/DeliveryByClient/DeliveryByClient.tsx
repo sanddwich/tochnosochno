@@ -11,7 +11,7 @@ import PaymentSection from '../../../../../SharedComponents/PaymentSection/Payme
 import PoliticSection from '../../../../../SharedComponents/PoliticSection/PoliticSection'
 import { showLoginModal } from '../../../../../Redux/actions/app'
 import { processOrder, deleteDeliveryProduct, setTerminal, setComment } from '../../../../../Redux/actions/order'
-import { setPhone } from '../../../../../Redux/actions/auth'
+import { setPhone, setProcessOrderOnAuth } from '../../../../../Redux/actions/auth'
 import InputMask from 'react-input-mask'
 import * as Scroll from 'react-scroll'
 import './DeliveryByClient.scss'
@@ -27,6 +27,7 @@ interface DeliveryByClientProps {
   personCheck: boolean
   isAuth: boolean
   showLoginModal: () => void
+  setProcessOrderOnAuth: (isProcessOrder: boolean) => void
   setPhone: (phone: string) => void
   phone: string
   customer: Customer
@@ -92,6 +93,7 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
 
     if (formValid) {
       if (!this.props.isAuth) {
+        this.props.setProcessOrderOnAuth(true)
         this.props.showLoginModal()
       } else {
         this.props.processOrder()
@@ -310,6 +312,7 @@ const mapDispatchToProps = {
   deleteDeliveryProduct,
   setTerminal,
   setComment,
+  setProcessOrderOnAuth,
 }
 
 const mapStateToProps = (state: RootState) => {

@@ -20,6 +20,7 @@ import {
   SET_CUSTOMER_BIRTHDAY,
   SET_CUSTOMER_BONUS,
   SET_CUSTOMER_NAME,
+  SET_PROCESS_ORDER_AUTH,
   SET_SMS,
   SET_TOKEN,
   SIGN_IN,
@@ -119,6 +120,11 @@ interface DeleteProductFromFavorites {
   product: Product
 }
 
+interface SetProcessOrderAuth {
+  type: typeof SET_PROCESS_ORDER_AUTH
+  isProcessOrder: boolean
+}
+
 export type AuthActionType =
   | GetIsAuthAction
   | GetSmsAction
@@ -142,3 +148,4 @@ export type AuthActionType =
   | SetCustomerName
   | AddProductToFavorites
   | DeleteProductFromFavorites
+  | SetProcessOrderAuth

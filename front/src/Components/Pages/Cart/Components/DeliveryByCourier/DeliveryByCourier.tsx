@@ -9,7 +9,7 @@ import PaymentSection from '../../../../../SharedComponents/PaymentSection/Payme
 import PoliticSection from '../../../../../SharedComponents/PoliticSection/PoliticSection'
 import RadioButton from '../../../../../SharedComponents/RadioButton/RadioButton'
 import InputMask from 'react-input-mask'
-import { setPhone } from '../../../../../Redux/actions/auth'
+import { setPhone, setProcessOrderOnAuth } from '../../../../../Redux/actions/auth'
 import { showLoginModal } from '../../../../../Redux/actions/app'
 import {
   getStreetVariants,
@@ -78,6 +78,7 @@ interface DeliveryByCourierProps {
   calculateOrder: () => void
   setComment: (comment: string) => void
   setTerminal: (terminalId: string) => void
+  setProcessOrderOnAuth: (isProcessOrder: boolean) => void
 }
 
 interface DeliveryByCourierState {
@@ -267,6 +268,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
 
     if (formValid) {
       if (!this.props.isAuth) {
+        this.props.setProcessOrderOnAuth(true)
         this.props.showLoginModal()
       } else {
         this.props.processOrder()
@@ -633,6 +635,7 @@ const mapDispatchToProps = {
   getGeoLocation,
   setComment,
   setTerminal,
+  setProcessOrderOnAuth,
 }
 
 const mapStateToProps = (state: any) => {

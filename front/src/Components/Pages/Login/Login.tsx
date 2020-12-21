@@ -6,7 +6,7 @@ import ActionButton from '../../../SharedComponents/ActionButton/ActionButton'
 import BlockName from '../../../SharedComponents/BlockName/BlockName'
 import RoundButton from '../../../SharedComponents/RoundButton/RoundButton'
 import { hideLoginModal } from '../../../Redux/actions/app'
-import { getSmsCode, sendSmsCode, setPhone, setNotSms } from '../../../Redux/actions/auth'
+import { getSmsCode, sendSmsCode, setPhone, setNotSms, setProcessOrderOnAuth } from '../../../Redux/actions/auth'
 import InputMask from 'react-input-mask'
 import Countdown from 'react-countdown'
 
@@ -16,6 +16,7 @@ import CustomAlert from '../../../SharedComponents/CustomAlert/CustomAlert'
 interface LoginProps {
   showLogin: boolean
   hideLoginModal: () => void
+  setProcessOrderOnAuth: (isProcessOrder: boolean) => void
   setNotSms: () => void
   setPhone: (phone: string) => void
   getSmsCode: any
@@ -25,6 +26,7 @@ interface LoginProps {
   phone: string
   error: string
   isAuth: boolean
+  isProcessOrder: boolean
   smsCodeTime: string
 }
 
@@ -110,7 +112,14 @@ class Login extends React.Component<LoginProps, LoginState> {
           <div className="Login">
             <div className="Login__content">
               <div className="Login__content__close">
-                <RoundButton icon="icon_close.svg" backgroundColor="#F2F2F2" onClick={this.props.hideLoginModal} />
+                <RoundButton
+                  icon="icon_close.svg"
+                  backgroundColor="#F2F2F2"
+                  onClick={() => {
+                    this.props.setProcessOrderOnAuth(false)
+                    this.props.hideLoginModal()
+                  }}
+                />
               </div>
               <div className="Login__content__body">
                 <div className="Login__content__body__form">
@@ -182,7 +191,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                         onClick={() => this.codeSendHandler()}
                         textColor="white"
                         width="280px"
-                        text="Войти в личный кабинет"
+                        text={`${this.props.isProcessOrder ? 'Завершить заказ' : 'Войти в личный кабинет'}`}
                         backgroundColor="#303030"
                         icon="user_dark.svg"
                       />
@@ -215,11 +224,12 @@ const mapDispatchToProps = {
   sendSmsCode,
   setPhone,
   setNotSms,
+  setProcessOrderOnAuth,
 }
 
 const mapStateToProps = (state: RootState) => {
   const { showLogin } = state.app
-  const { loading, isSms, phone, error, isAuth, smsCodeTime } = state.auth
+  const { loading, isSms, phone, error, isAuth, smsCodeTime, isProcessOrder } = state.auth
   return {
     showLogin,
     loading,
@@ -228,6 +238,7 @@ const mapStateToProps = (state: RootState) => {
     error,
     isAuth,
     smsCodeTime,
+    isProcessOrder,
   }
 }
 

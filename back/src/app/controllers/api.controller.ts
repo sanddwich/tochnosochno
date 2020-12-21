@@ -329,6 +329,7 @@ export class ApiController {
         /*
          * Отправляем заказ в Iiko,
          */
+
         const iiko = await this.iiko.getInstance()
         const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
         // const iikoOrder = await iiko.checkOrderToIiko(order, order.terminalId)

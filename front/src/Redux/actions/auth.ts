@@ -19,10 +19,12 @@ import {
   SET_CUSTOMER_BIRTHDAY,
   SET_CUSTOMER_BONUS,
   SET_CUSTOMER_NAME,
+  SET_PROCESS_ORDER_AUTH,
   SET_TOKEN,
 } from '../constants/ActionTypes'
 import { AuthActionType } from '../interfaces/auth'
 import { showLoginModal } from './app'
+import { processOrder } from './order'
 import Product from '../../Interfaces/Product'
 import { API_URL } from '../../utils/config'
 
@@ -156,6 +158,7 @@ export const sendSmsCode = (code: string): ThunkAction<void, RootState, null, Au
   return async (dispatch, getState) => {
     try {
       const { phone } = getState().auth
+      const { isProcessOrder } = getState().auth
       dispatch(setLoading())
       const res = await fetch(`${apiServer}/auth/auth`, {
         credentials: 'include',
@@ -179,6 +182,10 @@ export const sendSmsCode = (code: string): ThunkAction<void, RootState, null, Au
 
       if (customer) {
         dispatch(setCustomer(customer))
+        if (isProcessOrder) {
+          dispatch(processOrder())
+          dispatch(setProcessOrderOnAuth(false))
+        }
       } else {
         throw new Error('Ошибка получения данных клиента')
       }
@@ -265,7 +272,6 @@ export const changeFavorite = (
 
       // const resData: ApiResponse = await res.json()
     } catch (err) {
-      console.log({ err })
       dispatch(setError(err))
     }
   }
@@ -375,5 +381,12 @@ const addProductToFavorites = (product: Product): AuthActionType => {
   return {
     type: ADD_PRODUCT_TO_FAVOURITES,
     product,
+  }
+}
+
+export const setProcessOrderOnAuth = (isProcessOrder: boolean): AuthActionType => {
+  return {
+    type: SET_PROCESS_ORDER_AUTH,
+    isProcessOrder,
   }
 }

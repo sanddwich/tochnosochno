@@ -516,7 +516,7 @@ export class Iiko {
       phone: order.phone,
       completeBefore: order.completeBefore,
       customer: order.customer,
-      comment: `${order.comment}. ${comment}.  ${order.address ? order.address.comment : ''}`,
+      comment: `${order.comment}. ${comment}.  ${order.address && order.address.comment ? order.address.comment : ''}`,
       deliveryPoint,
       orderServiceType,
       sourceKey: 'sochno30.ru',

@@ -41,6 +41,7 @@ export interface AuthState {
   smsCodeTime: Date
   phone: string
   code: string
+  isProcessOrder: boolean
 }
 
 export interface AppState {
