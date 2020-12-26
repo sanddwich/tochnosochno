@@ -6,7 +6,7 @@ import IIkoOrderItem from './IIkoOrderItem'
 import OrderServiceType from './OrderServiceType'
 
 export default class IIkoOrder {
-  completeBefore: string
+  completeBefore?: string
   items: IIkoOrderItem[]
   phone: string
   customer: Customer

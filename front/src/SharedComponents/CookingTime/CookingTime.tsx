@@ -87,7 +87,8 @@ class CookingTime extends React.Component<CookingTimeProps, CookingTimeState> {
     this.setState({
       isSelectTime: false,
     })
-    this.props.setPrepareDate(format(this.addHour(1), 'YYYY-MM-DD HH:mm:ss.SSS'))
+    // this.props.setPrepareDate(format(this.addHour(1), 'YYYY-MM-DD HH:mm:ss.SSS'))
+    this.props.setPrepareDate('')
   }
 
   setCookingTime = (cookingTime: Date | [Date, Date] | null) => {

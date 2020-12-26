@@ -21,7 +21,7 @@ class TestModal extends React.Component<TestModalProps, TestModalState> {
   constructor(props: TestModalProps) {
     super(props)
     this.state = {
-      show: this.props.isShowTestModal,
+      show: false,
     }
   }
 

@@ -314,7 +314,6 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     })
 
     this.setState({ ...state })
-    console.log('textFieldInputHandler')
     this.props.setDelivery(this.state.isDelivery, state.deliveryAddress)
     if (textFieldName === 'street' || textFieldName === 'house') {
       this.getDeliveryRestrictions()
@@ -334,7 +333,10 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
       const address = dadataAddress.value
       const city = dadataAddress.data.city || 'Астрахань'
       const street = dadataAddress.data.street
-      const house = `${dadataAddress.data.house}${dadataAddress.data.block_type}${dadataAddress.data.block}` || ''
+      const house =
+        `${dadataAddress.data.house}${dadataAddress.data.block_type ? dadataAddress.data.block_type : ''}${
+          dadataAddress.data.block ? dadataAddress.data.block : ''
+        }` || ''
 
       this.setState(
         {

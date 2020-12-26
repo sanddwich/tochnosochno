@@ -331,8 +331,16 @@ export class ApiController {
          */
 
         const iiko = await this.iiko.getInstance()
+
+        this.logger.info(
+          `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${
+            Date.now() - startTime
+          } ms - iikoOrder${JSON.stringify(await iiko.formatOrderForIiko(order))}`
+        )
+        // const errorInfo = await iiko.checkOrderToIiko(order, order.terminalId)
+        // console.log(errorInfo)
+        // return
         const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
-        // const iikoOrder = await iiko.checkOrderToIiko(order, order.terminalId)
 
         /*
          * Произошла ошибка в Iiko при создании заказа

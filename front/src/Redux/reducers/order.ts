@@ -42,9 +42,9 @@ const initialState: OrderState = {
   order: initialOrder,
   loading: false,
   error: '',
-  ruleCheck: false,
-  smsCheck: false,
-  personCheck: false,
+  ruleCheck: true,
+  smsCheck: true,
+  personCheck: true,
   isShowPaymentSelection: false,
 }
 

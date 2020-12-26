@@ -36,7 +36,7 @@ const initialState: AppState = {
   showComboModal: false,
   isShowSuccessModal: false,
   keyUpdate: Math.random(),
-  isShowTestModal: true,
+  isShowTestModal: false,
 }
 const app = (state: AppState = initialState, action: AppActionType) => {
   switch (action.type) {

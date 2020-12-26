@@ -283,6 +283,7 @@ export class Iiko {
 
       await getRepository(Group).save(groups)
       await getRepository(ProductCategory).save(productCategories)
+      const productsReponse = [...products]
 
       products.map(async (prod: Product) => {
         const productModifiers = prod.modifiers
@@ -363,9 +364,11 @@ export class Iiko {
             }
           })
         }
+        prod.groupModifiers = productGroupModifiers
+        prod.modifiers = productModifiers
       })
 
-      return [{ groups }, { products }, revision]
+      return [{ groups }, { productsReponse }, revision]
     } catch (error) {
       throw new Error(error)
     }
@@ -511,6 +514,10 @@ export class Iiko {
     /*
      *Формируем объект заказа, который отправится в iiko
      */
+
+    if (order.address && order.address.name) {
+      order.customer.name = order.address.name
+    }
 
     const iikoOrder: IIkoOrder = {
       phone: order.phone,

@@ -129,6 +129,11 @@ export class SmsService {
     }</span></p>
     ${order.comment ? `<p><span style="font-size: 17px;">Комментарий: ${order.comment}</span></p>` : ''}
     ${
+      order.address && order.address.comment
+        ? `<p><span style="font-size: 17px;">Комментарий: ${order.address.comment}</span></p>`
+        : ''
+    }
+    ${
       order.completeBefore
         ? `<p><span style="font-size: 17px;">Приготовить ко времени: ${order.completeBefore}</span></p>`
         : ''
