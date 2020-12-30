@@ -337,20 +337,18 @@ export class ApiController {
             Date.now() - startTime
           } ms - iikoOrder${JSON.stringify(await iiko.formatOrderForIiko(order))}`
         )
-        // const errorInfo = await iiko.checkOrderToIiko(order, order.terminalId)
-        // console.log(errorInfo)
-        // return
-        const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
+
+        // const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
 
         /*
          * Произошла ошибка в Iiko при создании заказа
          */
 
-        if (iikoOrder.errorInfo) {
-          const { code, message, description } = iikoOrder.errorInfo
-          throw new Error(`${code}. ${message}. ${description}`)
-        }
-        order.orderIikoId = iikoOrder.id
+        // if (iikoOrder.errorInfo) {
+        //   const { code, message, description } = iikoOrder.errorInfo
+        //   throw new Error(`${code}. ${message}. ${description}`)
+        // }
+        // order.orderIikoId = iikoOrder.id
 
         if (order.address && !order.address.id) {
           order.address.id = uuidv4()
@@ -557,7 +555,6 @@ export class ApiController {
     type: 'object',
   })
   // @CsrfTokenRequired()
-  @ApiServer({ url: '/api', description: 'Main API URL' })
   async getCities(ctx: Context<Customer, Session>) {
     const city: string = ctx.request.body.city
     const cities = await getRepository(City).find({
@@ -583,7 +580,6 @@ export class ApiController {
     required: ['cityId', 'street'],
     type: 'object',
   })
-  @ApiServer({ url: '/api', description: 'Main API URL' })
   async getStreetsByCity(ctx: Context<Customer, Session>) {
     const cityId: string = ctx.request.body.cityId
     const street: string = ctx.request.body.street
@@ -639,7 +635,6 @@ export class ApiController {
     required: ['deliverySum', 'house', 'isCourierDelivery', 'longitude', 'latitude', 'deliveryDate', 'classifierId'],
     type: 'object',
   })
-  @ApiServer({ url: '/api', description: 'Main API URL' })
   async getDeliveryRestirctions(ctx: Context<Customer, Session>) {
     /*
     Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.

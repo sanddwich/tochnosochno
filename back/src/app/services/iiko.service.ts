@@ -38,7 +38,7 @@ import OrderServiceType from '../interfaces/OrderServiceType'
 import { GeoCoder } from './geo-coder.service'
 import { LoggerService } from './logger.service'
 
-import fetch = require('node-fetch')
+import fetch from 'node-fetch'
 
 import downloadImage = require('image-downloader')
 import IikoErrorInfo from '../interfaces/Iiko/IikoErrorInfo'
@@ -535,7 +535,7 @@ export class Iiko {
   }
 
   private async fetchApi<T>(url: string, body: string, auth: boolean, method: string): Promise<T> {
-    const res: Response = await fetch(url, {
+    const res = await fetch(url, {
       method,
       headers: {
         'Content-Type': 'application/json',

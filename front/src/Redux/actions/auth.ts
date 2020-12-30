@@ -110,10 +110,17 @@ export const logout = (): ThunkAction<void, RootState, null, AuthActionType> => 
         },
       })
 
+      if (res.status === 401) {
+        dispatch(logoutAction())
+        cookies.remove('sessionID')
+        cookies.remove('csrfToken')
+      }
+
       if (!res.ok) {
         const resData: Error = await res.json()
         throw new Error(resData.message)
       }
+
       const resData: ApiResponse = await res.json()
       dispatch(logoutAction())
       cookies.remove('sessionID')
