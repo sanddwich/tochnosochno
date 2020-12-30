@@ -99,6 +99,7 @@ interface DeliveryByCourierState {
   isAllowedDelivery: boolean
   deliveryPrice: number
   addressFromInput: boolean
+  isAddressError: boolean
 }
 
 class DeliveryByCourier extends React.Component<DeliveryByCourierProps, DeliveryByCourierState> {
@@ -107,6 +108,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
   constructor(props: DeliveryByCourierProps) {
     super(props)
     this.state = {
+      isAddressError: false,
       addressFromInput: false,
       deliveryPrice: 0,
       isAllowedDelivery: false,
@@ -138,13 +140,13 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
         //   touched: false,
         //   isValid: false,
         // },
-        // {
-        //   name: 'name',
-        //   minLength: 2,
-        //   required: true,
-        //   touched: false,
-        //   isValid: false,
-        // },
+        {
+          name: 'name',
+          minLength: 2,
+          required: true,
+          touched: false,
+          isValid: false,
+        },
         {
           name: 'phone',
           minLength: 10,
@@ -160,7 +162,21 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
   }
 
   showPaymentSection = async () => {
-    await this.getDeliveryRestrictions()
+    if (
+      this.props.order.address?.street.classifierId &&
+      this.props.order.address?.house &&
+      this.props.order.address?.house != 'null'
+    ) {
+      await this.getDeliveryRestrictions()
+    } else {
+      this.setState({ isAddressError: true })
+      Scroll.scroller.scrollTo('addressElement', {
+        duration: 800,
+        delay: 0,
+        smooth: true,
+        offset: -200,
+      })
+    }
   }
 
   setLoading = (loading: boolean) => {
@@ -245,7 +261,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     validationTextfields.map((textfield) => {
       let isValid: boolean = true
       let value = ''
-      // textfield.name === 'name' && (value = this.props.customer?.name || '11')
+      textfield.name === 'name' && (value = this.props.order.address?.name || '')
       textfield.name === 'street' && (value = this.state.deliveryAddress.street.name)
       textfield.name === 'house' && (value = this.state.deliveryAddress.house)
       textfield.name === 'phone' && (value = this.props.phone || this.props.customer?.phone || '')
@@ -278,7 +294,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
         duration: 800,
         delay: 0,
         smooth: true,
-        offset: -200,
+        offset: -300,
       })
       this.setState({ validationTextfields })
     }
@@ -348,7 +364,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
         }
       )
 
-      this.setState({ addressFromInput: true })
+      this.setState({ addressFromInput: true, isAddressError: false })
     }
   }
 
@@ -364,10 +380,9 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
         this.setState({ dadataAddress: daData })
         this.setdaDataAddress(address, house, coordinates, city)
       }
-
-      this.props.deleteDeliveryProduct()
     }
-    this.setState({ deliveryPrice: 0, addressFromInput: false })
+    this.props.deleteDeliveryProduct()
+    this.setState({ deliveryPrice: 0, addressFromInput: false, isAddressError: false })
   }
 
   setdaDataAddress = (address: string, house: string, coordinates: number[], city: string) => {
@@ -404,6 +419,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
           <form hidden={this.state.loading} autoComplete="off" className="DeliveryByCourier__form">
             <div className="DeliveryByCourier__form__row">
               <div className="DeliveryByCourier__form__group">
+                <Scroll.Element name="addressElement"></Scroll.Element>
                 <label htmlFor="address">Адрес*</label>
                 <AddressSuggestions
                   ref={this.daDataInputRef}
@@ -420,6 +436,9 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
             </div>
 
             <div className="DeliveryByCourier__map mt-2">
+              {this.state.isAddressError ? (
+                <div className="DeliveryByCourier__form__error">Введите корректный адрес - улицу и номер дома.</div>
+              ) : null}
               <div className="DeliveryByCourier__map__info mb-2">
                 Выберите ваш адрес из списка, если Ваш адрес не удалось найти - отметьте его на карте
               </div>
@@ -429,7 +448,11 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
 
               <div style={{ position: 'relative' }}>
                 <div className="DeliveryByCourier__map__address">
-                  {`${this.props.order.address?.street.city}, ул ${this.props.order.address?.street.name}, д ${this.props.order.address?.house}`}
+                  {this.props.order.address?.street.classifierId &&
+                  this.props.order.address?.house &&
+                  this.props.order.address?.house != 'null'
+                    ? `${this.props.order.address?.street.city}, ул ${this.props.order.address?.street.name}, д ${this.props.order.address?.house}`
+                    : 'Адрес не найден'}
                 </div>
                 <YMaps query={{ lang: 'ru_RU' }}>
                   <Map
@@ -454,7 +477,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
               </div>
             </div>
 
-            <div className="DeliveryByCourier__form__row mt-4">
+            <div className="DeliveryByCourier__form__row mt-5 mt-md-4">
               <div className="DeliveryByCourier__form__group">
                 <label htmlFor="name">Ваше имя*</label>
                 <input
@@ -462,7 +485,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                   type="text"
                   placeholder="Николай.."
                   // value={this.props.customer?.name || ''}
-                  defaultValue={this.props.customer?.name || ''}
+                  defaultValue={this.props.customer?.name || this.props.order.address?.name}
                   //  / value={this.props.order.address?.name}
                   onInput={(e: React.FormEvent<HTMLInputElement>) => {
                     this.textFieldInputHandler(e.currentTarget.value, 'name')
@@ -578,6 +601,14 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                     <div className="DeliveryByCourier__error">{this.props.errorOrder}</div>
                   )}
 
+                  <div className="DeliveryByCourier__address__label">Адрес доставки</div>
+                  <div className="DeliveryByCourier__address__label">
+                    {this.props.order.address?.street.classifierId &&
+                    this.props.order.address?.house &&
+                    this.props.order.address?.house != 'null'
+                      ? `${this.props.order.address?.street.city}, ул ${this.props.order.address?.street.name}, д ${this.props.order.address?.house}`
+                      : 'Адрес не найден'}
+                  </div>
                   <PaymentSection isDelivery={true} />
                   <ActionButton
                     disabled={

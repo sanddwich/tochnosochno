@@ -10,7 +10,13 @@ import OrderTotalPrice from '../../../../../SharedComponents/OrderTotalPrice/Ord
 import PaymentSection from '../../../../../SharedComponents/PaymentSection/PaymentSection'
 import PoliticSection from '../../../../../SharedComponents/PoliticSection/PoliticSection'
 import { showLoginModal } from '../../../../../Redux/actions/app'
-import { processOrder, deleteDeliveryProduct, setTerminal, setComment } from '../../../../../Redux/actions/order'
+import {
+  processOrder,
+  deleteDeliveryProduct,
+  setTerminal,
+  setComment,
+  setDelivery,
+} from '../../../../../Redux/actions/order'
 import { setPhone, setProcessOrderOnAuth } from '../../../../../Redux/actions/auth'
 import InputMask from 'react-input-mask'
 import * as Scroll from 'react-scroll'
@@ -20,6 +26,7 @@ import Customer from '../../../../../Interfaces/Customer'
 import Terminal from '../../../../../Interfaces/Terminal'
 import RadioButton from '../../../../../SharedComponents/RadioButton/RadioButton'
 import Order from '../../../../../Interfaces/Order'
+import Address from '../../../../../Interfaces/Address'
 
 interface DeliveryByClientProps {
   ruleCheck: boolean
@@ -38,6 +45,7 @@ interface DeliveryByClientProps {
   setTerminal: (terminalId: string) => void
   setComment: (comment: string) => void
   order: Order
+  setDelivery: (isDelivery: boolean, address: Address) => void
 }
 
 interface DeliveryByClientState {
@@ -60,6 +68,13 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
           touched: false,
           isValid: false,
         },
+        {
+          name: 'name',
+          minLength: 2,
+          required: true,
+          touched: false,
+          isValid: false,
+        },
       ],
     }
   }
@@ -77,6 +92,7 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
       let isValid: boolean = true
       let value = ''
       textfield.name === 'phone' && (value = this.props.phone || this.props.customer?.phone || '')
+      textfield.name === 'name' && (value = this.props.order.address?.name || '')
 
       if (textfield.required) {
         isValid = isValid && value.trim() !== ''
@@ -119,6 +135,7 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
 
     textFieldName === 'phone' && this.props.setPhone(value)
     textFieldName === 'comment' && this.props.setComment(value)
+    textFieldName === 'name' && this.props.setDelivery(false, { street: { name: '' }, name: value, house: '' })
 
     state.validationTextfields.map((textfield) => {
       if (textfield.name === textFieldName) {
@@ -140,9 +157,7 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
   }
 
   selectDeliveryTerminal = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.currentTarget.id)
     const selectedTerminal = this.getTerminalById(event.currentTarget.id)
-    console.log(selectedTerminal)
     if (selectedTerminal) {
       this.props.setTerminal(selectedTerminal.id)
     }
@@ -226,12 +241,15 @@ class DeliveryByClient extends React.Component<DeliveryByClientProps, DeliveryBy
                     onInput={(e: React.FormEvent<HTMLInputElement>) => {
                       this.textFieldInputHandler(e.currentTarget.value, 'name')
                     }}
-                    defaultValue={this.props.customer?.name || ''}
+                    defaultValue={this.props.customer?.name || this.props.order.address?.name}
                     className="DeliveryByClient__form__name"
                     id="name"
                     type="text"
                     placeholder="Николай.."
                   />
+                  {this.state.validationTextfields[1].touched && !this.state.validationTextfields[1].isValid ? (
+                    <div className="DeliveryByCourier__form__error">Введите ваше имя</div>
+                  ) : null}
                 </div>
                 <div className="DeliveryByClient__form__group">
                   <label htmlFor="phone">Телефон*</label>
@@ -313,6 +331,7 @@ const mapDispatchToProps = {
   setTerminal,
   setComment,
   setProcessOrderOnAuth,
+  setDelivery,
 }
 
 const mapStateToProps = (state: RootState) => {

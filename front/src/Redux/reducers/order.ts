@@ -214,7 +214,7 @@ const order = (state = initialState, action: OrderActionType) => {
           isDelivery: action.isDelivery,
           orderServiceType: action.isDelivery ? 'DeliveryByCourier' : 'DeliveryByClient',
           address: action.address,
-          terminalId: action.isDelivery ? null : action.address.id,
+          // terminalId: action.isDelivery ? null : action.address.id,
         },
       }
     case SET_TERMINAL:

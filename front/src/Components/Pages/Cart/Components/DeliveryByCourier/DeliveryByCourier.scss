@@ -82,4 +82,14 @@
       color: #303030;
     }
   }
+
+  &__address {
+    &__label {
+      font-family: 'Montserrat';
+      font-weight: 700;
+      font-size: 20px;
+      justify-content: space-between;
+      padding: 20px 0;
+    }
+  }
 }
