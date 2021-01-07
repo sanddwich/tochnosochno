@@ -54,8 +54,8 @@ export default class ShortMenuItem extends React.Component<ShortMenuItemProps, S
               md={4}
               style={{
                 background:
-                  this.props.category.images !== null && this.props.category.images !== ''
-                    ? `url(${this.props.category.images})`
+                  this.props.category.imageLinks && this.props.category.imageLinks.length > 0
+                    ? `url(${this.props.category.imageLinks[0]})`
                     : `url(/images/categories/rolls.png)`,
                 backgroundRepeat: 'no-repeat',
                 // backgroundAttachment: 'fixed',

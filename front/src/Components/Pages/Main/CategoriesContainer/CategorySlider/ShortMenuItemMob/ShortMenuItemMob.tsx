@@ -46,8 +46,8 @@ export default class ShortMenuItemMob extends React.Component<ShortMenuItemMobPr
               className="ShortMenuItemMob__cont m-0 p-0"
               style={{
                 background:
-                  this.props.category.images !== null && this.props.category.images !== ''
-                    ? `url(${this.props.category.images})`
+                  this.props.category.imageLinks && this.props.category.imageLinks.length > 0
+                    ? `url(${this.props.category.imageLinks[0]})`
                     : `url(/images/categories/rolls.png)`,
                 backgroundRepeat: 'no-repeat',
                 // backgroundAttachment: 'fixed',
