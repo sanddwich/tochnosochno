@@ -38,7 +38,19 @@ export default class LongMenuItem extends React.Component<LongMenuItemProps, Lon
           }}
         >
           <Row className="m-0 p-0">
-            <Col className="LongMenuItem__content m-0 p-0 pl-5 d-flex align-items-center" lg={7} md={8}>
+            <Col
+              className="LongMenuItem__content m-0 p-0  pl-5 d-flex align-items-center LongMenuItem__imgCont"
+              lg={12}
+              md={12}
+              style={{
+                background:
+                  this.props.category.imageLinks && this.props.category.imageLinks.length > 0
+                    ? `url(${this.props.category.imageLinks[0]})`
+                    : `url(/images/categories/rolls.png)`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right',
+              }}
+            >
               <div>
                 <div className="LongMenuItem__suggestion w-100">
                   <span>Выгодное предложение</span>
@@ -52,21 +64,20 @@ export default class LongMenuItem extends React.Component<LongMenuItemProps, Lon
                 </div>
               </div>
             </Col>
-            <Col
+            {/* <Col
               className="LongMenuItem__imgCont m-0 p-0"
-              lg={5}
-              md={4}
+              lg={6}
+              md={6}
               style={{
                 background:
                   this.props.category.imageLinks && this.props.category.imageLinks.length > 0
                     ? `url(${this.props.category.imageLinks[0]})`
                     : `url(/images/categories/rolls.png)`,
                 backgroundRepeat: 'no-repeat',
-                // backgroundAttachment: 'fixed',
                 backgroundPosition: 'right',
-                // backgroundSize: 'cover',
+             
               }}
-            ></Col>
+            ></Col> */}
           </Row>
         </Container>
         <Container className="showCat m-0 p-0 d-flex justify-content-start">
