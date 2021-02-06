@@ -505,7 +505,7 @@ export class Iiko {
 
       deliveryPoint = {
         address: { street, flat, house, floor, building, entrance },
-        coordinates: { latitude: order.address.latitude, longitude: order.address.longitude },
+        // coordinates: { latitude: order.address.latitude, longitude: order.address.longitude },
         comment: order.address.comment,
       }
       orderServiceType = 'DeliveryByCourier'

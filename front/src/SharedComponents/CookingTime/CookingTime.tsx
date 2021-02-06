@@ -143,9 +143,9 @@ class CookingTime extends React.Component<CookingTimeProps, CookingTimeState> {
                 filterDate={this.filterPassedTime}
                 timeCaption="Время"
                 dateFormat="HH:mm"
-                excludeTimes={this.excludeTimes(8, 15)}
-                minTime={this.setTime(9, 0)}
-                maxTime={this.setTime(23, 0)}
+                excludeTimes={this.excludeTimes(1, 15)}
+                minTime={this.setTime(1, 0)}
+                maxTime={this.setTime(24, 0)}
                 placeholderText="Время"
               />
             </div>

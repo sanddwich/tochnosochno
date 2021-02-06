@@ -68,7 +68,7 @@ const order = (state = initialState, action: OrderActionType) => {
       const orderItemRequiredModifiers = [] as OrderItemModifier[]
       const requiredModifiers = getRequiredModifiers(action.orderItem.product)
       requiredModifiers.map((modifier) => {
-        orderItemRequiredModifiers.push(new OrderItemModifier(1, modifier))
+        orderItemRequiredModifiers.push(new OrderItemModifier(modifier.defaultAmount || 1, modifier))
       })
 
       const orderItem = action.orderItem

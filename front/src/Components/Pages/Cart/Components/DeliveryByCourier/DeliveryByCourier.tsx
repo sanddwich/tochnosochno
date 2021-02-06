@@ -261,7 +261,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     validationTextfields.map((textfield) => {
       let isValid: boolean = true
       let value = ''
-      textfield.name === 'name' && (value = this.props.order.address?.name || '')
+      textfield.name === 'name' && (value = this.props.order.address?.name || this.props.customer?.name || '')
       textfield.name === 'street' && (value = this.state.deliveryAddress.street.name)
       textfield.name === 'house' && (value = this.state.deliveryAddress.house)
       textfield.name === 'phone' && (value = this.props.phone || this.props.customer?.phone || '')

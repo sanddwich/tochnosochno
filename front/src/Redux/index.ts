@@ -6,6 +6,10 @@ import rootReducer from './reducers'
 import storage from 'localforage'
 import createEncryptor from 'redux-persist-transform-encrypt'
 import { persistReducer } from 'redux-persist'
+import { AppState, AuthState } from './interfaces/interfaces'
+import { initialOrderState, initialAuthState, initialAppState } from './constants/initialState'
+
+const expireReducer = require('redux-persist-expire')
 
 const encryptor = createEncryptor({
   secretKey:
@@ -19,7 +23,27 @@ const persistConfig: any = {
   key: 'tochnosochno',
   storage,
   blacklist: ['menu'],
-  transforms: [encryptor],
+  transforms: [
+    expireReducer('order', {
+      persistedAtKey: 'order__persisted_at',
+      expireSeconds: 1 * 60 * 60,
+      expiredState: initialOrderState,
+      autoExpire: true,
+    }),
+    expireReducer('auth', {
+      persistedAtKey: 'auth__persisted_at',
+      expireSeconds: 3 * 60 * 60 * 24,
+      expiredState: initialAuthState,
+      autoExpire: true,
+    }),
+    expireReducer('app', {
+      persistedAtKey: 'app__persisted_at',
+      expireSeconds: 1 * 60 * 60,
+      expiredState: initialAppState,
+      autoExpire: true,
+    }),
+    encryptor,
+  ],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

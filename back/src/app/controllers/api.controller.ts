@@ -338,17 +338,19 @@ export class ApiController {
           } ms - iikoOrder${JSON.stringify(await iiko.formatOrderForIiko(order))}`
         )
 
-        // const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
+        const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
 
         /*
          * Произошла ошибка в Iiko при создании заказа
          */
 
-        // if (iikoOrder.errorInfo) {
-        //   const { code, message, description } = iikoOrder.errorInfo
-        //   throw new Error(`${code}. ${message}. ${description}`)
-        // }
-        // order.orderIikoId = iikoOrder.id
+        if (iikoOrder.errorInfo) {
+          const { code, message, description } = iikoOrder.errorInfo
+          throw new Error(`${code}. ${message}. ${description}`)
+        }
+        order.orderIikoId = iikoOrder.id
+
+        this.logger.info(`${getClientIp(ctx)} - orderIikoId - ${order.orderIikoId}`)
 
         if (order.address && !order.address.id) {
           order.address.id = uuidv4()
@@ -358,7 +360,7 @@ export class ApiController {
         }
 
         //Отправка заказа на email
-        await this.sender.sendOrderEmail(order)
+        // await this.sender.sendOrderEmail(order)
 
         await repositoryOrder.save(order)
         this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
