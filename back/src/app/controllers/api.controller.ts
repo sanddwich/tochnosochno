@@ -181,7 +181,6 @@ export class ApiController {
     try {
       const customer = await getRepository(Customer).findOne(
         { id: ctx.user.id },
-
         {
           relations: [
             'orders',
