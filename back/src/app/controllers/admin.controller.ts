@@ -219,4 +219,48 @@ export class AdminController {
       return new HttpResponseForbidden('Wrong token')
     }
   }
+
+
+
+  @Put('/orderStatus')
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      token: { type: 'string' },
+      orderIds:{type: 'array'}
+    },
+    required: ['token'],
+    type: 'object',
+  })
+  async getIIkoOrderStatus(ctx: Context) {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
+
+    const token = ctx.request.body.token
+    const orderIds = ctx.request.body.orderIds
+
+    if (token === Config.get('adminToken')) {
+      let orderIikoResponses
+
+      const iiko = await this.iiko.getInstance()
+      orderIikoResponses = await iiko.getOrders(orderIds)
+
+      this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
+      if (orderIikoResponses) {
+        return new HttpResponseCreated(orderIikoResponses)
+      } else {
+        return new HttpResponseBadRequest({ error: true, message: 'Ошибка при проверке статусов заказов' })
+      }
+    } else {
+      this.logger.error(
+        `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
+        `Wrong token: ${token}`
+      )
+      return new HttpResponseForbidden('Wrong token')
+    }
+  }
+
+
 }
