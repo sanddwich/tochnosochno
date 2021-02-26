@@ -359,7 +359,7 @@ export class ApiController {
         }
 
         //Отправка заказа на email
-        // await this.sender.sendOrderEmail(order)
+        await this.sender.sendOrderEmail(order)
 
         await repositoryOrder.save(order)
         this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
