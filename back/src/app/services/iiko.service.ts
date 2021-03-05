@@ -103,11 +103,15 @@ export class Iiko {
   }
 
   async sendOrderToIiko(order: Order, terminalGroupId?: Terminal | null) {
-    const terminalId = terminalGroupId ? terminalGroupId.toString() : null
-    // const terminalId = '121b5392-d62c-7611-0165-959330ae00c9'
+    let terminalId = terminalGroupId ? terminalGroupId.toString() : null
+    // const terminalId = 'b3a96b03-75bc-44dd-8fcd-53c5a548a8e9' //Ахматовская
 
     const organization = await getRepository(Organization).findOne()
     const iikoOrder = await this.formatOrderForIiko(order)
+
+    if (terminalId === '121b5392-d62c-7611-0165-959330ae00c9') {
+      terminalId = this.getTerminalGroupIdByTime(iikoOrder, 540, 1410)
+    }
 
     const body = JSON.stringify({
       organizationId: this.organizations[0].id,
@@ -231,6 +235,7 @@ export class Iiko {
       true,
       'POST'
     )
+
     return deliveryRestrictions
   }
 
@@ -563,5 +568,23 @@ export class Iiko {
       if (n === 1) throw new Error(err)
       return await this.fetch_retry(url, options, n - 1)
     }
+  }
+
+  private getTerminalGroupIdByTime(order: IIkoOrder, startWork: number, endWork: number) {
+    let date = new Date()
+    if (order.completeBefore) {
+      date = new Date(order.completeBefore)
+    }
+
+    let completeBeforeHours = date.getHours()
+    let completeBeforeMinutes = date.getMinutes()
+
+    const completeBeforeTotalMinutes = completeBeforeHours * 60 + completeBeforeMinutes + 60
+
+    if (completeBeforeTotalMinutes >= startWork && completeBeforeTotalMinutes <= endWork) {
+      return 'b3a96b03-75bc-44dd-8fcd-53c5a548a8e9' //Ахматовская
+    }
+
+    return '121b5392-d62c-7611-0165-959330ae00c9' //КИрова
   }
 }
