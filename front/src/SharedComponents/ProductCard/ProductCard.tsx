@@ -16,7 +16,10 @@ import NumberInput from '../NumberInput/NumberInput'
 import AddProductButton from '../AddProductButton/AddProductButton'
 import FavouriteRoundButton from '../FavouriteRoundButton/FavouriteRoundButton'
 import Category from '../../Interfaces/Category'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 // import { NavLink } from 'react-router-dom'
+
+import 'react-lazy-load-image-component/src/effects/blur.css'
 
 interface ProductCardProps {
   menu: Category[]
@@ -89,20 +92,15 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
               className="ProductCard__img d-flex justify-content-center"
               onClick={() => this.props.showProductModal(this.props.product)}
             >
-              <img
-                id={this.props.product.id}
+              <LazyLoadImage
                 src={
                   typeof this.props.product.imageLinks[0] !== 'undefined'
                     ? `${this.props.product.imageLinks[0]}`
                     : '/images/products/burger.png'
                 }
-                // src={
-                //   typeof this.props.product.imageLinks[0] !== 'undefined'
-                //     ? `/images/products/${this.props.product.id}.png`
-                //     : '/images/products/burger.png'
-                // }
-                // src={`/images/products/${this.props.product.id}.png`}
-                alt={this.props.product.name}
+                effect="blur"
+                height={384}
+                key={this.props.product.id}
               />
             </div>
 

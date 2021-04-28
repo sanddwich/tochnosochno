@@ -663,7 +663,18 @@ export class ApiController {
         // deliveryDate
       )
       this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
+
+      const aliveTerminals = await iiko.getAliveTerminals([
+        '52dcb85c-2c14-4e87-9625-24bc659dafd7',
+        '121b5392-d62c-7611-0165-959330ae00c9',
+      ])
+
       if (deliveryRestriction && !deliveryRestriction.errorDescription) {
+        _.remove(deliveryRestriction.allowedItems, (terminalGroup) => {
+          return aliveTerminals.find((terminal) => {
+            return !terminal.isAlive && terminal.terminalGroupId === terminalGroup.terminalGroupId
+          })
+        })
         return new HttpResponseOK({
           isAllowed: deliveryRestriction.isAllowed,
           allowedItems: deliveryRestriction.allowedItems,

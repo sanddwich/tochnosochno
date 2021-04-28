@@ -6,6 +6,6 @@ export default interface DeliveryRestrictionsAllowed {
   rejectCause: string
   addressExternalId: string
   location: Coordinate
-  allowedItems: TerminalGroup
+  allowedItems: TerminalGroup[]
   errorDescription?: string
 }

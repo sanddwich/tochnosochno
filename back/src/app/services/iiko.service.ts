@@ -43,6 +43,7 @@ import fetch from 'node-fetch'
 import downloadImage = require('image-downloader')
 import IikoErrorInfo from '../interfaces/Iiko/IikoErrorInfo'
 import IikoStreet from '../interfaces/Iiko/IikoStreet'
+import TerminalGroup from '../interfaces/Iiko/TerminalGroup'
 
 const API_SERVER = Config.get('iiko.apiUrl')
 const IIKO_PASSWORD = Config.get('iiko.iikoPassword')
@@ -50,6 +51,7 @@ const IIKO_PASSWORD = Config.get('iiko.iikoPassword')
 const TOKEN_URL = `${API_SERVER}/access_token`
 const ORGANIZATION_URL = `${API_SERVER}/organizations`
 const TERMINALS_URL = `${API_SERVER}/terminal_groups`
+const TERMINALS_ALIVE_URL = `${API_SERVER}/terminal_groups/is_alive`
 const PAYMENT_TYPE_URL = `${API_SERVER}/payment_types`
 const STREET_URL = `${API_SERVER}/streets/by_city`
 const CREATE_ORDER_URL = `${API_SERVER}/deliveries/create`
@@ -185,6 +187,20 @@ export class Iiko {
     })
 
     return terminalGroups
+  }
+
+  /*
+   * Выгрузка доступности терминалов доставки из IIKO .
+   */
+
+  async getAliveTerminals(terminalGroupIds: string[]) {
+    const body = JSON.stringify({ organizationIds: [this.organizations[0].id], terminalGroupIds })
+    const { correlationId, isAliveStatus } = await this.fetchApi<{
+      correlationId: string
+      isAliveStatus: TerminalGroup[]
+    }>(TERMINALS_ALIVE_URL, body, true, 'POST')
+
+    return isAliveStatus
   }
 
   /*

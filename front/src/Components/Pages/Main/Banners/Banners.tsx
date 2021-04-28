@@ -3,7 +3,7 @@ import { Col, Container, Row } from 'react-bootstrap'
 import { showComboModal as showComboModalFunc } from '../../../../Redux/actions/app'
 
 import './Banners.scss'
-
+import 'react-lazy-load-image-component/src/effects/blur.css'
 // Import Swiper React components
 import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -15,6 +15,7 @@ import 'swiper/components/pagination/pagination.scss'
 import { connect } from 'react-redux'
 import { RootState } from '../../../../Redux'
 import Category from '../../../../Interfaces/Category'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 // install Swiper components
 SwiperCore.use([Navigation, Pagination, Autoplay])
@@ -44,13 +45,26 @@ class Banners extends React.Component<BannersProps, BannersState> {
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.props.showComboModalFunc(cat)}
                   >
-                    <img
+                    {/* <img
                       className="img-fluid hvr-shrink "
                       src={`/images/banners/${cat.id}.png`}
                       onError={(event) => {
                         const el = event.target as HTMLElement
                         el.setAttribute('src', '/images/banners/no-banner.jpg')
                       }}
+                      
+                    /> */}
+
+                    <LazyLoadImage
+                      className="img-fluid hvr-shrink "
+                      src={`/images/banners/${cat.id}.png`}
+                      onError={(event) => {
+                        const el = event.target as HTMLElement
+                        el.setAttribute('src', '/images/banners/no-banner.jpg')
+                      }}
+                      effect="blur"
+                      height={384}
+                      key={cat.id}
                     />
                     {/* <img src="/images/banners/banner1.jpg" className="img-fluid" alt="" /> */}
                   </Col>
@@ -78,13 +92,25 @@ class Banners extends React.Component<BannersProps, BannersState> {
                     onClick={() => this.props.showComboModalFunc(cat)}
                   >
                     <Container className="m-0 p-0 ">
-                      <img
+                      {/* <img
                         className="img-fluid hvr-shrink"
                         src={`/images/banners/${cat.id}.png`}
                         onError={(event) => {
                           const el = event.target as HTMLElement
                           el.setAttribute('src', '/images/banners/no-banner.png')
                         }}
+                      /> */}
+
+                      <LazyLoadImage
+                        className="img-fluid hvr-shrink"
+                        src={`/images/banners/${cat.id}.png`}
+                        onError={(event) => {
+                          const el = event.target as HTMLElement
+                          el.setAttribute('src', '/images/banners/no-banner.png')
+                        }}
+                        effect="blur"
+                        height={384}
+                        key={cat.id}
                       />
                     </Container>
                   </SwiperSlide>

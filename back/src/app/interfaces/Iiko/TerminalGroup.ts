@@ -4,4 +4,5 @@ export default interface TerminalGroup {
   deliveryDurationInMinutes: number
   zone: string
   deliveryServiceProductId: string
+  isAlive?: boolean
 }

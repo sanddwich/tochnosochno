@@ -53,7 +53,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
 
   componentDidUpdate(prevProps: MenuProps) {
     if (this.props.location !== prevProps.location) {
-      this.loadImages()
+      // this.loadImages()
     }
   }
 

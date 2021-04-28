@@ -2,7 +2,7 @@ import React from 'react'
 import { Container, Row } from 'react-bootstrap'
 import { showComboModal as showComboModalFunc } from '../../../Redux/actions/app'
 import './Slider.scss'
-
+import 'react-lazy-load-image-component/src/effects/blur.css'
 // Import Swiper React components
 import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -14,6 +14,7 @@ import 'swiper/components/pagination/pagination.scss'
 import { RootState } from '../../../Redux'
 import { connect } from 'react-redux'
 import Category from '../../../Interfaces/Category'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 // install Swiper components
 SwiperCore.use([Navigation, Pagination, Autoplay])
@@ -52,13 +53,24 @@ class Slider extends React.Component<SliderProps, SliderState> {
                   onClick={() => this.props.showComboModalFunc(cat)}
                 >
                   <div id={cat.id} className="Slider__slide">
-                    <img
+                    {/* <img
                       className="img-fluid  hvr-shrink"
                       src={`/images/slides/${cat.id}.png`}
                       onError={(event) => {
                         const el = event.target as HTMLElement
                         el.setAttribute('src', '/images/slides/no-slide.png')
                       }}
+                    /> */}
+                    <LazyLoadImage
+                      className="img-fluid  hvr-shrink"
+                      src={`/images/slides/${cat.id}.png`}
+                      onError={(event) => {
+                        const el = event.target as HTMLElement
+                        el.setAttribute('src', '/images/slides/no-slide.png')
+                      }}
+                      effect="blur"
+                      height={384}
+                      key={cat.id}
                     />
                   </div>
                 </SwiperSlide>
