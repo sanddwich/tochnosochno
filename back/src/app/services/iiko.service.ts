@@ -111,7 +111,7 @@ export class Iiko {
     const organization = await getRepository(Organization).findOne()
     const iikoOrder = await this.formatOrderForIiko(order)
 
-    if (terminalId === '121b5392-d62c-7611-0165-959330ae00c9') {
+    if (terminalId === '121b5392-d62c-7611-0165-959330ae00c9' && order.isDelivery) {
       terminalId = this.getTerminalGroupIdByTime(iikoOrder, 540, 1410)
     }
 
