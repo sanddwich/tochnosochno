@@ -12,14 +12,25 @@ import { RootState } from '../../../Redux'
 import { connect } from 'react-redux'
 import ScrollAnimation from 'react-animate-on-scroll'
 import 'animate.css/animate.min.css'
+import { RouteComponentProps } from 'react-router-dom'
+import { setOrganization } from '../../../Redux/actions/app'
 
-interface MainProps {
+interface MatchParams {
+  organizationId: string
+}
+
+interface MainProps extends RouteComponentProps<MatchParams> {
   loading: boolean
+  setOrganization: (organizationId: string) => void
 }
 
 interface MainState {}
 
 class Main extends React.Component<MainProps, MainState> {
+  componentDidMount() {
+    if (this.props.match.params.organizationId) this.props.setOrganization(this.props.match.params.organizationId)
+  }
+
   render() {
     return (
       <Container fluid className="Main p-0 m-0">
@@ -54,7 +65,9 @@ class Main extends React.Component<MainProps, MainState> {
   }
 }
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  setOrganization,
+}
 
 const mapStateToProps = (state: RootState) => {
   const { loading } = state.menu

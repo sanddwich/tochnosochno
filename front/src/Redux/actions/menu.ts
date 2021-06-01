@@ -19,35 +19,25 @@ import { precacheImages } from '../../utils/utils'
 const apiServer = API_URL
 
 export const getMenu = (): ThunkAction<void, RootState, null, MenuAction> => {
-  return async (dispatch) => {
+  return async (dispatch: any, getState: any) => {
     try {
       dispatch(setLoading())
 
-      const res = await fetch(`${apiServer}/api/menu`)
+      const { organizationId } = getState().app
+
+      const res = await fetch(`${apiServer}/api/menu`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ organizationId }),
+      })
       if (!res.ok) {
         const resData: Error = await res.json()
         throw new Error(resData.message)
       }
 
       const resData = await res.json()
-
-      /*
-        Получаем комбо и доставку
-      */
-      // resData.products.map((category: Category) => {
-      //   if (category.isCombo || category.isService) {
-      //     dispatch(getGroupProducts(category.id))
-      //   }
-      // })
-
-      // const urls: string[] = []
-      // resData.products.map((group: Category) => {
-      //   group.products.map((product) => {
-      //     product.imageLinks && product.imageLinks.length > 0 && urls.push(product.imageLinks[0].toString())
-      //   })
-      // })
-
-      // await precacheImages(urls)
 
       dispatch(fetchMenu(resData.products))
       dispatch(setTerminals(resData.terminals))

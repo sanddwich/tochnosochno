@@ -38,4 +38,5 @@ export const initialAppState: AppState = {
   isShowSuccessModal: false,
   keyUpdate: Math.random(),
   isShowTestModal: false,
+  organizationId: 'c753337b-ccd2-4c3b-a605-0c8c23c20057',
 }

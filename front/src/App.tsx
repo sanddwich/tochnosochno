@@ -24,9 +24,7 @@ class App extends React.Component<AppProps, AppState> {
       showAlert: !!this.props.errorOrder,
     }
   }
-  componentDidMount() {
-    // this.props.getCustomer()
-  }
+  componentDidMount() {}
 
   setShow = () => {
     this.props.clearOrderError()

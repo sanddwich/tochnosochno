@@ -38,7 +38,7 @@ const persistConfig: any = {
     }),
     expireReducer('app', {
       persistedAtKey: 'app__persisted_at',
-      expireSeconds: 1 * 60 * 60,
+      expireSeconds: 3 * 60 * 60,
       expiredState: initialAppState,
       autoExpire: true,
     }),

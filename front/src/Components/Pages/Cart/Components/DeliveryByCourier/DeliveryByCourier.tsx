@@ -79,6 +79,7 @@ interface DeliveryByCourierProps {
   setComment: (comment: string) => void
   setTerminal: (terminalId: string) => void
   setProcessOrderOnAuth: (isProcessOrder: boolean) => void
+  organizationId: string
 }
 
 interface DeliveryByCourierState {
@@ -433,7 +434,14 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                   delay={500}
                   inputProps={{ type: 'text' }}
                   count={5}
-                  filterLocations={[{ ['region']: 'астраханская' }]}
+                  filterLocations={[
+                    {
+                      ['region']:
+                        this.props.organizationId == '216c18b5-abcf-41ff-af08-e5dfbda14689'
+                          ? 'волгоградская'
+                          : 'астраханская',
+                    },
+                  ]}
                   onChange={(value) => this.chooseAddressFromInput(value)}
                 />
                 {this.state.isAddressError ? (
@@ -610,7 +618,8 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                 <React.Fragment>
                   {!this.state.isAllowedDelivery && !this.props.errorOrder ? (
                     <div className="DeliveryByCourier__error mb-5">
-                      Доставка по данному адресу не осуществляется. Выберите другой адрес доставки.
+                      Доставка с указанными параметрами по данному адресу не осуществляется. Выберите другой адрес
+                      доставки, либо измените заказ.
                     </div>
                   ) : (
                     <div className="DeliveryByCourier__error ">{this.props.errorOrder}</div>
@@ -702,6 +711,7 @@ const mapStateToProps = (state: any) => {
     isShowPaymentSelection,
   } = state.order
   const { menu } = state.menu
+  const { organizationId } = state.app
   return {
     loading: loading,
     errorOrder,
@@ -716,6 +726,7 @@ const mapStateToProps = (state: any) => {
     customer,
     isShowPaymentSelection,
     menu,
+    organizationId,
   }
 }
 

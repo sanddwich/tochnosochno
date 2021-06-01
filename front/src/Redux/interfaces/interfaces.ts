@@ -60,4 +60,5 @@ export interface AppState {
   isShowSuccessModal: boolean
   isShowTestModal: boolean
   keyUpdate: number
+  organizationId: string
 }

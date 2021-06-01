@@ -11,6 +11,7 @@ import {
   HIDE_SIDE_DIALOG,
   HIDE_SUCCESS_MODAL,
   HIDE_TEST_MODAL,
+  SET_ORGANIZATION,
   SET_PROCESS_ORDER_AUTH,
   SHOW_CART,
   SHOW_COMBO_MODAL,
@@ -107,6 +108,10 @@ interface ShowTestModal {
 interface HideTestModal {
   type: typeof HIDE_TEST_MODAL
 }
+interface SetOrganizationAction {
+  type: typeof SET_ORGANIZATION
+  organizationId: string
+}
 
 export type AppActionType =
   | GetAppAction
@@ -130,3 +135,4 @@ export type AppActionType =
   | AppUpdateKey
   | ShowTestModal
   | HideTestModal
+  | SetOrganizationAction

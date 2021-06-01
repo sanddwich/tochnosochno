@@ -10,6 +10,7 @@ import {
   HIDE_SIDE_DIALOG,
   HIDE_SUCCESS_MODAL,
   HIDE_TEST_MODAL,
+  SET_ORGANIZATION,
   SET_PROCESS_ORDER_AUTH,
   SHOW_CART,
   SHOW_COMBO_MODAL,
@@ -29,6 +30,11 @@ import {
 export const showProductDialog = (isChangeProduct: boolean) => ({
   type: SHOW_PRODUCT,
   isChangeProduct: isChangeProduct,
+})
+
+export const setOrganization = (organizationId: string) => ({
+  type: SET_ORGANIZATION,
+  organizationId,
 })
 
 export const hideSideDialog = () => ({

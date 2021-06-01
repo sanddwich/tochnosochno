@@ -50,6 +50,8 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
 
               <Route path="/" exact component={Main} />
 
+              <Route path="/city/:organizationId" exact component={Main} />
+
               <Redirect to="/" />
             </Switch>
           </PageContent>

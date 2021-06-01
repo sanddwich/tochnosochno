@@ -75,12 +75,22 @@ export class ApiController {
     return response
   }
 
-  @Get('/menu')
+  @Post('/menu')
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      organizationId: { type: 'string' },
+    },
+    required: ['organizationId'],
+    type: 'object',
+  })
   async getMenu(ctx: Context) {
     /*
     Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
     */
     const startTime = Date.now()
+
+    let organizationId = ctx.request.body.organizationId
 
     try {
       let products = await getRepository(Group).find({
@@ -129,7 +139,10 @@ export class ApiController {
        * Вывод терминалов доставки
        */
 
-      const terminals = await getRepository(Terminal).find({ isAlive: true })
+      const terminals = await getRepository(Terminal).find({
+        isAlive: true,
+        organization: organizationId,
+      })
 
       let recentProducts = await getRepository(Product).find({
         where: {

@@ -176,17 +176,22 @@ export class Iiko {
    */
 
   async setTerminals() {
-    const body = JSON.stringify({ organizationIds: [this.organizations[0].id] })
-    const { correlationId, terminalGroups } = await this.fetchApi<{
-      correlationId: string
-      terminalGroups: IikoTerminalGroup[]
-    }>(TERMINALS_URL, body, true, 'POST')
+    const organizations = await getRepository(Organization).find()
+    console.log(organizations)
 
-    terminalGroups.map(async (terminalGroup) => {
-      await getRepository(Terminal).save(terminalGroup.items)
+    organizations.map(async (organization) => {
+      const body = JSON.stringify({ organizationIds: [organization.id] })
+      const { correlationId, terminalGroups } = await this.fetchApi<{
+        correlationId: string
+        terminalGroups: IikoTerminalGroup[]
+      }>(TERMINALS_URL, body, true, 'POST')
+
+      terminalGroups.map(async (terminalGroup) => {
+        await getRepository(Terminal).save(terminalGroup.items)
+      })
     })
 
-    return terminalGroups
+    return true
   }
 
   /*
@@ -288,7 +293,9 @@ export class Iiko {
    * Выгрузка меню из IIKO в базу данных сайта.
    */
   async getMenu() {
-    const body = JSON.stringify({ organizationId: this.organizations[0].id })
+    // const body = JSON.stringify({ organizationId: this.organizations[0].id })
+    const body = JSON.stringify({ organizationId: 'c753337b-ccd2-4c3b-a605-0c8c23c20057' })
+
     const { correlationId, groups, productCategories, products, sizes, revision } = await this.fetchApi<{
       correlationId: string
       groups: Group[]

@@ -89,18 +89,16 @@ class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
             </Row>
 
             <div
-              className="ProductCard__img d-flex justify-content-center"
+              className="ProductCard__img d-flex justify-content-center img-fluid"
               onClick={() => this.props.showProductModal(this.props.product)}
             >
-              <LazyLoadImage
+              <img
+                id={this.props.product.id}
                 src={
                   typeof this.props.product.imageLinks[0] !== 'undefined'
                     ? `${this.props.product.imageLinks[0]}`
                     : '/images/products/burger.png'
                 }
-                effect="blur"
-                height={384}
-                key={this.props.product.id}
               />
             </div>
 

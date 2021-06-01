@@ -7,6 +7,7 @@ import {
   HIDE_SIDE_DIALOG,
   HIDE_SUCCESS_MODAL,
   HIDE_TEST_MODAL,
+  SET_ORGANIZATION,
   SET_PROCESS_ORDER_AUTH,
   SHOW_CART,
   SHOW_COMBO_MODAL,
@@ -37,6 +38,7 @@ const initialState: AppState = {
   isShowSuccessModal: false,
   keyUpdate: Math.random(),
   isShowTestModal: false,
+  organizationId: 'c753337b-ccd2-4c3b-a605-0c8c23c20057',
 }
 const app = (state: AppState = initialState, action: AppActionType) => {
   switch (action.type) {
@@ -90,6 +92,12 @@ const app = (state: AppState = initialState, action: AppActionType) => {
         ...state,
         showSideDialog: true,
         formType: 'cookingTime',
+      }
+
+    case SET_ORGANIZATION:
+      return {
+        ...state,
+        organizationId: action.organizationId,
       }
 
     case HIDE_SIDE_DIALOG:
