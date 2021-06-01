@@ -104,19 +104,26 @@ export class Iiko {
     return errorInfo
   }
 
-  async sendOrderToIiko(order: Order, terminalGroupId?: Terminal | null) {
-    let terminalId = terminalGroupId ? terminalGroupId.toString() : null
+  async sendOrderToIiko(order: Order, terminalGroupId: Terminal) {
+    let terminalId = terminalGroupId.toString()
     // const terminalId = 'b3a96b03-75bc-44dd-8fcd-53c5a548a8e9' //Ахматовская
-
-    const organization = await getRepository(Organization).findOne()
+    const terminal = await getRepository(Terminal).findOne(
+      { id: terminalId },
+      {
+        relations: ['organization'],
+      }
+    )
+    console.log({ terminal })
+    const organizationId = terminal ? terminal.organization.id : null
     const iikoOrder = await this.formatOrderForIiko(order)
+    console.log(organizationId, terminalId)
 
     if (terminalId === '121b5392-d62c-7611-0165-959330ae00c9' && order.isDelivery) {
       terminalId = this.getTerminalGroupIdByTime(iikoOrder, 540, 1410)
     }
 
     const body = JSON.stringify({
-      organizationId: this.organizations[0].id,
+      organizationId: organizationId,
       order: iikoOrder,
       terminalGroupId: terminalId,
       createOrderSettings: {
@@ -125,7 +132,8 @@ export class Iiko {
     })
 
     const { correlationId, orderInfo } = await this.fetchApi<{ correlationId: string; orderInfo: OrderResponse }>(
-      CREATE_ORDER_URL,
+      // CREATE_ORDER_URL,
+      CHECK_ORDER_URL,
       body,
       true,
       'POST'

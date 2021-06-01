@@ -15,12 +15,16 @@
   .HeaderDown__menuEl {
     color: #ffffff;
   }
+
+  &__selectCity {
+    margin: 10px 0;
+    width: 360px;
+  }
 }
 
 .HeaderDownMobile {
   height: 54px;
   background: #303030;
-
 
   .HeaderDown__menuEl {
     font-family: 'Roboto';
@@ -42,6 +46,6 @@
 
 .activatedLink {
   div {
-    border-bottom: 5px solid #FFD74B;
+    border-bottom: 5px solid #ffd74b;
   }
 }

@@ -452,7 +452,7 @@ export const deleteDeliveryProduct = () => {
   }
 }
 
-const clearDeliveryProduct = (): OrderActionType => {
+export const clearDeliveryProduct = (): OrderActionType => {
   return {
     type: DELETE_DELIVERY_SERVICE_PRODUCT,
   }

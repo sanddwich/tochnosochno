@@ -1,14 +1,18 @@
 import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import { RootState } from '../../../Redux'
 import ActionButton from '../../../SharedComponents/ActionButton/ActionButton'
 import RoundButton from '../../../SharedComponents/RoundButton/RoundButton'
 import './Footer.scss'
 
-interface FooterProps {}
+interface FooterProps {
+  organizationId: string
+}
 
 interface FooterState {}
 
-export default class Footer extends React.Component<FooterProps, FooterState> {
+class Footer extends React.Component<FooterProps, FooterState> {
   render() {
     return (
       <footer className="footer">
@@ -52,17 +56,30 @@ export default class Footer extends React.Component<FooterProps, FooterState> {
           <div className="row">
             <div className="col-md-5">
               <div className="footer__contacts">
-                <div className="row mt-3">
-                  <div className="col-6 pr-0">
-                    <div className="footer__contacts__title">Телефон ресторана</div>
-                    <div className="footer__contacts__phone"> 46-46-00</div>
+                {this.props.organizationId === 'c753337b-ccd2-4c3b-a605-0c8c23c20057' ? (
+                  <div className="row mt-3">
+                    <div className="col-6 pr-0">
+                      <div className="footer__contacts__title">Телефон ресторана</div>
+                      <div className="footer__contacts__phone"> 46-46-00</div>
+                    </div>
+                    <div className="col-6 pr-0">
+                      <div className="footer__contacts__title">Телефон доставки</div>
+                      <div className="footer__contacts__phone"> 46-46-02</div>
+                      <div className="footer__contacts__phone"> 46-46-07</div>
+                    </div>
                   </div>
-                  <div className="col-6 pr-0">
-                    <div className="footer__contacts__title">Телефон доставки</div>
-                    <div className="footer__contacts__phone"> 46-46-02</div>
-                    <div className="footer__contacts__phone"> 46-46-07</div>
+                ) : (
+                  <div className="row mt-3">
+                    <div className="col-6 pr-0">
+                      <div className="footer__contacts__title">Телефон ресторана</div>
+                      <div className="footer__contacts__phone"> 78-00-78</div>
+                    </div>
+                    <div className="col-6 pr-0">
+                      <div className="footer__contacts__title">Телефон доставки</div>
+                      <div className="footer__contacts__phone"> 78-00-78</div>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
             <div className="col-md-4">
@@ -90,3 +107,15 @@ export default class Footer extends React.Component<FooterProps, FooterState> {
     )
   }
 }
+
+const mapDispatchToProps = {}
+
+const mapStateToProps = (state: RootState) => {
+  const { organizationId } = state.app
+
+  return {
+    organizationId,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Footer)

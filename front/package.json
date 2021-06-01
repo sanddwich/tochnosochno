@@ -23,7 +23,7 @@
     "bootstrap": "^4.5.2",
     "fecha": "^4.2.0",
     "localforage": "^1.9.0",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-animate-on-scroll": "^2.1.5",
@@ -43,6 +43,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.4",
     "react-scroll": "^1.8.1",
+    "react-select": "^4.3.1",
     "react-yandex-maps": "^4.5.0",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
@@ -51,7 +52,7 @@
     "redux-persist-expire": "^1.1.0",
     "redux-persist-transform-encrypt": "^2.0.1",
     "redux-thunk": "^2.3.0",
-    "swiper": "^6.2.0"
+    "swiper": "^6.7.0"
   },
   "scripts": {
     "start": "react-scripts start --env.API_URL=http://api.sochno30.ru",
@@ -93,6 +94,7 @@
     "@types/react-phone-number-input": "^3.0.5",
     "@types/react-redux": "^7.1.9",
     "@types/react-router-dom": "^5.1.5",
+    "@types/react-select": "^4.0.15",
     "@types/redux-logger": "^3.0.8",
     "@types/redux-persist-transform-encrypt": "^2.0.1",
     "@types/uuid": "^8.3.0",

@@ -52,7 +52,7 @@
     "port": 3306,
     "username": "host1820901_tochnosochno",
     "password": "Asdfrewq1234!",
-    "database": "host1820901_tochnosochnobackup",
+    "database": "host1820901_tochnosochnomainbckp",
     "synchronize": "true",
     "logging": ["error"]
   },

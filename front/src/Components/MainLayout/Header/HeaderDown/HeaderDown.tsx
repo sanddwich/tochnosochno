@@ -4,7 +4,11 @@ import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import Category from '../../../../Interfaces/Category'
 import { RootState } from '../../../../Redux'
-
+import Select from 'react-select'
+import OptionType from 'react-select'
+import { setOrganization } from '../../../../Redux/actions/app'
+import { getMenu } from '../../../../Redux/actions/menu'
+import { clearDeliveryProduct } from '../../../../Redux/actions/order'
 import './HeaderDown.scss'
 
 // Import Swiper React components
@@ -15,6 +19,10 @@ import 'swiper/swiper.scss'
 
 interface HeaderDownProps {
   menu: Category[]
+  organizationId: string
+  setOrganization: (organizationId: string) => void
+  getMenu: any
+  clearDeliveryProduct: any
 }
 
 interface HeaderDownState {}
@@ -24,8 +32,29 @@ class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
     // console.log(this.props.menu)
   }
 
+  handleCityChange = (inputValue: any, actionMeta: any) => {
+    this.props.setOrganization(inputValue.value)
+    this.props.getMenu()
+    this.props.clearDeliveryProduct()
+  }
+
+  getCityIndex(options: any[], value: string) {
+    let ind = -1
+    options.forEach((option, index) => {
+      if (option.value === value) {
+        ind = index
+      }
+    })
+    return ind
+  }
+
   render() {
-    // console.log(this.props.menu)
+    const options = [
+      { value: 'c753337b-ccd2-4c3b-a605-0c8c23c20057', label: 'Астрахань' },
+      { value: '216c18b5-abcf-41ff-af08-e5dfbda14689', label: 'Волгоград' },
+    ]
+    console.log(this.props.organizationId)
+    console.log(this.getCityIndex(options, this.props.organizationId))
     return (
       <React.Fragment>
         <Container fluid className="HeaderDown p-0 m-0 d-none d-lg-flex">
@@ -68,16 +97,32 @@ class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
             </Swiper>
           ) : null}
         </Container>
+        <div className="d-flex justify-content-center">
+          <div className="HeaderDown__selectCity">
+            <Select
+              onChange={this.handleCityChange}
+              value={options[this.getCityIndex(options, this.props.organizationId)]}
+              // defaultValue={options[this.getCityIndex(options, this.props.organizationId)]}
+              options={options}
+            />
+          </div>
+        </div>
       </React.Fragment>
     )
   }
 }
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  setOrganization,
+  getMenu,
+  clearDeliveryProduct,
+}
 
 const mapStateToProps = (state: RootState) => {
   const { menu } = state.menu
+  const { organizationId } = state.app
   return {
     menu: menu,
+    organizationId,
   }
 }
 

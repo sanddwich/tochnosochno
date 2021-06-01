@@ -52,7 +52,7 @@
     "username": "host1820901_tochnosochno",
     "password": "Asdfrewq1234!",
     
-    "database": "host1820901_tochnososchnomain",
+    "database": "host1820901_tochnososchnomainbckp",
     "synchronize": "true",
     "logging": ["error"]
   },
