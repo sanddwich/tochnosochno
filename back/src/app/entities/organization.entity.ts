@@ -14,6 +14,18 @@ export class Organization {
   restaurantAddress: string
   @Column()
   useUaeAddressingSystem: boolean
+  @Column()
+  city: string
+  @Column()
+  delivery_phones: string
+  @Column()
+  restraunt_phones: string
+  @Column()
+  area: string
+  @Column()
+  email: string
+  @Column()
+  iiko: boolean
   @OneToMany((type) => Terminal, (terminal) => terminal.organization)
   terminals: Terminal[]
 }

@@ -18,11 +18,16 @@ import { RootState } from '../../Redux'
 import Loader from '../../SharedComponents/Loader/Loader'
 import ScreenLoader from '../../SharedComponents/ScreenLoader/ScreenLoader'
 import OverlayLoader from '../../SharedComponents/OverlayLoader/OverlayLoader'
+import { Helmet } from 'react-helmet'
+import { getCurrentOrganization } from '../../utils/utils'
+import Organization from '../../Interfaces/Organization'
 
 interface MainLayoutProps {
   getMenu: any
   isAuth: boolean
   loading: boolean
+  organizations: Organization[]
+  organizationId: string
 }
 
 interface MainLayoutState {}
@@ -35,6 +40,34 @@ class MainLayout extends React.Component<MainLayoutProps, MainLayoutState> {
   render() {
     return (
       <Container fluid className="MainLayout p-0 m-0">
+        <Helmet>
+          <meta
+            name="description"
+            content={`У нас Вы можете заказать еду с доставкой на дом или офис по городу ${
+              getCurrentOrganization(this.props.organizations, this.props.organizationId)?.city
+            } и по области. 
+      Доставка пиццы, роллов, салатов и прочих блюд. 
+      Онлайн-заказ в ТочноСочно.`}
+          />
+          <meta
+            name="og:description"
+            content={`У нас Вы можете заказать еду с доставкой на дом или офис по городу ${
+              getCurrentOrganization(this.props.organizations, this.props.organizationId)?.city
+            } и по области. 
+      Доставка пиццы, роллов, салатов и прочих блюд. 
+      Онлайн-заказ в ТочноСочно.`}
+          />
+          <meta
+            property="og:title"
+            content={`ТочноСочно - доставка еды в г. ${
+              getCurrentOrganization(this.props.organizations, this.props.organizationId)?.city
+            } и по области`}
+          />
+          <title>{`ТочноСочно - доставка еды в г. ${
+            getCurrentOrganization(this.props.organizations, this.props.organizationId)?.city
+          } и по области`}</title>
+        </Helmet>
+
         {this.props.loading ? <ScreenLoader /> : null}
         <div hidden={this.props.loading}>
           <Header />
@@ -69,10 +102,13 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: RootState) => {
   const { isAuth } = state.auth
-  const { loading, productsLoading } = state.menu
+  const { loading, productsLoading, organizations } = state.menu
+  const { organizationId } = state.app
   return {
     isAuth,
     loading,
+    organizations,
+    organizationId,
   }
 }
 

@@ -1,5 +1,6 @@
 import { group } from 'console'
 import Modifier from '../Interfaces/Modifier'
+import Organization from '../Interfaces/Organization'
 import Product from '../Interfaces/Product'
 
 export const precacheImages = async (srcs: string[]) => {
@@ -51,4 +52,8 @@ export const getRequiredModifiers = (product: Product): Modifier[] => {
   })
 
   return requiredModifiers
+}
+
+export const getCurrentOrganization = (organizations: Organization[], organizationId: string) => {
+  return organizations.find((organization) => organization.id === organizationId)
 }

@@ -4,6 +4,7 @@ import Customer from '../../Interfaces/Customer'
 import FormType from '../../Interfaces/FormType'
 import Order from '../../Interfaces/Order'
 import OrderItem from '../../Interfaces/OrderItem'
+import Organization from '../../Interfaces/Organization'
 import Product from '../../Interfaces/Product'
 import Terminal from '../../Interfaces/Terminal'
 
@@ -14,6 +15,7 @@ export interface MenuState {
   error: string
   date: Date
   productsLoading: boolean
+  organizations: Organization[]
 }
 
 export interface OrderState {

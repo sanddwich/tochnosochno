@@ -9,8 +9,8 @@ import { ApiController } from './api.controller'
 const controller = createController(ApiController)
 describe('ApiController', () => {
   describe('has a "getMenu" method that', () => {
-    it('should handle requests at GET /menu', () => {
-      strictEqual(getHttpMethod(ApiController, 'getMenu'), 'GET')
+    it('should handle requests at POST /menu', () => {
+      strictEqual(getHttpMethod(ApiController, 'getMenu'), 'POST')
       strictEqual(getPath(ApiController, 'getMenu'), '/menu')
     })
   })

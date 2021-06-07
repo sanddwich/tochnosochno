@@ -3,16 +3,19 @@ import {
   Context,
   dependency,
   Get,
+  HttpResponse,
   HttpResponseBadRequest,
   HttpResponseCreated,
   HttpResponseForbidden,
+  Post,
   Put,
   render,
   TokenRequired,
   ValidateBody,
 } from '@foal/core'
 import { fetchUser, TypeORMStore } from '@foal/typeorm'
-import { User } from '../entities'
+import { getRepository } from 'typeorm'
+import { Customer, User } from '../entities'
 import { Iiko, LoggerService, PaymentService, SmsService } from '../services'
 import getClientIp from '../utils/utils'
 
@@ -220,14 +223,12 @@ export class AdminController {
     }
   }
 
-
-
   @Put('/orderStatus')
   @ValidateBody({
     additionalProperties: false,
     properties: {
       token: { type: 'string' },
-      orderIds:{type: 'array'}
+      orderIds: { type: 'array' },
     },
     required: ['token'],
     type: 'object',
@@ -262,5 +263,37 @@ export class AdminController {
     }
   }
 
+  @Post('/orderbytime')
+  @ValidateBody({
+    additionalProperties: false,
+    properties: {
+      token: { type: 'string' },
+    },
+    type: 'object',
+  })
+  async getTerminalByTime(ctx: Context) {
+    /*
+    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
+    */
+    const startTime = Date.now()
 
+    const iiko = await this.iiko.getInstance()
+
+    const customer = await getRepository(Customer).findOne()
+    let response = ''
+    if (customer) {
+      response = iiko.getTerminalGroupIdByTime(
+        {
+          items: [],
+          phone: 'sdadasd',
+          payments: [],
+          customer,
+        },
+        540,
+        1410
+      )
+    }
+
+    return new HttpResponseCreated(response)
+  }
 }

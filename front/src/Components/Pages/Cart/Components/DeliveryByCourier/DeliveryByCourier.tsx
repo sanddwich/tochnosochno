@@ -47,6 +47,7 @@ import Group from '../../../../../Interfaces/Group'
 import Product from '../../../../../Interfaces/Product'
 import Category from '../../../../../Interfaces/Category'
 import OrderItem from '../../../../../Interfaces/OrderItem'
+import Organization from '../../../../../Interfaces/Organization'
 
 interface DeliveryByCourierProps {
   getStreetVariants: any
@@ -80,6 +81,7 @@ interface DeliveryByCourierProps {
   setTerminal: (terminalId: string) => void
   setProcessOrderOnAuth: (isProcessOrder: boolean) => void
   organizationId: string
+  organizations: Organization[]
 }
 
 interface DeliveryByCourierState {
@@ -162,6 +164,10 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
     this.props.setComment('')
     this.props.hidePaymentSelection()
     this.props.deleteDeliveryProduct()
+  }
+
+  getCurrentOrganization() {
+    return this.props.organizations.find((organization) => organization.id === this.props.organizationId)
   }
 
   showPaymentSection = async () => {
@@ -436,10 +442,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
                   count={5}
                   filterLocations={[
                     {
-                      ['region']:
-                        this.props.organizationId == '216c18b5-abcf-41ff-af08-e5dfbda14689'
-                          ? 'волгоградская'
-                          : 'астраханская',
+                      ['region']: this.getCurrentOrganization()?.area,
                     },
                   ]}
                   onChange={(value) => this.chooseAddressFromInput(value)}
@@ -710,7 +713,7 @@ const mapStateToProps = (state: any) => {
     personCheck,
     isShowPaymentSelection,
   } = state.order
-  const { menu } = state.menu
+  const { menu, organizations } = state.menu
   const { organizationId } = state.app
   return {
     loading: loading,
@@ -727,6 +730,7 @@ const mapStateToProps = (state: any) => {
     isShowPaymentSelection,
     menu,
     organizationId,
+    organizations,
   }
 }
 

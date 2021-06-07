@@ -1,4 +1,5 @@
 import Category from '../../Interfaces/Category'
+import Organization from '../../Interfaces/Organization'
 import Terminal from '../../Interfaces/Terminal'
 import {
   ADD_GROUP_PRODUCTS,
@@ -6,6 +7,7 @@ import {
   HIDE_PRODUCTS_LOADING,
   SET_ERROR,
   SET_LOADING,
+  SET_ORGANIZATIONS,
   SET_PRODUCTS_LOADING,
   SET_TERMINALS,
 } from '../constants/ActionTypes'
@@ -37,6 +39,11 @@ interface SetTerminalsAction {
   terminals: Terminal[]
 }
 
+interface SetOrganizationsAction {
+  type: typeof SET_ORGANIZATIONS
+  organizations: Organization[]
+}
+
 interface AddGroupProductsAction {
   type: typeof ADD_GROUP_PRODUCTS
   group: Category
@@ -50,3 +57,4 @@ export type MenuAction =
   | AddGroupProductsAction
   | SetProductsLoadingAction
   | HideProductsLoadingAction
+  | SetOrganizationsAction

@@ -34,6 +34,7 @@ import {
   Terminal,
   Street,
   City,
+  Organization,
 } from '../entities'
 import { fetchUser, TypeORMStore } from '@foal/typeorm'
 import * as _ from 'lodash'
@@ -144,6 +145,12 @@ export class ApiController {
         organization: organizationId,
       })
 
+      const organizations = await getRepository(Organization).find({
+        order: {
+          city: 'ASC',
+        },
+      })
+
       let recentProducts = await getRepository(Product).find({
         where: {
           type: 'Dish',
@@ -167,8 +174,7 @@ export class ApiController {
       })
 
       this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
-
-      return new HttpResponseOK({ products, terminals, recentProducts })
+      return new HttpResponseOK({ organizations, products, terminals, recentProducts })
     } catch (error) {
       this.logger.error(
         `${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`,
@@ -296,6 +302,13 @@ export class ApiController {
     const order: Order = ctx.request.body.order
     const repositoryOrder = getRepository(Order)
 
+    const terminal = await getRepository(Terminal).findOne(
+      { id: order.terminalId.toString() },
+      {
+        relations: ['organization'],
+      }
+    )
+
     /*
      * Проверка корректности заказа.
      * Отключил, т.к Iiko сама проверяет заказ на коректность.
@@ -338,10 +351,6 @@ export class ApiController {
          * Оплата курьеру
          */
       } else if (order.payment === 'cash' || order.payment === 'credit') {
-        /*
-         * Отправляем заказ в Iiko,
-         */
-
         const iiko = await this.iiko.getInstance()
 
         this.logger.info(
@@ -349,20 +358,25 @@ export class ApiController {
             Date.now() - startTime
           } ms - iikoOrder${JSON.stringify(await iiko.formatOrderForIiko(order))}`
         )
-
-        const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
-
         /*
-         * Произошла ошибка в Iiko при создании заказа
+         * Отправляем заказ в Iiko,
          */
 
-        if (iikoOrder.errorInfo) {
-          const { code, message, description } = iikoOrder.errorInfo
-          throw new Error(`${code}. ${message}. ${description}`)
-        }
-        order.orderIikoId = iikoOrder.id
+        if (terminal && terminal.organization.iiko) {
+          const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
 
-        this.logger.info(`${getClientIp(ctx)} - orderIikoId - ${order.orderIikoId}`)
+          /*
+           * Произошла ошибка в Iiko при создании заказа
+           */
+
+          if (iikoOrder.errorInfo) {
+            const { code, message, description } = iikoOrder.errorInfo
+            throw new Error(`${code}. ${message}. ${description}`)
+          }
+          order.orderIikoId = iikoOrder.id
+
+          this.logger.info(`${getClientIp(ctx)} - orderIikoId - ${order.orderIikoId}`)
+        }
 
         if (order.address && !order.address.id) {
           order.address.id = uuidv4()
@@ -372,7 +386,7 @@ export class ApiController {
         }
 
         //Отправка заказа на email
-        await this.sender.sendOrderEmail(order)
+        await this.sender.sendOrderEmail(order, terminal)
 
         await repositoryOrder.save(order)
         this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
@@ -645,8 +659,18 @@ export class ApiController {
       isCourierDelivery: { type: 'boolean' },
       deliveryDate: { type: 'string' },
       classifierId: { type: 'string' },
+      organizationId: { type: 'string' },
     },
-    required: ['deliverySum', 'house', 'isCourierDelivery', 'longitude', 'latitude', 'deliveryDate', 'classifierId'],
+    required: [
+      'deliverySum',
+      'house',
+      'isCourierDelivery',
+      'longitude',
+      'latitude',
+      'deliveryDate',
+      'classifierId',
+      'organizationId',
+    ],
     type: 'object',
   })
   async getDeliveryRestirctions(ctx: Context<Customer, Session>) {
@@ -663,6 +687,7 @@ export class ApiController {
     const longitude: number = ctx.request.body.longitude
     const classifierId: string = ctx.request.body.classifierId
     const deliveryDate: string = ctx.request.body.deliveryDate
+    const organizationId: string = ctx.request.body.organizationId
     try {
       const iiko = await this.iiko.getInstance()
       const deliveryRestriction = await iiko.getDeliveryRestirctions(
@@ -673,14 +698,14 @@ export class ApiController {
         latitude,
         longitude,
         classifierId
-        // deliveryDate
       )
       this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
 
-      const aliveTerminals = await iiko.getAliveTerminals([
-        '52dcb85c-2c14-4e87-9625-24bc659dafd7',
-        '121b5392-d62c-7611-0165-959330ae00c9',
-      ])
+      const organization = await getRepository(Organization).findOne({ id: organizationId })
+
+      const terminals = await getRepository(Terminal).find({ organization })
+
+      const aliveTerminals = await iiko.getAliveTerminals(terminals, organizationId)
 
       if (deliveryRestriction && !deliveryRestriction.errorDescription) {
         _.remove(deliveryRestriction.allowedItems, (terminalGroup) => {

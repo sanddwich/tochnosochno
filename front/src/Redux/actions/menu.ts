@@ -8,6 +8,7 @@ import {
   HIDE_PRODUCTS_LOADING,
   SET_ERROR,
   SET_LOADING,
+  SET_ORGANIZATIONS,
   SET_PRODUCTS_LOADING,
   SET_TERMINALS,
 } from '../constants/ActionTypes'
@@ -15,6 +16,9 @@ import { MenuAction } from '../interfaces/menu'
 
 import { API_URL } from '../../utils/config'
 import { precacheImages } from '../../utils/utils'
+import Organization from '../../Interfaces/Organization'
+import MenuResponse from '../../Interfaces/MenuResponse'
+import { setOrganization } from './app'
 
 const apiServer = API_URL
 
@@ -37,10 +41,11 @@ export const getMenu = (): ThunkAction<void, RootState, null, MenuAction> => {
         throw new Error(resData.message)
       }
 
-      const resData = await res.json()
+      const resData: MenuResponse = await res.json()
 
       dispatch(fetchMenu(resData.products))
       dispatch(setTerminals(resData.terminals))
+      dispatch(setOrganizations(resData.organizations))
     } catch (err) {
       dispatch(setError(err))
     }
@@ -126,5 +131,12 @@ const setTerminals = (terminals: Terminal[]): MenuAction => {
   return {
     type: SET_TERMINALS,
     terminals: terminals,
+  }
+}
+
+const setOrganizations = (organizations: Organization[]): MenuAction => {
+  return {
+    type: SET_ORGANIZATIONS,
+    organizations,
   }
 }

@@ -16,8 +16,10 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 // Import Swiper styles
 import 'swiper/swiper.scss'
+import Organization from '../../../../Interfaces/Organization'
 
 interface HeaderDownProps {
+  organizations: Organization[]
   menu: Category[]
   organizationId: string
   setOrganization: (organizationId: string) => void
@@ -28,9 +30,7 @@ interface HeaderDownProps {
 interface HeaderDownState {}
 
 class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
-  componentDidMount() {
-    // console.log(this.props.menu)
-  }
+  componentDidMount() {}
 
   handleCityChange = (inputValue: any, actionMeta: any) => {
     this.props.setOrganization(inputValue.value)
@@ -48,13 +48,17 @@ class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
     return ind
   }
 
+  getCityOptions() {
+    return this.props.organizations.map((organization) => {
+      return {
+        value: organization.id,
+        label: organization.city,
+      }
+    })
+  }
+
   render() {
-    const options = [
-      { value: 'c753337b-ccd2-4c3b-a605-0c8c23c20057', label: 'Астрахань' },
-      { value: '216c18b5-abcf-41ff-af08-e5dfbda14689', label: 'Волгоград' },
-    ]
-    console.log(this.props.organizationId)
-    console.log(this.getCityIndex(options, this.props.organizationId))
+    const options = this.getCityOptions()
     return (
       <React.Fragment>
         <Container fluid className="HeaderDown p-0 m-0 d-none d-lg-flex">
@@ -102,7 +106,6 @@ class HeaderDown extends React.Component<HeaderDownProps, HeaderDownState> {
             <Select
               onChange={this.handleCityChange}
               value={options[this.getCityIndex(options, this.props.organizationId)]}
-              // defaultValue={options[this.getCityIndex(options, this.props.organizationId)]}
               options={options}
             />
           </div>
@@ -118,11 +121,12 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const { menu } = state.menu
+  const { menu, organizations } = state.menu
   const { organizationId } = state.app
   return {
     menu: menu,
     organizationId,
+    organizations,
   }
 }
 

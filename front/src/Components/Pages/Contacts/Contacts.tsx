@@ -1,29 +1,36 @@
 import React from 'react'
-import { Container } from 'react-bootstrap'
+import { connect } from 'react-redux'
 import { YMaps, Map, Placemark } from 'react-yandex-maps'
+import Organization from '../../../Interfaces/Organization'
+import Terminal from '../../../Interfaces/Terminal'
+import { RootState } from '../../../Redux'
 import BlockName from '../../../SharedComponents/BlockName/BlockName'
 
 import './Contacts.scss'
 
-interface ContactsProps {}
+interface ContactsProps {
+  organizationId: string
+  terminals: Terminal[]
+  organizations: Organization[]
+}
 
 interface ContactsState {}
 
-export default class Contacts extends React.Component<ContactsProps, ContactsState> {
+class Contacts extends React.Component<ContactsProps, ContactsState> {
   render() {
     return (
       <div className="contacts container mt-5">
         <div className="row">
           <div className="col-md-5">
             <BlockName name="Рестораны" />
-            <div className="contacts__address">
-              <img src="/images/icons/map-pin.svg" alt="" />
-              <div className="contacts__address__text">Кирова 27</div>
-            </div>
-            <div className="contacts__address">
-              <img src="/images/icons/map-pin.svg" alt="" />
-              <div className="contacts__address__text">Жилая 12</div>
-            </div>
+            {this.props.terminals.map((terminal) => {
+              return (
+                <div key={terminal.id} className="contacts__address">
+                  <img src="/images/icons/map-pin.svg" alt="" />
+                  <div className="contacts__address__text">{terminal.name}</div>
+                </div>
+              )
+            })}
           </div>
           <div className="col-md-7 contacts__delivery">
             <BlockName name="Доставка" />
@@ -48,14 +55,19 @@ export default class Contacts extends React.Component<ContactsProps, ContactsSta
           <YMaps>
             <Map
               className="contacts__map__yandex"
-              defaultState={{
-                center: [46.347801, 48.037095],
+              state={{
+                center: [parseFloat(this.props.terminals[0]?.latitude), parseFloat(this.props.terminals[0]?.longitude)],
                 zoom: 17,
-                geometry: { type: 'Point', coordinates: [46.400285, 48.09156] },
               }}
             >
-              <Placemark geometry={[46.347801, 48.037095]} />
-              <Placemark geometry={[46.405095, 48.090833]} />
+              {this.props.terminals.map((terminal) => {
+                return (
+                  <Placemark
+                    key={terminal.id}
+                    geometry={[parseFloat(terminal.latitude), parseFloat(terminal.longitude)]}
+                  />
+                )
+              })}
             </Map>
           </YMaps>
         </div>
@@ -63,3 +75,18 @@ export default class Contacts extends React.Component<ContactsProps, ContactsSta
     )
   }
 }
+
+const mapDispatchToProps = {}
+
+const mapStateToProps = (state: RootState) => {
+  const { organizationId } = state.app
+  const { organizations, terminals } = state.menu
+
+  return {
+    organizationId,
+    organizations,
+    terminals,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Contacts)

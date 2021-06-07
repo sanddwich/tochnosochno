@@ -3,7 +3,6 @@ import { ThunkAction } from 'redux-thunk'
 import { RootState } from '..'
 import Address from '../../Interfaces/Address'
 import ApiResponse from '../../Interfaces/ApiResponse'
-import Order from '../../Interfaces/Order'
 import OrderItem from '../../Interfaces/OrderItem'
 import PaymentType from '../../Interfaces/PaymentType'
 import {
@@ -13,17 +12,14 @@ import {
   CHANGE_ITEM_ORDER,
   CHANGE_ORDER_ITEM_AMOUNT,
   CLEAR_ORDER_ERROR,
-  DEC_ORDER_ITEM_AMOUNT,
   DELETE_DELIVERY_SERVICE_PRODUCT,
   DELETE_FROM_ORDER,
   HIDE_ORDER_LOADING,
   HIDE_PAYMENT_SELECTION,
-  INC_ORDER_ITEM_AMOUNT,
   SET_COMMENT,
   SET_DELIVERY,
   SET_GUEST_COUNT,
   SET_INIT_ORDER,
-  SET_ORDER_AMOUNT,
   SET_ORDER_BONUS,
   SET_ORDER_ERROR,
   SET_ORDER_LOADING,
@@ -286,6 +282,8 @@ export const getDeliveryRestrictions = (
     try {
       const { token } = getState().auth
 
+      const { organizationId } = getState().app
+
       const cookies = new Cookies()
       const csrfToken = cookies.get('csrfToken')
 
@@ -306,6 +304,7 @@ export const getDeliveryRestrictions = (
           longitude,
           classifierId,
           deliveryDate,
+          organizationId,
         }),
       })
 

@@ -14,6 +14,7 @@ import './HeaderUp.scss'
 import CartRoundButton from '../../../../SharedComponents/CartRoundButton/CartRoundButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSortUp } from '@fortawesome/free-solid-svg-icons'
+import Organization from '../../../../Interfaces/Organization'
 
 interface HeaderUpProps {
   isAuth: boolean
@@ -21,6 +22,7 @@ interface HeaderUpProps {
   showLoginModal: () => void
   showComboModal: boolean
   organizationId: string
+  organizations: Organization[]
 }
 
 interface HeaderUpState {
@@ -54,6 +56,18 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
     toggleMenu ? (element.style.display = 'block') : (element.style.display = 'none')
 
     this.setState({ toggleMenu: !this.state.toggleMenu })
+  }
+
+  getRestrauntPhones() {
+    return this.getCurrentOrganization()?.restraunt_phones.split(' ')
+  }
+
+  getDeliveryPhones() {
+    return this.getCurrentOrganization()?.delivery_phones.split(' ')
+  }
+
+  getCurrentOrganization() {
+    return this.props.organizations.find((organization) => organization.id === this.props.organizationId)
   }
 
   render() {
@@ -106,72 +120,41 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
             </NavLink>
           </div>
           <div className="HeaderUp__menuItem d-flex justify-content-between">
-            {this.props.organizationId === 'c753337b-ccd2-4c3b-a605-0c8c23c20057' ? (
-              <Row className="HeaderUp__container p-0 m-0 d-flex align-items-center">
-                <div className="HeaderUp__containerImg">
-                  <a href="tel:88512464600">
-                    <RoundButton backgroundColor="#303030" icon="nyamnyan_white.svg" onClick={() => this.noAction()} />
-                  </a>
-                </div>
-                <div className="HeaderUp__containerDescr pl-2">
-                  <a href="tel:88512464600">
-                    <div className="HeaderUp__containerDescrPhone">46-46-00</div>
-                    <div className="HeaderUp__containerDescrTitle">номер ресторана</div>
-                  </a>
-                </div>
-              </Row>
-            ) : (
-              <Row className="HeaderUp__container p-0 m-0 d-flex align-items-center">
-                <div className="HeaderUp__containerImg">
-                  <a href="tel:88442780078">
-                    <RoundButton backgroundColor="#303030" icon="nyamnyan_white.svg" onClick={() => this.noAction()} />
-                  </a>
-                </div>
-                <div className="HeaderUp__containerDescr pl-2">
-                  <a href="tel:88442780078">
-                    <div className="HeaderUp__containerDescrPhone">78-00-78</div>
-                    <div className="HeaderUp__containerDescrTitle">номер ресторана</div>
-                  </a>
-                </div>
-              </Row>
-            )}
+            <Row className="HeaderUp__container p-0 m-0 d-flex align-items-center">
+              <div className="HeaderUp__containerImg">
+                <RoundButton backgroundColor="#303030" icon="nyamnyan_white.svg" onClick={() => this.noAction()} />
+              </div>
+              <div className="HeaderUp__containerDescr pl-2">
+                {this.getRestrauntPhones()?.map((phone) => {
+                  return (
+                    <div key={phone} className="HeaderUp__containerDescrPhone">
+                      {phone}
+                    </div>
+                  )
+                })}
+                <div className="HeaderUp__containerDescrTitle">номер ресторана</div>
+              </div>
+            </Row>
           </div>
-          {this.props.organizationId === 'c753337b-ccd2-4c3b-a605-0c8c23c20057' ? (
-            <div className="HeaderUp__menuItem d-flex justify-content-between">
-              <Row className="HeaderUp__container p-0 m-0 d-flex align-items-center">
-                <a href="tel:88512464602">
-                  <div className="HeaderUp__containerImg">
-                    <RoundButton backgroundColor="#303030" icon="car_white.svg" onClick={() => this.noAction()} />
-                  </div>
-                </a>
-                <div className="HeaderUp__containerDescr pl-2">
-                  <a href="tel:88512464602">
-                    <div className="HeaderUp__containerDescrPhone">46-46-02</div>
-                  </a>
-                  <a href="tel:88512464607">
-                    <div className="HeaderUp__containerDescrPhone">46-46-07</div>
-                  </a>
-                  <div className="HeaderUp__containerDescrTitle">служба доставки</div>
-                </div>
-              </Row>
-            </div>
-          ) : (
-            <div className="HeaderUp__menuItem d-flex justify-content-between">
-              <Row className="HeaderUp__container p-0 m-0 d-flex align-items-center">
-                <a href="tel:88442780078">
-                  <div className="HeaderUp__containerImg">
-                    <RoundButton backgroundColor="#303030" icon="car_white.svg" onClick={() => this.noAction()} />
-                  </div>
-                </a>
-                <div className="HeaderUp__containerDescr pl-2">
-                  <a href="tel:88442780078">
-                    <div className="HeaderUp__containerDescrPhone">78-00-78</div>
-                  </a>
-                  <div className="HeaderUp__containerDescrTitle">служба доставки</div>
-                </div>
-              </Row>
-            </div>
-          )}
+
+          <div className="HeaderUp__menuItem d-flex justify-content-between">
+            <Row className="HeaderUp__container p-0 m-0 d-flex align-items-center">
+              <div className="HeaderUp__containerImg">
+                <RoundButton backgroundColor="#303030" icon="car_white.svg" onClick={() => this.noAction()} />
+              </div>
+              <div className="HeaderUp__containerDescr pl-2">
+                {this.getDeliveryPhones()?.map((phone) => {
+                  return (
+                    <div key={phone} className="HeaderUp__containerDescrPhone">
+                      {phone}
+                    </div>
+                  )
+                })}
+                <div className="HeaderUp__containerDescrTitle">служба доставки</div>
+              </div>
+            </Row>
+          </div>
+
           <div className="HeaderUp__menuItem">
             <Row className="m-0 p-0">
               <Col className="m-0 p-0">
@@ -306,45 +289,33 @@ class HeaderUp extends React.Component<HeaderUpProps, HeaderUpState> {
                 </Row>
               </NavLink>
 
-              {/* <a href="tel:88512464602" onClick={() => this.burgerButtonClick()}> */}
-              {this.props.organizationId === 'c753337b-ccd2-4c3b-a605-0c8c23c20057' ? (
-                <Row className="pl-3 pr-3">
-                  <Container fluid className="HeaderUp__toggleMenuItem2 p-0 m-0 mt-5 d-flex justify-content-between">
-                    <div className="HeaderUp__toggleMenuItemTitle">Телефоны доставки</div>
-                    <div>
-                      <a href="tel:88512464602">
-                        <div className="HeaderUp__toggleMenuItemPhone">46-46-02</div>
-                      </a>
-                      <a href="tel:88512464607">
-                        <div className="HeaderUp__toggleMenuItemPhone">46-46-07</div>
-                      </a>
-                    </div>
-                  </Container>
-                </Row>
-              ) : null}
+              <Row className="pl-3 pr-3">
+                <Container fluid className="HeaderUp__toggleMenuItem2 p-0 m-0 mt-5 d-flex justify-content-between">
+                  <div className="HeaderUp__toggleMenuItemTitle">Телефоны доставки</div>
+                  <div>
+                    {this.getDeliveryPhones()?.map((phone) => {
+                      return (
+                        <div key={phone} className="HeaderUp__toggleMenuItemPhone">
+                          {phone}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </Container>
+              </Row>
 
-              {/* </a> */}
-              {/* <a href="tel:88512464600" onClick={() => this.burgerButtonClick()}> */}
-              {this.props.organizationId === 'c753337b-ccd2-4c3b-a605-0c8c23c20057' ? (
-                <Row className="pl-3 pr-3">
-                  <Container fluid className="HeaderUp__toggleMenuItem2 p-0 m-0 mt-3 d-flex justify-content-between">
-                    <div className="HeaderUp__toggleMenuItemTitle">Телефон ресторана</div>
-                    <a href="tel:88512464600">
-                      <div className="HeaderUp__toggleMenuItemPhone">46-46-00</div>
-                    </a>
-                  </Container>
-                </Row>
-              ) : (
-                <Row className="pl-3 pr-3">
-                  <Container fluid className="HeaderUp__toggleMenuItem2 p-0 m-0 mt-3 d-flex justify-content-between">
-                    <div className="HeaderUp__toggleMenuItemTitle">Телефон ресторана</div>
-                    <a href="tel:88442780078">
-                      <div className="HeaderUp__toggleMenuItemPhone">78-00-78</div>
-                    </a>
-                  </Container>
-                </Row>
-              )}
-              {/* </a> */}
+              <Row className="pl-3 pr-3">
+                <Container fluid className="HeaderUp__toggleMenuItem2 p-0 m-0 mt-3 d-flex justify-content-between">
+                  <div className="HeaderUp__toggleMenuItemTitle">Телефон ресторана</div>
+                  {this.getRestrauntPhones()?.map((phone) => {
+                    return (
+                      <div key={phone} className="HeaderUp__toggleMenuItemPhone">
+                        {phone}
+                      </div>
+                    )
+                  })}
+                </Container>
+              </Row>
 
               <Row className="HeaderUp__toggleMenuItemTitle2 pl-3 pr-3">Социальные сети</Row>
 
@@ -411,12 +382,14 @@ const mapDispatchToProps = {
 const mapStateToProps = (state: RootState) => {
   const { showLogin, showComboModal, organizationId } = state.app
   const { isAuth } = state.auth
+  const { organizations } = state.menu
 
   return {
     isAuth,
     showLogin,
     showComboModal,
     organizationId,
+    organizations,
   }
 }
 

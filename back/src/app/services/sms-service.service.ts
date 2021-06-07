@@ -1,4 +1,4 @@
-import { Order, PinCode, Terminal } from '../entities'
+import { Order, Organization, PinCode, Terminal } from '../entities'
 import { getRepository } from 'typeorm'
 import * as nodemailer from 'nodemailer'
 import axios from 'axios'
@@ -48,9 +48,18 @@ export class SmsService {
     return pinCode
   }
 
-  async sendOrderEmail(order: Order) {
+  async sendOrderEmail(order: Order, terminal?: Terminal) {
     let orderItemsHtml = ''
     let deliveryAddress = ''
+    let email = ''
+
+    if (terminal) {
+      email = terminal.organization.email
+    } else {
+      email = Config.get('mail.orderEmail')
+    }
+    console.log(email)
+
     if (order.isDelivery && order.address) {
       deliveryAddress = ` ${order.address.street.name ? `ул. ${order.address.street.name},` : ''} 
        ${order.address.house ? `д. ${order.address.house},` : ''} 
@@ -59,7 +68,6 @@ export class SmsService {
       ${order.address.floor ? `${order.address.floor} этаж` : ''}`
     }
     if (!order.isDelivery) {
-      const terminal = await getRepository(Terminal).findOne({ id: order.terminalId.toString() })
       deliveryAddress = terminal ? terminal.name : ''
     }
 
@@ -152,7 +160,7 @@ export class SmsService {
 
     const result = await transporter.sendMail({
       from: `"${Config.get('host')}" <${Config.get('mail.auth.user')}>`,
-      to: Config.get('mail.orderEmail'),
+      to: email,
       subject: `Заказ с сайта - ${order.date}`,
       text: 'Новый заказ',
       html: html,

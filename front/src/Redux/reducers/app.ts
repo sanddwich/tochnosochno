@@ -38,7 +38,7 @@ const initialState: AppState = {
   isShowSuccessModal: false,
   keyUpdate: Math.random(),
   isShowTestModal: false,
-  organizationId: 'c753337b-ccd2-4c3b-a605-0c8c23c20057',
+  organizationId: '216c18b5-abcf-41ff-af08-e5dfbda14689',
 }
 const app = (state: AppState = initialState, action: AppActionType) => {
   switch (action.type) {
