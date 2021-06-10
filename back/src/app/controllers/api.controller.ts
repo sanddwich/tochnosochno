@@ -691,6 +691,7 @@ export class ApiController {
     try {
       const iiko = await this.iiko.getInstance()
       const deliveryRestriction = await iiko.getDeliveryRestirctions(
+        organizationId,
         streetId,
         house,
         deliverySum,

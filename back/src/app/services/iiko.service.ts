@@ -227,6 +227,7 @@ export class Iiko {
    */
 
   async getDeliveryRestirctions(
+    organizationId: string,
     streetId: string,
     house: string,
     deliverySum: number,
@@ -237,10 +238,25 @@ export class Iiko {
     deliveryDate?: string
   ): Promise<DeliveryRestrictionsAllowed | undefined> {
     const deliveryAddress = { streetId, house, classifierId }
-    const orderLocation = { latitude, longitude }
+
+    let orderLocation = {}
+
+    if (latitude && longitude) {
+      orderLocation = { latitude, longitude }
+    } else {
+      const organization = await getRepository(Organization).findOne({ id: organizationId })
+
+      const terminal = await getRepository(Terminal).findOne({ organization })
+
+      const latitude = terminal ? terminal.latitude : 0
+
+      const longitude = terminal ? terminal.longitude : 0
+
+      orderLocation = { latitude, longitude }
+    }
 
     const body = JSON.stringify({
-      organizationIds: [this.organizations[0].id],
+      organizationIds: [organizationId],
       deliverySum,
       orderLocation,
       deliveryAddress,

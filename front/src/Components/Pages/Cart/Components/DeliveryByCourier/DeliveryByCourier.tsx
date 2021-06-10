@@ -48,6 +48,7 @@ import Product from '../../../../../Interfaces/Product'
 import Category from '../../../../../Interfaces/Category'
 import OrderItem from '../../../../../Interfaces/OrderItem'
 import Organization from '../../../../../Interfaces/Organization'
+import { RootState } from '../../../../../Redux'
 
 interface DeliveryByCourierProps {
   getStreetVariants: any
@@ -353,9 +354,10 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
   chooseAddressFromInput = (dadataAddress: DaDataSuggestion<DaDataAddress> | undefined) => {
     if (dadataAddress) {
       const coordinates = [
-        Number.parseFloat(dadataAddress.data.geo_lat || '46.347801'),
-        Number.parseFloat(dadataAddress.data.geo_lon || '48.037095'),
+        Number.parseFloat(dadataAddress.data.geo_lat || '0'),
+        Number.parseFloat(dadataAddress.data.geo_lon || '0'),
       ]
+      console.log(coordinates)
       const address = dadataAddress.value
       const city = dadataAddress.data.city || 'Астрахань'
       const street = dadataAddress.data.street
@@ -702,7 +704,7 @@ const mapDispatchToProps = {
   setProcessOrderOnAuth,
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: RootState) => {
   const { loading, error, phone, isAuth, customer } = state.auth
   const {
     loading: loadingOrder,
@@ -713,7 +715,7 @@ const mapStateToProps = (state: any) => {
     personCheck,
     isShowPaymentSelection,
   } = state.order
-  const { menu, organizations } = state.menu
+  const { menu, organizations, terminals } = state.menu
   const { organizationId } = state.app
   return {
     loading: loading,
