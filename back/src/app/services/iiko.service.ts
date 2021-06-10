@@ -106,7 +106,11 @@ export class Iiko {
      * Сделана проверка доставки в заисимости от времени заказа,
      * т.к распределение заказов от IIKO работает не корректно
      */
-    if (terminalId === '121b5392-d62c-7611-0165-959330ae00c9' && order.isDelivery) {
+    if (
+      (terminalId === '121b5392-d62c-7611-0165-959330ae00c9' ||
+        terminalId === 'b3a96b03-75bc-44dd-8fcd-53c5a548a8e9') &&
+      order.isDelivery
+    ) {
       terminalId = this.getTerminalGroupIdByTime(iikoOrder, 540, 1350)
     }
 
@@ -616,8 +620,6 @@ export class Iiko {
     let completeBeforeMinutes = date.getMinutes()
 
     const completeBeforeTotalMinutes = completeBeforeHours * 60 + completeBeforeMinutes + 60
-
-    console.log(completeBeforeTotalMinutes)
 
     if (completeBeforeTotalMinutes >= startWork && completeBeforeTotalMinutes <= endWork) {
       return 'b3a96b03-75bc-44dd-8fcd-53c5a548a8e9' //Ахматовская
