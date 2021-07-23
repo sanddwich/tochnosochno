@@ -30,6 +30,7 @@ export class MenuService {
         .orderBy('RAND()')
         .limit(count)
         .where('`price` > 200')
+        .andWhere('`isDeleted = false`')
         .getMany()
 
       randomProducts.map((product) => {

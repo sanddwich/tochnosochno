@@ -95,8 +95,16 @@ export class ApiController {
 
     try {
       let products = await getRepository(Group).find({
-        where: {
-          isGroupModifier: false,
+        // where: {
+        //   isGroupModifier: false,
+        // },
+
+        where: (group) => {
+          group
+            .where({
+              isGroupModifier: false,
+            })
+            .andWhere('Group__products.isDeleted = :isDeleted', { isDeleted: false })
         },
 
         relations: [
@@ -154,6 +162,7 @@ export class ApiController {
       let recentProducts = await getRepository(Product).find({
         where: {
           type: 'Dish',
+          isDeleted: false,
           parentGroup: { id: !' ', isService: false },
         },
 
