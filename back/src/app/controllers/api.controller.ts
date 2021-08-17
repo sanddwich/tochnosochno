@@ -370,6 +370,7 @@ export class ApiController {
         /*
          * Отправляем заказ в Iiko,
          */
+        const iikoOrder = await this.iiko.formatOrderForIiko(order)
 
         if (terminal && terminal.organization.iiko) {
           const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
@@ -707,8 +708,10 @@ export class ApiController {
         isCourierDelivery,
         latitude,
         longitude,
-        classifierId
+        classifierId,
+        deliveryDate
       )
+
       this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
 
       const organization = await getRepository(Organization).findOne({ id: organizationId })

@@ -106,13 +106,13 @@ export class Iiko {
      * Сделана проверка доставки в заисимости от времени заказа,
      * т.к распределение заказов от IIKO работает не корректно
      */
-    if (
-      (terminalId === '121b5392-d62c-7611-0165-959330ae00c9' ||
-        terminalId === 'b3a96b03-75bc-44dd-8fcd-53c5a548a8e9') &&
-      order.isDelivery
-    ) {
-      terminalId = this.getTerminalGroupIdByTime(iikoOrder, 540, 1350)
-    }
+    // if (
+    //   (terminalId === '121b5392-d62c-7611-0165-959330ae00c9' ||
+    //     terminalId === 'b3a96b03-75bc-44dd-8fcd-53c5a548a8e9') &&
+    //   order.isDelivery
+    // ) {
+    //   terminalId = this.getTerminalGroupIdByTime(iikoOrder, 540, 1350)
+    // }
 
     const body = JSON.stringify({
       organizationId,
@@ -267,13 +267,13 @@ export class Iiko {
       isCourierDelivery,
       deliveryDate,
     })
+    console.log(body)
     const deliveryRestrictions: DeliveryRestrictionsAllowed = await this.fetchApi(
       DELIVERY_RESTRICTIONS_URL,
       body,
       true,
       'POST'
     )
-
     return deliveryRestrictions
   }
 
@@ -589,6 +589,7 @@ export class Iiko {
       body,
     })
     if (!res.ok && (res.status === 400 || res.status === 401 || res.status === 500 || res.status === 504)) {
+      console.log(res.status)
       const error: IIkoErrorResponse = await res.json()
 
       throw new Error(
@@ -610,7 +611,7 @@ export class Iiko {
     }
   }
 
-  public getTerminalGroupIdByTime(order: IIkoOrder, startWork: number, endWork: number) {
+  public getTerminalGroupIdByTime_deprecated(order: IIkoOrder, startWork: number, endWork: number) {
     let date = new Date()
     if (order.completeBefore) {
       date = new Date(order.completeBefore)
@@ -620,6 +621,8 @@ export class Iiko {
     let completeBeforeMinutes = date.getMinutes()
 
     const completeBeforeTotalMinutes = completeBeforeHours * 60 + completeBeforeMinutes + 60
+
+    console.log(completeBeforeTotalMinutes)
 
     if (completeBeforeTotalMinutes >= startWork && completeBeforeTotalMinutes <= endWork) {
       return 'b3a96b03-75bc-44dd-8fcd-53c5a548a8e9' //Ахматовская
