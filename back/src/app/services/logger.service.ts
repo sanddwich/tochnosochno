@@ -5,6 +5,7 @@ const customLevels = {
   levels: {
     error: 0,
     info: 1,
+    iiko: 2,
   },
   colors: {
     error: 'bold red whiteBG',
@@ -33,6 +34,12 @@ export class LoggerService {
           level: 'error',
           format: winston.format.combine(winston.format.timestamp({ format: 'DD-MM-YYYY HH:mm:ss' }), logFormat),
         }),
+
+        new winston.transports.File({
+          filename: `iiko_logs/${new Date().toJSON().slice(0, 10)}.txt`,
+          level: 'iiko',
+          format: winston.format.combine(winston.format.timestamp({ format: 'DD-MM-YYYY HH:mm:ss' }), logFormat),
+        }),
       ],
     })
     winston.addColors(customLevels.colors)
@@ -40,6 +47,9 @@ export class LoggerService {
 
   info(msg: string, object?: any) {
     this.logger.log('info', `${msg}${object ? `\n${JSON.stringify(object, null, 4)}` : ''}`)
+  }
+  iiko(msg: string, object?: any) {
+    this.logger.log('iiko', `${msg}${object ? `\n${JSON.stringify(object, null, 4)}` : ''}`)
   }
   error(msg: string, error: any) {
     console.log(error)

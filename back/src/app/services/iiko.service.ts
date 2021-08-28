@@ -73,6 +73,8 @@ export class Iiko {
   private tokenTimeStamp: number
   private organizations: Organization[]
 
+  private logger = new LoggerService()
+
   private async init() {
     const tokenAge = (Date.now() - this.tokenTimeStamp) / 60000
     if (!this.token || tokenAge > 20) {
@@ -267,7 +269,6 @@ export class Iiko {
       isCourierDelivery,
       deliveryDate,
     })
-    console.log(body)
     const deliveryRestrictions: DeliveryRestrictionsAllowed = await this.fetchApi(
       DELIVERY_RESTRICTIONS_URL,
       body,
@@ -449,6 +450,7 @@ export class Iiko {
 
   private async getToken() {
     this.tokenTimeStamp = Date.now()
+
     const body = JSON.stringify({ apiLogin: IIKO_PASSWORD })
 
     const { correlationId, token } = await this.fetchApi<{ correlationId: string; token: string }>(
@@ -580,6 +582,8 @@ export class Iiko {
   }
 
   private async fetchApi<T>(url: string, body: string, auth: boolean, method: string): Promise<T> {
+    this.logger.iiko(method + ' - ' + url, body)
+
     const res = await fetch(url, {
       method,
       headers: {
@@ -589,7 +593,6 @@ export class Iiko {
       body,
     })
     if (!res.ok && (res.status === 400 || res.status === 401 || res.status === 500 || res.status === 504)) {
-      console.log(res.status)
       const error: IIkoErrorResponse = await res.json()
 
       throw new Error(
@@ -599,7 +602,11 @@ export class Iiko {
       throw new Error(`Error ${res.status}. ${res.statusText} ${url}`)
     }
 
-    return await res.json()
+    const response = await res.json()
+
+    this.logger.iiko('response: ', response)
+
+    return response
   }
 
   fetch_retry = async (url, options, n) => {
