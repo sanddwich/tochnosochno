@@ -73,6 +73,8 @@ export class Iiko {
   private tokenTimeStamp: number
   private organizations: Organization[]
 
+  private logger = new LoggerService()
+
   private async init() {
     const tokenAge = (Date.now() - this.tokenTimeStamp) / 60000
     if (!this.token || tokenAge > 20) {
@@ -106,13 +108,13 @@ export class Iiko {
      * Сделана проверка доставки в заисимости от времени заказа,
      * т.к распределение заказов от IIKO работает не корректно
      */
-    if (
-      (terminalId === '121b5392-d62c-7611-0165-959330ae00c9' ||
-        terminalId === 'b3a96b03-75bc-44dd-8fcd-53c5a548a8e9') &&
-      order.isDelivery
-    ) {
-      terminalId = this.getTerminalGroupIdByTime(iikoOrder, 540, 1350)
-    }
+    // if (
+    //   (terminalId === '121b5392-d62c-7611-0165-959330ae00c9' ||
+    //     terminalId === 'b3a96b03-75bc-44dd-8fcd-53c5a548a8e9') &&
+    //   order.isDelivery
+    // ) {
+    //   terminalId = this.getTerminalGroupIdByTime(iikoOrder, 540, 1350)
+    // }
 
     const body = JSON.stringify({
       organizationId,
@@ -273,7 +275,6 @@ export class Iiko {
       true,
       'POST'
     )
-
     return deliveryRestrictions
   }
 
@@ -449,6 +450,7 @@ export class Iiko {
 
   private async getToken() {
     this.tokenTimeStamp = Date.now()
+
     const body = JSON.stringify({ apiLogin: IIKO_PASSWORD })
 
     const { correlationId, token } = await this.fetchApi<{ correlationId: string; token: string }>(
@@ -580,6 +582,8 @@ export class Iiko {
   }
 
   private async fetchApi<T>(url: string, body: string, auth: boolean, method: string): Promise<T> {
+    this.logger.iiko(method + ' - ' + url, body)
+
     const res = await fetch(url, {
       method,
       headers: {
@@ -598,7 +602,11 @@ export class Iiko {
       throw new Error(`Error ${res.status}. ${res.statusText} ${url}`)
     }
 
-    return await res.json()
+    const response = await res.json()
+
+    this.logger.iiko('response: ', response)
+
+    return response
   }
 
   fetch_retry = async (url, options, n) => {
@@ -610,7 +618,7 @@ export class Iiko {
     }
   }
 
-  public getTerminalGroupIdByTime(order: IIkoOrder, startWork: number, endWork: number) {
+  public getTerminalGroupIdByTime_deprecated(order: IIkoOrder, startWork: number, endWork: number) {
     let date = new Date()
     if (order.completeBefore) {
       date = new Date(order.completeBefore)
@@ -620,6 +628,8 @@ export class Iiko {
     let completeBeforeMinutes = date.getMinutes()
 
     const completeBeforeTotalMinutes = completeBeforeHours * 60 + completeBeforeMinutes + 60
+
+    console.log(completeBeforeTotalMinutes)
 
     if (completeBeforeTotalMinutes >= startWork && completeBeforeTotalMinutes <= endWork) {
       return 'b3a96b03-75bc-44dd-8fcd-53c5a548a8e9' //Ахматовская

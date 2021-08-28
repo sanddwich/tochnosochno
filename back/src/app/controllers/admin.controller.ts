@@ -262,38 +262,4 @@ export class AdminController {
       return new HttpResponseForbidden('Wrong token')
     }
   }
-
-  @Post('/orderbytime')
-  @ValidateBody({
-    additionalProperties: false,
-    properties: {
-      token: { type: 'string' },
-    },
-    type: 'object',
-  })
-  async getTerminalByTime(ctx: Context) {
-    /*
-    Время начала обработки запроса. Нужно чтобы считать общее время обработки запроса.
-    */
-    const startTime = Date.now()
-
-    const iiko = await this.iiko.getInstance()
-
-    const customer = await getRepository(Customer).findOne()
-    let response = ''
-    if (customer) {
-      response = iiko.getTerminalGroupIdByTime(
-        {
-          items: [],
-          phone: 'sdadasd',
-          payments: [],
-          customer,
-        },
-        540,
-        1410
-      )
-    }
-
-    return new HttpResponseCreated(response)
-  }
 }

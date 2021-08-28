@@ -95,8 +95,16 @@ export class ApiController {
 
     try {
       let products = await getRepository(Group).find({
-        where: {
-          isGroupModifier: false,
+        // where: {
+        //   isGroupModifier: false,
+        // },
+
+        where: (group) => {
+          group
+            .where({
+              isGroupModifier: false,
+            })
+            .andWhere('Group__products.isDeleted = :isDeleted', { isDeleted: false })
         },
 
         relations: [
@@ -154,6 +162,7 @@ export class ApiController {
       let recentProducts = await getRepository(Product).find({
         where: {
           type: 'Dish',
+          isDeleted: false,
           parentGroup: { id: !' ', isService: false },
         },
 
@@ -361,6 +370,7 @@ export class ApiController {
         /*
          * Отправляем заказ в Iiko,
          */
+        const iikoOrder = await this.iiko.formatOrderForIiko(order)
 
         if (terminal && terminal.organization.iiko) {
           const iikoOrder = await iiko.sendOrderToIiko(order, order.terminalId)
@@ -698,8 +708,10 @@ export class ApiController {
         isCourierDelivery,
         latitude,
         longitude,
-        classifierId
+        classifierId,
+        deliveryDate
       )
+
       this.logger.info(`${getClientIp(ctx)} - ${ctx.request.method} ${ctx.request.url}  ${Date.now() - startTime} ms`)
 
       const organization = await getRepository(Organization).findOne({ id: organizationId })

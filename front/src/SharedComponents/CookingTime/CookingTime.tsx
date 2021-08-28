@@ -2,13 +2,14 @@ import React from 'react'
 import RadioButton from '../RadioButton/RadioButton'
 import DatePicker from 'react-datepicker'
 import ru from 'date-fns/locale/ru'
-import { setPrepareDate } from '../../Redux/actions/order'
+import { setPrepareDate, deleteDeliveryProduct } from '../../Redux/actions/order'
 import './CookingTime.scss'
 import { connect } from 'react-redux'
 import { format } from 'fecha'
 
 interface CookingTimeProps {
   setPrepareDate: (prepareDate: string) => void
+  deleteDeliveryProduct: () => void
 }
 
 interface CookingTimeState {
@@ -81,6 +82,7 @@ class CookingTime extends React.Component<CookingTimeProps, CookingTimeState> {
     if (this.state.cookingTime) {
       this.props.setPrepareDate(format(new Date(this.state.cookingTime.toString()), 'YYYY-MM-DD HH:mm:ss.SSS'))
     }
+    this.props.deleteDeliveryProduct()
   }
 
   selectSoon = () => {
@@ -89,10 +91,12 @@ class CookingTime extends React.Component<CookingTimeProps, CookingTimeState> {
     })
     // this.props.setPrepareDate(format(this.addHour(1), 'YYYY-MM-DD HH:mm:ss.SSS'))
     this.props.setPrepareDate('')
+    this.props.deleteDeliveryProduct()
   }
 
   setCookingTime = (cookingTime: Date | [Date, Date] | null) => {
     this.setState({ cookingTime })
+
     if (cookingTime) {
       this.props.setPrepareDate(format(new Date(cookingTime.toString()), 'YYYY-MM-DD HH:mm:ss.SSS'))
     }
@@ -158,6 +162,7 @@ class CookingTime extends React.Component<CookingTimeProps, CookingTimeState> {
 
 const mapDispatchToProps = {
   setPrepareDate,
+  deleteDeliveryProduct,
 }
 
 export default connect(null, mapDispatchToProps)(CookingTime)
