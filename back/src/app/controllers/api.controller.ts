@@ -100,11 +100,10 @@ export class ApiController {
         // },
 
         where: (group) => {
-          group
-            .where({
-              isGroupModifier: false,
-            })
-            .andWhere('Group__products.isDeleted = :isDeleted', { isDeleted: false })
+          group.where({
+            isGroupModifier: false,
+          })
+          // .andWhere('Group__products.isDeleted = :isDeleted', { isDeleted: false })
         },
 
         relations: [
@@ -716,7 +715,8 @@ export class ApiController {
 
       const organization = await getRepository(Organization).findOne({ id: organizationId })
 
-      const terminals = await getRepository(Terminal).find({ organization })
+      const terminals = await getRepository(Terminal).find({ organization, isCheckAlive: true })
+      console.log(terminals)
 
       const aliveTerminals = await iiko.getAliveTerminals(terminals, organizationId)
 

@@ -23,6 +23,9 @@ export class Terminal {
   @Column()
   isAlive: boolean
 
+  @Column()
+  isCheckAlive: boolean
+
   @ManyToOne((type) => Organization, (organization) => organization.terminals)
   organization: Organization
 
