@@ -8,4 +8,6 @@ export default interface Organization {
   delivery_phones: string
   restraunt_phones: string
   area: string
+  workTime: string
+  additionalInfo: string
 }

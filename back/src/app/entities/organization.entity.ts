@@ -26,6 +26,11 @@ export class Organization {
   email: string
   @Column()
   iiko: boolean
+  @Column()
+  workTime: string
+  @Column()
+  additionalInfo: string
+
   @OneToMany((type) => Terminal, (terminal) => terminal.organization)
   terminals: Terminal[]
 }

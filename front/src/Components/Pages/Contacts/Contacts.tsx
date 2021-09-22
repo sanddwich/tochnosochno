@@ -17,6 +17,18 @@ interface ContactsProps {
 interface ContactsState {}
 
 class Contacts extends React.Component<ContactsProps, ContactsState> {
+  getCurrentOrganization() {
+    return this.props.organizations.find((organization) => organization.id === this.props.organizationId)
+  }
+
+  getWorkTime() {
+    return this.getCurrentOrganization()?.workTime
+  }
+
+  getAdditionalInfo() {
+    return this.getCurrentOrganization()?.additionalInfo
+  }
+
   render() {
     return (
       <div className="contacts container mt-5">
@@ -36,15 +48,15 @@ class Contacts extends React.Component<ContactsProps, ContactsState> {
             <BlockName name="Доставка" />
 
             <div className="row contacts__delivery__row">
-              <div className="col-sm-6 pt-3">Работаем КРУГЛОСУТОЧНО</div>
+              <div className="col-sm-6 pt-3">Работаем {this.getWorkTime()}</div>
               <div className="col-sm-6 pt-3">
                 Минимальный заказ от <span className="bold">500</span> руб
               </div>
             </div>
             <div className="row contacts__delivery__row">
               <div className="col-sm-6 pt-3">
-                Время доставки 60 минут*
-                <div className="footnote">*или бесплатная пицца</div>
+                Время доставки 60 минут
+                <div className="footnote">{this.getAdditionalInfo()}</div>
               </div>
 
               <div className="col-sm-6 pt-3">Доставка от 0 до 400 руб</div>

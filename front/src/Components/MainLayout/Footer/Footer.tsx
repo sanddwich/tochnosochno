@@ -27,6 +27,14 @@ class Footer extends React.Component<FooterProps, FooterState> {
     return this.props.organizations.find((organization) => organization.id === this.props.organizationId)
   }
 
+  getWorkTime() {
+    return this.getCurrentOrganization()?.workTime
+  }
+
+  getAdditionalInfo() {
+    return this.getCurrentOrganization()?.additionalInfo
+  }
+
   render() {
     return (
       <footer className="footer">
@@ -64,7 +72,7 @@ class Footer extends React.Component<FooterProps, FooterState> {
             </div>
 
             <div className="col-md-5 ">
-              <div className="footer__worktime">Работаем КРУГЛОСУТОЧНО</div>
+              <div className="footer__worktime">Работаем {this.getWorkTime()}</div>
             </div>
           </div>
           <div className="row">
