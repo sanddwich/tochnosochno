@@ -214,7 +214,7 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
       deliveryDate
     )
 
-    if (deliveryRestriction && deliveryRestriction.isAllowed) {
+    if (deliveryRestriction && deliveryRestriction.isAllowed && deliveryRestriction.allowedItems.length > 0) {
       const deliveryServiceProductId = deliveryRestriction.allowedItems[0].deliveryServiceProductId
       this.props.setTerminal(deliveryRestriction.allowedItems[0].terminalGroupId)
       if (deliveryServiceProductId) {
@@ -247,7 +247,10 @@ class DeliveryByCourier extends React.Component<DeliveryByCourierProps, Delivery
       this.setState({ isAllowedDelivery: true })
       // this.setState({ isPaymentShow: true })
       this.props.showPaymentSelection()
-    } else if (deliveryRestriction && !deliveryRestriction.isAllowed) {
+    } else if (
+      (deliveryRestriction && !deliveryRestriction.isAllowed) ||
+      deliveryRestriction.allowedItems.length == 0
+    ) {
       this.setState({ isAllowedDelivery: false })
       // this.setState({ isPaymentShow: true })
       this.props.showPaymentSelection()

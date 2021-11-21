@@ -715,15 +715,20 @@ export class ApiController {
 
       const organization = await getRepository(Organization).findOne({ id: organizationId })
 
-      const terminals = await getRepository(Terminal).find({ organization, isCheckAlive: true })
-      console.log(terminals)
+      const terminals = await getRepository(Terminal).find({ organization })
 
       const aliveTerminals = await iiko.getAliveTerminals(terminals, organizationId)
 
       if (deliveryRestriction && !deliveryRestriction.errorDescription) {
-        _.remove(deliveryRestriction.allowedItems, (terminalGroup) => {
-          return aliveTerminals.find((terminal) => {
-            return !terminal.isAlive && terminal.terminalGroupId === terminalGroup.terminalGroupId
+        _.remove(deliveryRestriction.allowedItems, (deliveryRestterminalGroup) => {
+          return aliveTerminals.find((terminalGroup) => {
+            return terminals.find((terminal) => {
+              return (
+                (!terminalGroup.isAlive || !terminal.isCheckAlive) &&
+                terminal.id === terminalGroup.terminalGroupId &&
+                terminalGroup.terminalGroupId === deliveryRestterminalGroup.terminalGroupId
+              )
+            })
           })
         })
         return new HttpResponseOK({

@@ -199,7 +199,7 @@ export class Iiko {
    * Выгрузка доступности терминалов доставки из IIKO .
    */
 
-  async getAliveTerminals(terminals: Terminal[], organizationId: string) {
+  async getAliveTerminals(terminals: Terminal[], organizationId: string): Promise<TerminalGroup[]> {
     const terminalGroupIds = terminals.map(({ id }) => id)
 
     const body = JSON.stringify({ organizationIds: [organizationId], terminalGroupIds })
